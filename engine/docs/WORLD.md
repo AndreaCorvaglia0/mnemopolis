@@ -121,3 +121,40 @@ several rounds of screenshots to get right.
 - The sameness of rooms and of the lab frame.
 - The rule that everything is generated from `course.js`. A hand-placed exception breaks the
   correspondence between town and map.
+
+## Generated rooms
+
+Optional, on by default: `src/gen/interior.js` builds a different room for every house, the same
+on every build (seeded by the course id and the house id). Switch it off in
+`courses/<slug>/world.json` with `{ "gen": { "interior": false } }`: every house then gets the
+standard room described above, unchanged.
+
+**What stays, in every room:** the lab door (wooden, glowing, labelled LAB), the reading wall (a
+board over a desk; the player reads it from the tile in front of the desk), the host standing
+free near the middle, the exit mat in the front wall with the entrance just above it, the concept
+written on the back wall and the gold house number. Their place changes with the plan; their look
+does not.
+
+**What varies:** the plan (`hall` wide and low, `square` compact, `ell` with a corner cut away,
+`alcove` with a recess for the signature object, `dais` with a raised platform; 11 to 16 tiles
+wide, 9 to 12 high, so a phone held upright keeps zoom 3), floor and wall treatment, furniture by
+kind of house (lab benches and cabinets, archive shelves and drawers, hall long tables and banners,
+studio easels and examination tables, observatory telescopes and chart tables, cave rocks,
+crystals and torches), rugs, plants, night windows, and one large **signature object**: the
+concept's `emblem` drawn big on a pedestal, in a display case or on a standing banner, or, without
+a known emblem, an object chosen by the seed (orrery, globe, crystal, clock, tree, prism,
+hourglass). Neighbouring houses never share a plan. Materials come from the project's `THEME`
+(wood, stone, accent, wall tone), so the rooms of one course belong together.
+
+**Rules.** Pieces are placed one at a time: against the back wall, against a side wall, or
+free-standing with a walkway all around. A piece is refused if it covers a reserved tile (the
+walkway up from the exit, the tiles in front of the door and the reading wall, the host's
+neighbours, the space in front of the signature) or leaves any free tile unreachable. Then a
+breadth-first search from the entrance checks the door, every reading-wall tile, the host and the
+exit; a room that fails is drawn again with the next seed, and `npm run check` (part of the
+build) reports any room that still fails.
+
+**Add a plan:** a function in `PLANS` returning `{ w, h, top, bot }` (per column: the row where
+the back wall starts, the row of the front wall). **Add a furniture piece:** an entry in `PIECES`
+(footprint, height, allowed modes), a painter in `PAINT`, and its name in a kind's `furniture`
+list in `KINDS`. Run `npm run check`, then look at the rooms with `npm run shots`.

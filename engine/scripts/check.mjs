@@ -29,4 +29,14 @@ try {
   console.log(`town: ${m.MAP_W} x ${m.MAP_H} tiles, ${m.BUILDINGS.length} buildings, farthest door ${far} steps from the square (about ${Math.round(far * 0.15)} s walking)`);
   if (far > 45) console.log('warning  town: a house is more than 45 steps from the square');
 } catch (e) { console.log(`ERROR    the town cannot be generated: ${e.message}`); bad++; }
+// the rooms: every generated room must keep its lab door, reading wall, host and exit reachable
+try {
+  const { GEN } = await import('../src/gen/core.js');
+  if (GEN.interior) {
+    const { PLACES } = await import('../src/data/content.js');
+    const { planRoom } = await import('../src/gen/interior.js');
+    const rooms = PLACES.filter((p) => p.kind !== 'workshop' && p.kind !== 'museum').map((p) => planRoom(p)); // throws if a room breaks the rule
+    console.log(`rooms: ${rooms.map((L) => `${L.id} ${L.plan} ${L.w}x${L.h}`).join(', ')}`);
+  } else console.log('rooms: generator off, standard room');
+} catch (e) { console.log(`ERROR    ${e.message}`); bad++; }
 process.exit(bad ? 1 : 0);
