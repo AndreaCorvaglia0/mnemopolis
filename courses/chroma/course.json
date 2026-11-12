@@ -1,0 +1,1162 @@
+{
+  "$schema": "../../skills/knowledge-base/schema/course.schema.json",
+  "version": 1,
+  "id": "chroma",
+  "language": "en",
+  "title": "Chroma Town",
+  "subject": "How colour works",
+  "bigIdea": "Colour is three numbers: three lights on a screen, three inks on paper, three signals in the eye.",
+  "learner": "A curious adult with no background in colour science who uses screens and printers every day.",
+  "goals": [
+    "Predict the result of mixing coloured lights and of mixing inks.",
+    "Describe a colour with hue, saturation and lightness and relate it to RGB.",
+    "Explain why three numbers are enough to describe a colour, and why the same numbers can look different."
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Standard colour science as found in any introductory text (additive and subtractive mixing, HSL, simultaneous contrast, trichromacy)",
+      "tier": "B",
+      "note": "No user material: this example course was written from general reference knowledge. The cone curves in the lab are simplified."
+    },
+    {
+      "id": "S2",
+      "title": "Malacara, Color Vision and Colorimetry: Theory and Applications (SPIE Press), chapter 1",
+      "url": "https://nanolithography.spiedigitallibrary.org/samples/PM204.pdf",
+      "tier": "A",
+      "note": "Newton’s prism experiments and his 1672 communication to the Royal Society; Young 1802; Helmholtz."
+    },
+    {
+      "id": "S3",
+      "title": "Yellott, Important Dates in Vision Science",
+      "url": "https://sites.socsci.uci.edu/~jyellott/yellott_dates.html",
+      "tier": "B",
+      "note": "Young’s three-receptor theory; Hering’s opponent theory in the 1870s; CIE 1931."
+    },
+    {
+      "id": "S4",
+      "title": "The Victorian Web, Nineteenth-Century Photography: A Timeline",
+      "url": "https://victorianweb.org/photos/chron.html",
+      "tier": "B",
+      "note": "Maxwell and Sutton, Royal Institution, 1861."
+    },
+    {
+      "id": "S5",
+      "title": "The works themselves: Hering, Zur Lehre vom Lichtsinne (1878); Munsell, A Color Notation (1905); CIE 1931 standard observer; Stokes et al., A Standard Default Color Space for the Internet: sRGB (1996)",
+      "tier": "A",
+      "note": "Publication dates taken from the works; not re-read for this example."
+    }
+  ],
+  "themes": [
+    {
+      "id": "light",
+      "name": "Lamp Quarter",
+      "idea": "Light adds up. Ink takes away.",
+      "cue": {
+        "landscape": "river",
+        "landmark": "obelisk"
+      }
+    },
+    {
+      "id": "eye",
+      "name": "Sight Hill",
+      "idea": "Colour happens in the eye and the brain, not in the object.",
+      "cue": {
+        "landscape": "hill",
+        "landmark": "statue",
+        "why": "A hill is where you go to look: this theme is about the observer."
+      }
+    },
+    {
+      "id": "roots",
+      "name": "Old Town",
+      "idea": "Three centuries to find out why three numbers are enough.",
+      "cue": {
+        "landscape": "forest",
+        "landmark": "stones",
+        "why": "Old trees and standing stones for the origins of the ideas."
+      }
+    }
+  ],
+  "concepts": [
+    {
+      "id": "lamps",
+      "theme": "light",
+      "type": "mechanism",
+      "name": "Additive mixing",
+      "place": "Three Lamps House",
+      "sign": "LAMPS",
+      "objective": "Predict the colour of any mix of red, green and blue light.",
+      "idea": "A screen makes every colour by adding red, green and blue light. All three together make white.",
+      "wrongBelief": "Mixing colours always works like paint: more colours give a darker, muddier result.",
+      "anchor": {
+        "type": "example",
+        "text": "Three torches with coloured gels pointed at the same wall.",
+        "limits": "Real torches are not pure red, green and blue, so their white is less clean than a screen’s."
+      },
+      "application": "Every screen. The colour picker of any app shows these three numbers.",
+      "remember": [
+        "Red + green light = yellow. All three lights = white.",
+        "A pixel is three numbers: red, green, blue, each from 0 to 255.",
+        "Equal numbers give a grey."
+      ],
+      "explain": {
+        "q": "Why does adding a second lamp never make the wall darker?",
+        "a": "A lamp only adds light to what the wall already sends back. Nothing in the process removes light, so the sum can only grow."
+      },
+      "lab": {
+        "title": "Additive mixing",
+        "stations": [
+          {
+            "id": "mix",
+            "tab": "Three lamps",
+            "goal": "Lights add up: where two lamps overlap, the wall gets both colours at once.",
+            "beat": "ground",
+            "pattern": "handle",
+            "object": "Three coloured lamps on a dark wall.",
+            "action": "Drags the lamps until their light overlaps, and points at the wall to read which lights are on.",
+            "surprise": "Red over green turns yellow, and all three turn white: brighter, not muddy.",
+            "predict": {
+              "q": "Red light on top of green light will look...",
+              "options": [
+                "Brown",
+                "Yellow",
+                "Purple",
+                "White"
+              ]
+            },
+            "controls": [],
+            "tries": [
+              "Drag the red lamp onto the green one.",
+              "Bring all three lamps together."
+            ],
+            "takeaway": "Red + green = <b>yellow</b>, green + blue = <b>cyan</b>, red + blue = <b>magenta</b>. All three = <b>white</b>. Adding light can only make things brighter.",
+            "source": "Drawn live with additive blending: each lamp adds its own channel."
+          },
+          {
+            "id": "pixel",
+            "tab": "One pixel",
+            "goal": "A pixel is three tiny lamps. Its colour is three numbers from 0 to 255.",
+            "beat": "rule",
+            "pattern": "zoom",
+            "object": "One pixel, magnified into its three stripes.",
+            "action": "Sets the three brightness values, then steps back from the screen.",
+            "surprise": "The stripes can no longer be told apart and a single colour appears, though only red, green and blue are drawn.",
+            "controls": [
+              "Brightness of the red, green and blue lamp (one group of three sliders)",
+              "Distance from the screen"
+            ],
+            "tries": [
+              "Make orange: a lot of red, some green, no blue.",
+              "Make a mid grey: three equal numbers.",
+              "Step back until the stripes merge into one colour."
+            ],
+            "takeaway": "Every colour on a screen is <code>(red, green, blue)</code>. Equal numbers give grey. The eye cannot resolve the three lamps, so it sees their sum.",
+            "source": "On the left only pure red, green and blue stripes are drawn. Any other colour you see there is made by your eye."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Lights add",
+          "text": "Shine a red lamp on a wall and the wall sends red light to your eye. Add a green lamp and it sends red and green together. Nothing is taken away, so two lamps are always brighter than one.",
+          "figure": {
+            "kind": "animation",
+            "ref": "lamps",
+            "caption": "Three lamps drifting together. Where all three overlap the wall is white."
+          }
+        },
+        {
+          "title": "A pixel is three lamps",
+          "text": "Look at a screen through a magnifying glass and every pixel splits into a red, a green and a blue stripe. Each has a brightness from 0 to 255. From normal distance the eye cannot separate them and sees their sum."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Red light plus green light gives...",
+          "options": [
+            "Yellow",
+            "Brown",
+            "Purple",
+            "White"
+          ],
+          "answer": 0,
+          "why": "Lights add. Red and green together stimulate the eye like yellow does.",
+          "traps": [
+            null,
+            "paint-mixing intuition",
+            "confusion with red + blue",
+            "confusion with all three lights"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Red, green and blue light at full strength give...",
+          "options": [
+            "Black",
+            "White",
+            "Grey",
+            "Brown"
+          ],
+          "answer": 1,
+          "why": "Adding light always makes the result brighter. All three at full strength is white.",
+          "traps": [
+            "paint-mixing intuition: more colours, darker",
+            null,
+            "equal amounts always give grey",
+            "paint-mixing intuition"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "On a screen, the colour of a pixel is stored as...",
+          "options": [
+            "One number from 0 to 255",
+            "A wavelength in nanometres",
+            "Three numbers: red, green and blue"
+          ],
+          "answer": 2,
+          "why": "Each pixel has a red, a green and a blue lamp, each with its own brightness from 0 to 255.",
+          "traps": [
+            "thinks of brightness only",
+            "believes a screen emits each colour as its own light",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A pixel is set to R 120, G 120, B 120. What do you see?",
+          "options": [
+            "A dark red",
+            "Nothing",
+            "White",
+            "A mid grey"
+          ],
+          "answer": 3,
+          "why": "Equal amounts of the three lights have no hue. The amount sets how light the grey is.",
+          "traps": [
+            "reads only the first number",
+            "thinks equal lights cancel out",
+            "equal means white, forgetting the amount",
+            null
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A pixel shows yellow. Which sub-pixel is switched off?",
+          "options": [
+            "Blue",
+            "Green",
+            "Red",
+            "None"
+          ],
+          "answer": 0,
+          "why": "Yellow on a screen is red plus green. Blue stays dark.",
+          "traps": [
+            null,
+            "does not recall that yellow is red + green",
+            "does not recall that yellow is red + green",
+            "believes the screen has a yellow lamp"
+          ]
+        }
+      ],
+      "sources": [
+        "S1"
+      ]
+    },
+    {
+      "id": "print",
+      "theme": "light",
+      "type": "process",
+      "name": "Subtractive mixing",
+      "place": "Print Works",
+      "sign": "PRINT",
+      "objective": "Explain why printers use cyan, magenta and yellow, and why mixing inks gets darker.",
+      "idea": "Ink works by removing light from white paper. Each ink removes one of the three lights.",
+      "wrongBelief": "Ink adds its colour to the paper, the way a lamp adds light.",
+      "anchor": {
+        "type": "contrast",
+        "text": "The same two colours mixed as lights and as inks, side by side.",
+        "limits": "Real inks are not perfect filters: three of them give a muddy dark, which is why printers add black."
+      },
+      "application": "The cartridges of a printer: cyan, magenta and yellow, plus black for a deeper dark.",
+      "remember": [
+        "Cyan absorbs red, magenta absorbs green, yellow absorbs blue.",
+        "More ink, less light: mixed inks get darker.",
+        "On paper, tone is the size of the dots."
+      ],
+      "explain": {
+        "q": "Why do printers use cyan, magenta and yellow, and not red, green and blue inks?",
+        "a": "Cyan, magenta and yellow each remove one of the three lights, so they can be layered and still leave something. A red, green or blue ink removes two at once: any two of them on top of each other leave nothing."
+      },
+      "callbacks": [
+        {
+          "to": "lamps",
+          "how": "The same three lights as in Three Lamps House, now taken away instead of added."
+        }
+      ],
+      "lab": {
+        "title": "Subtractive mixing",
+        "stations": [
+          {
+            "id": "inks",
+            "tab": "Ink removes light",
+            "goal": "Paper is white because it sends back all light. An ink works by keeping some of it.",
+            "beat": "ground",
+            "pattern": "handle",
+            "object": "Three transparent ink discs on white paper.",
+            "action": "Drags the inks over each other and points at the paper to read which light comes back.",
+            "surprise": "Stacking all three leaves black: the opposite of the three lamps.",
+            "controls": [],
+            "tries": [
+              "Drag cyan onto magenta and read what comes back.",
+              "Stack all three inks."
+            ],
+            "takeaway": "Cyan absorbs <b>red</b>, magenta absorbs <b>green</b>, yellow absorbs <b>blue</b>. Two inks leave one light; three leave none: black.",
+            "source": "Drawn live with multiply blending: each ink removes its own channel.",
+            "predict": {
+              "q": "Cyan ink printed over yellow ink on white paper will look...",
+              "options": [
+                "Green",
+                "Black",
+                "White"
+              ]
+            }
+          },
+          {
+            "id": "compare",
+            "tab": "Light or paint",
+            "goal": "The same colours behave in opposite ways as lights and as paints.",
+            "beat": "twist",
+            "pattern": "contrast",
+            "object": "The same three colour names, as lamps on a dark wall and as paints on white paper, side by side.",
+            "action": "Switches each colour on and off and compares the two sides.",
+            "surprise": "With nothing on, the lamp side is black and the paper side white. With everything on they swap.",
+            "controls": [
+              "Three on/off switches: red, green, blue"
+            ],
+            "tries": [
+              "Switch on all three.",
+              "Compare none with two."
+            ],
+            "takeaway": "Lights start from <b>dark and add</b>: more lights, brighter. Paints start from <b>white and take away</b>: more paints, darker.",
+            "source": "Idealised lights and paints: each paint is taken to reflect one primary only."
+          },
+          {
+            "id": "dots",
+            "tab": "Dots",
+            "goal": "A printer cannot make light grey ink. It prints black dots of different sizes.",
+            "beat": "rule",
+            "pattern": "zoom",
+            "object": "A printed photograph of a shaded ball.",
+            "action": "Steps closer to the print.",
+            "surprise": "The smooth greys are black dots of different sizes on white paper.",
+            "controls": [
+              "Distance from the print",
+              "Print or original tones"
+            ],
+            "tries": [
+              "Step closer until you see single dots.",
+              "Compare the print with the original tones."
+            ],
+            "takeaway": "Tone on paper is <b>dot size</b>: big dots look dark, small dots look light. From reading distance the eye averages them.",
+            "source": "A halftone computed live from a simple shaded ball."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Ink takes away",
+          "text": "Paper has no lamps. It is white because it reflects all the light that falls on it. An ink is a filter: cyan ink absorbs red light and lets green and blue come back.",
+          "figure": {
+            "kind": "animation",
+            "ref": "inks",
+            "caption": "Three inks drifting together. Where all three overlap, no light comes back."
+          }
+        },
+        {
+          "title": "Why not red, green and blue inks?",
+          "text": "A red ink absorbs green and blue: two thirds of the light at once. Put green ink on top and nothing is left. Cyan, magenta and yellow each remove only one third, so they can be combined."
+        },
+        {
+          "title": "Tone from dots",
+          "text": "A printer either puts ink on a spot or does not. Light and dark come from the size of the dots, which the eye averages from reading distance."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Cyan ink looks cyan because it absorbs...",
+          "options": [
+            "Blue light",
+            "Red light",
+            "Green light",
+            "All light"
+          ],
+          "answer": 1,
+          "why": "White minus red leaves green plus blue, which is cyan.",
+          "traps": [
+            "names a light that cyan sends back, not the one it removes",
+            null,
+            "names a light that cyan sends back, not the one it removes",
+            "thinks any ink absorbs everything"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Mixing more inks makes the result...",
+          "options": [
+            "Lighter",
+            "More saturated",
+            "Darker",
+            "White"
+          ],
+          "answer": 2,
+          "why": "Every ink removes some light. More inks, less light left.",
+          "traps": [
+            "applies the rule of lights to ink",
+            "more ink means more colour",
+            null,
+            "applies the rule of lights to ink"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "How does a printer make a light grey with black ink?",
+          "options": [
+            "Diluted ink",
+            "Small dots on white paper",
+            "A thinner layer of ink"
+          ],
+          "answer": 1,
+          "why": "It prints ink or no ink. Small dots leave more white paper, and the eye averages the two.",
+          "traps": [
+            "assumes a printer can dilute ink",
+            null,
+            "assumes a printer can vary the thickness"
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Yellow ink over magenta ink on white paper gives...",
+          "options": [
+            "Red",
+            "Blue",
+            "Green",
+            "Black"
+          ],
+          "answer": 0,
+          "why": "Yellow removes blue, magenta removes green. Only red is left.",
+          "traps": [
+            null,
+            "mixes up which light each ink removes",
+            "mixes up which light each ink removes",
+            "thinks any two inks give black"
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A printed photo has smooth greys. Up close you would see...",
+          "options": [
+            "Grey ink",
+            "Black dots of different sizes",
+            "Three grey inks",
+            "Tiny lamps"
+          ],
+          "answer": 1,
+          "why": "A printer puts ink or no ink. Tone comes from the size of the dots; the eye averages them.",
+          "traps": [
+            "assumes a printer can dilute ink",
+            null,
+            "assumes a printer can dilute ink",
+            "confuses print with screen"
+          ]
+        }
+      ],
+      "sources": [
+        "S1"
+      ]
+    },
+    {
+      "id": "wheel",
+      "theme": "eye",
+      "type": "view",
+      "name": "Hue, saturation, lightness",
+      "place": "Hue Tower",
+      "sign": "HUE",
+      "objective": "Describe any colour with three words (which colour, how vivid, how light) and link them to RGB.",
+      "idea": "Hue, saturation and lightness are the same colours as RGB, described the way people talk.",
+      "wrongBelief": "RGB and hue, saturation, lightness are different sets of colours.",
+      "anchor": {
+        "type": "analogy",
+        "text": "RGB is a street address; hue, saturation and lightness are directions given by a neighbour.",
+        "limits": "The conversion is exact, but equal steps on a dial do not look equal to the eye."
+      },
+      "application": "Design tools and CSS accept a colour as hsl(), because changing one dial is easier than changing three numbers together.",
+      "remember": [
+        "Hue = which colour (the angle on the wheel).",
+        "Saturation = how far from grey.",
+        "Lightness = how close to white or black."
+      ],
+      "explain": {
+        "q": "A designer says \"same colour, just less loud\". Which dial moves, and what happens to the three RGB numbers?",
+        "a": "Saturation goes down. The three RGB numbers move toward each other; when they are equal the colour has become a grey."
+      },
+      "callbacks": [
+        {
+          "to": "lamps",
+          "how": "Every position on the wheel is shown also as the three lamp numbers of Three Lamps House."
+        }
+      ],
+      "lab": {
+        "title": "Three dials",
+        "stations": [
+          {
+            "id": "dials",
+            "tab": "Three dials",
+            "goal": "Any colour can be described the way people talk: which colour, how vivid, how light.",
+            "beat": "rule",
+            "pattern": "puzzle",
+            "object": "A colour disc where the angle is hue and the distance from the centre is saturation.",
+            "action": "Drags a marker on the disc and changes lightness to reach a named colour.",
+            "surprise": "At the centre every hue becomes the same grey, and the three RGB numbers become equal.",
+            "controls": [
+              "Lightness"
+            ],
+            "tries": [
+              "Find a pastel pink: a red hue, vivid, and very light.",
+              "Turn any colour into a grey without touching lightness."
+            ],
+            "takeaway": "<b>Hue</b> is which colour, <b>saturation</b> how far it is from grey, <b>lightness</b> how close to white or black. It is the same colour as RGB, with the numbers rearranged.",
+            "source": "HSL computed live from the standard conversion to RGB."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Three dials",
+          "text": "Nobody says \"a bit more 214, 96, 30\". People say \"more orange\", \"less vivid\", \"lighter\". Hue, saturation and lightness turn those words into dials."
+        },
+        {
+          "title": "The same colours",
+          "text": "HSL does not add any colour to RGB. It is a different set of coordinates for the same points, the way a town can be described by street addresses or by walking directions."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Which dial turns red into orange into yellow?",
+          "options": [
+            "Hue",
+            "Saturation",
+            "Lightness",
+            "Contrast"
+          ],
+          "answer": 0,
+          "why": "Hue is the position around the colour wheel.",
+          "traps": [
+            null,
+            "confuses how vivid with which colour",
+            "confuses light or dark with which colour",
+            "not one of the three dials"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Saturation at zero gives...",
+          "options": [
+            "Black",
+            "White",
+            "The pure colour",
+            "A grey"
+          ],
+          "answer": 3,
+          "why": "With no saturation there is no hue left: only a grey whose lightness you chose.",
+          "traps": [
+            "confuses saturation with lightness",
+            "confuses saturation with lightness",
+            "reads the scale backwards",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Which dial turns a red into a dark red and then into black?",
+          "options": [
+            "Hue",
+            "Saturation",
+            "Lightness"
+          ],
+          "answer": 2,
+          "why": "Lowering lightness moves any colour toward black without changing which colour it is.",
+          "traps": [
+            "confuses darker with a different colour",
+            "confuses duller with darker",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Pastel pink is a red with...",
+          "options": [
+            "Low lightness",
+            "High lightness",
+            "A different hue",
+            "Zero saturation"
+          ],
+          "answer": 1,
+          "why": "Same hue as red, pushed toward white.",
+          "traps": [
+            "reads lightness backwards",
+            null,
+            "thinks pink is a hue of its own",
+            "zero saturation would be grey"
+          ]
+        }
+      ],
+      "sources": [
+        "S1"
+      ]
+    },
+    {
+      "id": "context",
+      "theme": "eye",
+      "type": "cases",
+      "name": "Colour depends on context",
+      "place": "Illusion Studio",
+      "sign": "ILLUSION",
+      "objective": "Show that the same patch looks different on different backgrounds, and say why that matters.",
+      "idea": "The eye judges a colour against what surrounds it. The same numbers can look different.",
+      "wrongBelief": "The eye measures colour like an instrument: same numbers, same appearance.",
+      "anchor": {
+        "type": "example",
+        "text": "A grey card looks light in a dark room and dark on fresh snow.",
+        "limits": "The surround changes how a colour looks, not what a camera or a file records."
+      },
+      "application": "Checking the colour of text or of a chart on its real background before publishing.",
+      "remember": [
+        "The same numbers can look different on different backgrounds.",
+        "A dark surround makes a patch look lighter; a coloured surround pushes it toward the opposite colour."
+      ],
+      "explain": {
+        "q": "Why is it a bad idea to compare two colour swatches that sit on different backgrounds?",
+        "a": "The eye judges each swatch against its own surround, so the comparison measures the backgrounds as much as the swatches. Put both on the same neutral background."
+      },
+      "callbacks": [
+        {
+          "to": "wheel",
+          "how": "Lightness was a dial in Hue Tower. Here the same lightness looks different."
+        }
+      ],
+      "lab": {
+        "title": "Colour in context",
+        "stations": [
+          {
+            "id": "grey",
+            "tab": "Same grey?",
+            "goal": "The eye does not measure a colour. It compares it with what is around it.",
+            "beat": "twist",
+            "pattern": "predict-test",
+            "object": "Two grey squares on a wall that goes from dark to light.",
+            "action": "Drags one square next to the other, then swaps the wall for a plain one.",
+            "surprise": "Side by side they are the same grey.",
+            "predict": {
+              "q": "Two grey squares, one on the dark side and one on the light side. Which is lighter?",
+              "options": [
+                "The left one",
+                "The right one",
+                "They are identical"
+              ]
+            },
+            "controls": [
+              "Wall: dark-to-light or plain"
+            ],
+            "tries": [
+              "Drag one square next to the other.",
+              "Replace the wall with a plain one."
+            ],
+            "takeaway": "The squares have the <b>same numbers</b>. On a dark surround a patch looks lighter, on a light surround darker: <b>simultaneous contrast</b>.",
+            "source": "Both squares are drawn with the same fill, #808080."
+          },
+          {
+            "id": "tint",
+            "tab": "Colour too",
+            "goal": "The surround shifts hue as well, not only lightness.",
+            "beat": "ground",
+            "pattern": "contrast",
+            "object": "Two neutral patches, one on a yellow wall and one on a blue wall.",
+            "action": "Covers the coloured walls and brings them back.",
+            "surprise": "The tint of the patches goes away with the walls.",
+            "controls": [
+              "Walls: coloured or covered"
+            ],
+            "tries": [
+              "Cover the coloured walls.",
+              "Bring the walls back and look again."
+            ],
+            "takeaway": "A neutral patch borrows the <b>opposite</b> of its surround: bluish on yellow, yellowish on blue. Always judge a colour on the background it will be used on.",
+            "source": "Both patches are drawn with the same fill, #8f8f86."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "The eye compares",
+          "text": "The eye evolved to recognise surfaces under changing light, not to measure light. It judges every patch against its neighbours. A grey patch on black looks light; the same patch on white looks dark."
+        },
+        {
+          "title": "Why it matters",
+          "text": "Pick colours on the background they will live on. Two charts with different backgrounds can make the same value look different, and equal numbers in a file are no promise of equal appearance."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Two patches have identical RGB values. Can they look different?",
+          "options": [
+            "No, never",
+            "Only on old screens",
+            "Yes, if their surroundings differ",
+            "Only in print"
+          ],
+          "answer": 2,
+          "why": "Perceived colour depends on the surround. The numbers stay the same.",
+          "traps": [
+            "believes the eye measures colour",
+            "blames the device",
+            null,
+            "blames the medium"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "A neutral grey patch on a yellow wall looks slightly...",
+          "options": [
+            "Bluish",
+            "Yellowish",
+            "Unchanged"
+          ],
+          "answer": 0,
+          "why": "The eye pushes a neutral patch away from its surround, toward the opposite colour.",
+          "traps": [
+            null,
+            "expects the surround to rub off on the patch",
+            "believes the eye measures colour"
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A grey patch on a dark background looks...",
+          "options": [
+            "Lighter than it is",
+            "Darker than it is",
+            "Unchanged",
+            "Bluish"
+          ],
+          "answer": 0,
+          "why": "The eye exaggerates the difference from the surround: simultaneous contrast.",
+          "traps": [
+            null,
+            "expects the surround to rub off on the patch",
+            "believes the eye measures colour",
+            "confuses a lightness effect with a hue shift"
+          ]
+        },
+        {
+          "level": 3,
+          "q": "You pick a text colour by eye on a dark mock-up. On a white page it looks wrong. Why?",
+          "options": [
+            "The file changed",
+            "The surround changed",
+            "White pages are brighter",
+            "RGB is unreliable"
+          ],
+          "answer": 1,
+          "why": "Judge a colour on the background it will actually be used on.",
+          "traps": [
+            "blames the file",
+            null,
+            "names the brightness but misses the comparison",
+            "blames the numbers"
+          ]
+        }
+      ],
+      "sources": [
+        "S1"
+      ]
+    },
+    {
+      "id": "history",
+      "theme": "roots",
+      "type": "story",
+      "name": "How we found out",
+      "place": "Colour Museum",
+      "sign": "MUSEUM",
+      "objective": "Place the key discoveries about colour in order and say what each one settled.",
+      "idea": "From Newton’s prism to sRGB: each step turned colour from a mystery into numbers.",
+      "wrongBelief": "Describing colour with three numbers is a convention of computers.",
+      "application": "sRGB is why the same photo looks roughly alike on a phone and on a laptop.",
+      "remember": [
+        "1672, Newton: white light is a mixture.",
+        "1802, Young: three kinds of receptor are enough.",
+        "1931, CIE: colour as three measured numbers."
+      ],
+      "callbacks": [
+        {
+          "to": "lamps",
+          "how": "Maxwell’s photograph of 1861 is Three Lamps House with three projectors."
+        }
+      ],
+      "threads": {
+        "physics": "Physics",
+        "eye": "The eye",
+        "standard": "Standards"
+      },
+      "timeline": [
+        {
+          "year": 1672,
+          "thread": "physics",
+          "title": "White light is a mixture",
+          "who": "Isaac Newton",
+          "text": "Newton passes sunlight through a prism and gets a band of colours; a second prism brings them back to white. Colour is not added by the glass: it is already in the light.",
+          "why": "The start of everything in the Lamp Quarter: lights can be split and added.",
+          "src": "Newton, letter to the Royal Society, 1672"
+        },
+        {
+          "year": 1802,
+          "thread": "eye",
+          "title": "Three kinds of receptor",
+          "who": "Thomas Young",
+          "text": "Young argues that the eye cannot hold a separate receptor for every colour. Three kinds, each answering to a broad range of light, would be enough.",
+          "why": "The reason three lamps are enough.",
+          "src": "Young, Bakerian Lecture, Philosophical Transactions, 1802"
+        },
+        {
+          "year": 1861,
+          "thread": "physics",
+          "title": "The first colour photograph",
+          "who": "James Clerk Maxwell",
+          "text": "Three black-and-white photographs of a tartan ribbon, taken through red, green and blue filters and projected through the same filters, combine into a colour image.",
+          "why": "Young’s idea, working: three channels rebuild a coloured scene.",
+          "src": "Maxwell, Royal Institution lecture, 1861"
+        },
+        {
+          "year": 1878,
+          "thread": "eye",
+          "title": "Opponent colours",
+          "who": "Ewald Hering",
+          "text": "In the 1870s Hering notes that nobody sees a reddish green or a yellowish blue. He proposes that vision works in opposing pairs: red against green, blue against yellow, light against dark.",
+          "why": "Both views are right: three receptors first, opposing pairs after.",
+          "src": "Hering, Zur Lehre vom Lichtsinne, 1878"
+        },
+        {
+          "year": 1905,
+          "thread": "standard",
+          "title": "Colour gets coordinates",
+          "who": "Albert Munsell",
+          "text": "A painter and teacher, Munsell orders colours by hue, value and chroma, with steps that look equal to the eye.",
+          "why": "The ancestor of the three dials in the Hue Tower.",
+          "src": "Munsell, A Color Notation, 1905"
+        },
+        {
+          "year": 1931,
+          "thread": "standard",
+          "title": "The standard observer",
+          "who": "CIE",
+          "text": "The International Commission on Illumination publishes colour-matching functions measured on human observers. Any light can now be written as three numbers that predict whether two lights will match.",
+          "why": "Colour becomes measurable and comparable between laboratories.",
+          "src": "CIE 1931 colour space"
+        },
+        {
+          "year": 1996,
+          "thread": "standard",
+          "title": "sRGB",
+          "who": "HP and Microsoft",
+          "text": "A shared default for what the three numbers of a pixel mean on an ordinary monitor. It becomes the standard colour space of the web.",
+          "why": "Why the same file looks roughly the same on different screens.",
+          "src": "Stokes et al., 1996; IEC 61966-2-1"
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Who showed that white light is a mixture of colours?",
+          "options": [
+            "Young",
+            "Maxwell",
+            "Newton",
+            "Munsell"
+          ],
+          "answer": 2,
+          "why": "Newton, with two prisms, in 1672.",
+          "traps": [
+            "confuses the receptor idea with the prism",
+            "confuses the photograph with the prism",
+            null,
+            "confuses the notation with the prism"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Who argued in 1802 that three kinds of receptor are enough?",
+          "options": [
+            "Isaac Newton",
+            "Thomas Young",
+            "Albert Munsell"
+          ],
+          "answer": 1,
+          "why": "Young reasoned that the eye could not hold a separate receptor for every colour.",
+          "traps": [
+            "confuses with the prism",
+            null,
+            "confuses with the colour notation"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "What did the CIE publish in 1931?",
+          "options": [
+            "The first colour photograph",
+            "The sRGB default for monitors",
+            "The standard observer: three measured numbers"
+          ],
+          "answer": 2,
+          "why": "Colour-matching functions measured on people: any light becomes three numbers that predict a match.",
+          "traps": [
+            "confuses with Maxwell, 1861",
+            "confuses with 1996",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Maxwell’s 1861 photograph used...",
+          "options": [
+            "One colour plate",
+            "Three filtered photographs",
+            "Hand colouring",
+            "A prism"
+          ],
+          "answer": 1,
+          "why": "Red, green and blue filters: three channels, as a screen does today.",
+          "traps": [
+            "assumes colour plates existed",
+            null,
+            "assumes the colour was painted on",
+            "confuses with Newton"
+          ]
+        }
+      ],
+      "sources": [
+        "S2",
+        "S3",
+        "S4",
+        "S5"
+      ]
+    },
+    {
+      "id": "cones",
+      "theme": "roots",
+      "type": "deep",
+      "name": "Why three numbers are enough",
+      "place": "Cone Cave",
+      "sign": "CONES",
+      "objective": "Explain how two physically different lights can look identical.",
+      "idea": "The eye reduces any light to three signals. Lights that give the same three signals look the same.",
+      "wrongBelief": "To show a colour, a device must emit light of that colour.",
+      "anchor": {
+        "type": "analogy",
+        "text": "Three judges each give one score. Two very different performances can get the same three scores.",
+        "limits": "Judges score independently. The three cone curves overlap, and that overlap is exactly why a mixture can imitate a pure light."
+      },
+      "application": "A display with three lamps per pixel reproduces most of the colours we can see.",
+      "remember": [
+        "The eye keeps three signals for any light.",
+        "Different lights that give the same three signals look identical: metamers."
+      ],
+      "explain": {
+        "q": "A screen has no yellow lamp. Explain to a friend how it shows a lemon.",
+        "a": "It lights the red and the green lamp together. That excites the long and medium cones in the same proportion as the yellow light of a lemon would, so the brain receives the same signals and sees the same colour."
+      },
+      "callbacks": [
+        {
+          "to": "lamps",
+          "how": "Three lamps are enough because the eye keeps only three signals."
+        }
+      ],
+      "lab": {
+        "title": "Two lights, one colour",
+        "stations": [
+          {
+            "id": "match",
+            "tab": "Match the light",
+            "goal": "The eye turns any light into three signals. Lights with the same three signals look the same.",
+            "beat": "rule",
+            "pattern": "match",
+            "object": "A spectrum with the three cone curves, a pure light A and a lamp B made of red plus green.",
+            "action": "Adjusts the red and green parts of lamp B until its three cone signals equal those of light A.",
+            "surprise": "Two physically different lights give identical signals and identical colour.",
+            "controls": [
+              "Wavelength of light A",
+              "Red and green amounts of lamp B (one pair of sliders)"
+            ],
+            "tries": [
+              "Match light A using only the red and green lamps.",
+              "Move light A to another wavelength and match it again."
+            ],
+            "takeaway": "Pure yellow light and a red-plus-green mix are physically different and look <b>identical</b>: they are <b>metamers</b>. That is why three lamps are enough for a screen.",
+            "source": "Cone curves are simplified bell shapes. Both swatches are computed from the three signals with the same rule, so they are approximate but comparable."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Three kinds of cone",
+          "text": "The retina has three kinds of colour receptor. Each answers to a broad range of wavelengths, most strongly to long, medium or short ones. A light, however complex, leaves the eye as three signals."
+        },
+        {
+          "title": "Different lights, same signals",
+          "text": "Pure yellow light excites the long and medium cones together. So does a mix of red and green light, in the right proportion. The brain receives the same three signals and cannot tell them apart."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "How many signals does the eye keep for any light?",
+          "options": [
+            "One",
+            "Three",
+            "Seven",
+            "One per wavelength"
+          ],
+          "answer": 1,
+          "why": "Three kinds of cone, three signals. Everything else about the light is lost.",
+          "traps": [
+            "thinks of brightness only",
+            null,
+            "counts the colours of the rainbow",
+            "believes the eye records the whole spectrum"
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Two lights with different spectra look identical when...",
+          "options": [
+            "they have the same brightness",
+            "they are both pure wavelengths",
+            "they give the same three cone signals"
+          ],
+          "answer": 2,
+          "why": "The eye keeps only the three signals. Same signals, same colour.",
+          "traps": [
+            "thinks of brightness only",
+            "believes the eye records the whole spectrum",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Why can a screen with three lamps show yellow without any yellow light?",
+          "options": [
+            "Red plus green gives the same cone signals as yellow light",
+            "It cannot",
+            "The screen has a hidden yellow lamp",
+            "Yellow is not a real colour"
+          ],
+          "answer": 0,
+          "why": "The eye only keeps three signals. Same signals, same colour, whatever the light was made of.",
+          "traps": [
+            null,
+            "believes a colour needs its own light",
+            "believes a colour needs its own light",
+            "overcorrects: yellow is as real as any colour"
+          ]
+        },
+        {
+          "level": 3,
+          "q": "Two lights with different spectra that look identical are called...",
+          "options": [
+            "Complementary",
+            "Metamers",
+            "Primaries",
+            "Saturated"
+          ],
+          "answer": 1,
+          "why": "Metamerism is what makes screens and printing possible.",
+          "traps": [
+            "a real term for a different idea",
+            null,
+            "a real term for a different idea",
+            "a real term for a different idea"
+          ]
+        }
+      ],
+      "sources": [
+        "S1",
+        "S3"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "print",
+      "to": "lamps",
+      "type": "requires",
+      "note": "An ink is defined by which of the three lights it removes."
+    },
+    {
+      "from": "lamps",
+      "to": "print",
+      "type": "contrasts",
+      "note": "Lights start from dark and add; inks start from white and take away."
+    },
+    {
+      "from": "wheel",
+      "to": "lamps",
+      "type": "requires",
+      "note": "Hue, saturation and lightness re-describe the three lamp numbers."
+    },
+    {
+      "from": "context",
+      "to": "wheel",
+      "type": "used-in",
+      "note": "Judging lightness and hue by eye is where context misleads."
+    },
+    {
+      "from": "lamps",
+      "to": "context",
+      "type": "contrasts",
+      "note": "The numbers stay fixed; the appearance does not."
+    },
+    {
+      "from": "cones",
+      "to": "lamps",
+      "type": "requires",
+      "note": "The matching experiment uses added lights."
+    },
+    {
+      "from": "cones",
+      "to": "lamps",
+      "type": "causes",
+      "note": "Three cone signals are the reason three lamps are enough."
+    },
+    {
+      "from": "cones",
+      "to": "history",
+      "type": "part-of",
+      "note": "Young’s three receptors of 1802, made operable."
+    },
+    {
+      "from": "history",
+      "to": "wheel",
+      "type": "causes",
+      "note": "Munsell’s ordering is the ancestor of the three dials."
+    }
+  ],
+  "finalCheck": {
+    "name": "Colour League",
+    "size": 8,
+    "pass": 0.7
+  }
+}

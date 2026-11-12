@@ -1,0 +1,56 @@
+// Reading walls: one scrollable page per house. Every page has the same frame, built from the
+// course database, so the learner always knows where to look:
+//   concept and idea -> "think of it as" (the anchor) -> the author's sections (src/course/pages.js)
+//   -> "explain it yourself" -> "remember" (the 1 to 3 facts the review meadows will ask again).
+import { overlay, h } from './shell.js';
+import { PLACE } from '../data/content.js';
+import { PAGES, ANIMS } from '../course/pages.js';
+
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const ANCHOR = { analogy: 'Think of it as', metaphor: 'Think of it as', example: 'Picture this', contrast: 'Compare' };
+
+function frame(p, body) {
+  const anchor = p.anchor ? `<p class="hb-key"><b>${ANCHOR[p.anchor.type] || 'Think of it as'}:</b> ${esc(p.anchor.text)}</p>` : '';
+  const explain = p.explain ? `<h3>Explain it yourself</h3><p>${esc(p.explain.q)}</p><details class="hb-det"><summary>Say your answer out loud first, then compare</summary><p>${esc(p.explain.a)}</p></details>` : '';
+  const remember = p.remember?.length ? `<h3>Remember</h3><ul class="hb-rem">${p.remember.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>` : '';
+  return `<div class="hb-num">${p.order} · ${esc(p.district.name)}</div><h2>${esc(p.concept)}</h2><p class="lead">${esc(p.idea)}</p>${anchor}${body || ''}${explain}${remember}`;
+}
+
+// Opens the page of a place (or a free page from pages.js by id). Resolves with 'lab' if the reader asks for the lab.
+export function openReading(id, anchor = null) {
+  const p = PLACE[id], page = PAGES[id] || {};
+  const { root, close } = overlay(p ? p.name : page.title || '', p ? 'Reading wall' : page.sub || 'Deep dive');
+  close.textContent = 'Close  (Esc)';
+  const hasLab = p && p.kind !== 'museum';
+  const go = h('button', { class: 'hb-go' }, !p ? 'Back →' : p.kind === 'workshop' ? 'Go to the machines →' : 'Try it in the lab →');
+  const art = h('article', { html: p ? frame(p, page.html) : page.html || '' });
+  if (hasLab || !p) art.append(go);
+  const scroller = h('div', { class: 'hb-page', tabindex: '0' }, art);
+  root.append(scroller);
+  scroller.focus();
+  if (anchor) requestAnimationFrame(() => art.querySelector(`#sec-${anchor}`)?.scrollIntoView());
+  let alive = true;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // <canvas data-anim="name" width="720" height="400"> is drawn by ANIMS[name](g, seconds)
+  art.querySelectorAll('canvas[data-anim]').forEach((cv) => {
+    const draw = ANIMS[cv.dataset.anim], g = cv.getContext('2d');
+    if (!draw) return;
+    let visible = false, last = -1;
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { root: scroller }).observe(cv);
+    const tick = (ms) => {
+      if (!alive) return;
+      const t = still ? 2.2 : ms / 1000;
+      if ((visible || last < 0) && t - last > 0.05) { last = t; g.clearRect(0, 0, cv.width, cv.height); draw(g, t, cv); }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  root.dataset.ready = '1';
+  return new Promise((resolve) => {
+    const done = (v) => { alive = false; window.removeEventListener('keydown', key, true); root.remove(); resolve(v); };
+    const key = (e) => { if (e.key === 'Escape') { e.preventDefault(); done(); } };
+    window.addEventListener('keydown', key, true);
+    close.onclick = () => done();
+    go.onclick = () => done('lab');
+  });
+}
