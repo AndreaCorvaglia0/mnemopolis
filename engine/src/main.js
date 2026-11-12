@@ -14,6 +14,10 @@ import { openReading } from './lab/reading.js';
 import { paintKind } from './art/buildings.js';
 import { MONUMENT_KINDS } from './art/sprites.js';
 import { KINDS } from './world/townMap.js';
+import { GEN, THEMES, THEME } from './gen/core.js';
+import { paintFacade } from './gen/facade.js';
+import { EMBLEMS, drawEmblem } from './gen/emblems.js';
+import { makeCanvas } from './art/px.js';
 
 // Pixelify Sans has an "fi" ligature that reads like "A" at small sizes.
 // A zero-width non-joiner after every f keeps the letters apart.
@@ -103,12 +107,36 @@ import * as content from './data/content.js';
 import { state } from './systems/state.js';
 document.title = content.COURSE.title;
 // A picture of every kind of building and every landmark: useful when working on the look.
-function gallery() {
+// With generated houses on (GEN.facade), every kind in each theme with two seeds, then the emblems.
+// gallery({ scale: 2 }) draws it bigger.
+function gallery({ scale } = {}) {
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'position:fixed;inset:0;z-index:50;background:#3c7a3a;display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end;align-content:center;justify-content:center;padding:20px;font:14px system-ui;color:#fff';
-  const add = (cv, label) => { const d = document.createElement('div'); d.style.textAlign = 'center'; cv.style.cssText = `width:${cv.width * 2}px;image-rendering:pixelated;display:block;margin:0 auto 6px`; d.append(cv, label); wrap.append(d); };
-  for (const [kind, k] of Object.entries(KINDS)) add(paintKind(k.paint, { x: 0, y: 0, w: k.w, h: k.h, doors: k.doors, label: kind.toUpperCase().slice(0, 9) }), `kind: ${kind}`);
-  for (const m of MONUMENT_KINDS) { const src = game.textures.get(`mon-${m}`).getSourceImage(), cv = document.createElement('canvas'); cv.width = src.width; cv.height = src.height; cv.getContext('2d').drawImage(src, 0, 0); add(cv, `landmark: ${m}`); }
+  wrap.style.cssText = 'position:fixed;inset:0;z-index:50;background:#3c7a3a;display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end;align-content:center;justify-content:center;padding:20px;font:14px system-ui;color:#fff;overflow:auto';
+  const add = (cv, label, s = 2, into = wrap) => { const d = document.createElement('div'); d.style.textAlign = 'center'; cv.style.cssText = `width:${cv.width * s}px;image-rendering:pixelated;display:block;margin:0 auto 6px`; d.append(cv, label); into.append(d); return d; };
+  if (GEN.facade) {
+    const s = scale || 1, extra = { league: { paint: 'league', w: 8, h: 5, doors: [[3, 4], [4, 4]] }, home: { paint: 'cottage', w: 4, h: 4, doors: [[1, 3]] } };
+    wrap.style.gap = '6px 10px'; wrap.style.font = '11px system-ui'; wrap.style.padding = '8px';
+    let e = 0;
+    for (const th of Object.values(THEMES)) ['a', 'b'].forEach((seed, k) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;gap:10px;align-items:flex-end;width:100%;justify-content:center';
+      const tag = document.createElement('div'); tag.style.cssText = 'width:70px;text-align:right'; tag.textContent = `${th.name} ${seed}`; row.append(tag);
+      for (const [kind, kk] of Object.entries({ ...KINDS, ...extra })) {
+        const b = { id: `gallery-${kind}`, kind, x: 0, y: 0, w: kk.w, h: kk.h, doors: kk.doors, paint: kk.paint, label: kind.toUpperCase().slice(0, 9), emblem: EMBLEMS[e++ % EMBLEMS.length] };
+        add(paintFacade(b, { theme: th, seed: `gallery-${seed}:${kind}`, district: k ? 1 : 0, slot: k ? 1 : 0 }).canvas, '', s, row);
+      }
+      wrap.append(row);
+    });
+    // one district: the same kind in the four places of a district must be told apart at a glance
+    const row = document.createElement('div'); row.style.cssText = 'display:flex;gap:10px;align-items:flex-end;width:100%;justify-content:center';
+    const tag = document.createElement('div'); tag.style.cssText = 'width:70px;text-align:right'; tag.textContent = `${THEME.name}: one district`; row.append(tag);
+    for (const kind of ['lab', 'hall', 'archive']) for (let slot = 0; slot < 4; slot++) { const kk = KINDS[kind]; add(paintFacade({ id: `d-${kind}-${slot}`, kind, x: 0, y: 0, w: kk.w, h: kk.h, doors: kk.doors, paint: kk.paint, label: kind.toUpperCase() }, { seed: `district:${kind}:${slot}`, district: 2, slot }).canvas, '', s, row); }
+    wrap.append(row);
+    const strip = document.createElement('div'); strip.style.cssText = 'display:flex;gap:8px;width:100%;justify-content:center;align-items:center';
+    for (const name of EMBLEMS) { const [cv, ctx] = makeCanvas(11, 11); ctx.fillStyle = '#1b1a2b'; ctx.fillRect(0, 0, 11, 11); drawEmblem(ctx, name, 1, 1, 1, '#ffcf5a'); cv.title = name; add(cv, '', 2 * s, strip); }
+    wrap.append(strip);
+  } else for (const [kind, k] of Object.entries(KINDS)) add(paintKind(k.paint, { x: 0, y: 0, w: k.w, h: k.h, doors: k.doors, label: kind.toUpperCase().slice(0, 9) }), `kind: ${kind}`);
+  for (const m of MONUMENT_KINDS) { const src = game.textures.get(`mon-${m}`).getSourceImage(), cv = document.createElement('canvas'); cv.width = src.width; cv.height = src.height; cv.getContext('2d').drawImage(src, 0, 0); add(cv, GEN.facade ? '' : `landmark: ${m}`, GEN.facade ? scale || 1 : 2); }
   document.body.append(wrap);
   return 1;
 }

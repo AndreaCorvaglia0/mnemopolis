@@ -44,7 +44,7 @@ places.forEach((p, i) => {
   if (p.kind !== 'museum') steps.push(`eval:${enc(`(__game.scene.getScene('UI').reading('${p.id}'),1)`)}`, 'wait:1500', `shot:${n}-${p.id}-page`, 'key:Escape', 'wait:500');
   else steps.push(`eval:${enc(`(__game.scene.getScene('UI').plaque(__hb.content.PLACE['${p.id}'].timeline,0,__hb.content.PLACE['${p.id}'].kinds),1)`)}`, 'wait:1000', `shot:${n}-${p.id}-plaque`, 'key:Escape', 'wait:500');
 });
-steps.push(`eval:${enc("(__game.scene.getScene('UI').showAtlas(),1)")}`, 'wait:1200', 'shot:98-map', 'key:Escape', 'wait:500', `eval:${enc('__hb.gallery()')}`, 'wait:600', 'shot:99-gallery');
+steps.push(`eval:${enc("(__game.scene.getScene('UI').showAtlas(),1)")}`, 'wait:1200', 'shot:98-map', 'key:Escape', 'wait:500', ...(PHONE ? [] : ['resize:1600:1300']), `eval:${enc('__hb.gallery()')}`, 'wait:800', 'shot:99-gallery');
 const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch' : '?lite&test' } });
 console.log(`Pictures are in ${out}. Open them.`);
 process.exit(r.status || 0);

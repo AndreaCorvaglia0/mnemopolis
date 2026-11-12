@@ -56,6 +56,44 @@ Landmarks (`landmark`, and `hub.monument`): `fountain`, `obelisk`, `statue`, `ar
 Choose them for meaning where an honest link exists, otherwise simply for variety. Tell the
 learner the link in the district's `idea` or in the guide's lines if there is one.
 
+## Generated houses
+
+On by default (`GEN.facade`, `src/gen/facade.js`). Every house is put together at boot from
+hand-drawn pieces, in three passes: massing (the shape of the kind, storeys, roof type), facade
+(walls, bays, door, sign) and details (shutters, flower boxes, awnings, chimneys, lamps, emblem).
+It is deterministic: the seed is `<course id>:<house id>:facade`, so the same course always gives
+the same town and another course a different one.
+
+| Stays (it tells the learner the kind) | Varies |
+|---|---|
+| The silhouette of each kind: the lab's cube on the roof, the hall's balance board, the studio's ring and flat roof, the archive's columns and pediment, the observatory's tower and light, the workshop's saw-tooth roof and chimneys, the museum's castle, the cave's mouth, the league's star | Roof type and colour, storeys, window shape and arrangement, door style, chimney, porch or awning, shutters, flower boxes, vines, wall material, column count, tooth count, tower bands and cap, banners, crystals... |
+| Footprint, door tile, house number, the name sign | |
+
+- **Districts**: the houses of one district share a roof colour family; each house is one step
+  lighter or darker, has its own wall colour and one strong feature (shutters, flower boxes,
+  awning, vines...) chosen by its place in the district, so two of them never look alike.
+- **Themes** (`THEMES` in `src/gen/core.js`, chosen by `"theme"` in `world.json`, otherwise by
+  the course id) change structure, not only colour: `harbour` has clapboard walls, tiled roofs of
+  middle pitch and shutters; `nordic` painted board walls, steep slate roofs with front gables and
+  tall windows; `citadel` ashlar walls with quoins, low hip, flat or mansard roofs and arched
+  windows. The fields under `style` are read by the generator.
+- **Emblems**: `"emblem"` on a concept in `course.json` puts a 9 x 9 icon on the sign, a gable or
+  a tower. The names are in `src/gen/emblems.js` (`__hb.gallery()` shows them all); the validator
+  warns on an unknown name.
+
+`__hb.gallery()` (saved by `npm run shots` as `99-gallery.png`) shows every kind in the three
+themes with two seeds, and four houses of one district; `__hb.gallery({ scale: 2 })` is bigger.
+
+- **Switch off**: `{ "gen": { "facade": false } }` in `courses/<slug>/world.json`. The town is then
+  drawn by the hand-written painters of `src/art/buildings.js`, exactly as before.
+- **Add a theme**: a new entry in `THEMES` with the same fields as the others, including
+  `hubRoof` and `style` (`pitch` 0 to 1, `roofs`, `tex`, `wall`, `windows`, `doors`, `shutters`,
+  `chimney`, `boxes`, `awning`, `quoins`, `tower`, `cap`, `castle`).
+- **Add a roof style**: a branch in `roof()` in `src/gen/facade.js` that fills its box and
+  returns where a mark fits (`cx`, `cy`); then name it in a theme's `style.roofs`.
+- **Add an emblem**: nine strings of nine characters in `ICONS` in `src/gen/emblems.js`. Keep it
+  bold and filled: it is read at one pixel per cell.
+
 ## Standard look or custom look
 
 **Standard (default).** Everything above, generated. Names, texts, landscapes, landmarks, kinds
