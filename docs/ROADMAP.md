@@ -10,9 +10,13 @@
 - Engine: generated town, standard rooms, workshop, museum, lab frame, reading pages, map,
   review questions, final check, save, music.
 
+- A build skill, root commands, a course scaffold, and a workflow that validates, builds and
+  publishes every course on push.
+
 ## Next
 
-1. **A build skill** (`skills/game-build/`): from a validated course to a tested game.
+1. Play-testing with real learners, and a second example course that uses the layouts and
+   landscapes the first one does not.
 
 ## Later
 

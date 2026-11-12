@@ -1,0 +1,13 @@
+{
+  "name": "mnemopolis",
+  "private": true,
+  "description": "Shortcuts to run from the repository root. Choose the course with COURSE=<slug> (default: chroma).",
+  "scripts": {
+    "new": "node skills/knowledge-base/scripts/new-course.mjs",
+    "validate": "node skills/knowledge-base/scripts/validate.mjs",
+    "setup": "npm --prefix engine install",
+    "check": "npm --prefix engine run check",
+    "build": "npm --prefix engine run build",
+    "shots": "npm --prefix engine run shots"
+  }
+}

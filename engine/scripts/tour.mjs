@@ -4,7 +4,7 @@
 //   to move afterwards), every room, every lab station, every reading page, the map.
 // LOOK at the pictures afterwards: a build that compiles can still be wrong on screen.
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, rmSync } from 'node:fs';
+import { mkdirSync, rmSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { COURSE } from '../src/course/course.js';
@@ -12,6 +12,9 @@ import { LABS } from '../src/course/labs.js';
 import { MAP_W, MAP_H, BUILDINGS } from '../src/world/townMap.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url)), out = path.join(here, '..', 'shots');
+const chrome = process.env.CHROME || ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'].find(existsSync);
+if (!chrome || !existsSync(chrome)) { console.log('No Chrome or Chromium found (set CHROME=/path/to/it). Screenshots skipped: nothing was checked on screen.'); process.exit(0); }
+if (!existsSync(path.join(here, '..', 'dist', 'index.html'))) { console.log('No build yet: run the build first.'); process.exit(1); }
 rmSync(out, { recursive: true, force: true }); mkdirSync(out, { recursive: true });
 const enc = (js) => encodeURIComponent(js);
 const places = COURSE.districts.flatMap((d) => d.places);

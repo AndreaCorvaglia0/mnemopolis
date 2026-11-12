@@ -26,9 +26,18 @@ is only one way to walk through it.
 
 ## Make your own
 
-1. Use this repository as a template and open it with an AI coding agent (Claude Code or similar).
-2. Say: *"Read AGENTS.md. I want a course on ‹subject›. My material is in ‹folder›."*
-3. Answer its questions, approve the map it shows you, play the result.
+**In a Claude chat** (with code execution on): attach your material and write
+
+> Clone https://github.com/AndreaCorvaglia0/mnemopolis, read AGENTS.md and follow it. I want a game to learn ‹subject›.
+
+You get the game as one HTML page and your course as a zip, to continue later.
+
+**In a coding agent** (Claude Code or similar): press *Use this template*, open your copy and say
+*"Read AGENTS.md. I want a course on ‹subject›. My material is in ‹folder›."* Your course lives in
+`courses/‹name›/`; on every push a workflow validates it, builds it and, if GitHub Pages is on
+(Settings → Pages → Source: GitHub Actions), publishes it.
+
+Either way you answer a few questions, approve the map of the course, then play.
 
 `courses/chroma/` is a complete example (a short course on colour).
 
