@@ -1,7 +1,13 @@
 # For AI agents working in this repository
 
-This repository turns a subject into a learning game in three independent steps. Do them in
-order, and do not start a step before the previous one is accepted by the user.
+This repository turns a subject into a learning game in three independent steps.
+
+**Go all the way.** Unless the user says otherwise, a request for a game means: do steps 1 and 2
+in one go and deliver the playable game. Do not stop after the knowledge base, do not wait for
+approval of the map, and do not end with a plan or an offer to continue. Take sensible defaults,
+say which ones you took, show the map in passing, and keep building. Stop early only if the user
+asked to be consulted first ("ask me before", "show me the map first") or if you cannot even
+tell what the subject is.
 
 | Step | You do | Instructions | Output |
 |---|---|---|---|

@@ -37,7 +37,8 @@ You get the game as an artifact you can open and share, and your course as a zip
 `courses/‹name›/`; on every push a workflow validates it, builds it and, if GitHub Pages is on
 (Settings → Pages → Source: GitHub Actions), publishes it.
 
-Either way you answer a few questions, approve the map of the course, then play.
+By default the agent goes all the way to a playable game and shows you the map of the course on
+the way. Say "ask me first" or "show me the map before building" if you want to steer it.
 
 `courses/chroma/` is a complete example (a short course on colour).
 

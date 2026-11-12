@@ -12,7 +12,7 @@ that does not exist.
 ## Before you start
 
 - `node skills/knowledge-base/scripts/validate.mjs courses/<slug>` reports no errors.
-- The user has seen and accepted the map. If not, go back: do not build an unapproved course.
+- The map has been shown to the user. Their approval is not required unless they asked for it.
 - Read `engine/docs/SCHEMA.md` (what a station's code receives) and one lab of the example,
   `courses/chroma/labs/lamps.js`, as the quality bar.
 
@@ -21,10 +21,12 @@ that does not exist.
 1. **Set up once.** `npm run setup` (installs the engine's packages).
 2. **One station first, end to end.** Pick the first station of the first concept. Write
    `courses/<slug>/labs/<conceptId>.js` exporting `{ <stationId>: mount }`, then
-   `COURSE=<slug> npm run build` and `npm run shots`. Open the pictures. Show the user this one
-   station before writing the others: it is the cheapest moment to correct the style.
+   `COURSE=<slug> npm run build` and `npm run shots`. Open the pictures, publish the game so the
+   user can already play, and **continue without waiting**.
 3. **Then the rest, concept by concept.** After each concept: build, shots, look.
-4. **Deliver** (see below).
+4. **Deliver** (see below). The work is done when every station has code and the game is
+   published, not before. If you are running out of room, finish whole concepts, publish what
+   works, and say exactly which stations are still missing.
 
 Stations without code do not break the game during the work: they show a notice, and
 `npm run check` lists them. A course is finished when that list is empty.

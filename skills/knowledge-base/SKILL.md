@@ -37,7 +37,7 @@ Do them in order. Each has a reference file: read it when you reach the step, no
 | 2 | **Gather**: the user's material, then the web, then questions to the user | `sources.md` | `references/1-sources.md` |
 | 3 | **Map**: extract ideas, find the big idea, choose, link | first half of `map.md` | `references/2-concept-map.md` |
 | 4 | **Path**: order, themes, call-backs | second half of `map.md` | `references/3-path.md` |
-| | **Checkpoint with the user** | their changes | below |
+| | **Show the map** (do not wait) | the map in the conversation | below |
 | 5 | **Activate**: for every concept, what the learner does to understand it | concepts in `course.json` | `references/4-active-learning.md`, `references/5-labs.md` |
 | 6 | **Ask**: questions for remembering and for using | questions in `course.json` | `references/6-questions.md` |
 
@@ -46,7 +46,10 @@ errors, and read its warnings.
 
 ### Step 1: the brief
 
-Ask in **one message**, with a default for each item, and only what is still unknown:
+**Default: do not ask, decide.** If you know the subject, fill the brief yourself from what the
+user wrote and attached, with the defaults below, state your choices in two or three lines, and
+go on. Ask (in one message, with a default for each item) only when the user asked to be
+consulted, or when the subject itself is unclear. The items of the brief:
 
 - **Subject**, and the **material** the user trusts (files, notes, links). None is acceptable:
   you will work from sources you look up, and list them.
@@ -57,12 +60,12 @@ Ask in **one message**, with a default for each item, and only what is still unk
 - **Size**: small (4 to 6 concepts), standard (7 to 10), large (up to 16). Default: standard.
 - **Language** of the course.
 
-If the user is not there to answer, take the most reasonable reading, write it in `brief.md`,
-and go on.
+Write the choices in `brief.md` under "Decisions taken without the user".
 
 ### The checkpoint
 
-After step 4, show the user, in the conversation:
+After step 4, show the user, in the conversation, **and keep working without waiting** (unless
+they asked to approve the map first):
 
 1. the big idea;
 2. the map as a table: theme, concept, "you will be able to", "in the lab you will" (one line
@@ -70,8 +73,7 @@ After step 4, show the user, in the conversation:
 3. what you left out and why;
 4. anything you could not verify, and any choice that is theirs to make.
 
-Changing the map now takes minutes. After the labs are designed it takes hours. If nobody
-answers, continue with your version and say so when you hand over.
+If the user answers with changes while you work, apply them: changing the map early is cheap.
 
 ## Limits
 
@@ -102,6 +104,6 @@ They are what keeps a course in one head. The validator enforces them.
 
 ## Handing over
 
-When the validator passes, tell the user: the map, what is simplified, what is unverified, and
-the two or three lab designs you are least sure of. The next step is building the game from
-`course.json` (see the repository's `AGENTS.md`).
+When the validator passes, **go straight on to building the game** with
+`skills/game-build/SKILL.md`, unless the user asked only for the course design. Keep for the
+final message: what is simplified, what is unverified, and the lab designs you are least sure of.
