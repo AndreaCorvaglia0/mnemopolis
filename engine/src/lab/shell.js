@@ -2,6 +2,7 @@
 // One station = one learning objective: a goal, one thing to try, one takeaway.
 import { LABS } from '../course/labs.js';
 import { state, save } from '../systems/state.js';
+import { touch } from '../systems/view.js';
 import { sfx } from '../systems/audio.js';
 import { codePanel } from './code.js';
 import { COURSE } from '../course/course.js';
@@ -55,6 +56,7 @@ const CSS = `
 .lab-chip.on{border-color:#7ddc8a;color:#7ddc8a}
 .lab-panel{background:#0e1116;border:1px solid #232a36;border-radius:8px;overflow:auto;min-height:0}
 @keyframes hbin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (max-width:700px){.hb-top{flex-wrap:wrap;gap:8px 12px;padding:10px 12px}.hb-top h1{white-space:normal;flex:1 1 0;min-width:0;font-size:15px}.hb-tabs{order:3;flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.hb-tab{white-space:nowrap;flex:none}.hb-close{padding:8px 14px}}
 @media (max-width:900px){.hb-main{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}.lab-side{border-left:0;border-top:1px solid #232a36;max-height:42vh}}
 @media (prefers-reduced-motion:reduce){.lab-take{animation:none}}
 .hb-page{flex:1;overflow:auto;scroll-behavior:smooth}
@@ -119,7 +121,7 @@ export function predict(controls, question, options) {
 let styled = false;
 export function overlay(title, sub) {
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
-  const close = h('button', { class: 'hb-close' }, 'Close  (Esc)');
+  const close = h('button', { class: 'hb-close' }, touch.on ? 'Close  ✕' : 'Close  (Esc)');
   const tabs = h('div', { class: 'hb-tabs' });
   const root = h('div', { class: 'hb-over', role: 'dialog', 'aria-label': title }, h('div', { class: 'hb-top' }, h('h1', { html: `${title} <span>· ${sub}</span>` }), tabs, close));
   document.body.append(root);
@@ -171,7 +173,7 @@ export function openLab(id, start = 0) {
     root.dataset.ready = '0';
     // a prediction, when the design asks for one, comes before the learner touches anything
     if (st.predict) {
-      const wait = h('div', { class: 'lab-box', style: 'display:grid;place-items:center;color:#8b93a7;font-size:17px' }, 'Make your prediction on the right. Then the stage opens.');
+      const wait = h('div', { class: 'lab-box', style: 'display:grid;place-items:center;color:#8b93a7;font-size:17px' }, 'Make your prediction first. Then the stage opens.');
       stage.append(wait);
       await predict(controls, st.predict.q, st.predict.options);
       if (my !== token) return;

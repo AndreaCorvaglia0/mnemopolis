@@ -4,6 +4,8 @@ import { state, save, pickQuestion } from '../systems/state.js';
 import { sfx, initAudio, setMusic, setFire, setSea } from '../systems/audio.js';
 import { COURSE, DIALOG, TALK, QUESTIONS, LEAGUE } from '../data/content.js';
 import { Walker } from '../systems/walker.js';
+import { TapNav } from '../systems/tapnav.js';
+import { townZoom } from '../systems/view.js';
 import { hash } from '../art/px.js';
 
 const TOD = {
@@ -46,6 +48,8 @@ export class Town extends Phaser.Scene {
     const cam = this.cameras.main;
     cam.setBounds(0, 0, MAP_W * T, MAP_H * T);
     cam.setRoundPixels(true);
+    // a tap on a building means its door
+    this.nav = new TapNav(this, { w: MAP_W, h: MAP_H, redirect: (x, y) => { const b = BUILDINGS.find((o) => !o.home && x >= o.x && x < o.x + o.w && y >= o.y && y < o.y + o.h); return b ? b.doors[0] : null; } });
     this.layout();
     this.scale.on('resize', this.layout, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.layout, this));
@@ -96,7 +100,7 @@ export class Town extends Phaser.Scene {
     const W = this.scale.width, H = this.scale.height;
     const cam = this.cameras.main;
     cam.setSize(W, H);
-    cam.setZoom(Math.max(1, Math.round(Math.min(W / 320, H / 180))));
+    cam.setZoom(townZoom(W, H));
     if (this.brush) this.sizeDark();
   }
 
@@ -330,13 +334,15 @@ export class Town extends Phaser.Scene {
     }
     const [px, py] = this.player.facing(), near = this.npcAt(px, py);
     this.ui.setPrompt(near ? `Space  Talk to ${near.def.name}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? 'Space  Read the sign' : this.objects.get(`${px},${py}`)?.kind === 'monument' ? 'Space  Look at the landmark' : null);
-    const dir = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
-    if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E)) return this.interact();
+    const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
+    if (key) this.nav.cancel();
+    const tapped = !key && this.nav.walking, dir = key || this.nav.next();
+    if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) return this.interact();
     if (!dir) { this.player.stopAnim(); return; }
-    const speed = k.SHIFT.isDown ? 95 : 150;
+    const speed = k.SHIFT.isDown ? 95 : tapped ? 110 : 150;
     const res = this.player.step(dir, this.canEnter, speed, (x, y) => this.arrived(x, y));
     if (res && res.door) this.tryDoor(res.door);
-    else if (res === false && time - (this.lastBump || 0) > 300) { this.lastBump = time; sfx.bump(); }
+    else if (res === false) { if (tapped) this.nav.blocked(); else if (time - (this.lastBump || 0) > 300) { this.lastBump = time; sfx.bump(); } }
   }
 
   arrived(x, y) {

@@ -47,7 +47,7 @@ the way. Say "ask me first" or "show me the map before building" if you want to 
 Early, and not yet play-tested with learners. The whole path works on the example course: design,
 validation, build, publication. Feedback and issues are welcome.
 
-Play the example: https://andreacorvaglia0.github.io/mnemopolis/chroma/
+Play the example, on a computer or a phone: https://andreacorvaglia0.github.io/mnemopolis/chroma/
 See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 The research behind the method: [skills/knowledge-base/references/evidence.md](skills/knowledge-base/references/evidence.md).

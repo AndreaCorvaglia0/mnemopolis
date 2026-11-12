@@ -28,7 +28,6 @@ function frame(p, body) {
 export function openReading(id, anchor = null) {
   const p = PLACE[id], page = { html: p ? sections(p) : '' };
   const { root, close } = overlay(p ? p.name : page.title || '', p ? 'Reading wall' : page.sub || 'Deep dive');
-  close.textContent = 'Close  (Esc)';
   const hasLab = p && p.kind !== 'museum';
   const go = h('button', { class: 'hb-go' }, !p ? 'Back →' : p.kind === 'workshop' ? 'Go to the machines →' : 'Try it in the lab →');
   const art = h('article', { html: p ? frame(p, page.html) : page.html || '' });

@@ -8,6 +8,7 @@
     "setup": "npm --prefix engine install",
     "check": "npm --prefix engine run check",
     "build": "npm --prefix engine run build",
-    "shots": "npm --prefix engine run shots"
+    "shots": "npm --prefix engine run shots",
+    "shots:phone": "npm --prefix engine run shots:phone"
   }
 }

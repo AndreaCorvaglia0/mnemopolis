@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { sfx, setMusic, setFire, setSea } from '../systems/audio.js';
 import { Walker } from '../systems/walker.js';
+import { TapNav } from '../systems/tapnav.js';
+import { townZoom } from '../systems/view.js';
 import { makeCanvas, rect, px, hash, addTex } from '../art/px.js';
 import { drawText, textWidth } from '../art/buildings.js';
 import { FireLight, bracket } from '../art/fire.js';
@@ -69,6 +71,7 @@ export class Museum extends Phaser.Scene {
 
     const cam = this.cameras.main;
     cam.setBackgroundColor('#0b0806'); cam.setRoundPixels(true);
+    this.nav = new TapNav(this, { w: this.W, h: 9 });
     this.layout();
     cam.startFollow(this.player.sprite, true, 0.15, 0.15);
     this.scale.on('resize', this.layout, this);
@@ -85,7 +88,8 @@ export class Museum extends Phaser.Scene {
 
   layout() {
     const Ws = this.scale.width, Hs = this.scale.height, cam = this.cameras.main, W = this.W;
-    const z = Math.max(1, Math.floor(Math.min(Ws / 300, Hs / 170)));
+    // the corridor scrolls sideways, so the zoom follows the same rule as the town
+    const z = Math.max(1, Math.min(townZoom(Ws, Hs), Math.floor(Hs / (H * T + 30))));
     cam.setSize(Ws, Hs); cam.setZoom(z);
     const vh = Hs / z;
     cam.setBounds(0, -(vh - H * T) / 2, W * T, vh);
@@ -108,14 +112,16 @@ export class Museum extends Phaser.Scene {
     }
     const [fx, fy] = this.player.facing(), m = fy === 2 ? this.slots.get(fx) : null, guide = this.guide.tx === fx && this.guide.ty === fy;
     this.ui.setPrompt(guide ? `Space  Talk to ${MASTERS[this.id].name}` : m ? `Space  ${m.year}: ${m.title}` : null);
-    if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E)) {
+    if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) {
       if (guide) return this.talk();
       if (m) return this.ui.plaque(this.list, this.list.indexOf(m), this.place.kinds);
       return;
     }
-    const dir = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
+    const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
+    if (key) this.nav.cancel();
+    const tapped = !key && this.nav.walking, dir = key || this.nav.next();
     if (!dir) { this.player.stopAnim(); return; }
-    const res = this.player.step(dir, this.canEnter, k.SHIFT.isDown ? 95 : 150, () => sfx.step('stone'));
+    const res = this.player.step(dir, this.canEnter, k.SHIFT.isDown || tapped ? 95 : 150, () => sfx.step('stone'));
     if (res && res.exit) this.go('Town', { from: this.id }, sfx.gate);
   }
 

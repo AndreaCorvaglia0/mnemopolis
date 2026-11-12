@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { sfx, setMusic, setFire, setSea } from '../systems/audio.js';
 import { Walker } from '../systems/walker.js';
+import { TapNav } from '../systems/tapnav.js';
 import { makeCanvas, rect, px, hash, addTex } from '../art/px.js';
 import { drawText, textWidth } from '../art/buildings.js';
 import { LABS } from '../course/labs.js';
@@ -78,6 +79,7 @@ export class Workshop extends Phaser.Scene {
     const cam = this.cameras.main;
     cam.setBackgroundColor('#0d0f1e'); cam.setRoundPixels(true);
     this.ui.setLocation(place.name, 'room');
+    this.nav = new TapNav(this, { w: W, h: H });
     this.layout();
     this.scale.on('resize', this.layout, this);
     const dropFx = () => cam.postFX.clear();
@@ -116,14 +118,16 @@ export class Workshop extends Phaser.Scene {
     }
     const [fx, fy] = this.player.facing(), m = this.at.get(`${fx},${fy}`), guide = this.guide.tx === fx && this.guide.ty === fy;
     this.ui.setPrompt(guide ? `Space  Talk to ${MASTERS[this.id].name}` : m !== undefined ? `Space  ${m + 1}. ${this.lab.stations[m].tab}` : null);
-    if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E)) {
+    if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) {
       if (guide) return this.talk();
       if (m !== undefined) return this.ui.lab(this.id, m);
       return;
     }
-    const dir = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
+    const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
+    if (key) this.nav.cancel();
+    const tapped = !key && this.nav.walking, dir = key || this.nav.next();
     if (!dir) { this.player.stopAnim(); return; }
-    const res = this.player.step(dir, this.canEnter, k.SHIFT.isDown ? 95 : 150, () => sfx.step('stone'));
+    const res = this.player.step(dir, this.canEnter, k.SHIFT.isDown || tapped ? 95 : 150, () => sfx.step('stone'));
     if (res && res.exit) {
       this.leaving = true; sfx.door();
       this.cameras.main.fadeOut(220, 0, 0, 0);

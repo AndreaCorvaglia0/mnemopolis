@@ -8,6 +8,7 @@
 | `npm run course <slug>` | Points the engine at `courses/<slug>/` (default `chroma`, or `COURSE=`). Run by the commands below. |
 | `npm run check` | Validates the knowledge base, and that every designed station has code. |
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
+| `npm run shots:phone` | The same tour on a phone held upright (390 x 844, touch mode), into `shots/phone/`. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
 | `npm run dev` | Live server while editing, if a browser is available. |
 
@@ -73,3 +74,15 @@ Course work happens in `courses/<slug>/`, not here. See `WORLD.md` for what a cu
 Standard houses need no code. A workshop takes its machines from the lab's stations; a museum
 takes its plaques from `timeline`. For anything else, prefer a new station pattern inside the lab
 over a new scene: the lab frame is where the learner already knows how to behave.
+
+## Phones and screen shapes
+
+| | Rule | Where |
+|---|---|---|
+| Zoom of the town and the museum | The **short side** of the screen shows about 14 tiles, upright or sideways, phone or monitor; whole-number zoom so pixel art stays sharp. Try other values with `?tiles=N` in the address. | `src/systems/view.js` |
+| Rooms and the workshop | The whole room fits the screen, at the largest whole-number zoom. | each scene's `layout()` |
+| Interface (dialogues, quiz, prompts) | Sideways: a 960 x 540 stage scaled to fit. Upright: 600 virtual pixels across, as tall as the screen, so text keeps a readable size; boxes span the width and sit at the bottom; the quiz stacks its buttons. | `UI.frame()` in `src/scenes/UI.js` |
+| Touch | Tap where you want to go; tap a person, sign, plaque or machine to walk to it and use it; tap a building to go to its door. Buttons replace the key hints (Map, Music, Grass); the gold prompt can be tapped. Turns on by itself on touch screens; `?touch` forces it. | `src/systems/tapnav.js`, `UI.setLocation()` |
+| Labs and pages | Under 900 px wide the stage sits above the panel; under 700 px the header wraps so Close stays on screen. | `src/lab/shell.js` |
+
+Lab code must work with a finger: see `skills/game-build/SKILL.md`.

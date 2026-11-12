@@ -59,6 +59,9 @@ Rules:
 - **No network at run time.** No CDN, no remote fonts or images.
 - Texts shown by your code (captions, readouts) follow the course's language and tone: plain,
   no praise, no exclamation marks.
+- **It must work on a phone held upright.** The stage is then about 360 px wide: draw text in
+  canvases at 22 px or more for a 720-wide canvas, make things to drag at least 40 px across,
+  and make task thresholds forgiving for a finger. Check with `npm run shots:phone`.
 - Aim for 40 to 80 lines per station. If it grows beyond that, the design is probably two
   stations: say so.
 
@@ -74,6 +77,7 @@ match a wrong design, and never change `course.json` silently.
 | `COURSE=<slug> npm run check` | The course is valid, every station has code, every door in the town is reachable and near |
 | `COURSE=<slug> npm run build` | The above, then `engine/dist/index.html` |
 | `npm run shots` | Pictures in `engine/shots/`: the town, a walk into a house and back, every room, station and page |
+| `npm run shots:phone` | The same on a phone held upright, with touch, in `engine/shots/phone/` |
 
 Pictures show the first state of each station, not the interaction. For each station also
 verify the logic of its tasks by reading your own conditions against the drawing code.
