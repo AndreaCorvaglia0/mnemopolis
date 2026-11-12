@@ -30,17 +30,7 @@ export function draggable(pane, items, redraw, { radius = (it) => it.r, bounds =
   pane.cv.style.cursor = 'grab';
 }
 
-// "Predict first": the learner commits to an answer before touching anything. No score: the lab is
-// where they find out. Resolves with the index picked. Use it when intuition is likely to be wrong.
-export function predict(controls, question, options) {
-  return new Promise((resolve) => {
-    const box = h('div', { class: 'lab-read' }, h('div', { class: 'lab-k' }, 'Predict first'), h('div', { style: 'margin-bottom:8px' }, question));
-    const row = h('div', { style: 'display:flex;gap:6px;flex-wrap:wrap' });
-    options.forEach((o, i) => row.append(h('button', { class: 'lab-btn', onclick: () => { sfx.tick(); [...row.children].forEach((b, j) => { b.disabled = true; b.style.opacity = j === i ? 1 : 0.4; if (j === i) b.style.borderColor = '#ffcf5a'; }); box.append(h('div', { style: 'margin-top:8px;color:#ffcf5a' }, 'Now find out: the stage is yours.')); resolve(i); } }, o)));
-    box.append(row);
-    controls.append(box);
-  });
-}
+export { predict } from './shell.js';
 
 export const rgbCss = ([r, g, b]) => `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
 export function hslToRgb(hh, s, l) { // h in degrees, s and l in 0..1

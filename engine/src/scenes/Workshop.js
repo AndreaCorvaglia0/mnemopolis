@@ -3,7 +3,7 @@ import { sfx, setMusic, setFire, setSea } from '../systems/audio.js';
 import { Walker } from '../systems/walker.js';
 import { makeCanvas, rect, px, hash, addTex } from '../art/px.js';
 import { drawText, textWidth } from '../art/buildings.js';
-import { LABS } from '../course/labs/index.js';
+import { LABS } from '../course/labs.js';
 import { PLACE, MASTERS } from '../data/content.js';
 
 // A workshop is the room of a PROCESS: the stations of its lab are machines on one conveyor belt,

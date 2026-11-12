@@ -3,16 +3,16 @@
 ## Done
 
 - Knowledge-base method as an independent skill, with schema, validator and a worked example.
+- The engine reads `courses/<slug>/course.json`; a course folder holds only content and the
+  interaction code of its lab stations.
 - Engine: generated town, standard rooms, workshop, museum, lab frame, reading pages, map,
   review questions, final check, save, music.
 
 ## Next
 
-1. **Engine reads `course.json`.** Course text comes from the knowledge base; `courses/<slug>/labs/`
-   holds only interaction code, one function per station id. Remove `engine/src/course/`.
-2. **A smaller, more natural town.** Compact layout with curved streets, a river through it,
+1. **A smaller, more natural town.** Compact layout with curved streets, a river through it,
    small squares, more landmarks and vegetation; night as the default mood.
-3. **A build skill** (`skills/game-build/`): from a validated course to a tested game.
+2. **A build skill** (`skills/game-build/`): from a validated course to a tested game.
 
 ## Later
 

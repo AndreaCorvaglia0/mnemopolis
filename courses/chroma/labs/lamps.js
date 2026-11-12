@@ -1,6 +1,6 @@
 // Three Lamps House: additive mixing. Two stations, one idea each.
-import { h, slider, readout } from '../../lab/shell.js';
-import { canvasPane, draggable, predict, rgbCss } from '../../lab/kit.js';
+import { h, slider, readout } from '../../../engine/src/lab/shell.js';
+import { canvasPane, draggable, rgbCss } from '../../../engine/src/lab/kit.js';
 
 const NAMES = { '000': 'no light (black)', '100': 'red', '010': 'green', '001': 'blue', '110': 'yellow', '011': 'cyan', '101': 'magenta', '111': 'white' };
 
@@ -18,8 +18,6 @@ async function mix(ctx) {
     if (d(R, G) < 150) ctx.did(0);
     if (d(R, G) < 120 && d(G, B) < 120 && d(R, B) < 120) ctx.did(1);
   };
-  await predict(ctx.controls, 'Red light on top of green light will look...', ['Brown', 'Yellow', 'Purple', 'White']);
-  if (!ctx.alive()) return;
   ctx.controls.append(out);
   draggable(pane, lamps, draw, { bounds: [60, 60, W - 60, H - 60] });
   pane.hover((x, y) => {
@@ -52,16 +50,5 @@ async function pixel(ctx) {
   draw();
 }
 
-export default {
-  title: 'Additive mixing',
-  stations: [
-    { tab: 'Three lamps', goal: 'Lights add up: where two lamps overlap, the wall gets both colours at once.',
-      tries: ['Drag the red lamp onto the green one.', 'Bring all three lamps together.'],
-      takeaway: 'Red + green = <b>yellow</b>, green + blue = <b>cyan</b>, red + blue = <b>magenta</b>. All three = <b>white</b>. Adding light can only make things brighter.',
-      source: 'Drawn live with additive blending: each lamp adds its own channel.', mount: mix },
-    { tab: 'One pixel', goal: 'A pixel is three tiny lamps. Its colour is three numbers from 0 to 255.',
-      tries: ['Make orange: a lot of red, some green, no blue.', 'Make a mid grey: three equal numbers.', 'Step back until the stripes merge into one colour.'],
-      takeaway: 'Every colour on a screen is <code>(red, green, blue)</code>. Equal numbers give grey. The eye cannot resolve the three lamps, so it sees their sum.',
-      source: 'On the left only pure red, green and blue stripes are drawn. Any other colour you see there is made by your eye.', mount: pixel },
-  ],
-};
+// One function per station id of this concept in course.json. Texts live there, not here.
+export default { mix, pixel };

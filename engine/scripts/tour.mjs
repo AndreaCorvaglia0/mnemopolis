@@ -8,7 +8,7 @@ import { mkdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { COURSE } from '../src/course/course.js';
-import { LABS } from '../src/course/labs/index.js';
+import { LABS } from '../src/course/labs.js';
 import { MAP_W, MAP_H, BUILDINGS } from '../src/world/townMap.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url)), out = path.join(here, '..', 'shots');

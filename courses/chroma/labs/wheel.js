@@ -1,6 +1,6 @@
 // Hue Tower: hue, saturation, lightness.
-import { slider, readout } from '../../lab/shell.js';
-import { canvasPane, hslToRgb, rgbCss } from '../../lab/kit.js';
+import { slider, readout } from '../../../engine/src/lab/shell.js';
+import { canvasPane, hslToRgb, rgbCss } from '../../../engine/src/lab/kit.js';
 
 async function dials(ctx) {
   const W = 720, H = 480, R = 200, CX = 240, CY = 240, pane = canvasPane(ctx.stage, W, H, 'Angle = hue. Distance from the centre = saturation.');
@@ -30,12 +30,5 @@ async function dials(ctx) {
   draw();
 }
 
-export default {
-  title: 'Three dials',
-  stations: [
-    { tab: 'Three dials', goal: 'Any colour can be described the way people talk: which colour, how vivid, how light.',
-      tries: ['Find a pastel pink: a red hue, vivid, and very light.', 'Turn any colour into a grey without touching lightness.'],
-      takeaway: '<b>Hue</b> is which colour, <b>saturation</b> how far it is from grey, <b>lightness</b> how close to white or black. It is the same colour as RGB, with the numbers rearranged.',
-      source: 'HSL computed live from the standard conversion to RGB.', mount: dials },
-  ],
-};
+// One function per station id of this concept in course.json. Texts live there, not here.
+export default { dials };

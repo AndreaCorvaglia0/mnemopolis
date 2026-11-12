@@ -5,7 +5,8 @@
 | | |
 |---|---|
 | `npm install` | Once. Needs Node 18 or later. |
-| `npm run check` | Validates the course against the limits. |
+| `npm run course <slug>` | Points the engine at `courses/<slug>/` (default `chroma`, or `COURSE=`). Run by the commands below. |
+| `npm run check` | Validates the knowledge base, and that every designed station has code. |
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
 | `npm run dev` | Live server while editing, if a browser is available. |
@@ -21,7 +22,7 @@ without it.
 
 ```
 engine/src/
-  course/          THE COURSE: course.js, pages.js, labs/         <- you work here
+  course/          adapter: turns courses/<slug>/course.json into what the scenes need
   world/townMap.js generates the town from the course
   scenes/          Boot, Town, Interior (standard room), Workshop (belt), Museum (timeline), UI
   lab/             shell.js (station frame), kit.js (canvas, drag, predict), code.js (code panel),
@@ -31,7 +32,7 @@ engine/src/
   data/content.js  read-only views of the course for the scenes
 ```
 
-You should rarely need to leave `course/`. See `WORLD.md` for what a custom look touches.
+Course work happens in `courses/<slug>/`, not here. See `WORLD.md` for what a custom look touches.
 
 ## How things connect
 

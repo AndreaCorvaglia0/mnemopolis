@@ -1,6 +1,6 @@
 // Print Works (a workshop: three machines on one belt): subtractive mixing.
-import { h, seg, slider, readout } from '../../lab/shell.js';
-import { canvasPane, draggable, rgbCss } from '../../lab/kit.js';
+import { h, seg, slider, readout } from '../../../engine/src/lab/shell.js';
+import { canvasPane, draggable, rgbCss } from '../../../engine/src/lab/kit.js';
 
 async function inks(ctx) {
   const W = 720, H = 480, pane = canvasPane(ctx.stage, W, H, 'White paper and three transparent inks. Drag them.');
@@ -67,21 +67,5 @@ async function dotsStation(ctx) {
   draw();
 }
 
-export default {
-  title: 'Subtractive mixing',
-  stepper: true,
-  stations: [
-    { tab: 'Ink removes light', short: 'INK', zone: 'Mix', goal: 'Paper is white because it sends back all light. An ink works by keeping some of it.',
-      tries: ['Drag cyan onto magenta and read what comes back.', 'Stack all three inks.'],
-      takeaway: 'Cyan absorbs <b>red</b>, magenta absorbs <b>green</b>, yellow absorbs <b>blue</b>. Two inks leave one light; three leave none: black.',
-      source: 'Drawn live with multiply blending: each ink removes its own channel.', mount: inks },
-    { tab: 'Light or paint', short: 'COMPARE', zone: 'Mix', goal: 'The same colours behave in opposite ways as lights and as paints.',
-      tries: ['Switch on all three.', 'Compare none with two.'],
-      takeaway: 'Lights start from <b>dark and add</b>: more lights, brighter. Paints start from <b>white and take away</b>: more paints, darker.',
-      source: 'Idealised lights and paints: each paint is taken to reflect one primary only.', mount: compare },
-    { tab: 'Dots', short: 'DOTS', zone: 'Print', goal: 'A printer cannot make light grey ink. It prints black dots of different sizes.',
-      tries: ['Step closer until you see single dots.', 'Compare the print with the original tones.'],
-      takeaway: 'Tone on paper is <b>dot size</b>: big dots look dark, small dots look light. From reading distance the eye averages them.',
-      source: 'A halftone computed live from a simple shaded ball.', mount: dotsStation },
-  ],
-};
+// One function per station id of this concept in course.json. Texts live there, not here.
+export default { inks, compare, dots: dotsStation };

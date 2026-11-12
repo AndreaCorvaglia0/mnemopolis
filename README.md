@@ -28,8 +28,8 @@ is only one way to walk through it.
 
 ## Status
 
-Early. The knowledge-base method and its validator are complete. The engine works and still
-carries the example course inside it; reading `course.json` directly is the next step.
+Early. The knowledge-base method, its validator and the engine work end to end on the example
+course. The town's look is being reworked.
 See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 The research behind the method: [skills/knowledge-base/references/evidence.md](skills/knowledge-base/references/evidence.md).

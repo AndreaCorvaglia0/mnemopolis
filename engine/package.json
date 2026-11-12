@@ -4,9 +4,10 @@
   "version": "0.5.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "check": "node scripts/check.mjs",
-    "build": "node scripts/check.mjs && vite build",
+    "course": "node scripts/use-course.mjs",
+    "dev": "node scripts/use-course.mjs && vite",
+    "check": "node scripts/use-course.mjs && node scripts/check.mjs",
+    "build": "node scripts/use-course.mjs && node scripts/check.mjs && vite build",
     "shots": "node scripts/tour.mjs"
   },
   "dependencies": {

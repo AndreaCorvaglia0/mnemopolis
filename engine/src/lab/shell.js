@@ -1,6 +1,6 @@
 // The lab: a full-screen, clean viewer that opens on top of the town.
 // One station = one learning objective: a goal, one thing to try, one takeaway.
-import { LABS } from '../course/labs/index.js';
+import { LABS } from '../course/labs.js';
 import { state, save } from '../systems/state.js';
 import { sfx } from '../systems/audio.js';
 import { codePanel } from './code.js';
@@ -103,6 +103,19 @@ export function slider(label, min, max, value, onInput, { step = 1, fmt = (v) =>
 export const readout = (html = '') => h('div', { class: 'lab-read', html });
 
 const PLACE_NAME = (id) => COURSE.districts.flatMap((d) => d.places).find((p) => p.id === id)?.name || id;
+// "Predict first": the learner commits to an answer before touching anything. No score: the lab is
+// where they find out. Resolves with the index picked. Use it when intuition is likely to be wrong.
+export function predict(controls, question, options) {
+  return new Promise((resolve) => {
+    const box = h('div', { class: 'lab-read' }, h('div', { class: 'lab-k' }, 'Predict first'), h('div', { style: 'margin-bottom:8px' }, question));
+    const row = h('div', { style: 'display:flex;gap:6px;flex-wrap:wrap' });
+    options.forEach((o, i) => row.append(h('button', { class: 'lab-btn', onclick: () => { sfx.tick(); [...row.children].forEach((b, j) => { b.disabled = true; b.style.opacity = j === i ? 1 : 0.4; if (j === i) b.style.borderColor = '#ffcf5a'; }); box.append(h('div', { style: 'margin-top:8px;color:#ffcf5a' }, 'Now find out: the stage is yours.')); resolve(i); } }, o)));
+    box.append(row);
+    controls.append(box);
+  });
+}
+
+
 let styled = false;
 export function overlay(title, sub) {
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
@@ -156,6 +169,14 @@ export function openLab(id, start = 0) {
     };
     root.dataset.station = `${id}:${i}`;
     root.dataset.ready = '0';
+    // a prediction, when the design asks for one, comes before the learner touches anything
+    if (st.predict) {
+      const wait = h('div', { class: 'lab-box', style: 'display:grid;place-items:center;color:#8b93a7;font-size:17px' }, 'Make your prediction on the right. Then the stage opens.');
+      stage.append(wait);
+      await predict(controls, st.predict.q, st.predict.options);
+      if (my !== token) return;
+      wait.remove();
+    }
     await st.mount(ctx);
     if (my === token) root.dataset.ready = '1';
   };

@@ -2,7 +2,7 @@
 // one recalls the other: big idea in the middle, one branch per district, one leaf per house.
 import { overlay, h } from './shell.js';
 import { COURSE, DISTRICTS, PLACES, QUESTIONS } from '../data/content.js';
-import { LABS } from '../course/labs/index.js';
+import { LABS } from '../course/labs.js';
 import { state } from '../systems/state.js';
 
 const COL = ['#6f93e0', '#ef7a6d', '#4fd1c5', '#f0a45a'];

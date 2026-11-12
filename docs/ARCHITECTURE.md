@@ -6,7 +6,8 @@ Three layers, each replaceable without touching the others.
 courses/<slug>/            a course (content only)
   knowledge/               working documents: brief, sources, map and path
   course.json              the contract between design and game
-  labs/, assets/           (planned) the code and media of its lab stations
+  labs/<conceptId>.js      interaction code, one function per station id
+  anims.js, world.json     optional: page animations; overrides of the derived world
 
 skills/knowledge-base/     how to design a course; validator; schema
 engine/                    how to play one

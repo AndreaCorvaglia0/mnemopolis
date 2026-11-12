@@ -1,6 +1,6 @@
 // Cone Cave (deep dive): why three numbers are enough. Two different lights, one colour.
-import { h, slider, readout } from '../../lab/shell.js';
-import { canvasPane, rgbCss } from '../../lab/kit.js';
+import { h, slider, readout } from '../../../engine/src/lab/shell.js';
+import { canvasPane, rgbCss } from '../../../engine/src/lab/kit.js';
 
 // Simplified cone sensitivities: bell curves at roughly the right places. Good for the idea, not for measurement.
 const bell = (peak, width) => (nm) => Math.exp(-((nm - peak) ** 2) / (2 * width * width));
@@ -39,13 +39,5 @@ async function match(ctx) {
   draw();
 }
 
-export default {
-  title: 'Two lights, one colour',
-  wide: false,
-  stations: [
-    { tab: 'Match the light', goal: 'The eye turns any light into three signals. Lights with the same three signals look the same.',
-      tries: ['Match light A using only the red and green lamps.', 'Move light A to another wavelength and match it again.'],
-      takeaway: 'Pure yellow light and a red-plus-green mix are physically different and look <b>identical</b>: they are <b>metamers</b>. That is why three lamps are enough for a screen.',
-      source: 'Cone curves are simplified bell shapes. Both swatches are computed from the three signals with the same rule, so they are approximate but comparable.', mount: match },
-  ],
-};
+// One function per station id of this concept in course.json. Texts live there, not here.
+export default { match };
