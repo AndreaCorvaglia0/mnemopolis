@@ -14,6 +14,11 @@ people who teach it well. This matters most when the user gave a subject and no 
 - Keep the two or three best resources you meet for each theme. They become the learner's
   "go further" links (`further` on a concept: three at most, each with one line on why).
 
+How much to scout depends on the care in the brief. Light: one or two reference outlines, the
+basic concepts only, no search for extra examples or real material; every fact still verified.
+Standard: as described here. Curated: more outlines and sources, cross-checks of numbers and
+definitions, and a search for real open material for the labs.
+
 ## Order of work
 
 1. **Read all the user's material first**, completely. It defines the scope, the vocabulary and

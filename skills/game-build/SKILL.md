@@ -85,6 +85,21 @@ verify the logic of its tasks by reading your own conditions against the drawing
 If there is no Chrome in your environment, `npm run shots` says so and skips. Then tell the user
 plainly that nothing was checked on screen, and ask them to play each station once.
 
+## Care: graphics and testing
+
+The care chosen in the brief (see `skills/knowledge-base/SKILL.md`) sets the polish, never the
+correctness: every station must still work as specified.
+
+| | light | standard (default) | curated |
+|---|---|---|---|
+| Graphics | fully generated: default theme, no custom art, `world.json` only for switches, no emblems | generated, emblems chosen per concept | a theme chosen or tuned for the project; custom emblems or art pieces allowed |
+| Screenshots | one pass | `npm run shots` | `npm run shots` and `npm run shots:phone` |
+| Labs | build once | build once | refine after a first play |
+
+The generators can be switched off in `courses/<slug>/world.json`
+(`"gen": {"facade": false, "interior": false, "dressing": false}`) and a theme chosen
+(`"theme": "harbour"`, `"nordic"` or `"citadel"`); see `engine/src/gen/core.js`.
+
 ## Delivering
 
 - The game: `engine/dist/index.html`, one self-contained page with no network access.
