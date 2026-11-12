@@ -495,6 +495,10 @@
               }
             }
           }
+        },
+        "emblem": {
+          "type": "string",
+          "description": "Optional. A small icon that stands for the concept (lamp, drop, gear, eye...). Shown on the house and in its room as a memory cue. See engine/src/gen/emblems.js for the names available."
         }
       }
     },
