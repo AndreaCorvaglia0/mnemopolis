@@ -35,5 +35,28 @@ export const THEMES = {
     hubRoof: '#4f3e7a',
     style: { pitch: 0.15, roofs: ['hip', 'flat', 'mansard'], tex: 'tile', wall: 'ashlar', windows: ['arched', 'arched', 'square'], doors: ['#6a4a2c', '#4a3020', '#3a2b1d'], shutters: ['#3f7f72', '#9c3440', '#6b4fa0'], chimney: 0.35, boxes: 0.45, awning: 0.35, quoins: true, tower: 'stone', cap: 'crenel', castle: '#c9b48e' } },
 };
+// added for the dressing generator (gen/dressing.js): which small things a project's town gets and
+// their colours. Lists are weighted by repetition. `floral` and `worked` are the two district moods.
+THEMES.harbour.dressing = {
+  fence: { floral: 'picket', worked: 'rope' }, plots: { floral: ['flowers', 'flowers', 'orchard'], worked: ['veg', 'veg', 'flowers'] },
+  plaza: ['planter', 'barrels', 'stall', 'bench', 'crates', 'planter'], side: { floral: ['flowerbed', 'planter', 'barrels'], worked: ['barrels', 'crates', 'nets'] },
+  corner: { floral: ['laundry', 'flowerbed', 'barrels'], worked: ['nets', 'crates', 'laundry', 'barrels'] },
+  water: { pier: true, boats: 2, reeds: 0.3, lilies: 0.04 }, lantern: 'pier',
+  flowers: ['#e0574f', '#f2c94c', '#f5f1e6', '#5fb0d2'], cloth: ['#3c5ea6', '#f3ead6', '#b9463b', '#2a8c87'], fruit: '#e0574f', paint: '#f3f2ec',
+};
+THEMES.nordic.dressing = {
+  fence: { floral: 'picket', worked: 'rail' }, plots: { floral: ['flowers', 'orchard'], worked: ['veg', 'veg', 'orchard'] },
+  plaza: ['lantern', 'bench', 'woodpile', 'planter', 'sledge'], side: { floral: ['flowerbed', 'lantern', 'woodpile'], worked: ['woodpile', 'woodpile', 'sledge', 'barrels'] },
+  corner: { floral: ['fir', 'beehive', 'laundry'], worked: ['woodpile', 'fir', 'sledge', 'laundry', 'beehive'] },
+  water: { pier: true, boats: 1, reeds: 0.4, lilies: 0.05 }, lantern: 'post',
+  flowers: ['#f2c94c', '#9a6ad1', '#f5f1e6', '#e0574f'], cloth: ['#c9563f', '#e7c873', '#dfe6ea', '#4f7f8f'], fruit: '#d9443a', paint: '#f4f1e8',
+};
+THEMES.citadel.dressing = {
+  fence: { floral: 'hedge', worked: 'wall' }, plots: { floral: ['flowers', 'flowers', 'orchard'], worked: ['veg', 'orchard'] },
+  plaza: ['well', 'statue', 'topiary', 'planter', 'bench', 'stall'], side: { floral: ['topiary', 'planter', 'flowerbed'], worked: ['barrels', 'crates', 'well'] },
+  corner: { floral: ['topiary', 'statue', 'beehive'], worked: ['crates', 'barrels', 'beehive', 'laundry'] },
+  water: { pier: false, boats: 1, reeds: 0.3, lilies: 0.08 }, lantern: 'well',
+  flowers: ['#e0574f', '#9a6ad1', '#ffb85c', '#f5f1e6'], cloth: ['#9c3440', '#e8e2d2', '#6b4fa0', '#3f7f72'], fruit: '#f2a03c', paint: '#e8e2d2',
+};
 const names = Object.keys(THEMES);
 export const THEME = THEMES[WORLD?.theme] || THEMES[names[hash(DATA.id) % names.length]];

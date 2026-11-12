@@ -17,6 +17,7 @@ import { KINDS } from './world/townMap.js';
 import { GEN, THEMES, THEME } from './gen/core.js';
 import { paintFacade } from './gen/facade.js';
 import { EMBLEMS, drawEmblem } from './gen/emblems.js';
+import { dressingSheet } from './gen/dressingArt.js';
 import { makeCanvas } from './art/px.js';
 
 // Pixelify Sans has an "fi" ligature that reads like "A" at small sizes.
@@ -137,6 +138,8 @@ function gallery({ scale } = {}) {
     wrap.append(strip);
   } else for (const [kind, k] of Object.entries(KINDS)) add(paintKind(k.paint, { x: 0, y: 0, w: k.w, h: k.h, doors: k.doors, label: kind.toUpperCase().slice(0, 9) }), `kind: ${kind}`);
   for (const m of MONUMENT_KINDS) { const src = game.textures.get(`mon-${m}`).getSourceImage(), cv = document.createElement('canvas'); cv.width = src.width; cv.height = src.height; cv.getContext('2d').drawImage(src, 0, 0); add(cv, GEN.facade ? '' : `landmark: ${m}`, GEN.facade ? scale || 1 : 2); }
+  // the dressing pieces of the three themes, one row each
+  if (GEN.dressing) for (const th of Object.values(THEMES)) { const row = document.createElement('div'); row.style.cssText = 'display:flex;gap:10px;align-items:center;width:100%;justify-content:center'; const tag = document.createElement('div'); tag.style.cssText = 'width:70px;text-align:right'; tag.textContent = `${th.name} dressing`; row.append(tag); add(dressingSheet(th), '', 2 * (scale || 1), row); wrap.append(row); }
   document.body.append(wrap);
   return 1;
 }

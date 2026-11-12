@@ -158,3 +158,42 @@ build) reports any room that still fails.
 the back wall starts, the row of the front wall). **Add a furniture piece:** an entry in `PIECES`
 (footprint, height, allowed modes), a painter in `PAINT`, and its name in a kind's `furniture`
 list in `KINDS`. Run `npm run check`, then look at the rooms with `npm run shots`.
+
+## Generated dressing
+
+Optional, on by default: `src/gen/dressing.js` fills the space the town leaves over with small
+things, so that it looks cared for and differs from project to project. Same course, same town
+(seeded `dressing:...`).
+
+**What it adds:** a stone kerb where grass meets a plaza and a few pieces on the plaza's edge
+(planters, benches, a stall, a well, a lantern...); things against the side walls of houses
+(flower beds, woodpiles, barrels...); flower borders at the foot of house fronts; plots, that is
+fenced allotments and flower gardens whose fences, walls or hedges join at the corners, with a
+gate toward the nearest lane and stepping stones to it, and small unfenced orchards; things in
+nooks of leftover grass (laundry lines, nets, firs, beehives...); on the water a jetty you can
+walk onto, moored boats, reeds and lily pads. The beds inside a plot are laid out by a tiny Wave
+Function Collapse (`src/gen/wfc.js`): crops run in rows, the next row differs.
+
+**Themes and districts:** `THEMES.<name>.dressing` in `src/gen/core.js` says what appears and
+its colours. `harbour`: rope fences and pickets, barrels, crates, nets, laundry, a jetty with a
+lantern and two boats. `nordic`: picket and rail fences, woodpiles, sledges, firs, beehives,
+lanterns on posts. `citadel`: clipped hedges and low stone walls, statues, wells, topiaries,
+planters, no jetty. Each district is `floral` or `worked` (alternating, seeded), which picks the
+fence and the lists; the square is `floral`.
+
+**What stays fixed:** plazas, lanes (full width), river and ponds, bridges, houses and their
+fronts, the tiles in front of doors, signs, landmarks and their surroundings, lamps, people,
+the review meadow. Nothing solid goes near the water's edge or where a tree would hide it. Every
+solid piece is accepted only if a breadth-first search from the start still reaches every tile it
+reached before, and no lane, plaza, door step, landmark, sign or person got one step farther;
+`npm run check` repeats that test (`dressing: ... no walk got longer`).
+
+**Switch off:** `{ "gen": { "dressing": false } }` in `courses/<slug>/world.json`. The town is
+then exactly as without the generator.
+
+**Add a piece:** a painter in `STAND` (stands up, solid) or `FLAT` (on the ground) in
+`src/gen/dressingArt.js`, its name in `TALL` in `dressing.js` if it stands up, and the name in a
+theme's `plaza`, `side` or `corner` lists. Two tiles wide: add it to `WIDE`. **Add a theme
+variant:** a `dressing` object on the theme with the same fields (`fence`, `plots`, `plaza`,
+`side`, `corner`, `water`, `lantern`, `flowers`, `cloth`, `fruit`, `paint`). `__hb.gallery()`
+shows every piece in the three themes on its last rows.
