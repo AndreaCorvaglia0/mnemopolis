@@ -57,10 +57,25 @@ consulted, or when the subject itself is unclear. The items of the brief:
 - **Goals**: two or three things the learner should be able to *do* at the end.
 - **Typical mistakes**: what the learner, or people in general, get wrong about this subject.
   This is the most useful thing the user can tell you.
-- **Size**: small (4 to 6 concepts), standard (7 to 10), large (up to 16). Default: standard.
+- **Size**: how much content. small (4 to 6 concepts), standard (7 to 10), large (up to 16).
+  Default: standard. It says nothing about quality.
+- **Care**: how much effort per unit of content: light, standard or curated (table below).
+  Default: standard. Size and care are independent: any size can be combined with any care.
+  Do not tie the number of lab stations to care, or the reverse.
 - **Language** of the course.
 
-Write the choices in `brief.md` under "Decisions taken without the user".
+Write the choices in `brief.md` under "Decisions taken without the user". State in one line
+which size and care you chose, and that the user can ask for another. If the user mentions
+limited credits or wanting it quick, choose care light (size stays what they asked, or standard).
+
+**What each level of care changes.** Accuracy never drops with care: breadth and polish change,
+rigour does not. Every fact that reaches the learner is verified at every level.
+
+| | light | standard (default) | curated |
+|---|---|---|---|
+| Research | focused on the basic concepts; 1 or 2 reference outlines | as in `references/1-sources.md` | more sources and cross-checks |
+| Labs | simplest pattern that passes the four tests; no hunt for extra examples or real material | as in `references/5-labs.md` | real open material sought; refined after a first play |
+| Graphics, testing | see `skills/game-build/SKILL.md` | see `skills/game-build/SKILL.md` | see `skills/game-build/SKILL.md` |
 
 ### The checkpoint
 

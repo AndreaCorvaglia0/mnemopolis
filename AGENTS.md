@@ -19,6 +19,8 @@ Rules that hold everywhere:
 
 - Speak to the user in their language. Write the course in the language of the brief.
 - Accuracy first: nothing reaches the learner that does not rest on a source.
+- The brief records two independent settings: size (how much content) and care (light, standard
+  or curated: how much effort per unit). Care changes breadth and polish, never accuracy.
 - Few concepts, one objective per lab station, nothing decorative.
 - Step 1 never touches `engine/`. Steps 2 and 3 never change the content of `course.json`:
   if the build reveals a problem in the design, go back to step 1 and say so.

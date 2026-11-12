@@ -34,6 +34,10 @@ Every concept gets a **place name**: short, concrete, easy to picture, hinting a
 ("Three Lamps House", not "Module 1"), and a sign of 9 characters at most. The method of loci
 needs places that are distinct and stable, in a fixed order. The name is part of the memory.
 
+Optionally, a concept can have an `emblem`: a small icon that stands for it, shown on the house
+and in its room as a memory cue. Choose it from the names in `engine/src/gen/emblems.js`.
+Skip it at care light.
+
 ## D. Call-backs: repetition by design
 
 Forgetting is fought by meeting an idea again, later, in a different setting. Plan it:

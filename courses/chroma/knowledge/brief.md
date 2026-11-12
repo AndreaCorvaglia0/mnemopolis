@@ -8,5 +8,6 @@
   3. explain why three numbers are enough to describe a colour, and why the same numbers can look different.
 - **Typical mistakes:** treating every mixture like paint ("more colours, darker"); believing a screen needs a lamp for each colour; trusting the eye as a measuring instrument.
 - **Size:** small (6 concepts).
+- **Care:** standard.
 - **Language:** English.
 - **Material received:** none. This is the example course of the repository, written from general reference knowledge (see `sources.md`).
