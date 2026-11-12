@@ -8,13 +8,14 @@ generated from the course so that these three hold by construction. Nobody place
 | In the town | In the course | Rule |
 |---|---|---|
 | The central square, with a monument | The subject as a whole; the big idea | Reading the monument shows the big idea |
-| A district, ringed by its own landscape | One theme | 1 to 4 districts, each with a different landscape |
-| The landscape (river, shore, forest, meadow, hill) | A visual cue for the theme | You cross it to enter: a bridge over the river, stairs up the hill, a gap in the trees, a gate in the fence |
+| A district: a small plaza with houses around it, in its own landscape | One theme | 1 to 4 districts, each with a different landscape |
+| The landscape (river, shore, forest, meadow, hill) | A visual cue for the theme | The district sits across the river, on a rocky rise, in a grove, among fenced flower fields, or beside a pond |
 | The district plaza and its landmark | The idea of the theme | Reading the landmark shows the district idea and its houses |
-| An avenue from the square, lined with trees | "Start from the big idea" | Districts go clockwise from the west, in learning order |
+| A winding lane from the square | "Start from the big idea" | Districts go clockwise from the west, in learning order, each a few seconds' walk away |
+| The river | A landmark for orientation | Always present: it winds between the square and one district, with a bridge and a pond at each end |
 | A house | One concept | 1 to 4 per district, numbered in learning order; the number is on the wall |
 | The shape of the house | The kind of knowledge inside | See the table below |
-| The street inside a district | The order of the concepts | Nearest the plaza first; left before right |
+| Position around the plaza | The order of the concepts | Two houses above the plaza, then two below; left before right |
 | A signpost by each door | Name, concept, objective | Generated |
 | Tall grass (review meadows) | Retrieval practice | Quick questions on houses already visited; optional; G switches them off |
 | The league hall, on the square | The final check | Questions of level 2 and 3 from every house |
@@ -42,9 +43,12 @@ learns the room once.
 
 ## Landscapes and landmarks
 
-Landscapes (`nature`): `river` (a moat with a bridge), `shore` (a sandy island in a lake, with a
-bridge), `forest` (a ring of trees with a gap), `meadow` (a fence with a gate, flowers), `hill`
-(a rock plateau with stairs).
+Landscapes (`nature`): `river` (the district lies across the river), `shore` (a pond with a sandy
+edge beside it), `forest` (a grove around it), `meadow` (flower fields and stretches of fence),
+`hill` (a rocky rise).
+
+The town is compact on purpose. `npm run check` reports the walking distance from the square to
+the farthest door and warns above 45 steps. Night is the default time of day (N changes it).
 
 Landmarks (`landmark`, and `hub.monument`): `fountain`, `obelisk`, `statue`, `arch`, `bell`,
 `stones`. Each can be used once.
@@ -66,7 +70,7 @@ This is already a complete, coherent world, and it is where the effort should go
    with rectangles and ellipses) and its name to `scripts/check.mjs`.
 4. A new kind of building: a painter in `src/art/buildings.js`, an entry in `KINDS` in
    `src/world/townMap.js`, a theme in `THEME` in `src/scenes/Interior.js`.
-5. A new landscape: a ring rule in `generate()` in `src/world/townMap.js`, and possibly new
+5. A new landscape: a rule in `generate()` in `src/world/townMap.js`, and possibly new
    ground painting in `src/art/ground.js`.
 6. Music: tracks are chord lists in `src/systems/audio.js`.
 

@@ -14,5 +14,19 @@ if (v.status) process.exit(v.status);
 const { LABS } = await import('../src/course/labs.js');
 let bad = 0;
 for (const [id, lab] of Object.entries(LABS)) for (const s of lab.stations) if (!s.coded) { console.log(`ERROR    station "${id}.${s.id}" has no code: export it from courses/${SLUG}/labs/${id}.js`); bad++; }
-try { const m = await import('../src/world/townMap.js'); console.log(`town: ${m.MAP_W} x ${m.MAP_H} tiles, ${m.BUILDINGS.length} buildings`); } catch (e) { console.log(`ERROR    the town cannot be generated: ${e.message}`); bad++; }
+// the town: it must generate, houses must stand on dry land without overlapping, and every door
+// must be reachable on foot from the square
+try {
+  const m = await import('../src/world/townMap.js');
+  const blocked = new Set();
+  m.TERRAIN.forEach((row, y) => [...row].forEach((ch, x) => { if ('~ReTbF'.includes(ch)) blocked.add(`${x},${y}`); }));
+  for (const b of m.BUILDINGS) for (let y = b.y; y < b.y + b.h; y++) for (let x = b.x; x < b.x + b.w; x++) { const k = `${x},${y}`; if (blocked.has(`B${k}`)) { console.log(`ERROR    town: "${b.id}" overlaps another building`); bad++; } if (m.TERRAIN[y][x] === '~') { console.log(`ERROR    town: "${b.id}" stands in water`); bad++; } blocked.add(k); blocked.add(`B${k}`); }
+  [...m.LAMPS, ...m.SIGNS.map((s) => [s.x, s.y]), ...m.PROPS, ...m.MONUMENTS.flatMap((o) => [[o.x, o.y], [o.x + 1, o.y]]), ...m.NPCS.map((o) => [o.x, o.y])].forEach(([x, y]) => blocked.add(`${x},${y}`));
+  const dist = new Map([[`${m.START.x},${m.START.y}`, 0]]), queue = [[m.START.x, m.START.y]];
+  while (queue.length) { const [x, y] = queue.shift(), d = dist.get(`${x},${y}`); for (const [i, j] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const k = `${x + i},${y + j}`; if (x + i < 0 || y + j < 0 || x + i >= m.MAP_W || y + j >= m.MAP_H || blocked.has(k) || dist.has(k)) continue; dist.set(k, d + 1); queue.push([x + i, y + j]); } }
+  let far = 0;
+  for (const b of m.BUILDINGS) { if (b.home) continue; const d = Math.min(...b.doors.map(([x, y]) => dist.get(`${x},${y + 1}`) ?? Infinity)); if (d === Infinity) { console.log(`ERROR    town: the door of "${b.id}" cannot be reached from the square`); bad++; } else far = Math.max(far, d); }
+  console.log(`town: ${m.MAP_W} x ${m.MAP_H} tiles, ${m.BUILDINGS.length} buildings, farthest door ${far} steps from the square (about ${Math.round(far * 0.15)} s walking)`);
+  if (far > 45) console.log('warning  town: a house is more than 45 steps from the square');
+} catch (e) { console.log(`ERROR    the town cannot be generated: ${e.message}`); bad++; }
 process.exit(bad ? 1 : 0);

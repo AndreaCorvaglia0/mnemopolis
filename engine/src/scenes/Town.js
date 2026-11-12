@@ -20,7 +20,7 @@ export class Town extends Phaser.Scene {
   create(data = {}) {
     this.ui = this.scene.get('UI');
     this.locked = false; // the scene object is reused: a lock left over from entering a door froze the player
-    this.tod = this.registry.get('tod') || 'dusk';
+    this.tod = this.registry.get('tod') || 'night';
     this.cur = { ...TOD[this.tod] };
     this.lights = [];
     this.glows = [];
