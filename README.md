@@ -1,4 +1,10 @@
-# Mnemopolis
+<p align="center">
+  <img src="assets/mnemopolis-banner.svg" alt="Mnemopolis: memory towns for active learning" width="100%">
+</p>
+
+<p align="center">
+  A template for building learning games as memory towns: every building is a concept, every lab is a place to get your hands on it.
+</p>
 
 Turn any subject into a small game you learn by playing: a pixel-art town where every house is
 one concept and holds a lab to handle it. Built on recognised active-learning techniques
