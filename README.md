@@ -43,8 +43,10 @@ Either way you answer a few questions, approve the map of the course, then play.
 
 ## Status
 
-Early. The knowledge-base method, its validator and the engine work end to end on the example
-course. The town's look is being reworked.
+Early, and not yet play-tested with learners. The whole path works on the example course: design,
+validation, build, publication. Feedback and issues are welcome.
+
+Play the example: https://andreacorvaglia0.github.io/mnemopolis/chroma/
 See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 The research behind the method: [skills/knowledge-base/references/evidence.md](skills/knowledge-base/references/evidence.md).
