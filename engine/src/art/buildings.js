@@ -1,6 +1,8 @@
 // Buildings. Each one gets a day texture plus a "lit" overlay for windows at dusk.
 import { P } from './palette.js';
 import { makeCanvas, rect, px, ellipse, hash, mix, addTex } from './px.js';
+import { GEN } from '../gen/core.js';
+import { paintFacade } from '../gen/facade.js';
 
 // 3x5 pixel font for signboards
 const G = {
@@ -406,7 +408,8 @@ export function paintKind(paint, b) { return PAINTERS[paint](b).canvas; }
 export function makeBuildings(scene, buildings) {
   const info = {};
   for (const b of buildings) {
-    const res = PAINTERS[b.paint](b);
+    // generated houses when GEN.facade is on (gen/facade.js); these painters are the fallback
+    const res = (GEN.facade && paintFacade(b)) || PAINTERS[b.paint](b);
     if (b.order) { // house number: the order of the learning path, visible from the street
       const ctx = res.canvas.getContext('2d'), H = res.canvas.height, t = String(b.order), w = textWidth(t) + 4;
       rect(ctx, 2, H - 10, w + 2, 9, P.ink); rect(ctx, 3, H - 9, w, 7, P.gold); drawText(ctx, t, 5, H - 8, P.ink);

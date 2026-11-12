@@ -24,9 +24,16 @@ export function seeded(key) {
 // Chosen by world.json "theme", otherwise by the course id. Generators may ADD fields to a theme,
 // never rename these.
 export const THEMES = {
-  harbour: { name: 'harbour', roofs: ['#b9463b', '#3c5ea6', '#2a8c87', '#d9822f'], wall: ['#f3ead6', '#e6dcc0', '#d9cbb0'], wood: '#7a5230', stone: '#8f8a82', trim: '#ffffff', accent: '#ffcf5a' },
-  nordic: { name: 'nordic', roofs: ['#3a3f6b', '#5b6b8c', '#2f5d50', '#7a3b3b'], wall: ['#c9563f', '#e7c873', '#dfe6ea'], wood: '#5a3a20', stone: '#7b8088', trim: '#f4f1e8', accent: '#ffd98a' },
-  citadel: { name: 'citadel', roofs: ['#6b4fa0', '#8a5a34', '#3f7f72', '#9c3440'], wall: ['#d6d2c8', '#b4afa6', '#c9b89a'], wood: '#6a4a2c', stone: '#6f6a64', trim: '#e8e2d2', accent: '#ffb85c' },
+  harbour: { name: 'harbour', roofs: ['#b9463b', '#3c5ea6', '#2a8c87', '#d9822f'], wall: ['#f3ead6', '#e6dcc0', '#d9cbb0', '#cfe0e3'], wood: '#7a5230', stone: '#8f8a82', trim: '#ffffff', accent: '#ffcf5a',
+    // added for the facade generator (gen/facade.js): structure, not only colour
+    hubRoof: '#3c5ea6',
+    style: { pitch: 0.45, roofs: ['slope', 'hip', 'gable'], tex: 'tile', wall: 'clapboard', windows: ['square', 'square', 'wide'], doors: ['#2f5d8a', '#2a8c87', '#9c3440', '#7a5230'], shutters: ['#2f5d8a', '#2a8c87', '#3f7f52', '#b9463b'], chimney: 0.6, boxes: 0.7, awning: 0.5, quoins: false, tower: 'stripes', cap: 'dome', castle: '#b9b3a6' } },
+  nordic: { name: 'nordic', roofs: ['#3a3f6b', '#5b6b8c', '#2f5d50', '#7a3b3b'], wall: ['#c9563f', '#e7c873', '#dfe6ea', '#4f7f8f'], wood: '#5a3a20', stone: '#7b8088', trim: '#f4f1e8', accent: '#ffd98a',
+    hubRoof: '#2f3a52',
+    style: { pitch: 0.9, roofs: ['slope', 'gable', 'gable'], tex: 'slate', wall: 'boards', windows: ['tall', 'tall', 'square'], doors: ['#2f3b52', '#5a3a20', '#2f5d50', '#7a3b3b'], shutters: ['#f4f1e8'], chimney: 0.95, boxes: 0.25, awning: 0.1, quoins: false, tower: 'plain', cap: 'cone', castle: '#8e96a3' } },
+  citadel: { name: 'citadel', roofs: ['#6b4fa0', '#8a5a34', '#3f7f72', '#9c3440'], wall: ['#d6d2c8', '#b4afa6', '#c9b89a', '#d8c7a6'], wood: '#6a4a2c', stone: '#6f6a64', trim: '#e8e2d2', accent: '#ffb85c',
+    hubRoof: '#4f3e7a',
+    style: { pitch: 0.15, roofs: ['hip', 'flat', 'mansard'], tex: 'tile', wall: 'ashlar', windows: ['arched', 'arched', 'square'], doors: ['#6a4a2c', '#4a3020', '#3a2b1d'], shutters: ['#3f7f72', '#9c3440', '#6b4fa0'], chimney: 0.35, boxes: 0.45, awning: 0.35, quoins: true, tower: 'stone', cap: 'crenel', castle: '#c9b48e' } },
 };
 const names = Object.keys(THEMES);
 export const THEME = THEMES[WORLD?.theme] || THEMES[names[hash(DATA.id) % names.length]];

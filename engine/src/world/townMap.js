@@ -118,7 +118,7 @@ function generate() {
     const first = order + 1;
     d.places.forEach((p, j) => {
       const k = ks[j], s = spot[j], bx = ax + s.x, by = ay + s.b - k.h + 1;
-      const b = { id: p.id, kind: p.kind, name: p.name, label: (p.sign || p.name).toUpperCase().slice(0, 9), paint: k.paint, scene: k.scene, x: bx, y: by, w: k.w, h: k.h, open: true, district: d.id, order: ++order };
+      const b = { id: p.id, kind: p.kind, name: p.name, label: (p.sign || p.name).toUpperCase().slice(0, 9), paint: k.paint, scene: k.scene, x: bx, y: by, w: k.w, h: k.h, open: true, district: d.id, di: i, dj: j, emblem: p.emblem, order: ++order };
       b.doors = k.doors.map(([dx, dy]) => [bx + dx, by + dy]);
       buildings.push(b);
       const d0 = b.doors[0][0] - ax, d1 = b.doors[b.doors.length - 1][0] - ax, row = s.b + 1;
