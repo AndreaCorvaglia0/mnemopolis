@@ -16,6 +16,10 @@
 - Phones: tap to walk and to use things, touch buttons, an interface laid out for upright
   screens, one zoom rule for every screen shape, a phone screenshot tour.
 
+- Optional generators (`engine/src/gen/`): house fronts, rooms and town dressing that differ per
+  house and per project (three themes, emblems), deterministic, each one switchable in
+  `world.json`. Size and care of a course are independent settings of the brief.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
@@ -26,7 +30,9 @@
 - Labs of the example course drawn for small screens (some canvas text is small on a phone).
 
 - Game dynamics: spending points, shops, avatar items, quests.
-- More art: building variants, landmarks, seasons.
+- Generators: more variety for studio, museum and league hall; more room plans; signature
+  objects matched to the kind of house; more themes.
+- More art: landmarks, seasons.
 - Per-option feedback on questions, using the `traps` already in the course.
 - Courses in several towns, linked.
 - Play-testing protocol and its results.

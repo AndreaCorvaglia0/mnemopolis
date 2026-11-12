@@ -15,6 +15,7 @@ engine/                    how to play one
   src/scenes/              town, standard room, workshop, museum, interface
   src/lab/                 frame of a lab station, reading page, map, helpers
   src/art/                 everything drawn in code (the look)
+  src/gen/                 optional generators: house fronts, rooms, town dressing, themes
   src/systems/             save, audio, movement
 ```
 
@@ -35,6 +36,7 @@ a separate file.
 | A new kind of lab interaction | a helper in `engine/src/lab/`, a row in `references/5-labs.md` | scenes |
 | Game dynamics (points to spend, shops, quests, streaks) | a new `engine/src/mechanics/`, reading progress from `systems/state.js` | the course format: dynamics are a property of the game, not of the knowledge |
 | Art: buildings, landmarks, landscapes, characters | `engine/src/art/`, registered in `engine/src/world/` | lab code |
+| A generated variation (house style, room plan, dressing piece, theme) | `engine/src/gen/`, each module behind its switch in `world.json` (`"gen"`), seeded by the course id | the hand-made fallback it replaces |
 | Another front end (cards, a printable workbook, a 3D world) | a sibling of `engine/` reading the same `course.json` | |
 
 ## Decisions
