@@ -8,8 +8,10 @@ import { TapNav } from '../systems/tapnav.js';
 import { makeCanvas, rect, px, ellipse, hash, mix, addTex } from '../art/px.js';
 import { drawText, textWidth } from '../art/buildings.js';
 import { P } from '../art/palette.js';
+import { GEN } from '../gen/core.js';
+import { generateRoom } from '../gen/interior.js';
 
-const RW = 15, RH = 11, T = 16;
+const RW = 15, RH = 11, T = 16; // the size of the standard room
 
 // ---------- room painting ----------
 function floor(ctx, style) {
@@ -76,6 +78,7 @@ function desk(ctx, x, y, w) {
   rect(ctx, x + 2, y + 12, 3, 4, P.metalDark); rect(ctx, x + w - 5, y + 12, 3, 4, P.metalDark);
 }
 
+// The standard room (used when the room generator is switched off).
 // One room template for every house. Only colours, floor and light change with the kind of house,
 // so the player never has to relearn a room: lab door on the left, reading wall next to it, host in the middle.
 const THEME = {
@@ -89,6 +92,9 @@ const THEME = {
 
 function roomFor(place) {
   const th = THEME[place.kind] || THEME.lab;
+  const blocked = new Uint8Array(RW * RH);
+  for (let y = 0; y < RH; y++) for (let x = 0; x < RW; x++) if (y <= 2 || y === 10 || x === 0 || x === 14) blocked[y * RW + x] = 1;
+  [[2, 3], [3, 3], [4, 3]].forEach(([x, y]) => (blocked[y * RW + x] = 1));
   return {
     ...th,
     paint(ctx) {
@@ -110,9 +116,14 @@ function roomFor(place) {
       if (th.torches) th.torches.forEach(([x, y]) => bracket(ctx, x, y));
       else { plant(ctx, 0, 52); plant(ctx, 224, 140); plant(ctx, 0, 140); }
     },
-    floorBlocks: [[2, 3], [3, 3], [4, 3]], exhibit: [[2, 3], [3, 3], [4, 3]], master: [8, 5], glows: [],
+    exhibit: [[2, 3], [3, 3], [4, 3]], master: [8, 5], glows: [],
+    w: RW, h: RH, blocked, lab: [1, 2], exit: [7, 10], start: [7, 9], labGlow: [24, 36, 'glow', 0.75], props: [],
   };
 }
+
+// The room of a house: generated (src/gen/interior.js), or the standard room when
+// world.json says { "gen": { "interior": false } }.
+const roomOf = (place) => (GEN.interior ? generateRoom(place) : roomFor(place));
 
 export class Interior extends Phaser.Scene {
   constructor() { super('Interior'); }
@@ -121,8 +132,9 @@ export class Interior extends Phaser.Scene {
     this.id = id;
     this.leaving = false; // the scene object is reused between visits
     this.ui = this.scene.get('UI');
-    const place = PLACE[id], room = roomFor(place);
+    const place = PLACE[id], room = roomOf(place);
     this.room = room;
+    const RW = (this.rw = room.w), RH = (this.rh = room.h);
     const key = `room-${id}`;
     if (!this.textures.exists(key)) {
       const [c, ctx] = makeCanvas(RW * T, RH * T);
@@ -130,21 +142,26 @@ export class Interior extends Phaser.Scene {
       addTex(this, key, c);
     }
     this.add.image(0, 0, key).setOrigin(0).setDepth(0);
+    // tall furniture: separate pieces sorted by depth, so the player can walk behind them
+    room.props.forEach((p, i) => {
+      const pk = `${key}-p${i}`;
+      if (!this.textures.exists(pk)) { const [c, ctx] = makeCanvas(p.w, p.h); p.paint(ctx); addTex(this, pk, c); }
+      this.add.image(p.x, p.y, pk).setOrigin(0).setDepth(p.depth);
+    });
     room.glows.forEach(([x, y, k, s]) => {
       const g = this.add.image(x, y, k).setScale(s).setBlendMode(Phaser.BlendModes.ADD).setDepth(5000).setAlpha(0.7);
       this.tweens.add({ targets: g, alpha: 0.4, duration: 1400 + x * 3, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     });
     // the lab door glows: it is the main thing to do in a room
-    const dg = this.add.image(24, 36, 'glow').setScale(0.75).setBlendMode(Phaser.BlendModes.ADD).setDepth(5000).setAlpha(0.8);
+    const [gx, gy, gk, gs] = room.labGlow;
+    const dg = this.add.image(gx, gy, gk).setScale(gs).setBlendMode(Phaser.BlendModes.ADD).setDepth(5000).setAlpha(0.8);
     this.tweens.add({ targets: dg, alpha: 0.35, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-    this.blocked = new Uint8Array(RW * RH);
-    for (let y = 0; y < RH; y++) for (let x = 0; x < RW; x++) if (y <= 2 || y === 10 || x === 0 || x === 14) this.blocked[y * RW + x] = 1;
-    room.floorBlocks.forEach(([x, y]) => (this.blocked[y * RW + x] = 1));
+    this.blocked = room.blocked;
     this.exhibitTiles = new Set(room.exhibit.map(([x, y]) => `${x},${y}`));
 
     const m = MASTERS[id];
     this.master = new Walker(this, `ch-${m.look}`, room.master[0], room.master[1], 'down');
-    this.player = new Walker(this, 'ch-player', 7, 9, 'up');
+    this.player = new Walker(this, 'ch-player', room.start[0], room.start[1], 'up');
     this.fire = room.torches ? new FireLight(this, RW * T, RH * T, room.torches.map(([x, y]) => [x, y + 2]), this.player.sprite, { dark: 0.55, radius: 52 }) : null;
     setMusic(room.dark ? 'castle' : 'building'); setFire(room.torches ? 0.8 : 0); setSea(0);
 
@@ -175,7 +192,7 @@ export class Interior extends Phaser.Scene {
     const W = this.scale.width, H = this.scale.height;
     const k = Math.min(W / 960, H / 540);
     const safe = this.ui.hudSafe ? this.ui.hudSafe() : [];
-    const rw = RW * T, rh = RH * T;
+    const rw = this.rw * T, rh = this.rh * T;
     let z = Math.max(1, Math.floor(Math.min(W / rw, H / rh)));
     for (; z > 1; z--) {
       const rx0 = (W - rw * z) / 2, ry0 = (H - rh * z) / 2;
@@ -188,10 +205,11 @@ export class Interior extends Phaser.Scene {
   }
 
   canEnter = (x, y) => {
-    if (x === 7 && y === 10) return { exit: true };
-    if (x === 1 && y === 2) return { lab: true };
-    if (x < 0 || y < 0 || x >= RW || y >= RH) return false;
-    if (this.blocked[y * RW + x]) return false;
+    const { exit, lab } = this.room;
+    if (x === exit[0] && y === exit[1]) return { exit: true };
+    if (x === lab[0] && y === lab[1]) return { lab: true };
+    if (x < 0 || y < 0 || x >= this.rw || y >= this.rh) return false;
+    if (this.blocked[y * this.rw + x]) return false;
     if (this.master.tx === x && this.master.ty === y) return false;
     return true;
   };
@@ -205,7 +223,7 @@ export class Interior extends Phaser.Scene {
     }
     const [fx, fy] = this.player.facing();
     this.ui.setPrompt(this.master.tx === fx && this.master.ty === fy ? `Space  Talk to ${MASTERS[this.id].name}`
-      : this.exhibitTiles.has(`${fx},${fy}`) ? 'Space  Read the wall' : fx === 1 && fy === 2 ? 'Space  Enter the lab' : null);
+      : this.exhibitTiles.has(`${fx},${fy}`) ? 'Space  Read the wall' : fx === this.room.lab[0] && fy === this.room.lab[1] ? 'Space  Enter the lab' : null);
     if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) return this.interact();
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
@@ -227,7 +245,7 @@ export class Interior extends Phaser.Scene {
     const [fx, fy] = this.player.facing();
     if (this.master.tx === fx && this.master.ty === fy) return this.talkMaster();
     if (this.exhibitTiles.has(`${fx},${fy}`)) return this.ui.reading(this.id);
-    if (fx === 1 && fy === 2) return this.ui.lab(this.id);
+    if (fx === this.room.lab[0] && fy === this.room.lab[1]) return this.ui.lab(this.id);
   }
 
   // The master says one line and offers what the room has. No lectures.
