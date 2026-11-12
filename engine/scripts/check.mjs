@@ -22,6 +22,16 @@ try {
   m.TERRAIN.forEach((row, y) => [...row].forEach((ch, x) => { if ('~ReTbF'.includes(ch)) blocked.add(`${x},${y}`); }));
   for (const b of m.BUILDINGS) for (let y = b.y; y < b.y + b.h; y++) for (let x = b.x; x < b.x + b.w; x++) { const k = `${x},${y}`; if (blocked.has(`B${k}`)) { console.log(`ERROR    town: "${b.id}" overlaps another building`); bad++; } if (m.TERRAIN[y][x] === '~') { console.log(`ERROR    town: "${b.id}" stands in water`); bad++; } blocked.add(k); blocked.add(`B${k}`); }
   [...m.LAMPS, ...m.SIGNS.map((s) => [s.x, s.y]), ...m.PROPS, ...m.MONUMENTS.flatMap((o) => [[o.x, o.y], [o.x + 1, o.y]]), ...m.NPCS.map((o) => [o.x, o.y])].forEach(([x, y]) => blocked.add(`${x},${y}`));
+  // the generated dressing (gardens, fences, jetty...): its solid tiles block, its jetty can be walked on,
+  // and nothing may get farther or unreachable because of it
+  const { GEN } = await import('../src/gen/core.js');
+  if (GEN.dressing) {
+    const D = await import('../src/gen/dressing.js'), L = D.planDressing();
+    L.blocked.forEach(([x, y]) => blocked.add(`${x},${y}`)); L.walk.forEach(([x, y]) => blocked.delete(`${x},${y}`));
+    const { problems } = D.checkDressing(L);
+    problems.forEach((p) => { console.log(`ERROR    dressing: ${p}`); bad++; });
+    console.log(`dressing: theme ${L.theme}, ${L.pieces.length} pieces, ${L.blocked.length} solid tiles, ${L.plots.length} plots; ${problems.length ? 'PROBLEMS' : 'no walk got longer'}`);
+  } else console.log('dressing: generator off');
   const dist = new Map([[`${m.START.x},${m.START.y}`, 0]]), queue = [[m.START.x, m.START.y]];
   while (queue.length) { const [x, y] = queue.shift(), d = dist.get(`${x},${y}`); for (const [i, j] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const k = `${x + i},${y + j}`; if (x + i < 0 || y + j < 0 || x + i >= m.MAP_W || y + j >= m.MAP_H || blocked.has(k) || dist.has(k)) continue; dist.set(k, d + 1); queue.push([x + i, y + j]); } }
   let far = 0;

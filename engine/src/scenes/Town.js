@@ -7,6 +7,8 @@ import { Walker } from '../systems/walker.js';
 import { TapNav } from '../systems/tapnav.js';
 import { townZoom } from '../systems/view.js';
 import { hash } from '../art/px.js';
+import { GEN } from '../gen/core.js';
+import { addDressing } from '../gen/dressing.js';
 
 const TOD = {
   dusk: { dark: 0.44, tint: 0x2a1d55, lit: 0.95, glow: 0.85, beam: 0.6, fire: 0.75, sun: 0.55, spark: 0.9 },
@@ -36,6 +38,7 @@ export class Town extends Phaser.Scene {
     this.makeTerrainObjects();
     this.makeBuildings();
     this.makeProps();
+    if (GEN.dressing) addDressing(this); // optional small things: gardens, fences, jetty... (gen/dressing.js)
     this.makeNPCs();
 
     const p = data.from ? this.exitTile(data.from) : state.pos || START;
