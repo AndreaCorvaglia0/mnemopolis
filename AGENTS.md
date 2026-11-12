@@ -16,6 +16,8 @@ Rules that hold everywhere:
 - Few concepts, one objective per lab station, nothing decorative.
 - Step 1 never touches `engine/`. Steps 2 and 3 never change the content of `course.json`:
   if the build reveals a problem in the design, go back to step 1 and say so.
+- In a Claude chat, deliver the game by publishing `engine/dist/index.html` as an artifact, and
+  republish the same artifact after every change.
 - Look at the screenshots (`npm run shots` in `engine/`) before saying the game works.
 
 Commands, from the repository root: `npm run new -- <slug>`, `npm run validate -- courses/<slug>`,

@@ -81,8 +81,12 @@ plainly that nothing was checked on screen, and ask them to play each station on
 
 ## Delivering
 
-- The game: `engine/dist/index.html`, one self-contained page. Publish it as an artifact if you
-  can, otherwise send the file.
+- The game: `engine/dist/index.html`, one self-contained page with no network access.
+  **In a Claude chat, publish it as an artifact**: pass that file as it is to your artifact tool
+  (it is a complete HTML page; do not rewrite or shorten it), give it the course title, and
+  tell the user in one line what it is. On every later change, republish the **same** artifact
+  so the user's link stays valid. Only if you have no artifact tool, send the file instead.
+  Publish early: as soon as the first station works, so the user plays while you build the rest.
 - The course: zip `courses/<slug>/` and send it too. It is the source: without it the game
   cannot be changed later. If you can push to the user's repository, commit it there instead.
 - Tell the user: what is simplified, what you could not test, and which stations you are least
