@@ -20,7 +20,8 @@ function frame(p, body) {
   const use = p.application ? `<h3>Where you meet it</h3><p>${esc(p.application)}</p>` : '';
   const explain = p.explain ? `<h3>Explain it yourself</h3><p>${esc(p.explain.q)}</p><details class="hb-det"><summary>Say your answer out loud first, then compare</summary><p>${esc(p.explain.a)}</p></details>` : '';
   const remember = p.remember?.length ? `<h3>Remember</h3><ul class="hb-rem">${p.remember.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>` : '';
-  return `<div class="hb-num">${p.order} · ${esc(p.district.name)}</div><h2>${esc(p.concept)}</h2><p class="lead">${esc(p.idea)}</p>${anchor}${body || ''}${use}${explain}${remember}`;
+  const more = p.further?.length ? `<h3>Go further</h3><ul>${p.further.map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener" style="color:#4fd1c5">${esc(f.title)}</a>: ${esc(f.why)}</li>`).join('')}</ul>` : '';
+  return `<div class="hb-num">${p.order} · ${esc(p.district.name)}</div><h2>${esc(p.concept)}</h2><p class="lead">${esc(p.idea)}</p>${anchor}${body || ''}${use}${explain}${remember}${more}`;
 }
 
 // Opens the page of a place (or a free page from pages.js by id). Resolves with 'lab' if the reader asks for the lab.

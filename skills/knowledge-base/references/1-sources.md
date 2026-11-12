@@ -2,6 +2,18 @@
 
 The aim is a body of material you can trust, and a record of where every claim comes from.
 
+## Scout before you choose
+
+Before deciding what the course contains, spend a few searches on how the subject is taught by
+people who teach it well. This matters most when the user gave a subject and no material.
+
+- Find **two or three reference outlines**: a university syllabus, the contents of a standard
+  textbook, an established open course. What they all include is the core. What only one
+  includes is optional.
+- Note their **order**: it usually encodes the prerequisites.
+- Keep the two or three best resources you meet for each theme. They become the learner's
+  "go further" links (`further` on a concept: three at most, each with one line on why).
+
 ## Order of work
 
 1. **Read all the user's material first**, completely. It defines the scope, the vocabulary and
@@ -51,7 +63,8 @@ And a **claims table** for everything factual that the learner will read:
 |---|---|---|---|
 | ... | ... | S1, S4 | verified / simplified / unverified |
 
-- **verified**: stated by a tier A or B source you read.
+- **verified**: stated by a tier A or B source you read. Numbers, dates, names and anything
+  surprising need **two independent sources** that agree.
 - **simplified**: true enough for this learner, with the simplification named. It must also be
   declared in the course (the `source` line of a lab station, or a sentence on the page).
 - **unverified**: remove it, or ask the user. An unverified claim does not go into `course.json`.
@@ -61,6 +74,8 @@ Record the source ids on each concept (`sources`), so that a reviewer can trace 
 ## Rights
 
 - Write every text in your own words. Short quotations only, with the source.
+- For labs, look for **real open material** before settling for a simulation: public datasets,
+  openly licensed images, recordings, sample files. A lab on the real thing beats a drawing of it.
 - Images, data and sounds: use the user's own, or material with a licence that allows reuse.
   Record the licence in the source log. If in doubt, leave it out or draw it.
 - Never present invented numbers as data.

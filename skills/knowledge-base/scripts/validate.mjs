@@ -81,6 +81,8 @@ concepts.forEach((p, i) => {
   (p.callbacks || []).forEach((cb) => { if (!ids.has(cb.to) || cb.to === p.id) err(`${P}: call-back to "${cb.to}", which is not an earlier concept`); });
   (p.sources || []).forEach((s) => { if (!sourceIds.has(s)) err(`${P}: source "${s}" is not in course.sources`); });
   if (c.sources?.length && !p.sources?.length) warn(`${P}: no sources listed`);
+  if ((p.further?.length || 0) > 3) err(`${P}: ${p.further.length} "further" links, keep 3 at most`);
+  (p.further || []).forEach((f, k) => { if (!f.title || !/^https?:\/\//.test(f.url || '') || !f.why) err(`${P} further ${k + 1}: needs a title, an http(s) url and a one-line "why"`); });
 
   // lab
   if (p.type === 'story') {

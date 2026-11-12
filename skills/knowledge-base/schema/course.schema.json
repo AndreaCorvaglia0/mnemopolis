@@ -3,140 +3,655 @@
   "title": "Course knowledge base",
   "description": "A course as data. Concepts are listed in the order of the learning path. Limits on counts and lengths are checked by scripts/validate.mjs.",
   "type": "object",
-  "required": ["version", "id", "language", "title", "subject", "bigIdea", "themes", "concepts", "relations", "finalCheck"],
+  "required": [
+    "version",
+    "id",
+    "language",
+    "title",
+    "subject",
+    "bigIdea",
+    "themes",
+    "concepts",
+    "relations",
+    "finalCheck"
+  ],
   "additionalProperties": false,
   "properties": {
-    "$schema": { "type": "string" },
-    "version": { "const": 1 },
-    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "Unique slug. Also the key of the learner's saved progress." },
-    "language": { "type": "string", "description": "Language of the course, e.g. en, it." },
-    "title": { "type": "string", "description": "Name of the course as the learner sees it." },
-    "subject": { "type": "string", "description": "One line: what the course is about." },
-    "bigIdea": { "type": "string", "description": "One claim, 28 words at most, from which the course follows." },
-    "learner": { "type": "string", "description": "Who it is for and what they already know." },
-    "goals": { "type": "array", "items": { "type": "string" }, "description": "What the learner can do at the end. Each starts with a verb." },
-    "credit": { "type": "string" },
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique slug. Also the key of the learner's saved progress."
+    },
+    "language": {
+      "type": "string",
+      "description": "Language of the course, e.g. en, it."
+    },
+    "title": {
+      "type": "string",
+      "description": "Name of the course as the learner sees it."
+    },
+    "subject": {
+      "type": "string",
+      "description": "One line: what the course is about."
+    },
+    "bigIdea": {
+      "type": "string",
+      "description": "One claim, 28 words at most, from which the course follows."
+    },
+    "learner": {
+      "type": "string",
+      "description": "Who it is for and what they already know."
+    },
+    "goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "What the learner can do at the end. Each starts with a verb."
+    },
+    "credit": {
+      "type": "string"
+    },
     "sources": {
       "type": "array",
       "items": {
-        "type": "object", "required": ["id", "title", "tier"], "additionalProperties": false,
-        "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "url": { "type": "string" }, "tier": { "enum": ["A", "B", "C"] }, "note": { "type": "string" } }
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "tier"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "tier": {
+            "enum": [
+              "A",
+              "B",
+              "C"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        }
       }
     },
     "themes": {
-      "type": "array", "minItems": 1, "maxItems": 4,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
       "items": {
-        "type": "object", "required": ["id", "name", "idea"], "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "idea"
+        ],
+        "additionalProperties": false,
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
-          "name": { "type": "string" },
-          "idea": { "type": "string", "description": "The theme as one sentence, 18 words at most." },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "idea": {
+            "type": "string",
+            "description": "The theme as one sentence, 18 words at most."
+          },
           "cue": {
-            "type": "object", "additionalProperties": false,
+            "type": "object",
+            "additionalProperties": false,
             "description": "A memory cue for the theme. All themes must differ.",
             "properties": {
-              "landscape": { "enum": ["river", "shore", "forest", "meadow", "hill"] },
-              "landmark": { "enum": ["fountain", "obelisk", "statue", "arch", "bell", "stones"] },
-              "why": { "type": "string", "description": "The link with the content, only if an honest one exists." }
+              "landscape": {
+                "enum": [
+                  "river",
+                  "shore",
+                  "forest",
+                  "meadow",
+                  "hill"
+                ]
+              },
+              "landmark": {
+                "enum": [
+                  "fountain",
+                  "obelisk",
+                  "statue",
+                  "arch",
+                  "bell",
+                  "stones"
+                ]
+              },
+              "why": {
+                "type": "string",
+                "description": "The link with the content, only if an honest one exists."
+              }
             }
           }
         }
       }
     },
     "concepts": {
-      "type": "array", "minItems": 1, "maxItems": 16,
-      "items": { "$ref": "#/$defs/concept" }
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "$ref": "#/$defs/concept"
+      }
     },
     "relations": {
       "type": "array",
       "items": {
-        "type": "object", "required": ["from", "to", "type"], "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "type"
+        ],
+        "additionalProperties": false,
         "properties": {
-          "from": { "type": "string" }, "to": { "type": "string" },
-          "type": { "enum": ["requires", "part-of", "causes", "contrasts", "same-structure", "example-of", "used-in"], "description": "Read as: from <type> to. 'requires' means from cannot be understood without to." },
-          "note": { "type": "string" }
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "requires",
+              "part-of",
+              "causes",
+              "contrasts",
+              "same-structure",
+              "example-of",
+              "used-in"
+            ],
+            "description": "Read as: from <type> to. 'requires' means from cannot be understood without to."
+          },
+          "note": {
+            "type": "string"
+          }
         }
       }
     },
     "finalCheck": {
-      "type": "object", "required": ["name", "size", "pass"], "additionalProperties": false,
-      "properties": { "name": { "type": "string" }, "size": { "type": "integer", "minimum": 4, "maximum": 20 }, "pass": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 } }
+      "type": "object",
+      "required": [
+        "name",
+        "size",
+        "pass"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 20
+        },
+        "pass": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        }
+      }
     }
   },
   "$defs": {
     "concept": {
       "type": "object",
-      "required": ["id", "theme", "type", "name", "place", "objective", "idea", "wrongBelief", "remember", "questions"],
+      "required": [
+        "id",
+        "theme",
+        "type",
+        "name",
+        "place",
+        "objective",
+        "idea",
+        "wrongBelief",
+        "remember",
+        "questions"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
-        "theme": { "type": "string" },
-        "type": { "enum": ["mechanism", "process", "view", "parts", "choice", "cases", "story", "deep"] },
-        "name": { "type": "string", "description": "The concept, 2 to 5 words." },
-        "place": { "type": "string", "description": "A short, picturable name for where this concept lives." },
-        "sign": { "type": "string", "maxLength": 9 },
-        "objective": { "type": "string", "description": "What the learner will be able to do. Starts with an observable verb." },
-        "idea": { "type": "string", "description": "The concept as one sentence, 28 words at most." },
-        "wrongBelief": { "type": "string", "description": "What people believe before. Drives the prediction, the surprise and the wrong options." },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*$"
+        },
+        "theme": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "mechanism",
+            "process",
+            "view",
+            "parts",
+            "choice",
+            "cases",
+            "story",
+            "deep"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "description": "The concept, 2 to 5 words."
+        },
+        "place": {
+          "type": "string",
+          "description": "A short, picturable name for where this concept lives."
+        },
+        "sign": {
+          "type": "string",
+          "maxLength": 9
+        },
+        "objective": {
+          "type": "string",
+          "description": "What the learner will be able to do. Starts with an observable verb."
+        },
+        "idea": {
+          "type": "string",
+          "description": "The concept as one sentence, 28 words at most."
+        },
+        "wrongBelief": {
+          "type": "string",
+          "description": "What people believe before. Drives the prediction, the surprise and the wrong options."
+        },
         "anchor": {
-          "type": "object", "required": ["type", "text"], "additionalProperties": false,
-          "properties": { "type": { "enum": ["analogy", "metaphor", "example", "contrast"] }, "text": { "type": "string" }, "limits": { "type": "string", "description": "Where the anchor stops being true." } }
-        },
-        "application": { "type": "string", "description": "Where the learner will meet this in real life. Specific." },
-        "remember": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "type": "string" } },
-        "explain": { "type": "object", "required": ["q", "a"], "additionalProperties": false, "properties": { "q": { "type": "string" }, "a": { "type": "string" } } },
-        "callbacks": { "type": "array", "items": { "type": "object", "required": ["to", "how"], "additionalProperties": false, "properties": { "to": { "type": "string" }, "how": { "type": "string" } } } },
-        "lab": {
-          "type": "object", "required": ["title", "stations"], "additionalProperties": false,
-          "properties": { "title": { "type": "string" }, "stations": { "type": "array", "minItems": 1, "maxItems": 8, "items": { "$ref": "#/$defs/station" } } }
-        },
-        "page": {
-          "type": "array", "maxItems": 5,
-          "items": {
-            "type": "object", "required": ["title", "text"], "additionalProperties": false,
-            "properties": {
-              "title": { "type": "string" }, "text": { "type": "string", "description": "Under about 120 words." },
-              "figure": { "type": "object", "required": ["kind", "ref", "caption"], "additionalProperties": false, "properties": { "kind": { "enum": ["animation", "image"] }, "ref": { "type": "string" }, "caption": { "type": "string" } } }
+          "type": "object",
+          "required": [
+            "type",
+            "text"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "enum": [
+                "analogy",
+                "metaphor",
+                "example",
+                "contrast"
+              ]
+            },
+            "text": {
+              "type": "string"
+            },
+            "limits": {
+              "type": "string",
+              "description": "Where the anchor stops being true."
             }
           }
         },
-        "threads": { "type": "object", "additionalProperties": { "type": "string" }, "description": "story only: named threads that group the events." },
-        "timeline": {
-          "type": "array", "minItems": 4, "maxItems": 14,
+        "application": {
+          "type": "string",
+          "description": "Where the learner will meet this in real life. Specific."
+        },
+        "remember": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
           "items": {
-            "type": "object", "required": ["year", "title", "text"], "additionalProperties": false,
-            "properties": { "year": { "type": "integer" }, "thread": { "type": "string" }, "title": { "type": "string" }, "who": { "type": "string" }, "text": { "type": "string" }, "why": { "type": "string" }, "src": { "type": "string" } }
+            "type": "string"
           }
         },
-        "questions": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/question" } },
-        "sources": { "type": "array", "items": { "type": "string" } }
+        "explain": {
+          "type": "object",
+          "required": [
+            "q",
+            "a"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "a": {
+              "type": "string"
+            }
+          }
+        },
+        "callbacks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "to",
+              "how"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "to": {
+                "type": "string"
+              },
+              "how": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "lab": {
+          "type": "object",
+          "required": [
+            "title",
+            "stations"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "stations": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 8,
+              "items": {
+                "$ref": "#/$defs/station"
+              }
+            }
+          }
+        },
+        "page": {
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "text"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string",
+                "description": "Under about 120 words."
+              },
+              "figure": {
+                "type": "object",
+                "required": [
+                  "kind",
+                  "ref",
+                  "caption"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "animation",
+                      "image"
+                    ]
+                  },
+                  "ref": {
+                    "type": "string"
+                  },
+                  "caption": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "threads": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "story only: named threads that group the events."
+        },
+        "timeline": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 14,
+          "items": {
+            "type": "object",
+            "required": [
+              "year",
+              "title",
+              "text"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "year": {
+                "type": "integer"
+              },
+              "thread": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "who": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "why": {
+                "type": "string"
+              },
+              "src": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "questions": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/question"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "further": {
+          "type": "array",
+          "maxItems": 3,
+          "description": "The best resources to go further, found while scouting.",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "url",
+              "why"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "why": {
+                "type": "string",
+                "description": "One line: what this resource gives the learner."
+              }
+            }
+          }
+        }
       }
     },
     "station": {
       "type": "object",
-      "required": ["id", "tab", "goal", "pattern", "object", "action", "surprise", "tries", "takeaway", "source"],
+      "required": [
+        "id",
+        "tab",
+        "goal",
+        "pattern",
+        "object",
+        "action",
+        "surprise",
+        "tries",
+        "takeaway",
+        "source"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
-        "tab": { "type": "string" },
-        "goal": { "type": "string", "description": "The idea as a sentence, 26 words at most." },
-        "beat": { "enum": ["ground", "rule", "twist", "sandbox"] },
-        "pattern": { "enum": ["handle", "cause-effect", "break-it", "predict-test", "contrast", "zoom", "match", "step-through", "sort-cases", "linked-analogy", "puzzle", "role-play", "sandbox"] },
-        "object": { "type": "string" }, "action": { "type": "string" }, "surprise": { "type": "string" },
-        "predict": { "type": "object", "required": ["q", "options"], "additionalProperties": false, "properties": { "q": { "type": "string" }, "options": { "type": "array", "minItems": 3, "maxItems": 4, "items": { "type": "string" } } } },
-        "controls": { "type": "array", "maxItems": 2, "items": { "type": "string" } },
-        "tries": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "type": "string" } },
-        "takeaway": { "type": "string" }, "source": { "type": "string" }, "data": { "type": "string" }
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*$"
+        },
+        "tab": {
+          "type": "string"
+        },
+        "goal": {
+          "type": "string",
+          "description": "The idea as a sentence, 26 words at most."
+        },
+        "beat": {
+          "enum": [
+            "ground",
+            "rule",
+            "twist",
+            "sandbox"
+          ]
+        },
+        "pattern": {
+          "enum": [
+            "handle",
+            "cause-effect",
+            "break-it",
+            "predict-test",
+            "contrast",
+            "zoom",
+            "match",
+            "step-through",
+            "sort-cases",
+            "linked-analogy",
+            "puzzle",
+            "role-play",
+            "sandbox"
+          ]
+        },
+        "object": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "surprise": {
+          "type": "string"
+        },
+        "predict": {
+          "type": "object",
+          "required": [
+            "q",
+            "options"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "q": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 4,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "controls": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "tries": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        },
+        "takeaway": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        }
       }
     },
     "question": {
-      "type": "object", "required": ["level", "q", "options", "answer", "why"], "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "level",
+        "q",
+        "options",
+        "answer",
+        "why"
+      ],
+      "additionalProperties": false,
       "properties": {
-        "level": { "enum": [1, 2, 3] }, "q": { "type": "string" },
-        "options": { "type": "array", "minItems": 3, "maxItems": 4, "items": { "type": "string" } },
-        "answer": { "type": "integer", "minimum": 0 },
-        "why": { "type": "string" },
-        "traps": { "type": "array", "items": { "type": ["string", "null"] }, "description": "For each option, the mistake it catches; null for the right one." }
+        "level": {
+          "enum": [
+            1,
+            2,
+            3
+          ]
+        },
+        "q": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "answer": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "why": {
+          "type": "string"
+        },
+        "traps": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": "For each option, the mistake it catches; null for the right one."
+        }
       }
     }
   }
