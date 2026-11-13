@@ -15,6 +15,8 @@ import { lighthouseDoor } from './lighthouse.js';
 import { playTurn } from './turn.js';
 import { houseDuel } from '../duel/index.js';
 import { DAY } from './config.js';
+import { view } from './paint.js';
+import { PAINTERS } from './scenes/index.js';
 
 export function storyDebug(game) {
   const town = () => game.scene.getScene('Town'), ui = () => game.scene.getScene('UI');
@@ -44,6 +46,8 @@ export function storyDebug(game) {
       else if (b) cam.centerOn((b.x + b.w / 2) * T, (b.y + (what === 'lighthouse' ? -3 : b.h / 2)) * T);
       return 1;
     },
+    // a painted scene alone, full screen, for looking at it: __hb.story.paint('harbour', { dock: 1 })
+    paint(name, params = {}) { document.getElementById('st-paint')?.remove(); const d = document.createElement('div'); d.id = 'st-paint'; d.style.cssText = 'position:fixed;inset:0;z-index:40;background:#000'; document.body.append(d); this._v = view(d, PAINTERS[name](), params); return 1; },
     follow: () => { const sc = town(); sc.cameras.main.startFollow(sc.player.sprite, true, 0.15, 0.15); return 1; },
   };
 }
