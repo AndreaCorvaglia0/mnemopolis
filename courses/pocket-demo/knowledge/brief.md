@@ -18,8 +18,8 @@ engine's default.
 | Customised (the subject) | Left to the engine's defaults |
 |---|---|
 | `course.json`: content, map, questions, lab designs | no `world.json`: town, theme, houses, names, guide, League host by seed |
-| `labs/wave.js` (one station, 49 lines with the kit) | no emblems, no signs, no experts, no riddles, no animations |
-| `labs/pitch.js` (two stations: the slider-reveal pattern called from code and extended, 27 lines; a custom sketch, 45 lines) | phrases, sounds, music, thoughts, ambient life: standard |
+| `labs/wave.js` (one station, 50 lines with the kit) | no emblems, no signs, no experts, no riddles, no animations |
+| `labs/pitch.js` (two stations: the slider-reveal pattern called from code and extended, 27 lines; a custom sketch, 46 lines) | phrases, sounds, music, thoughts, ambient life: standard |
 | two stations as ready-made patterns, pure data (`compare` for decibels, `sort` for mediums) | the build: `node scripts/pack.mjs courses/pocket-demo` into the prebuilt player |
 
 ## Lab plan

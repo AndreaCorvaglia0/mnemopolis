@@ -6,6 +6,7 @@ import { stage, tasks, animate, C, alpha, clamp, sfx } from '../../../engine/src
 async function push(ctx) {
   const t = tasks(ctx); // ticks the tasks by their "when" in course.json
   const hist = [], SPEED = 260, MAXP = 26; // squeeze speed in units per second (slowed down), cone travel
+  const t0 = performance.now(), clock = () => (performance.now() - t0) / 1000; // one wall clock: frames and pointer events agree
   let cone = 0, grab = false, now = 0, lastMove = -9, heard = 0, lastHit = -9, ring = 0, goldMin = 0, goldMax = 0, wasOut = false;
   const shiftAt = (dist, at = now) => { const tt = at - dist / SPEED; for (let i = hist.length - 1; i >= 0; i--) if (hist[i][0] <= tt) return hist[i][1] * Math.exp(-dist / 1400); return 0; };
   const L = (p) => (p.upright ? { x0: 118, cols: 10, rows: 13, gx: 28, gy: 34, top: 70, ear: 428 } : { x0: 150, cols: 22, rows: 9, gx: 26, gy: 34, top: 80, ear: 760 });
@@ -33,28 +34,28 @@ async function push(ctx) {
     d.text(heard ? `heard: ${heard}` : 'ear', Math.min(l.ear, pane.W - 40), cy + 72, { size: 17, weight: 600, color: heard ? C.gold : C.dim, align: 'center' });
   });
   const anim = animate(ctx, (dt) => {
-    now += dt === Infinity ? 0.016 : dt;
+    const prev = now; now = clock();
     hist.push([now, cone]); while (hist.length > 2 && hist[1][0] < now - 6) hist.shift();
     // the ear and the gold molecule are sampled between frames too, so a slow device misses nothing
-    const l = L(view.pane), step = dt === Infinity ? 0 : dt, sub = (dist) => [0, 1, 2, 3, 4, 5, 6, 7].map((k) => shiftAt(dist, now - (step * k) / 8));
+    const l = L(view.pane), step = Math.min(1, now - prev), sub = (dist) => [0, 1, 2, 3, 4, 5, 6, 7].map((k) => shiftAt(dist, now - (step * k) / 8));
     const us = sub(l.ear - 90), u = us.reduce((a, b) => (Math.abs(b) > Math.abs(a) ? b : a), 0), gs = sub(l.x0 + 2 * l.gx - 90);
     gs.forEach((x) => { goldMin = Math.min(goldMin, x); goldMax = Math.max(goldMax, x); });
     if (Math.abs(u) > 6 && !wasOut && now - lastHit > 0.25) { heard++; lastHit = now; ring = 1; sfx.tick(); t.pick('heard').state(`heard${heard}`).check(); }
     wasOut = Math.abs(u) > 6; ring = Math.max(0, ring - (dt === Infinity ? 1 : dt) * 2);
-    if (!grab) cone *= 0.85; // the cone springs back when let go
+    if (!grab) { cone *= Math.exp(-10 * (now - prev)); hist.push([now, cone]); } // the cone springs back when let go, at the same pace on any device
     if (Math.abs(cone) > 0.5) lastMove = now;
     view.redraw();
     return grab || now - lastMove < 5 || ring > 0; // runs until the last squeeze has crossed the air
   });
   view.pane.drag((x, y, phase) => {
     if (phase === 'down') { grab = x < 140; if (grab) { anim.kick(); t.pick('push').check(); } }
-    else if (phase === 'move' && grab) cone = clamp(x - 84, -MAXP, MAXP);
+    else if (phase === 'move' && grab) { cone = clamp(x - 84, -MAXP, MAXP); hist.push([clock(), cone]); }
     else if (phase === 'up') { grab = false; anim.kick(); }
   });
   view.pane.cv.style.cursor = 'grab';
   view.pane.hint(() => [84, L(view.pane).top + ((L(view.pane).rows - 1) * L(view.pane).gy) / 2]);
   // for the screenshots (scripts/readyshots.mjs): do a task by pushing the cone
-  const pulse = () => { grab = true; cone = MAXP; anim.kick(); t.pick('push').check(); setTimeout(() => { grab = false; }, 160); };
+  const pulse = () => { grab = true; cone = MAXP; hist.push([clock(), cone]); anim.kick(); t.pick('push').check(); setTimeout(() => { grab = false; hist.push([clock(), cone]); }, 160); };
   ctx.stage.__ready = { t, custom: (verb) => { pulse(); if (verb === 'try') [700, 1400].forEach((ms) => setTimeout(pulse, ms)); } };
 }
 

@@ -337,9 +337,9 @@ gets there only when it is tuned for that moment:
 ## How long a station is
 
 Measured on the demo course (`courses/pocket-demo/`, non-blank lines of code): "Push the air" (a
-travelling squeeze in a field of molecules, a draggable cone, an ear that counts arrivals) 49
-lines, about 5,000 characters; "Guess the curve" (four handles, the real curve drawn over the
-guess with the gap shaded, a score) 45 lines, about 4,200 characters; "More per second" (the
+travelling squeeze in a field of molecules, a draggable cone, an ear that counts arrivals) 50
+lines, about 5,500 characters; "Guess the curve" (four handles, the real curve drawn over the
+guess with the gap shaded, a score) 46 lines, about 4,200 characters; "More per second" (the
 pattern called from code, plus the tone and the counted squeezes) 27 lines, about 1,800
 characters; the two ready stations are 30 to 40 lines of data in `course.json`. The stations of
 `courses/chroma/`, written before the kit, take 20 to 45 lines, about 3,000 characters each: the
