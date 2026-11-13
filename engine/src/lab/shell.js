@@ -2,9 +2,11 @@
 // One station = one learning objective. The stage (the station's picture) is the screen; a panel
 // beside it (a bottom sheet on an upright screen) leads through one thing at a time:
 //   1. the question, if the design has one: the picture is already there, frozen;
-//   2. "You said X. Now check it": the picture comes alive, the tasks appear and tick themselves;
-//   3. when the tasks are done: the verdict on the prediction, the takeaway, and one button: Next.
-// The panel folds away to leave only the picture; the theory opens in a drawer.
+//   2. "You said X": the picture comes alive; one step at a time, "Now: <step>", ticking itself;
+//   3. when the steps are done: the verdict on the prediction, the takeaway, and one button: Next.
+// The panel folds away (a rail, or a one-line strip on a phone) and the stage can go full screen:
+// a bar along the picture's bottom edge then keeps the step, the result and Next in view.
+// The theory opens beside the picture (a sheet on a phone).
 import { LABS } from '../course/labs.js';
 import { state, save } from '../systems/state.js';
 import { sfx } from '../systems/audio.js';
@@ -13,20 +15,52 @@ import { available, isOn, isSpeaking, onChange, listen, stop as stopVoice, speak
 import { codePanel } from './code.js';
 import { CSS } from './style.js';
 import { readingArticle } from './reading.js';
+import { DATA } from '../course/_data.js';
 
-// Every word the frame shows, in one place, so a course in another language can replace them.
-export const TEXT = {
-  close: 'Close the lab', theory: 'Theory', stations: 'Stations', stage: 'The picture',
-  full: 'Full screen', unfull: 'Leave full screen', hide: 'Hide the panel', show: 'Show the panel',
-  lock: 'Answer the question first', pick: 'Pick an answer. Then try it on the picture.',
-  question: 'Question', explore: 'Your turn', tryIt: 'Try it', of: (a, b) => `${a} of ${b} done`,
-  said: 'You said', check: 'Now check it on the picture.', selfTick: 'Each step ticks itself when you do it.',
-  right: 'That is right.', answerIs: (a) => `The answer is: ${a}.`, compare: 'Compare it with what you saw.',
-  done: 'Done', doneSum: 'Takeaway ready', allDone: 'All steps done.', takeaway: 'Takeaway', keep: 'The picture stays live: keep exploring.',
-  listen: 'Listen', stop: 'Stop', readAloud: 'Read aloud', stopReading: 'Stop reading aloud',
-  next: (t) => `Next: ${t}`, back: 'Back to the room', more: 'More',
-  about: 'About this picture', station: (i, n, t, d) => `Station ${i} of ${n}: ${t}${d ? ', done' : ''}`,
+// Every word the frame shows, in one place: English and Italian. The set follows the course's
+// `language` (course.json), with English for anything missing. Another language is one more
+// entry in STRINGS with the same keys.
+const STRINGS = {
+  en: {
+    close: 'Close the lab', closeWord: 'Close', theory: 'Theory', stations: 'Stations', stage: 'The picture',
+    full: 'Full screen', unfull: 'Exit full screen', hide: 'Hide', show: 'Show', hidePanel: 'Hide the panel', showPanel: 'Show the panel',
+    lock: 'Answer the question first', lockGo: 'Show the question',
+    pick: 'Pick an answer. Then try it on the picture.',
+    question: 'Question', explore: 'Your turn', result: 'Result',
+    said: 'You said', check: 'Now check it on the picture.',
+    left: (n) => (n === 1 ? 'One more step, then the answer.' : `${n} more steps, then the answer.`),
+    now: 'Now', of: (a, b) => `${a} of ${b}`, where: 'Show me where', onPicture: 'Do it on the picture.',
+    youRight: (s) => `You said ${s}: right.`, youWrong: (s, a) => `You said ${s}. Answer: ${a}.`, youSaid: (s) => `You said ${s}.`,
+    compare: 'Compare it with what you saw.', answer: 'Answer',
+    pillRight: (a) => `${a}: right`, pillWrong: (a, s) => `${a}, not ${s}`,
+    allDone: 'All steps done', stepsDone: (n) => (n === 1 ? 'Step done' : `${n} steps done`),
+    takeaway: 'Takeaway', keep: 'The picture stays live: keep exploring.',
+    listen: 'Listen', stop: 'Stop', readAloud: 'Read aloud', stopReading: 'Stop reading aloud',
+    next: (t) => `Next: ${t}`, nextShort: 'Next', back: 'Back to the room', more: 'More',
+    about: 'About this picture', station: (i, n, t, d) => `Station ${i} of ${n}: ${t}${d ? ', done' : ''}`,
+  },
+  it: {
+    close: 'Chiudi il laboratorio', closeWord: 'Chiudi', theory: 'Teoria', stations: 'Postazioni', stage: "L'immagine",
+    full: 'Schermo intero', unfull: 'Esci dallo schermo intero', hide: 'Nascondi', show: 'Mostra', hidePanel: 'Nascondi il pannello', showPanel: 'Mostra il pannello',
+    lock: 'Prima rispondi alla domanda', lockGo: 'Vai alla domanda',
+    pick: "Scegli una risposta. Poi provala sull'immagine.",
+    question: 'Domanda', explore: 'Tocca a te', result: 'Risultato',
+    said: 'Hai detto', check: "Ora verificalo sull'immagine.",
+    left: (n) => (n === 1 ? 'Ancora un passo, poi la risposta.' : `Ancora ${n} passi, poi la risposta.`),
+    now: 'Ora', of: (a, b) => `${a} di ${b}`, where: 'Mostrami dove', onPicture: "Fallo direttamente sull'immagine.",
+    youRight: (s) => `Hai detto ${s}: giusto.`, youWrong: (s, a) => `Hai detto ${s}. Risposta: ${a}.`, youSaid: (s) => `Hai detto ${s}.`,
+    compare: 'Confrontalo con quello che hai visto.', answer: 'Risposta',
+    pillRight: (a) => `${a}: giusto`, pillWrong: (a, s) => `${a}, non ${s}`,
+    allDone: 'Tutti i passi fatti', stepsDone: (n) => (n === 1 ? 'Passo fatto' : `${n} passi fatti`),
+    takeaway: 'Da ricordare', keep: "L'immagine resta attiva: continua a esplorare.",
+    listen: 'Ascolta', stop: 'Ferma', readAloud: 'Leggi ad alta voce', stopReading: 'Ferma la lettura',
+    next: (t) => `Avanti: ${t}`, nextShort: 'Avanti', back: 'Torna alla stanza', more: 'Altro',
+    about: 'Su questa immagine', station: (i, n, t, d) => `Postazione ${i} di ${n}: ${t}${d ? ', fatta' : ''}`,
+  },
 };
+export const LANG = String(DATA.language || 'en').slice(0, 2).toLowerCase();
+export const TEXT = { ...STRINGS.en, ...(STRINGS[LANG] || {}) };
+export { STRINGS };
 
 const ICON = {
   x: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
@@ -38,6 +72,9 @@ const ICON = {
   lock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>',
   speaker: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>',
   stopsq: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+  chevl: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>',
+  up: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>',
+  target: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
   arrow: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
 };
 const icon = (k) => { const s = document.createElement('span'); s.style.display = 'contents'; s.innerHTML = ICON[k]; return s; };
@@ -116,7 +153,7 @@ export { listen, stopVoice, speak, script, VOICE, isOn };
 // voice) and a close button.
 export function overlay(title, sub, getText = null) {
   style();
-  const close = h('button', { type: 'button', class: 'hb-close', 'aria-label': 'Close' }, icon('x'), 'Close');
+  const close = h('button', { type: 'button', class: 'hb-close', 'aria-label': TEXT.closeWord }, icon('x'), TEXT.closeWord);
   const tabs = h('div', { class: 'hb-tabs' });
   const say = getText ? listenButton(getText) : null;
   const root = h('div', { class: 'hb-over', role: 'dialog', 'aria-label': title }, h('div', { class: `hb-top${say ? ' has-say' : ''}` }, h('h1', { html: `${title}${sub ? ` <span>· ${sub}</span>` : ''}` }), tabs, say, close));
@@ -129,117 +166,155 @@ export function openLab(id, start = 0) {
   style();
   const lab = LABS[id], N = lab.stations.length;
 
-  // ---- the frame, built once ----
+  // ---- header: the lab's name (a title, not a link), the stations as steps, Listen, Theory, Close ----
   const steps = h('nav', { class: `lx-steps${N > 4 ? ' many' : ''}`, 'aria-label': TEXT.stations });
-  const theoryBtn = h('button', { type: 'button', class: 'lx-btn lx-theory', 'aria-haspopup': 'dialog', title: TEXT.theory }, icon('book'), h('span', {}, TEXT.theory));
+  const tabTip = h('div', { class: 'lx-tabtip', 'aria-hidden': 'true', hidden: '' });
+  const theoryBtn = h('button', { type: 'button', class: 'lx-btn lx-theory', 'aria-haspopup': 'dialog', title: TEXT.theory }, icon('book'), h('span', { class: 't' }, TEXT.theory));
   const close = h('button', { type: 'button', class: 'lx-x', 'aria-label': TEXT.close, title: TEXT.close }, icon('x'));
   // what Listen reads: set by each station for its current phase
   let speech = () => '', drawerSpeech = () => '';
   const say = listenButton(() => speech(), 'lx-btn lx-say');
   const tools = h('div', { class: 'lx-tools' }, say, theoryBtn, close);
-  const top = h('header', { class: 'lx-top' }, h('div', { class: 'lx-name' }, lab.title), steps, tools);
+  const top = h('header', { class: 'lx-top' }, h('h1', { class: 'lx-name' }, lab.title), steps, tools);
 
+  // ---- the stage column: picture, controls docked under it (phone), and a bar along its bottom edge ----
   const stage = h('div', { class: 'lab-stage' });
-  const lock = h('div', { class: 'lx-lock' }, icon('lock'), TEXT.lock);
-  const fsBtn = h('button', { type: 'button', class: 'lx-fs', 'aria-label': TEXT.full, title: TEXT.full, 'aria-pressed': 'false' }, icon('full'));
-  const stageWrap = h('section', { class: 'lx-stagewrap', 'aria-label': TEXT.stage }, stage, lock, fsBtn);
+  const pings = h('div', { class: 'lx-pings', 'aria-hidden': 'true' });
+  const stageBox = h('div', { class: 'lx-stagebox' }, stage, pings);
+  const dock = h('div', { class: 'lx-dock', hidden: '' });
+  // the brief: one line with the progress or the result, wherever the panel is not visible
+  const bMark = h('span', { class: 'lx-bmark', 'aria-hidden': 'true' });
+  const bText = h('button', { type: 'button', class: 'lx-btext' });
+  const bNext = h('button', { type: 'button', class: 'lx-bnext' });
+  const brief = h('div', { class: 'lx-brief', role: 'status' }, bMark, bText, bNext);
+  const fsBtn = h('button', { type: 'button', class: 'lx-btn lx-fs', 'aria-pressed': 'false' });
+  const fsClose = h('button', { type: 'button', class: 'lx-x lx-fsx', 'aria-label': TEXT.close, title: TEXT.close }, icon('x'));
+  const bar = h('div', { class: 'lx-bar' }, brief, fsBtn, fsClose);
+  const stageWrap = h('section', { class: 'lx-stagewrap', 'aria-label': TEXT.stage }, stageBox, dock, bar);
 
+  // ---- the panel (a bottom sheet on an upright screen) ----
+  const hLabel = h('span', { class: 'lab' });
+  const handle = h('button', { type: 'button', class: 'lx-handle', 'aria-expanded': 'true' }, h('i', { class: 'grab' }), hLabel);
   const status = h('div', { class: 'lx-status' });
-  const sum = h('div', { class: 'lx-sum' });
   const pips = h('div', { class: 'lx-pips', 'aria-hidden': 'true' });
-  const mini = h('button', { type: 'button', class: 'lx-mini' }, icon('arrow'));
-  const tog = h('button', { type: 'button', class: 'lx-tog', 'aria-expanded': 'true', 'aria-label': TEXT.hide, title: TEXT.hide }, icon('chev'));
-  const phead = h('div', { class: 'lx-phead' }, status, sum, h('div', { class: 'lx-grow' }), pips, mini, tog);
-  const guide = h('div', { class: 'lx-guide', style: 'display:flex;flex-direction:column;gap:16px' });
+  const tog = h('button', { type: 'button', class: 'lx-tog', 'aria-expanded': 'true' });
+  const phead = h('div', { class: 'lx-phead' }, status, h('div', { class: 'lx-grow' }), pips, tog);
+  const strip = h('div', { class: 'lx-strip' });
+  const guide = h('div', { class: 'lx-guide' });
   const extra = h('div', { class: 'lx-extra' });
   const scroll = h('div', { class: 'lx-scroll' }, guide, extra);
+  const moreBar = h('button', { type: 'button', class: 'lx-morebar', tabindex: '-1' }, h('span', {}, TEXT.more), icon('down'));
   const act = h('div', { class: 'lx-act' });
-  const more = h('button', { type: 'button', class: 'lx-more', tabindex: '-1', 'aria-hidden': 'true', title: TEXT.more }, icon('down'));
-  const panel = h('aside', { class: 'lx-panel', 'aria-label': lab.title }, phead, scroll, more, act);
-  const main = h('div', { class: `lx-main${lab.wide ? ' wide' : ''}` }, stageWrap, panel);
+  const panel = h('aside', { class: 'lx-panel', 'aria-label': lab.title }, handle, phead, strip, scroll, moreBar, act);
+  const main = h('div', { class: 'lx-main' }, stageWrap, panel);
 
-  const dClose = h('button', { type: 'button', class: 'lx-x', 'aria-label': `${TEXT.close}: ${TEXT.theory}` }, icon('x'));
+  const dClose = h('button', { type: 'button', class: 'lx-x', 'aria-label': `${TEXT.closeWord}: ${TEXT.theory}`, title: TEXT.closeWord }, icon('x'));
   const dBody = h('div', { class: 'hb-page lx-dbody', tabindex: '0' });
   const dSay = listenButton(() => drawerSpeech(), 'lx-btn lx-say');
-  const drawer = h('div', { class: 'lx-drawer', role: 'dialog', 'aria-modal': 'true', 'aria-label': TEXT.theory, inert: '' }, h('div', { class: 'lx-dhead' }, h('h2', {}, TEXT.theory), dSay, dClose), dBody);
+  const drawer = h('div', { class: 'lx-drawer', role: 'dialog', 'aria-label': TEXT.theory, inert: '' }, h('div', { class: 'lx-dhead' }, h('h2', {}, TEXT.theory), dSay, dClose), dBody);
   const scrim = h('div', { class: 'lx-scrim' });
 
-  const root = h('div', { class: 'hb-over lx', role: 'dialog', 'aria-label': lab.title }, top, main, scrim, drawer);
+  const root = h('div', { class: `hb-over lx${lab.wide ? ' wide' : ''}`, role: 'dialog', 'aria-label': lab.title, lang: LANG }, top, main, scrim, drawer, tabTip);
   document.body.append(root);
+
+  let current = start, cleanup = [], token = 0, collapsed = false, full = false, theory = false;
+  let phase = 'explore', controls = null, onPhase = () => {}, drawBrief = () => {};
 
   // upright screens and narrow windows: stage on top, panel as a bottom sheet
   const stackQ = () => innerWidth < 760 || (innerHeight > innerWidth && innerWidth < 1000);
-  const relayout = () => {
-    const st = stackQ();
-    root.classList.toggle('stack', st);
-    // Listen sits in the header on wide screens, in the panel head on upright ones (room for the station name)
-    if (say) { if (st && say.parentNode !== phead) phead.insertBefore(say, tog); else if (!st && say.parentNode !== tools) tools.insertBefore(say, theoryBtn); }
-    cue();
+  const isStack = () => root.classList.contains('stack');
+  // where things live depends on the layout: the brief in the folded sheet on a phone, otherwise
+  // in the stage bar; Listen and Full screen in the sheet's head on a phone
+  const place = () => {
+    const st = isStack();
+    const briefHome = st && !full && phase !== 'ask' ? strip : bar;
+    if (brief.parentNode !== briefHome) briefHome.prepend(brief);
+    const fsHome = st && !full ? phead : bar;
+    if (fsBtn.parentNode !== fsHome) fsHome.insertBefore(fsBtn, fsHome === bar ? fsClose : tog);
+    if (say) { const sh = st ? phead : tools; if (say.parentNode !== sh) sh.insertBefore(say, st ? fsBtn.parentNode === phead ? fsBtn : tog : theoryBtn); }
+    // the sheet's Hide / Show: in its head when open, beside the one-line strip when folded
+    const hh = st && collapsed ? strip : phead;
+    if (handle.parentNode !== hh) hh.append(handle);
+    if (controls) { const ch = st ? dock : extra; if (controls.parentNode !== ch) ch.append(controls); }
+    dock.hidden = !(st && controls && controls.childElementCount && phase !== 'ask');
   };
+  const relayout = () => { root.classList.toggle('stack', stackQ()); place(); drawFs(); drawTog(); cue(); };
 
-  // ---- panel: fold away, drag (bottom sheet), "more below" cue ----
-  let collapsed = false;
+  // ---- panel: fold away (rail or strip), drag the sheet, "More" cue ----
+  const drawTog = () => {
+    const st = isStack();
+    tog.replaceChildren(collapsed ? icon('chevl') : h('span', { class: 't' }, TEXT.hide), collapsed ? h('span', { class: 't' }, TEXT.show) : icon('chev'));
+    tog.setAttribute('aria-expanded', String(!collapsed)); tog.setAttribute('aria-label', collapsed ? TEXT.showPanel : TEXT.hidePanel); tog.title = tog.getAttribute('aria-label');
+    hLabel.replaceChildren(icon(collapsed ? 'up' : 'down'), collapsed ? TEXT.show : TEXT.hide);
+    handle.setAttribute('aria-expanded', String(!collapsed)); handle.setAttribute('aria-label', collapsed ? TEXT.showPanel : TEXT.hidePanel);
+    handle.hidden = !st;
+  };
   const setCollapsed = (v) => {
     collapsed = v; root.classList.toggle('collapsed', v);
-    tog.setAttribute('aria-expanded', String(!v)); tog.setAttribute('aria-label', v ? TEXT.show : TEXT.hide); tog.title = v ? TEXT.show : TEXT.hide;
     if (v) panel.classList.remove('sized');
+    place(); drawTog(); drawBrief();
     requestAnimationFrame(cue);
   };
   tog.onclick = (e) => { e.stopPropagation(); setCollapsed(!collapsed); };
-  // on a bottom sheet the head is a handle: drag it up or down, or tap it
+  // on a bottom sheet the handle and the head can be dragged up or down, or tapped
   let drag = null;
-  phead.addEventListener('pointerdown', (e) => {
-    if (!root.classList.contains('stack') || e.target.closest('button')) return;
+  const dragStart = (e) => {
+    if (!isStack() || (e.target.closest('button') && e.target.closest('button') !== handle)) return;
     drag = { y: e.clientY, h0: panel.getBoundingClientRect().height, moved: false };
-    try { phead.setPointerCapture(e.pointerId); } catch { /* synthetic */ }
-  });
-  phead.addEventListener('pointermove', (e) => {
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* synthetic */ }
+  };
+  const dragMove = (e) => {
     if (!drag) return;
     const dy = e.clientY - drag.y;
     if (!drag.moved && Math.abs(dy) < 8) return;
     drag.moved = true;
     const total = main.getBoundingClientRect().height, hgt = Math.max(64, Math.min(total * 0.85, drag.h0 - dy));
-    if (collapsed) { collapsed = false; root.classList.remove('collapsed'); }
+    if (collapsed) { collapsed = false; root.classList.remove('collapsed'); drawTog(); }
     panel.classList.add('sized'); panel.style.setProperty('--sheet', `${hgt}px`);
-  });
-  const endDrag = () => {
+  };
+  const dragEnd = (e) => {
     if (!drag) return;
     const d = drag; drag = null;
-    if (!d.moved) { setCollapsed(!collapsed); return; }
-    const hgt = panel.getBoundingClientRect().height;
-    if (hgt < 140) { panel.classList.remove('sized'); setCollapsed(true); } else setCollapsed(false);
+    if (!d.moved) { if (e.currentTarget === handle || e.type === 'pointerup') setCollapsed(!collapsed); return; }
+    if (panel.getBoundingClientRect().height < 140) { panel.classList.remove('sized'); setCollapsed(true); } else setCollapsed(false);
   };
-  phead.addEventListener('pointerup', endDrag); phead.addEventListener('pointercancel', endDrag);
-  const cue = () => { panel.classList.toggle('more', scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight > 12); panel.style.setProperty('--actH', `${act.offsetHeight}px`); };
+  for (const el of [handle, phead]) { el.addEventListener('pointerdown', dragStart); el.addEventListener('pointermove', dragMove); el.addEventListener('pointerup', dragEnd); el.addEventListener('pointercancel', () => { drag = null; }); }
+  handle.addEventListener('click', (e) => { if (e.detail === 0) setCollapsed(!collapsed); }); // keyboard
+  const cue = () => {
+    const below = scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight > 12;
+    panel.classList.toggle('more', below && !collapsed);
+  };
   scroll.addEventListener('scroll', cue, { passive: true });
   new ResizeObserver(cue).observe(scroll);
   addEventListener('resize', relayout);
-  relayout();
-  more.onclick = () => scroll.scrollBy({ top: scroll.clientHeight * 0.7, behavior: 'smooth' });
+  moreBar.onclick = () => scroll.scrollBy({ top: scroll.clientHeight * 0.7, behavior: 'smooth' });
 
-  // ---- full screen stage ----
-  let full = false;
-  const setFull = (v) => {
-    full = v; root.classList.toggle('full', v);
-    fsBtn.replaceChildren(icon(v ? 'unfull' : 'full')); fsBtn.setAttribute('aria-pressed', String(v));
-    fsBtn.setAttribute('aria-label', v ? TEXT.unfull : TEXT.full); fsBtn.title = v ? TEXT.unfull : TEXT.full;
+  // ---- full screen stage: the bar keeps the progress, the result, Next, a way out and Close ----
+  const drawFs = () => {
+    const lab2 = full ? TEXT.unfull : TEXT.full;
+    fsBtn.replaceChildren(icon(full ? 'unfull' : 'full'), h('span', { class: 't' }, lab2));
+    fsBtn.setAttribute('aria-pressed', String(full)); fsBtn.setAttribute('aria-label', lab2); fsBtn.title = lab2;
   };
+  const setFull = (v) => { full = v; root.classList.toggle('full', v); place(); drawFs(); drawBrief(); };
   fsBtn.onclick = () => setFull(!full);
 
-  // ---- theory drawer ----
-  let theory = false, stopAnims = null, lastFocus = null;
+  // ---- theory: a side panel over the panel's column on a wide screen (the picture stays visible),
+  // a sheet on a phone ----
+  let stopAnims = null, lastFocus = null;
   const setTheory = (v) => {
     theory = v; root.classList.toggle('theory', v);
-    top.inert = v; main.inert = v; // keep the keyboard inside the drawer while it is open
-    if (v) { drawer.removeAttribute('inert'); lastFocus = document.activeElement; dClose.focus({ preventScroll: true }); }
+    const modal = isStack();
+    top.inert = v && modal; main.inert = v && modal; panel.inert = v;
+    if (v) { drawer.removeAttribute('inert'); drawer.setAttribute('aria-modal', String(modal)); lastFocus = document.activeElement; dClose.focus({ preventScroll: true }); }
     else { drawer.setAttribute('inert', ''); stopAnims?.(); stopAnims = null; lastFocus?.focus?.({ preventScroll: true }); }
     stopVoice();
-    theoryBtn.setAttribute('aria-expanded', String(v));
+    theoryBtn.setAttribute('aria-expanded', String(v)); theoryBtn.setAttribute('aria-pressed', String(v));
   };
   theoryBtn.onclick = () => {
+    if (theory) { setTheory(false); return; }
     const st = lab.stations[current], target = Array.isArray(st.deep) ? st.deep : [id, st.anchor || null];
     dBody.replaceChildren();
-    if (st.source) dBody.append(h('div', { style: 'max-width:760px;margin:0 auto;padding:20px 24px 0' }, h('p', { class: 'lx-about' }, h('b', {}, TEXT.about), st.source)));
+    if (st.source) dBody.append(h('div', { class: 'lx-aboutw' }, h('p', { class: 'lx-about' }, h('b', {}, TEXT.about), st.source)));
     if (st.deep !== false) {
       const { art, start: run, spoken } = readingArticle(target[0]);
       drawerSpeech = () => script([st.source && `${TEXT.about}: ${st.source}`, spoken()]);
@@ -253,18 +328,42 @@ export function openLab(id, start = 0) {
   dClose.onclick = () => setTheory(false);
   scrim.onclick = () => setTheory(false);
 
-  // ---- stations ----
-  let current = start, cleanup = [], token = 0;
+  // ---- stations as steps: number or tick, name; a label on hover, focus or a long press ----
   const isDone = (j) => !!state.done[`${id}:${j}`];
+  let tipTimer = 0, pressed = false;
+  const showTip = (b, text) => {
+    clearTimeout(tipTimer);
+    tabTip.textContent = text; tabTip.hidden = false;
+    const r = b.getBoundingClientRect(), rr = root.getBoundingClientRect(), w = tabTip.offsetWidth;
+    tabTip.style.left = `${Math.max(6, Math.min(rr.width - w - 6, r.left + r.width / 2 - w / 2))}px`;
+    tabTip.style.top = `${r.bottom + 6}px`;
+  };
+  const hideTip = (ms = 0) => { clearTimeout(tipTimer); tipTimer = setTimeout(() => { tabTip.hidden = true; }, ms); };
   const renderSteps = () => {
-    steps.replaceChildren(...lab.stations.map((st, j) => h('button', {
-      type: 'button', class: `lx-step${j === current ? ' cur' : ''}${isDone(j) ? ' done' : ''}`,
-      'aria-current': j === current ? 'step' : null, 'aria-label': TEXT.station(j + 1, N, st.tab, isDone(j)), title: st.tab,
-      onclick: () => { if (j !== current) show(j); },
-    }, h('span', { class: 'm', 'aria-hidden': 'true' }, isDone(j) ? '✓' : String(j + 1)), h('span', { class: 't' }, st.tab))));
+    const kids = [];
+    lab.stations.forEach((st, j) => {
+      if (j) kids.push(h('i', { class: `lx-link${isDone(j - 1) ? ' done' : ''}`, 'aria-hidden': 'true' }));
+      const name = `${j + 1}. ${st.tab}${isDone(j) ? ' ✓' : ''}`;
+      const b = h('button', {
+        type: 'button', class: `lx-step${j === current ? ' cur' : ''}${isDone(j) ? ' done' : ''}`,
+        'aria-current': j === current ? 'step' : null, 'aria-label': TEXT.station(j + 1, N, st.tab, isDone(j)),
+        onclick: () => { if (pressed) { pressed = false; return; } hideTip(); if (j !== current) show(j); },
+        onmouseenter: () => { tipTimer = setTimeout(() => showTip(b, name), 250); }, onmouseleave: () => hideTip(),
+        onfocus: () => { if (b.matches(':focus-visible')) showTip(b, name); }, onblur: () => hideTip(),
+        onpointerdown: (e) => { if (e.pointerType !== 'mouse') { pressed = false; clearTimeout(tipTimer); tipTimer = setTimeout(() => { pressed = true; showTip(b, name); }, 450); } },
+        onpointerup: (e) => { if (e.pointerType !== 'mouse') { if (pressed) hideTip(1400); else clearTimeout(tipTimer); } },
+        oncontextmenu: (e) => { if (pressed) e.preventDefault(); },
+      }, h('span', { class: 'm', 'aria-hidden': 'true' }, isDone(j) ? '✓' : String(j + 1)), h('span', { class: 't', 'aria-hidden': 'true' }, st.tab));
+      kids.push(b);
+    });
+    steps.replaceChildren(...kids);
   };
   let leave = () => {};
   const goNext = () => { if (current + 1 < N) show(current + 1); else leave(); };
+  bNext.onclick = (e) => { e.stopPropagation(); onPhase('next'); };
+  bText.onclick = () => onPhase('brief');
+  // a tap on the frozen picture: point at the question instead of doing nothing
+  stageBox.addEventListener('pointerdown', () => onPhase('locked-tap'));
 
   const show = async (i) => {
     const my = ++token, st = lab.stations[i];
@@ -272,39 +371,109 @@ export function openLab(id, start = 0) {
     stopVoice();
     cleanup.forEach((f) => f()); cleanup = [];
     if (theory) setTheory(false);
-    stage.replaceChildren(); guide.replaceChildren(); extra.replaceChildren(); act.replaceChildren();
+    stage.replaceChildren(); guide.replaceChildren(); extra.replaceChildren(); act.replaceChildren(); dock.replaceChildren(); pings.replaceChildren();
     scroll.scrollTop = 0;
     renderSteps();
-    const controls = h('div', { class: 'lab-ctl' });
+    controls = h('div', { class: 'lab-ctl' });
     let code = null;
     if (st.code) { code = codePanel(st.code, (s, key) => ctx.onCode?.(s, key)); extra.append(code.el); }
     extra.append(controls);
+    new MutationObserver(() => { if (my === token) place(); }).observe(controls, { childList: true });
 
     // phase: 'ask' (question pending), 'explore' (tasks), 'done' (verdict and takeaway)
-    let phase = st.predict ? 'ask' : 'explore', said = null, pendingReveal = false;
+    phase = st.predict ? 'ask' : 'explore';
+    let said = null, pendingReveal = false, hintFn = null, nudgeText = '', nudgeTimer = 0, justDone = -1;
     const tries = st.tries || [], ticked = new Set();
-    let list = null;
     const answer = Number.isInteger(st.predict?.answer) ? st.predict.answer : null;
+    const opt = (k) => st.predict.options[k];
+    const right = () => (said == null || answer == null ? null : said === answer);
+    const nowK = () => tries.findIndex((_, j) => !ticked.has(j));
+    const nextLabel = () => (current + 1 < N ? TEXT.next(lab.stations[current + 1].tab) : TEXT.back);
 
-    const head = () => {
-            status.replaceChildren(...(phase === 'ask' ? [TEXT.question] : phase === 'explore' ? [h('b', {}, TEXT.explore)] : [h('b', {}, TEXT.done)]));
-      const nowK = tries.findIndex((_, j) => !ticked.has(j));
-      sum.textContent = phase === 'ask' ? st.predict.q : phase === 'explore' ? plain(tries[nowK] || '') : TEXT.doneSum;
+    // ---- where to act: the station may say where (a point on its picture, or a control) ----
+    const hintAt = (k) => {
+      let v = null;
+      try { const f = hintFn || stage.querySelector('.lab-view')?.__pane?.__hint; v = f ? f(k) : null; } catch { v = null; }
+      if (!v) return null;
+      if (v instanceof Element) return { els: [v] };
+      if (Array.isArray(v) && typeof v[0] === 'number') return { at: v };
+      if (Array.isArray(v)) return { els: v.filter((e) => e instanceof Element) };
+      return { els: [].concat(v.el || []), at: v.at, pane: v.pane };
+    };
+    const ping = (pane, [x, y]) => {
+      const [sx, sy] = pane.toScreen(x, y), r = stageBox.getBoundingClientRect();
+      const p = h('i', { class: 'lx-ping', style: `left:${sx - r.left}px;top:${sy - r.top}px` });
+      pings.replaceChildren(p);
+      setTimeout(() => p.remove(), 2400);
+    };
+    const pointAt = (k, auto = false) => {
+      root.querySelectorAll('.lx-cue').forEach((e) => e.classList.remove('lx-cue', 'lx-cue-go'));
+      if (k < 0 || phase !== 'explore') return;
+      const t = hintAt(k);
+      if (!t) { if (!auto) { nudge(TEXT.onPicture, 2600); stageBox.classList.remove('lx-flash'); void stageBox.offsetWidth; stageBox.classList.add('lx-flash'); } return; }
+      (t.els || []).forEach((e) => { e.classList.add('lx-cue'); if (!auto) { e.classList.add('lx-cue-go'); e.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' }); } });
+      const pane = t.pane || stage.querySelector('.lab-view')?.__pane;
+      if (t.at && pane) ping(pane, t.at);
+      if (!auto && collapsed && !t.at && !isStack()) setCollapsed(false);
+    };
+    const nudge = (text, ms = 6000) => {
+      if (my !== token) return;
+      clearTimeout(nudgeTimer); nudgeText = text || '';
+      drawBrief(); drawNudge();
+      if (text) nudgeTimer = setTimeout(() => { if (my === token) { nudgeText = ''; drawBrief(); drawNudge(); } }, ms);
+    };
+    cleanup.push(() => clearTimeout(nudgeTimer));
+    const drawNudge = () => { const n = guide.querySelector('.lx-nudge'); if (n) { n.textContent = nudgeText; n.hidden = !nudgeText; } };
+
+    // ---- the brief: what the bar under the picture and the folded sheet say ----
+    drawBrief = () => {
+      if (my !== token) return;
+      brief.dataset.phase = phase;
+      brief.classList.toggle('nudging', !!nudgeText);
+      bNext.hidden = true; bMark.className = 'lx-bmark';
+      if (phase === 'ask') {
+        bMark.replaceChildren(icon('lock')); bText.textContent = TEXT.lock;
+        bNext.replaceChildren(TEXT.lockGo); bNext.hidden = !(collapsed || full);
+        bText.title = TEXT.lockGo;
+      } else if (phase === 'explore') {
+        const k = nowK();
+        if (tries.length && k >= 0) { bMark.textContent = `${k + 1}/${tries.length}`; bMark.classList.add('n'); } else bMark.replaceChildren();
+        bText.textContent = nudgeText || (k >= 0 ? plain(tries[k]) : plain(st.goal || ''));
+        bText.title = TEXT.where;
+      } else {
+        const r = right();
+        bMark.textContent = r === false ? '✗' : '✓'; bMark.classList.add(r === false ? 'no' : 'ok');
+        const a = answer != null ? opt(answer) : null, s = said != null ? opt(said) : null;
+        bText.textContent = nudgeText || (s == null ? TEXT.allDone : r == null ? TEXT.youSaid(s) : r ? TEXT.pillRight(a) : a.length + s.length <= 30 ? TEXT.pillWrong(a, s) : `${TEXT.answer}: ${a}`);
+        bText.title = TEXT.takeaway;
+        bNext.replaceChildren(h('span', { class: 't' }, nextLabel()), icon('arrow')); bNext.setAttribute('aria-label', nextLabel());
+        bNext.hidden = !(collapsed || full);
+      }
+      // on a phone the sheet's head names the station (with a lock while the picture is frozen)
+      status.replaceChildren(...(isStack() ? [phase === 'ask' ? icon('lock') : '', st.tab] : [phase === 'ask' ? TEXT.question : phase === 'explore' ? TEXT.explore : TEXT.result]));
       pips.replaceChildren(...tries.map((_, j) => h('i', { class: ticked.has(j) || phase === 'done' ? 'on' : '' })));
-      mini.hidden = phase !== 'done';
-      mini.setAttribute('aria-label', current + 1 < N ? TEXT.next(lab.stations[current + 1].tab) : TEXT.back);
-      mini.title = mini.getAttribute('aria-label');
     };
-    const triesList = () => {
-      const nowK = tries.findIndex((_, j) => !ticked.has(j));
-      list = h('ol', { class: 'lx-tries' }, tries.map((t, j) => h('li', { class: ticked.has(j) || phase === 'done' ? 'done' : j === nowK ? 'now' : '' },
-        h('span', { class: 'm', 'aria-hidden': 'true' }, ticked.has(j) || phase === 'done' ? '✓' : String(j + 1)), h('span', { html: t }))));
-      return list;
+    onPhase = (what) => {
+      if (my !== token) return;
+      if (what === 'next') { if (phase === 'done') goNext(); else if (phase === 'ask') askAgain(); return; }
+      if (what === 'locked-tap') { if (phase === 'ask') askAgain(true); return; }
+      if (phase === 'ask') askAgain();
+      else if (phase === 'explore') pointAt(nowK());
+      else { if (full) setFull(false); setCollapsed(false); }
     };
+    // bring the question into view and shake it gently: the picture is frozen until it is answered
+    const askAgain = (tap = false) => {
+      if (full && !tap) setFull(false);
+      if (collapsed) setCollapsed(false);
+      for (const el of [guide.querySelector('.lx-choices'), brief]) if (el) { el.classList.remove('lx-shake'); void el.offsetWidth; el.classList.add('lx-shake'); }
+      if (!tap) guide.querySelector('.lx-q')?.focus({ preventScroll: true });
+    };
+
     const lockStage = (v) => { stageWrap.classList.toggle('locked', v); stage.inert = v; extra.hidden = v && !code; controls.hidden = v; if (code) code.el.inert = v; };
 
     const render = () => {
       guide.replaceChildren(); act.replaceChildren();
+      root.dataset.phase = phase;
       if (phase === 'ask') {
         lockStage(true);
         const short = st.predict.options.every((o) => o.length <= 16);
@@ -313,54 +482,69 @@ export function openLab(id, start = 0) {
         guide.append(h('h2', { class: 'lx-q', tabindex: '-1' }, st.predict.q), h('p', { class: 'lx-hint lx-pick' }, TEXT.pick), box);
       } else if (phase === 'explore') {
         lockStage(false);
-        if (said != null) guide.append(h('div', { class: 'lx-said lx-in', tabindex: '-1' }, h('span', { class: 'l' }, TEXT.said), h('b', {}, st.predict.options[said]), h('span', {}, TEXT.check)));
+        const k = nowK();
+        if (said != null) guide.append(h('p', { class: 'lx-said lx-in', tabindex: '-1' }, h('span', {}, `${TEXT.said} `), h('b', {}, opt(said)), h('span', {}, `. ${ticked.size ? TEXT.left(tries.length - ticked.size) : TEXT.check}`)));
         else guide.append(h('h2', { class: 'lx-goal' }, st.why || st.goal));
-        guide.append(h('div', { class: 'lx-thead' }, h('h3', {}, TEXT.tryIt), h('span', {}, TEXT.of(ticked.size, tries.length))), triesList());
-        if (!ticked.size) guide.append(h('p', { class: 'lx-hint' }, TEXT.selfTick));
+        if (tries.length) {
+          const doneL = tries.map((t, j) => (ticked.has(j) ? h('li', { class: j === justDone ? 'just' : '' }, h('span', { class: 'm', 'aria-hidden': 'true' }, '✓'), h('span', { html: t })) : null)).filter(Boolean);
+          if (doneL.length) guide.append(h('ol', { class: 'lx-donel', 'aria-label': TEXT.stepsDone(doneL.length) }, doneL));
+          if (k >= 0) {
+            guide.append(h('button', { type: 'button', class: `lx-now${justDone >= 0 ? ' lx-in' : ''}`, onclick: () => pointAt(k) },
+              h('span', { class: 'lx-nowl' }, h('b', {}, TEXT.now), h('span', {}, TEXT.of(k + 1, tries.length)), h('span', { class: 'dots', 'aria-hidden': 'true' }, tries.map((_, j) => h('i', { class: ticked.has(j) ? 'on' : j === k ? 'cur' : '' })))),
+              h('span', { class: 'lx-nowt', html: tries[k] }),
+              h('span', { class: 'lx-nudge', hidden: '' }),
+              h('span', { class: 'lx-where' }, icon('target'), TEXT.where)));
+          }
+        }
+        drawNudge();
       } else {
         lockStage(false);
         if (said != null) {
-          const right = answer == null ? null : said === answer;
-          guide.append(h('div', { class: `lx-verdict lx-in${right === false ? ' wrong' : right == null ? ' plain' : ''}`, tabindex: '-1' },
-            h('span', { class: 'm', 'aria-hidden': 'true' }, right === false ? '!' : right == null ? '?' : '✓'),
-            h('div', {}, h('p', { class: 'big' }, `${TEXT.said}: ${st.predict.options[said]}.`),
-              h('p', {}, right == null ? TEXT.compare : right ? TEXT.right : TEXT.answerIs(st.predict.options[answer])))));
+          const r = right();
+          guide.append(h('div', { class: `lx-verdict lx-in ${r === false ? 'no' : r == null ? 'plain' : 'ok'}`, tabindex: '-1' },
+            h('span', { class: 'm', 'aria-hidden': 'true' }, r === false ? '✗' : r == null ? '?' : '✓'),
+            h('div', {}, h('p', { class: 'big' }, r == null ? TEXT.youSaid(opt(said)) : r ? TEXT.youRight(opt(said)) : TEXT.youWrong(opt(said), opt(answer))),
+              st.predict.why ? h('p', { html: st.predict.why }) : r == null ? h('p', {}, TEXT.compare) : null)));
         } else guide.append(h('h2', { class: 'lx-goal' }, st.why || st.goal));
         guide.append(h('div', { class: 'lx-take lx-in', role: 'status' }, h('span', { class: 'l' }, TEXT.takeaway), h('span', { html: st.takeaway })));
-        if (tries.length) guide.append(h('div', { class: 'lx-alldone', style: 'display:flex;flex-direction:column;gap:10px' }, h('div', { class: 'lx-thead' }, h('h3', {}, TEXT.tryIt), h('span', {}, TEXT.allDone)), triesList()));
-        guide.append(h('p', { class: 'lx-hint' }, TEXT.keep));
-        const label = current + 1 < N ? TEXT.next(lab.stations[current + 1].tab) : TEXT.back;
-        act.append(h('button', { type: 'button', class: 'lx-primary', onclick: goNext }, h('span', { class: 't' }, label), icon('arrow')));
+        guide.append(h('p', { class: 'lx-hint lx-keep' }, tries.length ? `✓ ${TEXT.stepsDone(tries.length)}. ` : '', TEXT.keep));
+        act.append(h('button', { type: 'button', class: 'lx-primary', onclick: goNext }, h('span', { class: 't' }, nextLabel()), icon('arrow')));
       }
-      head();
+      place(); drawBrief();
       requestAnimationFrame(cue);
     };
 
     // Listen reads what is on the panel now: the question and its answers; the answer given and
     // the step to do; or the verdict and the takeaway
     speech = () => {
-      const nowK = tries.findIndex((_, j) => !ticked.has(j));
-      if (phase === 'ask') return script([st.predict.q, ...st.predict.options.map((o, k) => `${String.fromCharCode(65 + k)}: ${o}`)]);
-      if (phase === 'explore') return script([said != null ? `${TEXT.said}: ${st.predict.options[said]}. ${TEXT.check}` : st.why || st.goal, ...tries.slice(Math.max(0, nowK))]);
-      const right = said == null || answer == null ? null : said === answer;
-      return script([said != null && `${TEXT.said}: ${st.predict.options[said]}.`, right === true && TEXT.right, right === false && TEXT.answerIs(st.predict.options[answer]), st.takeaway]);
+      const k = nowK();
+      if (phase === 'ask') return script([st.predict.q, ...st.predict.options.map((o, j) => `${String.fromCharCode(65 + j)}: ${o}`)]);
+      if (phase === 'explore') return script([said != null ? `${TEXT.youSaid(opt(said))} ${TEXT.check}` : st.why || st.goal, k >= 0 && tries[k]]);
+      const r = right();
+      return script([said != null && (r == null ? TEXT.youSaid(opt(said)) : r ? TEXT.youRight(opt(said)) : TEXT.youWrong(opt(said), opt(answer))), said != null && st.predict.why, st.takeaway]);
     };
     const finish = () => {
       if (my !== token || phase === 'done') return;
-      phase = 'done';
+      phase = 'done'; nudgeText = '';
+      pointAt(-1);
       state.done[`${id}:${i}`] = true; save(); sfx.reveal();
       if (VOICE.auto && isOn()) speak(speech());
-      renderSteps(); render();
+      renderSteps();
+      if (isStack() && !full) setCollapsed(false);
+      render();
       scroll.scrollTop = 0;
-      if (!collapsed) act.querySelector('button')?.focus({ preventScroll: true });
+      if (!collapsed && !full) act.querySelector('button')?.focus({ preventScroll: true });
     };
     const choose = (j) => {
       if (my !== token || phase !== 'ask') return;
       said = j; sfx.tick(); phase = 'explore';
+      // on a phone the sheet folds to one line so that the picture and its controls have the room
+      if (isStack() && !full) setCollapsed(true);
       render();
       stageWrap.classList.remove('go'); void stageWrap.offsetWidth; stageWrap.classList.add('go');
-      guide.querySelector('.lx-said')?.focus({ preventScroll: true });
+      if (!collapsed) guide.querySelector('.lx-said')?.focus({ preventScroll: true });
       if (pendingReveal || (tries.length && ticked.size === tries.length)) finish();
+      else setTimeout(() => { if (my === token) pointAt(nowK(), true); }, 350);
     };
     const ctx = {
       stage, controls, code,
@@ -371,16 +555,18 @@ export function openLab(id, start = 0) {
         if (my !== token || !tries[k] || ticked.has(k)) return;
         ticked.add(k);
         if (phase !== 'explore') return;
-        sfx.tick();
-        const nowK = tries.findIndex((_, j) => !ticked.has(j));
-        [...list.children].forEach((li, j) => { const d = ticked.has(j); li.className = d ? `done${j === k ? ' just' : ''}` : j === nowK ? 'now' : ''; li.firstChild.textContent = d ? '✓' : String(j + 1); });
-        guide.querySelector('.lx-thead span').textContent = TEXT.of(ticked.size, tries.length);
-        guide.querySelector('.lx-hint')?.remove();
-        head();
+        sfx.tick(); justDone = k;
+        render();
         if (ticked.size === tries.length) setTimeout(finish, 650);
+        else setTimeout(() => { if (my === token) pointAt(nowK(), true); }, 300);
       },
+      // optional: where to act for task k: an element (a control), [x, y] in the units of the
+      // station's canvasPane, or { el, at, pane }. A tap on the current step points there.
+      hint: (fn) => { hintFn = fn; if (phase === 'explore') pointAt(nowK(), true); },
+      // optional: a short line shown where the learner is looking (the step, or the bar), for a few seconds
+      nudge: (text, ms) => nudge(text, ms),
       // optional, for stations: the size of the stage in screen pixels, and a callback when it changes
-      size: () => { const r = stage.getBoundingClientRect(); return { w: r.width, h: r.height, upright: root.classList.contains('stack') }; },
+      size: () => { const r = stage.getBoundingClientRect(); return { w: r.width, h: r.height, upright: isStack() }; },
       onResize: (f) => { const ro = new ResizeObserver(() => { if (my === token) f(ctx.size()); }); ro.observe(stage); cleanup.push(() => ro.disconnect()); },
       // optional: the phase of the frame ('ask' | 'explore' | 'done') and the answer picked, if any
       phase: () => phase, said: () => said,
@@ -389,15 +575,21 @@ export function openLab(id, start = 0) {
     };
     root.dataset.station = `${id}:${i}`;
     root.dataset.ready = '0';
+    if (phase === 'ask' && collapsed && isStack()) setCollapsed(false);
     render();
     if (VOICE.auto && isOn()) speak(speech());
     if (phase === 'ask') guide.querySelector('.lx-q')?.focus({ preventScroll: true });
     // the station draws at once: its picture is visible (frozen) while the question is open
     await st.mount(ctx);
-    if (my === token) root.dataset.ready = '1';
-    root.__lab = { ctx, choose, finish, setCollapsed, setFull, theory: () => theoryBtn.click() };
+    if (my !== token) return;
+    root.dataset.ready = '1';
+    place();
+    // a phone with controls under the picture: the sheet starts folded to its one-line step
+    if (phase === 'explore' && isStack() && !full && !dock.hidden) setCollapsed(true);
+    if (phase === 'explore') setTimeout(() => { if (my === token) pointAt(nowK(), true); }, 300);
+    root.__lab = { ctx, choose, finish, setCollapsed, setFull, theory: () => theoryBtn.click(), pointAt: () => pointAt(nowK()) };
   };
-
+  relayout();
   return new Promise((resolve) => {
     const done = () => { stopVoice(); cleanup.forEach((f) => f()); stopAnims?.(); removeEventListener('keydown', key, true); removeEventListener('resize', relayout); root.remove(); resolve(); };
     leave = done;
@@ -405,13 +597,13 @@ export function openLab(id, start = 0) {
       const tag = e.target.tagName, typing = tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA';
       if (e.key === 'Escape') { e.preventDefault(); if (theory) setTheory(false); else if (full) setFull(false); else done(); return; }
       if (listenKey(e)) { e.preventDefault(); listen(() => (theory ? drawerSpeech() : speech())); return; }
-      if (theory || typing || e.altKey || e.ctrlKey || e.metaKey) return;
+      if ((theory && isStack()) || typing || e.altKey || e.ctrlKey || e.metaKey) return;
       if (/^[1-9]$/.test(e.key) && +e.key <= N) { e.preventDefault(); show(+e.key - 1); }
       else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = current + (e.key === 'ArrowRight' ? 1 : -1); if (n >= 0 && n < N) { e.preventDefault(); show(n); } }
     };
     addEventListener('keydown', key, true);
     close.onclick = done;
-    mini.onclick = (e) => { e.stopPropagation(); goNext(); };
+    fsClose.onclick = done;
     show(Math.min(start, N - 1));
   });
 }

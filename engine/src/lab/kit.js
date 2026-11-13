@@ -15,8 +15,13 @@ import { sfx } from '../systems/audio.js';
 //   pane.drag(fn) / pane.hover(fn)    // fn(x, y, phase) in your units; phase 'down' | 'move' | 'up'
 //   pane.tip(fn)                      // fn(x, y) returns html or null: a read-out next to the pointer or finger
 //
+//   pane.hint(fn)                     // fn(k) for task k: [x, y] in your units, or a control element:
+//                                     //   the frame points there when the learner taps the current step
+//
 // Pixel calls (getImageData, putImageData) take and give your units, as before. Old stations
-// that never call onResize keep working: after a resize the pane rescales the last picture.
+// keep working: `pane.cv.width` and `pane.cv.height` read your units (as when the canvas was
+// w x hgt), `pane.cv.getContext('2d')` returns `pane.g`, and a station that never calls onResize
+// gets its last picture rescaled after a resize. The backing store is `pane.backing()`.
 export function canvasPane(stage, w, hgt, caption = '', opts = {}) {
   const cv = h('canvas', { class: 'fit', tabindex: '-1' });
   const cap = h('div', { class: 'lab-cap' }, caption);
@@ -27,27 +32,33 @@ export function canvasPane(stage, w, hgt, caption = '', opts = {}) {
   stage.append(el);
   const raw = cv.getContext('2d', { willReadFrequently: true });
   const pane = { el, cv, W: w, H: hgt, scale: 1 };
+  // the real size of the canvas, in device pixels; cv.width and cv.height are the station's units
+  const DW = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width'), DH = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');
+  const rw = () => DW.get.call(cv), rh = () => DH.get.call(cv);
   let dpr = 1, s = 1, ox = 0, oy = 0, cw = 0, chh = 0, resizers = [];
 
   const shapeFor = (bw, bh) => (opts.portrait && bh > bw * 0.8 ? opts.portrait : [w, hgt]);
   const base = () => { raw.setTransform(s, 0, 0, s, ox, oy); raw.beginPath(); raw.rect(0, 0, pane.W, pane.H); raw.clip(); };
   // size the backing store to the element; returns true if anything changed
-  const fit = () => {
+  const fit = (keep = true) => {
     const r = wrap.getBoundingClientRect();
     const bw = Math.max(1, Math.round(r.width || w)), bh = Math.max(1, Math.round(r.height || hgt)), d = Math.min(3, window.devicePixelRatio || 1);
     const [W2, H2] = shapeFor(bw, bh);
-    if (bw === cw && bh === chh && d === dpr && W2 === pane.W && H2 === pane.H && cv.width) return false;
+    if (keep && bw === cw && bh === chh && d === dpr && W2 === pane.W && H2 === pane.H && rw() > 1) return false;
     // keep the last picture for stations that do not redraw themselves
     let snap = null;
-    if (!resizers.length && cv.width > 1) { snap = document.createElement('canvas'); snap.width = Math.max(1, Math.round(pane.W * s)); snap.height = Math.max(1, Math.round(pane.H * s)); snap.getContext('2d').drawImage(cv, ox, oy, snap.width, snap.height, 0, 0, snap.width, snap.height); }
+    if (keep && !resizers.length && rw() > 1) { snap = document.createElement('canvas'); snap.width = Math.max(1, Math.round(pane.W * s)); snap.height = Math.max(1, Math.round(pane.H * s)); snap.getContext('2d').drawImage(cv, ox, oy, snap.width, snap.height, 0, 0, snap.width, snap.height); }
     cw = bw; chh = bh; dpr = d; pane.W = W2; pane.H = H2; pane.upright = W2 !== w || H2 !== hgt;
-    cv.width = Math.round(bw * d); cv.height = Math.round(bh * d);
-    s = Math.min(cv.width / W2, cv.height / H2); ox = Math.round((cv.width - W2 * s) / 2); oy = Math.round((cv.height - H2 * s) / 2);
+    DW.set.call(cv, Math.round(bw * d)); DH.set.call(cv, Math.round(bh * d));
+    s = Math.min(rw() / W2, rh() / H2); ox = Math.round((rw() - W2 * s) / 2); oy = Math.round((rh() - H2 * s) / 2);
     pane.scale = s / d;
     base();
     if (snap) { raw.save(); raw.globalCompositeOperation = 'source-over'; raw.globalAlpha = 1; raw.drawImage(snap, 0, 0, pane.W, pane.H); raw.restore(); }
     return true;
   };
+  // old station code reads and sets cv.width / cv.height in its own units
+  Object.defineProperty(cv, 'width', { configurable: true, get: () => pane.W, set: (v) => { v = Math.max(1, Math.round(+v || 1)); if (!pane.upright) w = v; fit(false); } });
+  Object.defineProperty(cv, 'height', { configurable: true, get: () => pane.H, set: (v) => { v = Math.max(1, Math.round(+v || 1)); if (!pane.upright) hgt = v; fit(false); } });
 
   // The context the station draws with: the real one, with the scale applied and the pixel calls
   // translated to the station's units.
@@ -69,25 +80,36 @@ export function canvasPane(stage, w, hgt, caption = '', opts = {}) {
   };
   const bound = new Map();
   pane.g = new Proxy(raw, {
-    get(t, p) { if (p in over) return over[p]; const v = t[p]; if (typeof v !== 'function') return v; if (!bound.has(p)) bound.set(p, v.bind(t)); return bound.get(p); },
+    get(t, p) { if (p in over) return over[p]; if (p === 'canvas') return cv; const v = t[p]; if (typeof v !== 'function') return v; if (!bound.has(p)) bound.set(p, v.bind(t)); return bound.get(p); },
     set(t, p, v) { t[p] = v; return true; },
   });
+  cv.getContext = () => pane.g;
 
   // pointer position in the station's units
-  const pos = (e) => { const r = cv.getBoundingClientRect(), k = cv.width / Math.max(1, r.width); return [((e.clientX - r.left) * k - ox) / s, ((e.clientY - r.top) * k - oy) / s]; };
+  const pos = (e) => { const r = cv.getBoundingClientRect(), k = rw() / Math.max(1, r.width); return [((e.clientX - r.left) * k - ox) / s, ((e.clientY - r.top) * k - oy) / s]; };
   let down = false, onDrag = null, onHover = null, onTip = null;
+  let tipHide = 0;
   const tip = (e, x, y) => {
     const html = onTip?.(x, y);
+    clearTimeout(tipHide);
     if (!html) { tipEl.hidden = true; return; }
     tipEl.innerHTML = html; tipEl.hidden = false;
-    const r = wrap.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top, tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
-    const above = e.pointerType === 'touch' ? 64 : 18; // keep it clear of the finger
-    tipEl.style.left = `${Math.max(6, Math.min(r.width - tw - 6, px - tw / 2))}px`;
-    tipEl.style.top = `${py - th - above < 6 ? Math.min(r.height - th - 6, py + 24) : py - th - above}px`;
+    const r = wrap.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+    const finger = e.pointerType !== 'mouse';
+    tipEl.classList.toggle('dock', finger);
+    const tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
+    if (finger) {
+      // a finger covers what is under it: the read-out goes to the far edge of the picture
+      tipEl.style.left = `${Math.max(6, (r.width - tw) / 2)}px`;
+      tipEl.style.top = `${py > r.height / 2 ? 6 : r.height - th - 6}px`;
+    } else {
+      tipEl.style.left = `${Math.max(6, Math.min(r.width - tw - 6, px - tw / 2))}px`;
+      tipEl.style.top = `${py - th - 18 < 6 ? Math.min(r.height - th - 6, py + 24) : py - th - 18}px`;
+    }
   };
   cv.addEventListener('pointerdown', (e) => { down = true; try { cv.setPointerCapture(e.pointerId); } catch { /* synthetic events */ } const [x, y] = pos(e); onDrag?.(x, y, 'down'); tip(e, x, y); });
   cv.addEventListener('pointermove', (e) => { const [x, y] = pos(e); if (down) onDrag?.(x, y, 'move'); else onHover?.(x, y); tip(e, x, y); });
-  const up = (e) => { if (down) { down = false; onDrag?.(...pos(e), 'up'); } if (e.pointerType === 'touch') tipEl.hidden = true; };
+  const up = (e) => { if (down) { down = false; onDrag?.(...pos(e), 'up'); } if (e.pointerType !== 'mouse') tipHide = setTimeout(() => { tipEl.hidden = true; }, 2500); };
   cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
   cv.addEventListener('pointerleave', () => { if (!down) tipEl.hidden = true; });
 
@@ -96,6 +118,8 @@ export function canvasPane(stage, w, hgt, caption = '', opts = {}) {
     drag: (fn) => { onDrag = fn; },
     hover: (fn) => { onHover = fn; },
     tip: (fn) => { onTip = fn; },
+    hint: (fn) => { pane.__hint = fn; },
+    backing: () => ({ width: rw(), height: rh() }),
     caption: (t) => { cap.textContent = t; cap.hidden = !t; },
     onResize: (fn) => { resizers.push(fn); },
     // a font of `size` units, never below 16 screen pixels
@@ -103,7 +127,7 @@ export function canvasPane(stage, w, hgt, caption = '', opts = {}) {
     // `n` screen pixels in the station's units (for hairlines and hit areas)
     px: (n) => n / pane.scale,
     // where a point of the station's units is on the screen (client pixels); for tests and tours
-    toScreen: (x, y) => { const r = cv.getBoundingClientRect(), k = r.width / Math.max(1, cv.width); return [r.left + (ox + x * s) * k, r.top + (oy + y * s) * k]; },
+    toScreen: (x, y) => { const r = cv.getBoundingClientRect(), k = r.width / Math.max(1, rw()); return [r.left + (ox + x * s) * k, r.top + (oy + y * s) * k]; },
   });
   el.__pane = pane;
   fit();
