@@ -43,11 +43,12 @@ export function ink(pane) {
   const d = {
     g, pane, C,
     clear(fill = C.stage) { g.globalAlpha = 1; g.shadowBlur = 0; g.setLineDash?.([]); g.globalCompositeOperation = 'source-over'; g.fillStyle = fill; g.fillRect(0, 0, pane.W, pane.H); },
-    path(x, y, w, h, r = 10) { g.beginPath(); if (g.roundRect) g.roundRect(x, y, w, h, Math.min(r, w / 2, h / 2)); else g.rect(x, y, w, h); },
+    // never throws: a box with no room is simply not drawn (a very short stage must not blank the picture)
+    path(x, y, w, h, r = 10) { g.beginPath(); if (!(w > 0 && h > 0)) return false; if (g.roundRect) g.roundRect(x, y, w, h, Math.max(0, Math.min(r, w / 2, h / 2))); else g.rect(x, y, w, h); return true; },
     box(x, y, w, h, { fill = C.card, stroke = null, width = 2, r = 12, glow = null, glowSize = 18, alpha: a = 1 } = {}) {
       g.save(); g.globalAlpha = a;
       if (glow) { g.shadowColor = glow; g.shadowBlur = glowSize; }
-      d.path(x, y, w, h, r);
+      if (!d.path(x, y, w, h, r)) { g.restore(); return; }
       if (fill) { g.fillStyle = fill; g.fill(); }
       g.shadowBlur = 0;
       if (stroke) { g.strokeStyle = stroke; g.lineWidth = width; g.stroke(); }

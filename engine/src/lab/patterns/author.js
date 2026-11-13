@@ -13,10 +13,11 @@ import { fmt } from './expr.js';
 // draw(d, pane) is called now and after every resize; pane.upright says which box is in use.
 // Returns { pane, d, redraw }.
 // { fluid: true }: the box keeps the width of `wide` or `tall` and takes the height of the real stage
-// (within half and twice the given height), so that a short stage (a phone with the result sheet
+// (within 0.7 and 2 times the given height), so that a short stage (a phone with the result sheet
 // open) is not letterboxed into tiny text. Lay out from pane.W and pane.H.
 export function stage(ctx, { wide = [760, 480], tall = [480, 600], caption = '', fluid = false } = {}, draw = () => {}) {
-  const box = fluid ? (bw, bh) => { const up = bh > bw * 0.8, [W, H] = up ? tall : wide; return [W, Math.round(Math.min(H * 2, Math.max(H * 0.5, (W * bh) / bw))), up]; } : null;
+  // a narrow stage keeps the narrow box even when it is short
+  const box = fluid ? (bw, bh) => { const up = bh > bw * 0.8 || bw < 560, [W, H] = up ? tall : wide; return [W, Math.round(Math.min(H * 2, Math.max(H * 0.7, (W * bh) / bw))), up]; } : null;
   const pane = canvasPane(ctx.stage, wide[0], wide[1], caption, box ? { box } : { portrait: tall });
   const d = ink(pane);
   const redraw = () => { if (ctx.alive && !ctx.alive()) return; draw(d, pane); };

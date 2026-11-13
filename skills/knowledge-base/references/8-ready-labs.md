@@ -336,9 +336,13 @@ gets there only when it is tuned for that moment:
 
 ## How long a station is
 
-From the demo course (`courses/pocket-demo/`): the custom "Push the air" (a travelling squeeze in a
-field of molecules, a draggable cone, an ear) is about 60 lines; "Guess the curve" (four handles, the
-real curve drawn over the guess with the gap shaded) about 50; "More per second" (the pattern
-called from code, plus the tone and the counted squeezes) about 30; the two ready stations are
-data only. The stations of the example course `courses/chroma/`, written before the kit, are 30
-to 90 lines each, with their own layout and drawing code.
+Measured on the demo course (`courses/pocket-demo/`, non-blank lines of code): "Push the air" (a
+travelling squeeze in a field of molecules, a draggable cone, an ear that counts arrivals) 49
+lines, about 5,000 characters; "Guess the curve" (four handles, the real curve drawn over the
+guess with the gap shaded, a score) 45 lines, about 4,200 characters; "More per second" (the
+pattern called from code, plus the tone and the counted squeezes) 27 lines, about 1,800
+characters; the two ready stations are 30 to 40 lines of data in `course.json`. The stations of
+`courses/chroma/`, written before the kit, take 20 to 45 lines, about 3,000 characters each: the
+kit does not make an elaborate station much shorter; it removes the work that used to go wrong
+(layout for the phone, text that is too small, tasks that tick too early, cleaning up) and makes
+a pattern-shaped station nearly free.

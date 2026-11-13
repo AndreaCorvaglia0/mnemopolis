@@ -52,13 +52,15 @@ function niceTicks(a, b, n = 5) {
 function drawPlot(d, S, rect, s, glow) {
   const { g } = d, [x0, y0, w, h] = rect, P = S.plot, X = (x) => x0 + ((x - P.x.min) / (P.x.max - P.x.min)) * w, Y = (y) => y0 + h - ((y - P.y.min) / (P.y.max - P.y.min)) * h;
   d.box(x0, y0, w, h, { fill: '#0f141d', stroke: C.line, r: 8 });
+  // a plot squeezed by a short stage keeps its curves and drops its secondary labels
+  const compact = h < d.lineH(16) * 7;
   // grid and ticks
   const fs = 15, tick = (v) => fmt(v, Math.abs(v) < 10 && v % 1 ? 1 : 0);
-  for (const t of niceTicks(P.x.min, P.x.max, w > 420 ? 6 : 4)) { d.line([[X(t), y0], [X(t), y0 + h]], { color: '#1a2130', width: 1 }); d.text(tick(t), X(t), y0 + h + d.lineH(fs), { size: fs, color: C.dim, align: 'center' }); }
-  for (const t of niceTicks(P.y.min, P.y.max, h > 300 ? 5 : 4)) { d.line([[x0, Y(t)], [x0 + w, Y(t)]], { color: '#1a2130', width: 1 }); d.text(tick(t), x0 - 8, Y(t) + 5, { size: fs, color: C.dim, align: 'right' }); }
+  for (const t of niceTicks(P.x.min, P.x.max, compact ? 2 : w > 420 ? 6 : 4)) { d.line([[X(t), y0], [X(t), y0 + h]], { color: '#1a2130', width: 1 }); d.text(tick(t), X(t), y0 + h + d.lineH(fs), { size: fs, color: C.dim, align: 'center' }); }
+  for (const t of niceTicks(P.y.min, P.y.max, compact ? 2 : h > 300 ? 5 : 4)) { d.line([[x0, Y(t)], [x0 + w, Y(t)]], { color: '#1a2130', width: 1 }); d.text(tick(t), x0 - 8, Y(t) + 5, { size: fs, color: C.dim, align: 'right' }); }
   if (P.y.min < 0 && P.y.max > 0) d.line([[x0, Y(0)], [x0 + w, Y(0)]], { color: C.line2, width: 1.5 });
-  if (P.x.label) d.text(P.x.label, x0 + w, y0 + h + d.lineH(fs) * 2.1, { size: 16, color: C.muted, align: 'right', max: w });
-  if (P.y.label) d.text(P.y.label, x0 + 6, y0 - 10, { size: 16, color: C.muted, max: w });
+  if (P.x.label && !compact) d.text(P.x.label, x0 + w, y0 + h + d.lineH(fs) * 2.1, { size: 16, color: C.muted, align: 'right', max: w });
+  if (P.y.label && !compact) d.text(P.y.label, x0 + 6, y0 - 10, { size: 16, color: C.muted, max: w });
   g.save(); g.beginPath(); g.rect(x0, y0, w, h); g.clip();
   let ci = 0, legend = [];
   for (const L of S.layers) {
@@ -94,10 +96,10 @@ function drawPlot(d, S, rect, s, glow) {
     if (Number.isFinite(px) && Number.isFinite(py)) { d.circle(px, py, 13, { fill: alpha(L.col, 0.25) }); d.circle(px, py, 7, { fill: L.col, glow: L.col }); const lab = L.label(s); if (lab) d.text(lab, clamp(px, x0 + 60, x0 + w - 60), py - 20 < y0 + 20 ? py + 34 : py - 20, { size: 17, weight: 700, color: L.col, align: 'center' }); }
   }
   g.restore();
-  // legend, top left inside the plot
+  // the legend, top left inside the plot; left out when the plot is too short to hold it beside the curves
   let ly = y0 + 10;
-  legend.forEach(([t, c]) => { d.line([[x0 + 12, ly + 10], [x0 + 34, ly + 10]], { color: c, width: 4 }); ly += d.wrap(t, x0 + 42, ly, w - 56, { size: 16, lines: 2 }) + 4; });
-  return { X, Y };
+  if (h > d.lineH(16) * 6) legend.forEach(([t, c]) => { d.line([[x0 + 12, ly + 10], [x0 + 34, ly + 10]], { color: c, width: 4 }); ly += d.wrap(t, x0 + 42, ly, w - 56, { size: 16, lines: 2 }) + 4; });
+  return { X, Y, compact };
 }
 
 function drawBars(d, L, rect, s) {
@@ -113,17 +115,18 @@ function drawBars(d, L, rect, s) {
 }
 
 // the areas of one picture: plot, bars and shapes share the box, side by side or stacked
-function areas(S, box, upright) {
+function areas(S, box, upright, d = null) {
+  const lh = d ? d.lineH(16) : 20;
   const kinds = new Set(S.layers.map((L) => L.kind)), parts = [];
   if (kinds.has('shapes')) parts.push('shapes');
   if (kinds.has('bars')) parts.push('bars');
   if (S.plot) parts.push('plot');
-  const ro = S.layers.filter((L) => L.kind === 'readout').length;
-  const [x, y, w, h0] = box, h = h0 - ro * (w < 520 ? 52 : 34);
-  const out = { readout: [x, y + h + 4, w, ro * 34] };
+  const [, , , hb] = box, ro = hb > (d ? d.lineH(16) : 20) * 14 ? S.layers.filter((L) => L.kind === 'readout').length : 0;
+  const [x, y, w, h0] = box, rh = (d ? d.lineH(20) : 25) * (w < 520 ? 2 : 1) + 8, h = h0 - ro * rh;
+  const out = { readout: [x, y + h + 4, w, ro * rh] };
   const stack = upright || w < 520 ? 'v' : 'h', k = parts.length || 1;
   parts.forEach((p, i) => {
-    const pad = p === 'plot' ? [52, 30, 14, 58] : [0, 0, 0, 0]; // left, top, right, bottom
+    const pad = p === 'plot' ? [52, lh * 1.5, 14, lh * 2.6 + 6] : [0, 0, 0, 0]; // left, top, right, bottom: room for ticks and labels at their real size
     const r = stack === 'h' ? [x + (w / k) * i, y, w / k - (i < k - 1 ? 16 : 0), h] : [x, y + (h / k) * i, w, h / k - (i < k - 1 ? 12 : 0)];
     out[p] = [r[0] + pad[0], r[1] + pad[1], r[2] - pad[0] - pad[2], r[3] - pad[1] - pad[3]];
   });
@@ -131,14 +134,14 @@ function areas(S, box, upright) {
 }
 
 function drawScene(d, S, box, s, upright, glow) {
-  const A = areas(S, box, upright);
+  const A = areas(S, box, upright, d);
   let plotMap = null;
   if (A.shapes) for (const L of S.layers) if (L.kind === 'shapes') d.shapes(L.list, A.shapes, s, { num: S.shapeNum, tpl: S.shapeTpl });
   if (A.bars) for (const L of S.layers) if (L.kind === 'bars') drawBars(d, L, A.bars, s);
   if (A.plot) plotMap = drawPlot(d, S, A.plot, s, glow);
   const ro = S.layers.filter((L) => L.kind === 'readout');
   // a readout wraps to two lines rather than being cut
-  ro.forEach((L, i) => d.wrap(L.text(s), A.readout[0], A.readout[1] + 6 + i * 34, A.readout[2], { size: 20, weight: 700, color: C.gold, align: 'center', lines: 2 }));
+  ro.forEach((L, i) => d.wrap(L.text(s), A.readout[0], A.readout[1] + 4 + (i * A.readout[3]) / ro.length, A.readout[2], { size: 20, weight: 700, color: C.gold, align: 'center', lines: 2 }));
   return { A, plotMap };
 }
 
@@ -183,7 +186,7 @@ export function sliderReveal(ctx, data, whens = ctx.station?.when) {
   ctx.hint?.((k) => hintControl(t.whens[k], ctl));
   return (ctx.stage.__ready = { kind: 'slider-reveal', pane: view.pane, d: view.d, v: ctl.v, el: ctl.el, t, redraw: view.redraw, over: (f) => { extra.push(f); view.redraw(); } });
 }
-const drawSceneAreas = (S, pane) => { const pad = pane.upright ? 14 : 20; return areas(S, [pad, pad, pane.W - pad * 2, pane.H - pad * 2], pane.upright); };
+const drawSceneAreas = (S, pane) => { const pad = pane.upright ? 14 : 20; return areas(S, [pad, pad, pane.W - pad * 2, pane.H - pad * 2], pane.upright, { lineH: (n) => Math.max(n, 16 / pane.scale) * 1.25 }); };
 
 // where to act for a condition on a control: that control's element
 export function hintControl(w, ctl) {

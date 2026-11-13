@@ -13,7 +13,7 @@
     "Compare two sound levels in decibels as a ratio of intensities.",
     "Predict whether, and how fast, sound crosses a material."
   ],
-  "credit": "Facts checked against OpenStax physics textbooks, The Physics Classroom and Wikipedia (see knowledge/sources.md).",
+  "credit": "Facts checked against OpenStax physics textbooks, The Physics Classroom and Wikipedia.",
   "sources": [
     {
       "id": "os171",

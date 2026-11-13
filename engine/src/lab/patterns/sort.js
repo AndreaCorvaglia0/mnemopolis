@@ -41,8 +41,12 @@ export function sort(ctx, data, whens = ctx.station?.when) {
       else { b.x = L.pad + k * (L.bw + 14); b.y = L.binY; b.w = L.bw; b.h = L.binH; }
       const inBin = cards.filter((c) => c.at === b.id), head = b.head || 64;
       if (L.up) {
-        const cw2 = (b.w - 24 - 8) / 2, rows = Math.ceil(inBin.length / 2), step = Math.min(L.small + 6, (b.h - head - 6) / Math.max(1, rows));
-        inBin.forEach((c, i) => { c.w = cw2; c.h = L.small; c.tx = b.x + 12 + (i % 2) * (cw2 + 8); c.ty = b.y + head + Math.floor(i / 2) * step; });
+        // chips flow two to a row; a label too long for half the band takes a whole row
+        const cw2 = (b.w - 24 - 8) / 2, full = (c) => (L.measure ? L.measure(c) : 0) > cw2;
+        let col = 0, row = 0;
+        const at = inBin.map((c) => { const f = full(c); if (f && col) { row++; col = 0; } const p = [col, row, f]; if (f || col) { row++; col = 0; } else col = 1; return p; });
+        const rows = row + (col ? 1 : 0), step = Math.min(L.small + 6, (b.h - head - 6) / Math.max(1, rows));
+        inBin.forEach((c, i) => { const [cc, rr, f] = at[i]; c.w = f ? b.w - 24 : cw2; c.h = L.small; c.tx = b.x + 12 + cc * (cw2 + 8); c.ty = b.y + head + rr * step; });
       } else {
         const room = b.h - head - 10, step = Math.min(L.small + 6, room / Math.max(1, inBin.length));
         inBin.forEach((c, i) => { c.w = b.w - 16; c.h = L.small; c.tx = b.x + 8; c.ty = b.y + head + i * step; });
@@ -67,7 +71,7 @@ export function sort(ctx, data, whens = ctx.station?.when) {
     else d.wrap(c.label, c.x + dx + 14 + ex, c.y + (c.h - Math.min(2, Math.ceil(d.measure(c.label, fs, 600) / (c.w - 24 - ex))) * d.lineH(fs)) / 2, c.w - 24 - ex, { size: fs, weight: 600, lines: 2 });
   };
   const view = stage(ctx, { wide: data.wide || [840, 540], tall: data.tall || [480, 760], caption: data.caption || '', fluid: true }, (d, pane) => {
-    L = layout(pane); started = true; if (!settled) { home(L); cards.forEach((c) => { c.sx.set(c.tx); c.sy.set(c.ty); c.x = c.tx; c.y = c.ty; }); settled = true; } else home(L);
+    L = layout(pane); L.measure = (c) => d.measure(c.label, 16, 600) + (c.emoji ? 28 : 0) + 30; started = true; if (!settled) { home(L); cards.forEach((c) => { c.sx.set(c.tx); c.sy.set(c.ty); c.x = c.tx; c.y = c.ty; }); settled = true; } else home(L);
     d.clear();
     if (L.trayH > 12) d.box(8, 6, L.W - 16, L.trayH, { fill: '#0f141d', stroke: C.line, r: 14 });
     const maxSum = Math.max(1e-9, ...bins.map((b) => Math.abs(b.sum.target)));

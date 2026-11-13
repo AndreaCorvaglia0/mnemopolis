@@ -40,7 +40,12 @@ You get the game as an artifact you can open and share, and your course as a zip
 By default the agent goes all the way to a playable game and shows you the map of the course on
 the way. Say "ask me first" or "show me the map before building" if you want to steer it, and "light" or "curated" if you want less or more effort per concept (size and care are set independently).
 
-`courses/chroma/` is a complete example (a short course on colour).
+**Without installing anything**: a course folder (its `course.json` and lab files) becomes a game
+on the project's page `/play/` (in the browser, nothing uploaded), or with
+`node scripts/pack.mjs courses/‹name›` (Node only, no packages, no build).
+
+`courses/chroma/` is a complete example (a short course on colour); `courses/pocket-demo/` is a
+small one made the low-token way (labs designed for their concepts, everything else default).
 
 ## Status
 

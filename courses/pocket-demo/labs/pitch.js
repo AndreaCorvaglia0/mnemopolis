@@ -22,7 +22,7 @@ async function tone(ctx) {
     const [x0, y0, w, h] = r.A.plot, top = y0 + h * (1 - (1 + 1.3) / 2.6); // y = 1 on the plot's -1.3..1.3 scale
     let n = 0;
     for (let tx = 250 / s.f; tx <= 25; tx += 1000 / s.f) { d.circle(x0 + (tx / 25) * w, top, 7, { fill: C.gold, glow: C.gold }); n++; }
-    d.text(`${n} squeezes in 25 ms`, x0 + w - 10, y0 + h - 12, { size: 18, weight: 700, color: C.gold, align: 'right' });
+    if (!r.plotMap.compact) d.text(`${n} squeezes in 25 ms`, x0 + w - 10, y0 + h - 12, { size: 18, weight: 700, color: C.gold, align: 'right' });
   });
   // the real tone, quiet, while the learner wants it
   let audio = null;
@@ -45,13 +45,15 @@ async function wavelength(ctx) {
   const lam = (f) => SOUND / f;
   const view = stage(ctx, { wide: [800, 500], tall: [480, 620] }, (d, pane) => {
     d.clear();
-    const up = pane.upright, x0 = 70, y0 = up ? 70 : 46, w = pane.W - x0 - 24, h = pane.H - y0 - (up ? 120 : 96);
+    // margins from the real height of the text, which grows when the stage is small
+    const up = pane.upright, lh = d.lineH(16), title = d.wrap('wavelength: the length of one squeeze and stretch', 16, 4, pane.W - 32, { size: 16, lines: 2, measure: true });
+    const x0 = 70, y0 = title + 4 + lh, w = pane.W - x0 - 24, h = pane.H - y0 - lh * 4.2;
     box = { x0, y0, w, h };
     const px = (f) => x0 + ((f - X.min) / (X.max - X.min)) * w, py = (l) => y0 + h - ((l - Y.min) / (Y.max - Y.min)) * h;
     d.box(x0, y0, w, h, { fill: '#0f141d', stroke: C.line, r: 8 });
     for (let l = 0; l <= 4; l++) { d.line([[x0, py(l)], [x0 + w, py(l)]], { color: '#1a2130', width: 1 }); d.text(`${l} m`, x0 - 10, py(l) + 6, { size: 16, color: C.dim, align: 'right' }); }
-    for (let f = 100; f <= 1000; f += up ? 300 : 100) d.text(String(f), px(f), y0 + h + 24, { size: 16, color: C.dim, align: 'center' });
-    d.text('frequency (Hz)', x0 + w, y0 + h + 50, { size: 16, color: C.muted, align: 'right' });
+    for (let f = 100; f <= 1000; f += up || lh > 30 ? 300 : 100) d.text(String(f), px(f), y0 + h + lh, { size: 16, color: C.dim, align: f >= 1000 ? 'right' : 'center' });
+    d.text('frequency (Hz)', x0 + w, y0 + h + lh * 2.1, { size: 16, color: C.muted, align: 'right' });
     d.wrap('wavelength: the length of one squeeze and stretch', 16, 4, pane.W - 32, { size: 16, color: C.muted, lines: 2 });
     const pts = F.map((f, i) => [px(f), py(guess[i].v)]);
     if (real > 0) {
@@ -66,7 +68,7 @@ async function wavelength(ctx) {
     pts.forEach(([x, y], i) => { d.circle(x, y, 16, { fill: alpha(C.gold, moved.has(i) ? 0.25 : 0.12), stroke: C.gold, width: 3 }); if (shown) d.text(`${fmt(lam(F[i]), 2)} m`, x, py(lam(F[i])) - 18, { size: 16, weight: 700, color: C.acc, align: 'center' }); });
     if (shown && real >= 1) {
       const err = F.reduce((s, f, i) => s + Math.abs(guess[i].v - lam(f)), 0) / F.length;
-      d.text(`your guess is ${fmt(err, 2)} m off on average · at twice the frequency, half the wavelength`, x0, y0 + h + (up ? 84 : 80), { size: 17, weight: 700, color: C.gold, max: w });
+      d.text(`your guess is ${fmt(err, 2)} m off on average`, 16, y0 + h + lh * 3.6, { size: 17, weight: 700, color: C.gold, max: pane.W - 32 });
     }
   });
   const anim = animate(ctx, (dt) => { let more = guess.map((g) => g.step(dt)).some(Boolean); if (shown && real < 1) { real = dt === Infinity ? 1 : Math.min(1, real + dt * 0.8); more = true; } view.redraw(); return more; });

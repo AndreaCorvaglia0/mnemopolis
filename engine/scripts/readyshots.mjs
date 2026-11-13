@@ -41,7 +41,7 @@ for (const slug of courses) {
   const dir = existsSync(path.join(eng, '..', 'courses', slug, 'course.json')) ? path.join(eng, '..', 'courses', slug) : path.join(eng, 'tests', 'fixtures', slug);
   if (!existsSync(path.join(dir, 'course.json'))) { console.log(`no course ${slug}`); continue; }
   const r = spawnSync('npm', ['run', 'build'], { cwd: eng, env: { ...process.env, COURSE: slug }, encoding: 'utf8' });
-  if (r.status) { console.log(r.stdout.slice(-2000)); status = 1; continue; }
+  if (r.status) { console.log(`BUILD FAILED for ${slug}:\n${(r.stdout + r.stderr).slice(-3000)}`); status = 1; continue; }
   const course = JSON.parse(readFileSync(path.join(dir, 'course.json'), 'utf8'));
   const list = course.concepts.filter((p) => p.lab).flatMap((p) => p.lab.stations.filter((s) => !s.advanced).map((s, k) => ({ id: p.id, k, s })));
   for (const [tag, vp, q] of [['desktop', '1440x800x1', '?lite&test'], ['phone', '390x844x2', '?lite&test&touch']]) {
@@ -64,5 +64,5 @@ const OUT2 = process.env.OUT2 || '/tmp';
 mkdirSync(OUT2, { recursive: true });
 for (const f of readdirSync(out)) copyFileSync(path.join(out, f), path.join(OUT2, f));
 spawnSync('node', ['scripts/use-course.mjs'], { cwd: eng, stdio: 'ignore' });
-console.log(`Pictures are in ${out} and ${OUT2} (ready-*.png). Open them.`);
+console.log(status ? 'SOMETHING FAILED: see above.' : `Pictures are in ${out} and ${OUT2} (ready-*.png). Open them.`);
 process.exit(status);

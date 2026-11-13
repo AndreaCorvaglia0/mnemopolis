@@ -26,7 +26,7 @@ async function push(ctx) {
     }
     // how far the gold molecule has ever gone: a short bracket under it
     const gx0 = l.x0 + gold.c * l.gx, gy = l.top + gold.r * l.gy + 26;
-    if (goldMax - goldMin > 2) { d.line([[gx0 + goldMin, gy], [gx0 + goldMax, gy]], { color: C.gold, width: 4 }); d.text(`gold molecule: whole trip ${Math.round(goldMax - goldMin)} units, the ear is ${Math.round(l.ear - gx0)} away`, 16, l.top + l.rows * l.gy + 18, { size: 17, weight: 600, color: C.gold, max: pane.W - 32 }); }
+    if (goldMax - goldMin > 2) { d.line([[gx0 + goldMin, gy], [gx0 + goldMax, gy]], { color: C.gold, width: 4 }); d.wrap(`the gold molecule's whole trip: ${Math.round(goldMax - goldMin)} units (the ear is ${Math.round(l.ear - gx0)} away)`, 16, l.top + l.rows * l.gy + 4, pane.W - 32, { size: 17, weight: 600, color: C.gold, lines: 2 }); }
     // the ear, which lights up when a squeeze arrives
     d.circle(l.ear, cy, 34 + ring * 16, { fill: alpha(C.gold, 0.1 + 0.3 * ring), glow: ring > 0.05 ? C.gold : null });
     d.emoji('👂', l.ear, cy, 44);
