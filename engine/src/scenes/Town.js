@@ -494,7 +494,8 @@ export class Town extends Phaser.Scene {
     c?.faceToward(this.player.tx, this.player.ty);
     await this.ui.say(tr(Q_WORDS.aside), { name });
     if (c?.aside && !(c.tx === c.aside[0] && c.ty === c.aside[1])) {
-      const steps = GATE ? [[c.aside[0] - c.tx, c.aside[1] - c.ty]] : [[1, 0], [1, 0]];
+      // to the side tile and back toward the town, one step at a time (with a gate); else two steps right
+      const steps = GATE ? [...Array(Math.abs(c.aside[0] - c.tx)).fill([Math.sign(c.aside[0] - c.tx), 0]), ...Array(Math.abs(c.aside[1] - c.ty)).fill([0, Math.sign(c.aside[1] - c.ty)])] : [[1, 0], [1, 0]];
       const dirOf = ([dx, dy]) => (dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up');
       for (const st of steps) { if (c.gone) break; await new Promise((r) => { if (!c.step(dirOf(st), () => true, 260, () => r())) r(); }); }
       c.face(c.home);

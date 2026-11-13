@@ -225,13 +225,23 @@ async function walkTo(tx, ty, what, { use = true } = {}) {
       if (use || way.length > 1) await tap(...target);
       return true;
     }
+    // right next to it but the thing sits under the edge of the screen: use the prompt, as a player would
+    if (use && way.length <= 2) {
+      const pr = await ev(() => { const ui = __game.scene.getScene('UI'), b = ui.promptBox; if (!b) return null; const z = b.list.find((o) => o.type === 'Zone'); return __hb.uiToPage(z.x + z.width / 2, z.y + z.height / 2); });
+      if (pr) { if (PHONE) await tap(...pr); else await key('Space'); return true; }
+    }
     let pick = null;
     for (let i = way.length - 1; i > 0; i--) { const at = await tilePage(...way[i]); if (onScreen(at)) { pick = at; break; } }
     if (!pick) { fail(`nothing of the way to ${what} is on screen`); return false; }
     await tap(...pick);
     // wait until the player stops walking; if nothing happens for long, say what the game was doing
     await sleep(400);
-    try { await until(() => { const s = __game.scene.getScenes(true).find((x) => x.sys.settings.key !== 'UI'); return s && !s.player.moving && !s.nav.walking; }, `walking toward ${what}`, 30000); }
+    try {
+      const r = await until(() => { const s = __game.scene.getScenes(true).find((x) => x.sys.settings.key !== 'UI'), ui = __game.scene.getScene('UI'); return ui.choice && /grass|erba/i.test(ui.choice.question) ? 'grass' : s && !s.player.moving && !s.nav.walking; }, `walking toward ${what}`, 30000);
+      // a question rustled in the tall grass on the way: a player in a hurry says "not now"
+      if (r === 'grass' && what !== 'tall grass') { log(`   on the way to ${what}: a grass question, "not now"`); await choose((o, i) => /not now|non ora/i.test(o)); await waitIdle(); continue; }
+      if (r === 'grass') return true;
+    }
     catch (e) {
       const d = await ev(() => { const s = __game.scene.getScenes(true).find((x) => x.sys.settings.key !== 'UI'), ui = __game.scene.getScene('UI'); return { scene: s?.sys.settings.key, moving: s?.player.moving, path: s?.nav.path.length, pending: s?.nav.pending, locked: s?.locked, busy: ui.busy, modals: ui.modals, phase: ui.phase, sleeping: __game.loop.sleeping, at: [s?.player.tx, s?.player.ty], tweens: s?.tweens.getTweens?.().length }; });
       fail(`stuck walking toward ${what}: ${JSON.stringify(d)}`);
@@ -672,7 +682,7 @@ log('== the League');
 await checkTracker({ kind: 'league' }, 'all houses done');
 const champ = await ev(() => { const c = __game.scene.getScene('Town').champion; return c && [c.tx, c.ty]; });
 if (!champ) fail('no champion in town: the League cannot be started');
-if (FAST) await carryTo(champ[0], champ[1] + 2, 'up');
+if (FAST) await carryTo(GATE ? champ[0] - GATE.dir[0] * 2 : champ[0], GATE ? champ[1] - GATE.dir[1] * 2 : champ[1] + 2, 'up'); // on the town's side of the champion
 await walkTo(champ[0], champ[1], 'the champion');
 await until(() => __game.scene.getScene('UI').phase === 'choose', 'the champion');
 await shot('league-offer');
@@ -715,7 +725,9 @@ const away = await pathTo(free.p[0] + 3, free.p[1] + 3);
 if (away) { await walkTo(...away[Math.min(away.length - 1, 4)], 'a few steps away'); await sleep(1500); }
 await checkTracker({ kind: 'free' }, 'walking after the ending');
 if (G) {
-  await walkTo(G.tiles[1][0], G.tiles[1][1], 'the gate again');
+  await walkTo(G.stand[0], G.stand[1], 'the champion\'s old place', { use: false });
+  await until(() => { const s = __game.scene.getScene('Town'); return !s.player.moving && !s.nav.walking; }, 'standing before the gate');
+  await walkTo(G.tiles[0][0], G.tiles[0][1], 'the gate again');
   const p2 = await until(() => __game.scene.getScene('UI').phase || null, 'what the gate says after the ending', 20000);
   const said = p2 === 'say' ? await readSay() : [];
   log(`   through the gate again: ${p2} ${said.join(' / ')}`);

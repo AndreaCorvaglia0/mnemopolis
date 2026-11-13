@@ -18,15 +18,18 @@ export class Walker {
     this.shadow = scene.add.image(0, 0, 'shadow-s').setOrigin(0.5, 0.5);
     this.sprite = scene.add.sprite(0, 0, key, DIRS[dir].frame).setOrigin(0.5, 1);
     this.place();
-    // watchdog: a step tween that never finished froze the player for good (seen once on a phone in
-    // headless Chrome, cause not found). After a second, snap to the target tile and go on.
+    // Phaser's tween manager smooths lag: below 2 frames a second it advances tweens by 33 ms per
+    // frame, so a step of 150 ms took four or five frames (seconds on a slow machine, and the walk
+    // seemed frozen in headless Chrome). Steps follow real time instead.
+    scene.tweens.setLagSmooth();
+    // watchdog, in case a step tween still never finishes: after three seconds, snap to the target tile.
     const watch = () => this.unstick();
     scene.events.on('update', watch);
     scene.events.once('shutdown', () => scene.events.off('update', watch));
   }
 
   unstick() {
-    if (!this.moving || !this.stepping || this.gone || this.scene.time.now - this.stepping.at < 1000) return;
+    if (!this.moving || !this.stepping || this.gone || this.scene.time.now - this.stepping.at < 3000) return;
     const { tw, nx, ny, onDone } = this.stepping;
     tw?.stop?.();
     Object.assign(this, { tx: nx, ty: ny, moving: false, stepping: null });

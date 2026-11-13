@@ -79,6 +79,10 @@ Course work happens in `courses/<slug>/`, not here. See `WORLD.md` for what a cu
 - **After every `await` in `mount`, check `ctx.alive()`.** The learner may have moved on.
 - **Text.** Draw text in a pane with `pane.font(size)`: never below 16 screen pixels. Keep code lines under about 60 characters in the side panel. Long labels on
   buildings are cut at 9 characters. The pixel font on signs has capitals, digits, `-` and `.`.
+- **Lag smoothing of tweens.** Phaser advances tweens by only 33 ms per frame when a frame takes
+  more than 500 ms. Below two frames a second the player's steps crawled (seconds per tile) and the
+  phone play-through looked frozen. `Walker` switches lag smoothing off in its scene, and a watchdog
+  snaps a step that has not finished after three seconds (it logs `walker: ...`).
 - **Headless Chrome is slow** (a few frames per second with software rendering). Waits in the
   tour are long on purpose. A real browser is fast.
 - **The darkness layer** is as large as the camera view, not the map. If you add lights, add
