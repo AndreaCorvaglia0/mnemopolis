@@ -136,14 +136,14 @@ const PAINT = {
     pg.fillStyle = rad(pg, pw / 2, ph / 2, Math.min(pw, ph) * 0.3, Math.hypot(pw, ph) * 0.6, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(70,45,20,0.45)']]); pg.fillRect(0, 0, pw, ph);
     for (let i = 0; i < 18; i++) { pg.fillStyle = `rgba(140,100,50,${0.1 + rr() * 0.15})`; pg.beginPath(); pg.arc(rr() * pw, rr() * ph, (1 + rr() * 4) * u * 0.4, 0, Math.PI * 2); pg.fill(); }
     // the scratched face: gouged through the emulsion, violently, many strokes: the first thing one sees
-    const [hx2, hy2, hgt] = sc, R = hgt * 0.13;
+    const [hx2, hy2, hgt] = sc, R = hgt * 0.24; // larger than the face: it was done in anger
     pg.save(); pg.lineCap = 'round';
-    for (let i = 0; i < 46; i++) {
+    for (let i = 0; i < 90; i++) {
       const a = rr() * Math.PI * 2, len = R * (0.8 + rr() * 1.6), x0 = hx2 + Math.cos(a) * rr() * R * 0.6, y0 = hy2 + Math.sin(a) * rr() * R * 0.6, a2 = a + (rr() - 0.5) * 0.8;
-      pg.strokeStyle = `rgba(250,246,236,${0.55 + rr() * 0.45})`; pg.lineWidth = (0.6 + rr() * 2.2) * u * 0.35;
+      pg.strokeStyle = `rgba(250,246,236,${0.6 + rr() * 0.4})`; pg.lineWidth = (0.8 + rr() * 2.6) * u * 0.4;
       pg.beginPath(); pg.moveTo(x0 - Math.cos(a2) * len / 2, y0 - Math.sin(a2) * len / 2); pg.lineTo(x0 + Math.cos(a2) * len / 2 + (rr() - 0.5) * R * 0.3, y0 + Math.sin(a2) * len / 2); pg.stroke();
     }
-    pg.fillStyle = 'rgba(245,240,228,0.8)'; pg.beginPath(); pg.ellipse(hx2, hy2, R * 0.55, R * 0.7, 0.2, 0, Math.PI * 2); pg.fill(); // the paper showing through
+    pg.fillStyle = 'rgba(245,240,228,0.92)'; pg.beginPath(); smooth(pg, Array.from({ length: 9 }, (_, k) => { const a = (k / 9) * Math.PI * 2, rr2 = R * (0.42 + rr() * 0.25); return [hx2 + Math.cos(a) * rr2, hy2 + Math.sin(a) * rr2 * 1.2]; }), true); pg.fill(); // the paper showing through, torn ragged
     for (let i = 0; i < 10; i++) { pg.strokeStyle = 'rgba(40,30,20,0.35)'; pg.lineWidth = 0.6 * u * 0.4; const a = rr() * Math.PI * 2; pg.beginPath(); pg.moveTo(hx2, hy2); pg.lineTo(hx2 + Math.cos(a) * R * 1.2, hy2 + Math.sin(a) * R * 1.2); pg.stroke(); }
     pg.restore();
     g.drawImage(pc, px, py);
@@ -254,7 +254,7 @@ const PAINT = {
       g.beginPath(); if (i % 5 === 4) { g.moveTo(b.w * 0.71, b.h * 0.26); g.lineTo(b.w * 0.86, b.h * 0.15); } else { g.moveTo(x, y0); g.lineTo(x + b.w * 0.005, y1); } g.stroke();
     }
     g.fillStyle = '#8c3129'; g.fillRect(b.w * 0.3, -b.h * 0.04, b.w * 0.025, b.h * 1.15); // the ribbon
-    if (!dry) { for (let i = 0; i < 9; i++) { g.fillStyle = `rgba(20,12,8,${0.15 + r() * 0.2})`; g.beginPath(); g.ellipse(r() * b.w, r() * b.h, b.w * (0.05 + r() * 0.12), b.h * (0.04 + r() * 0.1), r(), 0, Math.PI * 2); g.fill(); } }
+    if (!dry) { for (let i = 0; i < 7; i++) { g.fillStyle = `rgba(20,12,8,${0.08 + r() * 0.1})`; g.beginPath(); g.ellipse(r() * b.w, r() * b.h, b.w * (0.03 + r() * 0.07), b.h * (0.03 + r() * 0.06), r(), 0, Math.PI * 2); g.fill(); } }
     g.fillStyle = 'rgba(255,255,255,0.08)'; g.fillRect(0, 0, b.w, b.h * 0.12);
     g.restore();
   },

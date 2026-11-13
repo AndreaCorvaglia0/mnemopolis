@@ -98,7 +98,7 @@ export const SERIF = 'Georgia,"Times New Roman","DejaVu Serif",serif';
 // writes `text` wrapped to width at (x, y); reveal 0..1 shows it letter by letter; returns the bottom y
 export function handwrite(g, text, x, y, width, size, { color = '#26305c', reveal = 1, seed = 5, lineH = 1.45 } = {}) {
   const r = rnd(seed);
-  g.save(); g.font = `${size}px ${HAND}`; g.fillStyle = color; g.textBaseline = 'alphabetic';
+  g.save(); g.font = `italic ${size}px ${HAND}`; g.fillStyle = color; g.textBaseline = 'alphabetic';
   const words = String(text).split(/\s+/), lines = []; let line = '';
   for (const w of words) { const t = line ? `${line} ${w}` : w; if (g.measureText(t).width > width && line) { lines.push(line); line = w; } else line = t; }
   if (line) lines.push(line);

@@ -21,7 +21,21 @@ import { startFog } from './fog.js';
 import { S_WORDS } from './words.js';
 import { tr, fill } from './config.js';
 
-export const TALLY = 4; // the marks already scratched on the notebook's cover when it is found
+export const TALLY = 4;
+
+// the town's name (the course's title), over the arrival and over the loop: the same card
+export async function titleCard(c) {
+  const t = h('div', {}, h('div', {}, COURSE.title.toUpperCase()), h('div', {}, COURSE.subject || ''));
+  t.style.cssText = 'text-align:center;color:#f1ecd9;text-shadow:0 2px 24px #000;opacity:0;transition:opacity 2s;padding:0 16px';
+  t.firstChild.style.cssText = 'font:600 clamp(32px,7vw,72px) Georgia,serif;letter-spacing:.14em';
+  t.lastChild.style.cssText = 'font:italic clamp(18px,2.6vw,26px) Georgia,serif;letter-spacing:.04em;color:#cfc6ae;margin-top:8px';
+  c.show(t);
+  requestAnimationFrame(() => { t.style.opacity = '1'; });
+  await c.sleep(4200);
+  t.style.opacity = '0';
+  await c.sleep(c.skipped ? 0 : 900);
+  c.hide();
+} // the marks already scratched on the notebook's cover when it is found
 
 // the next picture comes up under the current one, which fades away (a slow cross-dissolve)
 async function cut(c, from, painter, params, ms = 1200) {
@@ -47,7 +61,7 @@ export async function playLamp(town) {
     sfx.motif?.('lock');
     for (const l of tr(S_WORDS.keeperLamp)) await c.say(l, { min: 3200 });
     await (c.skipped ? null : lit);
-    v = await cut(c, v, registerPainter(), { name, arrived: state.story?.arrivedAt, push: 0.1, pushTime: 16 }, 1500);
+    v = await cut(c, v, registerPainter(), { name, place: COURSE.title, arrived: state.story?.arrivedAt, push: 0.1, pushTime: 16 }, 1500);
     await c.say(tr(S_WORDS.registerSeen), { min: 3000 });
     await c.sleep(1800); // the player does the arithmetic
     await c.say(tr(S_WORDS.signature), { min: 3400 });
@@ -79,7 +93,6 @@ export async function playEnding(town) {
     await c.say(tr(S_WORDS.dropped), { min: 3400 });
     // the purser at the gangway
     v = await cut(c, v, gangwayPainter(), { push: 0.05 });
-    await c.say(tr(S_WORDS.lessRain), { min: 3000 });
     await c.say(fill(tr(S_WORDS.anotherRound), { name }), { min: 3600 });
     await c.say(tr(S_WORDS.aboard), { min: 2200 });
     // the ship at the quay, its lights going out, as at the arrival
@@ -93,12 +106,8 @@ export async function playEnding(town) {
     v.fade('dock', 1, 11000);
     c.theme('full');
     await c.say(tr(S_WORDS.opening)[0], { min: 4200 });
-    // the title, over it
-    const title = h('div', {}, COURSE.title);
-    title.style.cssText = `font:600 clamp(30px,6vw,64px) Georgia,serif;color:#f1ecd9;letter-spacing:.06em;text-align:center;text-shadow:0 2px 20px #000;opacity:0;transition:opacity 2s;padding:0 16px`;
-    c.show(title);
-    requestAnimationFrame(() => { title.style.opacity = '1'; });
-    await c.sleep(4200);
+    // the title, over it, as at the arrival
+    await titleCard(c);
     await c.wait(2500);
     await c.dim(1, 1200);
     v.stop();

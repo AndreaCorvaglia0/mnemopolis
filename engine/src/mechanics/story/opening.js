@@ -8,6 +8,7 @@ import { touch } from '../../systems/view.js';
 import { cinema } from './cinema.js';
 import { view } from './paint.js';
 import { harbourPainter } from './scenes/harbour.js';
+import { titleCard } from './finale.js';
 import { S_WORDS } from './words.js';
 import { tr, fill } from './config.js';
 
@@ -62,6 +63,7 @@ export async function playOpening(ui) {
     const name = await askName(c);
     await c.say(tr(S_WORDS.ofCourse), { min: 1800 }); // the purser hesitates over the register
     await c.say(fill(tr(S_WORDS.signed), { name }));
+    await titleCard(c);
     await c.dim(1, 900);
   });
   stage?.stop();

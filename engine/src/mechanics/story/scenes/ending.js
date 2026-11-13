@@ -50,18 +50,31 @@ export function lampRoomPainter() {
       if (L > 0.01) glow(g, cx, cy, lw * 0.5, '#fff6d8', L);
       g.restore();
       g.fillStyle = '#0a0a0e'; g.fillRect(cx - lw * 0.45, cy + lh / 2, lw * 0.9, H * 0.04); g.fillRect(cx - lw * 0.3, cy - lh / 2 - H * 0.02, lw * 0.6, H * 0.025);
-      // the keeper, hooded, seen from behind and to the side, one arm toward the lamp; a rim of its light
-      const kx = W * 0.6, ky = H * 0.78, kh = H * 0.62;
+      // the keeper, hooded, seen from behind and to the side, one arm toward the lamp: a heavy cloak with
+      // its folds, the hood's deep opening turned away from us; only the lamp's rim light on the edges
+      const kx = W * 0.6, ky = H * 0.8, kh = H * 0.64;
+      const P2 = (a2, b2) => [kx + kh * a2, ky - kh * b2];
       g.save();
-      g.beginPath();
-      smooth(g, [[kx - kh * 0.18, ky + H * 0.05], [kx - kh * 0.2, ky - kh * 0.45], [kx - kh * 0.13, ky - kh * 0.78], [kx - kh * 0.02, ky - kh * 0.98], [kx + kh * 0.1, ky - kh * 0.86], [kx + kh * 0.14, ky - kh * 0.62], [kx + kh * 0.22, ky - kh * 0.4], [kx + kh * 0.24, ky + H * 0.05]]);
-      g.closePath(); g.fillStyle = lin(g, kx - kh * 0.2, 0, kx + kh * 0.25, 0, [[0, '#1d1a24'], [1, '#0a090d']]); g.fill();
-      // the arm, reaching toward the lens
-      g.beginPath(); smooth(g, [[kx - kh * 0.12, ky - kh * 0.6], [kx - kh * 0.3, ky - kh * 0.52], [kx - kh * 0.46, ky - kh * 0.48], [kx - kh * 0.5, ky - kh * 0.44], [kx - kh * 0.42, ky - kh * 0.4], [kx - kh * 0.22, ky - kh * 0.44], [kx - kh * 0.12, ky - kh * 0.46]]); g.closePath(); g.fillStyle = '#16141c'; g.fill();
-      // the rim light: the lamp catches the edge of the hood and the sleeve
-      g.globalCompositeOperation = 'lighter'; g.strokeStyle = `rgba(255,200,120,${0.15 + 0.6 * L})`; g.lineWidth = Math.max(1.5, H / 300);
-      g.beginPath(); smooth(g, [[kx - kh * 0.2, ky - kh * 0.45], [kx - kh * 0.13, ky - kh * 0.78], [kx - kh * 0.02, ky - kh * 0.98]]); g.stroke();
-      g.beginPath(); smooth(g, [[kx - kh * 0.3, ky - kh * 0.52], [kx - kh * 0.46, ky - kh * 0.48], [kx - kh * 0.5, ky - kh * 0.44]]); g.stroke();
+      // the body under the cloak: shoulders, back, the hem on the floor
+      g.beginPath(); smooth(g, [P2(-0.26, -0.05), P2(-0.24, 0.3), P2(-0.2, 0.6), P2(-0.12, 0.7), P2(0.02, 0.72), P2(0.16, 0.66), P2(0.24, 0.5), P2(0.28, 0.2), P2(0.32, -0.05)]); g.closePath();
+      g.fillStyle = lin(g, kx - kh * 0.26, 0, kx + kh * 0.32, 0, [[0, '#26222d'], [0.35, '#15131b'], [1, '#07060a']]); g.fill();
+      // folds: long soft shadows down the cloak
+      g.save(); g.clip();
+      for (const [x0, w] of [[-0.12, 0.05], [0.02, 0.07], [0.15, 0.05], [-0.2, 0.03]]) { g.fillStyle = lin(g, kx + kh * x0, 0, kx + kh * (x0 + w), 0, [[0, 'rgba(0,0,0,0)'], [0.5, 'rgba(0,0,0,0.45)'], [1, 'rgba(0,0,0,0)']]); g.fillRect(kx + kh * x0, ky - kh * 0.7, kh * w, kh * 0.8); }
+      g.restore();
+      // the hood: a deep cowl, its opening toward the lamp and away from us; inside, darkness
+      g.beginPath(); smooth(g, [P2(-0.14, 0.62), P2(-0.17, 0.78), P2(-0.1, 0.94), P2(0.04, 0.98), P2(0.14, 0.88), P2(0.15, 0.72), P2(0.08, 0.62)]); g.closePath();
+      g.fillStyle = lin(g, kx - kh * 0.17, 0, kx + kh * 0.15, 0, [[0, '#2a2632'], [0.5, '#16141c'], [1, '#09080c']]); g.fill();
+      g.beginPath(); smooth(g, [P2(-0.16, 0.66), P2(-0.165, 0.78), P2(-0.12, 0.88), P2(-0.07, 0.8), P2(-0.08, 0.68)]); g.closePath(); g.fillStyle = '#020203'; g.fill();
+      // the arm, reaching toward the lens, the sleeve falling back
+      g.beginPath(); smooth(g, [P2(-0.16, 0.56), P2(-0.32, 0.5), P2(-0.46, 0.47), P2(-0.52, 0.45), P2(-0.5, 0.41), P2(-0.34, 0.42), P2(-0.18, 0.44)]); g.closePath();
+      g.fillStyle = lin(g, kx - kh * 0.5, 0, kx - kh * 0.16, 0, [[0, '#2c2833'], [1, '#121017']]); g.fill();
+      g.fillStyle = '#3a2a22'; g.beginPath(); g.ellipse(kx - kh * 0.54, ky - kh * 0.43, kh * 0.025, kh * 0.018, -0.3, 0, Math.PI * 2); g.fill(); // the hand, a shadow in the glare
+      // the rim light: the lamp catches the edge of the hood, the shoulder and the sleeve
+      g.globalCompositeOperation = 'lighter'; g.lineCap = 'round';
+      for (const [pts, w] of [[[P2(-0.17, 0.78), P2(-0.1, 0.94), P2(0.04, 0.98)], 1], [[P2(-0.2, 0.6), P2(-0.24, 0.3), P2(-0.26, -0.05)], 0.6], [[P2(-0.32, 0.5), P2(-0.46, 0.47), P2(-0.52, 0.45)], 1]]) {
+        g.strokeStyle = `rgba(255,200,120,${(0.12 + 0.6 * L) * w})`; g.lineWidth = Math.max(1.5, H / 260); g.beginPath(); smooth(g, pts); g.stroke();
+      }
       g.restore();
       // the register on the desk catches the light too
       if (L > 0.01) glow(g, W * 0.79, H * 0.72, W * 0.12, '#ffd9a0', 0.25 * L);
@@ -81,7 +94,7 @@ export function registerPainter() {
       paper(g, x, y, pw, ph, { color: '#e3d6b4', seed: 21, edge: 0.4 });
       const u = ph / 100, cols = [x + pw * 0.06, x + pw * 0.3, x + pw * 0.66];
       g.fillStyle = '#5a4a30'; g.font = `${2.4 * u}px ${SERIF}`; g.textBaseline = 'alphabetic';
-      g.fillText('ARRIVALS', x + pw * 0.06, y + 6 * u);
+      g.fillText(`ARRIVALS  ·  ${String(P.place || '').toUpperCase()}`, x + pw * 0.06, y + 6 * u);
       g.font = `${1.7 * u}px ${SERIF}`; ['DATE', 'NAME', 'SIGNATURE'].forEach((s, i) => g.fillText(s, cols[i], y + 11 * u));
       g.strokeStyle = 'rgba(90,70,40,0.5)'; g.lineWidth = Math.max(1, u * 0.12);
       for (const cx of cols.slice(1)) { g.beginPath(); g.moveTo(cx - pw * 0.02, y + 8.5 * u); g.lineTo(cx - pw * 0.02, y + ph - 4 * u); g.stroke(); }
@@ -91,7 +104,9 @@ export function registerPainter() {
         const yy = top + (i + 1) * rh;
         g.beginPath(); g.moveTo(x + pw * 0.04, yy + u * 0.6); g.lineTo(x + pw * 0.96, yy + u * 0.6); g.stroke();
         if (i === rows - 1) continue; // the last line: empty
-        const back = rows - 2 - i, dt = new Date(d0.getTime() - back * (360 + Math.floor(r() * 60)) * 86400000);
+        // the years go back far: a crossing every few years, the oldest from before the ticket and the flower
+        const YEARS = [1903, 1907, 1911, 1924, 1938, 1951, 1969, 1987, 2006, d0.getFullYear()], back = rows - 2 - i;
+        const dt = new Date(YEARS[i] ?? d0.getFullYear(), (d0.getMonth() + (i % 3) - 1 + 12) % 12, Math.max(1, Math.min(28, d0.getDate() + ((i * 7) % 9) - 4)));
         const ink = `rgba(${Math.round(70 - back * 3)},${Math.round(55 - back * 2)},${Math.round(80 + (8 - back) * 4)},${0.95 - back * 0.04})`; // older lines browner and paler
         handwrite(g, `${dt.getDate()}.${dt.getMonth() + 1}.${dt.getFullYear()}`, cols[0], yy - rh * 0.22, pw * 0.22, rh * 0.42, { color: ink, seed: 30 + i });
         handwrite(g, name, cols[1], yy - rh * 0.22, pw * 0.34, rh * 0.48, { color: ink, seed: 50 + i });
@@ -99,7 +114,8 @@ export function registerPainter() {
         g.save(); g.strokeStyle = ink; g.lineWidth = Math.max(1, u * 0.22); g.lineCap = 'round'; g.beginPath();
         const sx = cols[2] + pw * 0.02, sy = yy - rh * 0.3, sw = pw * 0.24;
         g.moveTo(sx, sy + rh * 0.1);
-        for (let k = 0; k < 9; k++) { const kx = sx + (k / 8) * sw; g.quadraticCurveTo(kx - sw * 0.05, sy - rh * (0.15 + r() * 0.25) * (k % 2 ? 1 : -0.4), kx, sy + rh * (r() - 0.5) * 0.12); }
+        const loops = 6 + Math.floor(r() * 4);
+        for (let k = 0; k < loops; k++) { const kx = sx + (k / (loops - 1)) * sw * (0.85 + r() * 0.15); g.bezierCurveTo(kx - sw * 0.08, sy - rh * (0.3 + r() * 0.35), kx + sw * 0.02, sy + rh * (0.05 + r() * 0.2), kx, sy + rh * (r() - 0.5) * 0.15); }
         g.moveTo(sx - sw * 0.05, sy + rh * 0.22); g.quadraticCurveTo(sx + sw * 0.5, sy + rh * (0.32 + r() * 0.1), sx + sw * 1.05, sy + rh * 0.12); g.stroke(); g.restore();
       }
       g.restore();
@@ -108,58 +124,82 @@ export function registerPainter() {
   };
 }
 
-// ---- the pages: torn out one by one, taken by the wind over the roofs, each toward a lit window
+// ---- the pages: torn out one by one, they fall and scatter nearby, on the wet planks of the quay
+// and the first stretch of the lane; they will be picked up: someone stoops for one at the edge of the
+// frame, one is caught against the lamp post, the harbour master puts one in his pocket
 export function pagesPainter() {
-  let roofs = null, key = '';
-  const windowsOf = (W, H) => { const r = rnd(41), out = []; for (let i = 0; i < 14; i++) out.push([W * (0.06 + r() * 0.88), H * (0.33 + r() * 0.16)]); return out; };
+  let fg = null, key = '';
+  // where the pages come to rest, in the frame's proportions (the lane goes up to the right)
+  const RESTS = [[0.3, 0.86, -0.4], [0.44, 0.92, 0.3], [0.56, 0.84, -0.1], [0.66, 0.74, 0.5], [0.19, 0.8, 0.2], [0.75, 0.66, -0.3], [0.38, 0.75, 0.6], [0.84, 0.6, 0.1], [0.5, 0.97, -0.6], [0.6, 0.64, 0.2]];
   return {
     baseKeys: [],
-    focus: (W, H) => [W / 2, H * 0.45],
+    focus: (W, H) => [W * 0.5, H * 0.6],
     base(g, W, H) {
-      // a clear night: the rain has stopped; stars; the beam far off
-      g.fillStyle = lin(g, 0, 0, 0, H, [[0, '#060a16'], [0.55, '#14203a'], [1, '#0a0e18']]); g.fillRect(0, 0, W, H);
-      const r = rnd(8); for (let i = 0; i < 220; i++) { g.fillStyle = `rgba(230,236,255,${0.2 + r() * 0.6})`; g.fillRect(r() * W, r() * H * 0.45, 1 + (r() < 0.1), 1 + (r() < 0.1)); }
-      g.drawImage(blobs(W, H * 0.5, 20, '#26324e', { seed: 2, y: [0.3, 0.9], rx: [0.2, 0.5], ry: [0.03, 0.06], a: [0.2, 0.4] }), 0, 0);
+      // the night after the rain: a clearing sky over the roofs at the top of the lane
+      g.fillStyle = lin(g, 0, 0, 0, H * 0.5, [[0, '#060a16'], [1, '#18233c']]); g.fillRect(0, 0, W, H);
+      const r = rnd(8); for (let i = 0; i < 160; i++) { g.fillStyle = `rgba(230,236,255,${0.2 + r() * 0.5})`; g.fillRect(r() * W, r() * H * 0.3, 1, 1); }
+      g.drawImage(blobs(W, H * 0.45, 18, '#28344f', { seed: 2, y: [0.3, 0.9], rx: [0.2, 0.5], ry: [0.04, 0.08], a: [0.2, 0.4] }), 0, 0);
+      // the roofs at the top of the lane, a few windows lit
+      for (const [x, w, hh, lit] of [[0.52, 0.12, 0.1, 1], [0.63, 0.1, 0.13, 1], [0.72, 0.14, 0.09, 0], [0.85, 0.12, 0.12, 1], [0.95, 0.1, 0.08, 1]]) {
+        const X = W * x, Wd = W * w, top = H * (0.42 - hh);
+        g.fillStyle = '#0b0d16'; g.beginPath(); g.moveTo(X, H * 0.5); g.lineTo(X, top); g.lineTo(X + Wd / 2, top - H * 0.05); g.lineTo(X + Wd, top); g.lineTo(X + Wd, H * 0.5); g.fill();
+        if (lit) { g.fillStyle = '#ffcf7a'; g.fillRect(X + Wd * 0.3, top + H * 0.03, Wd * 0.14, H * 0.025); glow(g, X + Wd * 0.37, top + H * 0.04, Wd * 0.4, '#ffb35c', 0.35); }
+      }
+      // the lane going up between them, wet, cobbled
+      g.fillStyle = '#141218'; g.beginPath(); g.moveTo(W * 0.42, H); g.lineTo(W * 0.62, H * 0.5); g.lineTo(W * 0.72, H * 0.5); g.lineTo(W * 1.02, H); g.fill();
+      // the quay's planks, wet, in the foreground and to the left
+      g.fillStyle = lin(g, 0, H * 0.55, 0, H, [[0, '#211913'], [1, '#120c09']]); g.beginPath(); g.moveTo(0, H * 0.58); g.lineTo(W * 0.62, H * 0.52); g.lineTo(W * 0.5, H); g.lineTo(0, H); g.fill();
+      g.strokeStyle = 'rgba(0,0,0,0.55)'; g.lineWidth = Math.max(1, H / 500);
+      for (let k = 0; k < 14; k++) { const t = k / 14; g.beginPath(); g.moveTo(0, H * (0.58 + t * 0.42)); g.lineTo(W * (0.62 - t * 0.12), H * (0.52 + t * 0.48)); g.stroke(); }
+      // puddles holding the windows' light
+      for (let i = 0; i < 9; i++) { const x = W * (0.1 + r() * 0.7), y = H * (0.65 + r() * 0.3); g.fillStyle = 'rgba(140,160,200,0.08)'; g.beginPath(); g.ellipse(x, y, W * (0.03 + r() * 0.06), H * (0.008 + r() * 0.012), -0.1, 0, Math.PI * 2); g.fill(); }
+      // the lamp post on the quay, lit
+      const lx = W * 0.24, ly = H * 0.35;
+      g.fillStyle = '#07070b'; g.fillRect(lx - W * 0.004, ly, W * 0.008, H * 0.42); g.fillRect(lx - W * 0.012, ly - H * 0.04, W * 0.024, H * 0.045);
+      g.fillStyle = '#ffd98a'; g.fillRect(lx - W * 0.009, ly - H * 0.035, W * 0.018, H * 0.03);
+      glow(g, lx, ly - H * 0.02, H * 0.35, '#ffb35c', 0.4); glow(g, lx, ly - H * 0.02, H * 0.06, '#fff1c4', 0.7);
     },
     live(g, W, H, t, P) {
       if (key !== `${W}x${H}`) {
         key = `${W}x${H}`;
-        const [c, cg] = canvas(W, H), r = rnd(19);
-        // the roofs of the town, one after another, and their windows lit
-        for (let layer = 0; layer < 2; layer++) {
-          let x = -W * 0.05; const base = H * (0.5 + layer * 0.08), col = layer ? '#07080d' : '#0d0f18';
-          while (x < W * 1.05) {
-            const w = W * (0.06 + r() * 0.08), hh = H * (0.06 + r() * 0.09), peak = H * (0.03 + r() * 0.05);
-            cg.fillStyle = col; cg.beginPath(); cg.moveTo(x, H); cg.lineTo(x, base - hh); cg.lineTo(x + w / 2, base - hh - peak); cg.lineTo(x + w, base - hh); cg.lineTo(x + w, H); cg.fill();
-            if (r() < 0.4) cg.fillRect(x + w * 0.7, base - hh - peak * 0.9, w * 0.08, peak * 0.6);
-            for (let k = 0; k < 2; k++) { if (r() < 0.25) continue; const wx = x + w * (0.2 + k * 0.4), wy = base - hh * 0.6; cg.fillStyle = '#ffcf7a'; cg.fillRect(wx, wy, w * 0.14, hh * 0.22); cg.save(); cg.globalCompositeOperation = 'lighter'; cg.fillStyle = rad(cg, wx + w * 0.07, wy, 0, w * 0.4, [[0, 'rgba(255,190,100,0.3)'], [1, 'rgba(0,0,0,0)']]); cg.fillRect(wx - w * 0.4, wy - w * 0.4, w * 0.9, w * 0.9); cg.restore(); cg.fillStyle = col; }
-            x += w * (0.9 + r() * 0.3);
-          }
-        }
-        // the lighthouse, lit, over the roofs
-        const tx = W * 0.8, ty = H * 0.47; cg.fillStyle = '#0b0d14'; cg.beginPath(); cg.moveTo(tx - W * 0.018, ty); cg.lineTo(tx - W * 0.011, ty - H * 0.28); cg.lineTo(tx + W * 0.011, ty - H * 0.28); cg.lineTo(tx + W * 0.018, ty); cg.fill();
-        cg.fillRect(tx - W * 0.016, ty - H * 0.3, W * 0.032, H * 0.012);
-        roofs = { c, lamp: [tx, ty - H * 0.315] };
+        const [c, cg] = canvas(W, H);
+        // the harbour master, by the lamp, putting one page into his coat
+        const hx = W * 0.14, hy = H * 0.8, hh = H * 0.36;
+        // a long coat, broad in the shoulders, flaring to the hem; a peaked cap
+        cg.fillStyle = '#08090d'; cg.beginPath(); smooth(cg, [[hx - hh * 0.17, hy], [hx - hh * 0.13, hy - hh * 0.4], [hx - hh * 0.15, hy - hh * 0.68], [hx - hh * 0.1, hy - hh * 0.77], [hx - hh * 0.03, hy - hh * 0.79], [hx + hh * 0.05, hy - hh * 0.79], [hx + hh * 0.13, hy - hh * 0.74], [hx + hh * 0.15, hy - hh * 0.6], [hx + hh * 0.13, hy - hh * 0.35], [hx + hh * 0.16, hy]]); cg.closePath(); cg.fill();
+        cg.beginPath(); cg.ellipse(hx + hh * 0.01, hy - hh * 0.85, hh * 0.058, hh * 0.072, 0, 0, Math.PI * 2); cg.fill();
+        cg.beginPath(); cg.ellipse(hx + hh * 0.01, hy - hh * 0.915, hh * 0.07, hh * 0.035, 0, Math.PI, 0); cg.fill();
+        cg.beginPath(); cg.ellipse(hx + hh * 0.05, hy - hh * 0.9, hh * 0.08, hh * 0.012, 0.1, 0, Math.PI * 2); cg.fill(); // the brim
+        cg.fillStyle = '#d9ccaa'; cg.save(); cg.translate(hx + hh * 0.05, hy - hh * 0.55); cg.rotate(0.4); cg.fillRect(-hh * 0.035, -hh * 0.05, hh * 0.07, hh * 0.09); cg.restore(); // the page, half in the pocket
+        cg.strokeStyle = 'rgba(255,190,110,0.35)'; cg.lineWidth = Math.max(1, H / 600); cg.beginPath(); cg.moveTo(hx + hh * 0.13, hy - hh * 0.6); cg.lineTo(hx + hh * 0.12, hy); cg.stroke(); // the lamp on his edge
+        // someone at the right edge, up the lane, stooping for a page
+        const sx = W * 0.95, sy = H * 0.64, sh = H * 0.26; // half out of the frame
+        cg.fillStyle = '#0a0b10'; cg.beginPath(); smooth(cg, [[sx - sh * 0.1, sy], [sx - sh * 0.16, sy - sh * 0.35], [sx - sh * 0.05, sy - sh * 0.62], [sx + sh * 0.22, sy - sh * 0.66], [sx + sh * 0.26, sy - sh * 0.5], [sx + sh * 0.12, sy - sh * 0.3], [sx + sh * 0.1, sy]]); cg.closePath(); cg.fill();
+        cg.beginPath(); cg.ellipse(sx - sh * 0.15, sy - sh * 0.6, sh * 0.075, sh * 0.085, 0, 0, Math.PI * 2); cg.fill();
+        cg.strokeStyle = '#0a0b10'; cg.lineWidth = sh * 0.05; cg.lineCap = 'round'; cg.beginPath(); cg.moveTo(sx - sh * 0.02, sy - sh * 0.45); cg.lineTo(sx - sh * 0.2, sy - sh * 0.08); cg.stroke();
+        fg = c;
       }
-      // the beam, turning
-      const [lx, ly] = roofs.lamp, a = t * 0.7;
-      g.save(); g.globalCompositeOperation = 'lighter'; const len = W * 1.1, k = Math.abs(Math.cos(a));
-      g.fillStyle = rad(g, lx, ly, 0, len, [[0, `rgba(255,236,180,${0.3 * k})`], [1, 'rgba(255,236,180,0)']]); g.beginPath(); g.moveTo(lx, ly); g.lineTo(lx + Math.cos(a) * len, ly - H * 0.06 * k); g.lineTo(lx + Math.cos(a) * len, ly + H * 0.04 * k); g.fill(); g.restore();
-      glow(g, lx, ly, H * 0.05, '#fff6d8', 0.9);
-      g.drawImage(roofs.c, 0, 0);
-      // the pages: from the bottom of the frame (the notebook, in your hands) up over the roofs, turning,
-      // each toward a window; the n-th leaves at n * gap seconds
-      const wins = windowsOf(W, H), n = P.pages || 6, gap = 1.1, fly = 4.2, pw = Math.min(W, H) * 0.06;
-      for (let i = 0; i < n; i++) {
-        const s = (t - 0.6 - i * gap) / fly; if (s <= 0 || s >= 1.05) continue;
-        const [wx, wy] = wins[i % wins.length], x0 = W * (0.46 + (i % 3) * 0.04), y0 = H * 1.02, cx = lerp2(x0, wx, s) + Math.sin(s * 9 + i) * W * 0.04 * (1 - s), cy = lerp2(y0, wy, s) - Math.sin(s * Math.PI) * H * 0.35;
-        const sc = (1 - s * 0.75) * pw, rot = Math.sin(s * 12 + i) * 1.2, flip = Math.cos(s * 14 + i);
-        g.save(); g.translate(cx, cy); g.rotate(rot); g.scale(flip, 1); g.globalAlpha = s > 0.9 ? (1.05 - s) / 0.15 : 1;
-        g.fillStyle = lin(g, -sc / 2, 0, sc / 2, 0, [[0, '#e6dcc0'], [1, '#bfb08c']]); g.fillRect(-sc / 2, -sc * 0.65, sc, sc * 1.3);
-        g.fillStyle = 'rgba(40,50,90,0.5)'; for (let k = 0; k < 5; k++) g.fillRect(-sc * 0.35, -sc * 0.45 + k * sc * 0.2, sc * 0.6, Math.max(1, sc * 0.03));
+      // the pages: torn from the notebook at the bottom of the frame, carried a little by the wind,
+      // falling, each coming to rest nearby; the n-th leaves at n * gap seconds
+      const n = Math.min(RESTS.length, P.pages || 6), gap = 1.1, fall = 3.2, pw = Math.min(W, H) * 0.05;
+      const pageAt = (x, y, rot, sc, flip, alpha = 1, wet = 0) => {
+        g.save(); g.translate(x, y); g.rotate(rot); g.scale(flip, 0.55 + 0.45 * Math.abs(flip)); g.globalAlpha = alpha;
+        g.fillStyle = lin(g, -sc / 2, 0, sc / 2, 0, [[0, wet ? '#c8bc9c' : '#e6dcc0'], [1, wet ? '#a89a78' : '#c2b28e']]); g.fillRect(-sc / 2, -sc * 0.65, sc, sc * 1.3);
+        g.fillStyle = 'rgba(40,50,90,0.45)'; for (let k = 0; k < 5; k++) g.fillRect(-sc * 0.35, -sc * 0.45 + k * sc * 0.2, sc * 0.6, Math.max(1, sc * 0.03));
         g.restore();
-        if (s > 0.85) glow(g, wx, wy, pw * 1.6, '#ffd77a', (s - 0.85) * 4);
+      };
+      for (let i = 0; i < n; i++) {
+        const [rx, ry, rr] = RESTS[i], tx = W * rx, ty = H * ry, s = Math.max(0, Math.min(1, (t - 0.5 - i * gap) / fall));
+        if (s <= 0) continue;
+        const sc = pw * (0.7 + ry * 0.5);
+        if (s >= 1) { pageAt(tx, ty, rr, sc, 1, 1, 1); continue; }
+        // from the notebook (bottom centre) up a little in the gust, then down, fluttering, to its place
+        const x0 = W * 0.5, y0 = H * 1.02, x = x0 + (tx - x0) * s + Math.sin(s * 10 + i) * W * 0.03 * (1 - s), y = y0 + (ty - y0) * s - Math.sin(s * Math.PI) * H * 0.3;
+        pageAt(x, y, rr * s + Math.sin(s * 11 + i) * 0.9 * (1 - s), sc, Math.cos(s * 13 + i) * (1 - s) + s, 1);
       }
+      // a page caught against the lamp post, trembling
+      if (t > 2) pageAt(W * 0.245, H * 0.74 + Math.sin(t * 6) * H * 0.002, 0.15 + Math.sin(t * 5) * 0.05, pw * 0.9, 1, Math.min(1, (t - 2) / 0.6), 1);
+      g.drawImage(fg, 0, 0);
     },
   };
 }

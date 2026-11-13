@@ -149,11 +149,10 @@ export const S_WORDS = {
   berth: { en: 'Same berth as always.', it: 'Stesso ormeggio di sempre.' },
   // ---- the quay: the pages torn out; the cover left where it was found; the purser; the loop
   tear: {
-    en: ['The notebook is full.', 'You tear the pages out, one by one.', 'The wind takes each one home.'],
-    it: ['Il taccuino è pieno.', 'Strappi le pagine, una alla volta.', 'Il vento riporta ognuna a casa sua.'],
+    en: ['The notebook is full.', 'You tear the pages out, one by one.', 'The wind scatters them along the quay.'],
+    it: ['Il taccuino è pieno.', 'Strappi le pagine, una alla volta.', 'Il vento le sparpaglia lungo il molo.'],
   },
   dropped: { en: 'You let the cover fall where you found it.', it: 'Lasci cadere la copertina dove l\'avevi trovata.' },
-  lessRain: { en: '"It rained a little less this time."', it: '«Questa volta ha piovuto un po\' meno.»' },
   anotherRound: { en: '"Another round, {name}?"', it: '«Un altro giro, {name}?»' },
   aboard: { en: 'You go aboard.', it: 'Sali a bordo.' },
   // ---- after the ending: the fog returns
@@ -201,8 +200,8 @@ export const Q_STORY = {
     it: ['Non tutte le case del paese sono sulla tua strada, sai.', 'Ieri sera ho visto una luce {near}. Credevo che non ci abitasse nessuno.', 'C\'è un gatto con una lanterna. O l\'ho sognato.', 'Qualcuno {near} ricorda più di quanto dica.'],
   },
   congrats: {
-    en: ['Back again. The windows stayed lit, you see.', 'There you are again. It always rains a little less, after.', 'I remember you now. I think I always did.'],
-    it: ['Di nuovo qui. Le finestre sono rimaste accese, vedi.', 'Eccoti di nuovo. Dopo, piove sempre un po\' meno.', 'Adesso mi ricordo di te. Credo di essermene sempre ricordato.'],
+    en: ['Back again. The windows stayed lit, you see.', 'There you are again.', 'I remember you now. I think I always did.'],
+    it: ['Di nuovo qui. Le finestre sono rimaste accese, vedi.', 'Eccoti di nuovo.', 'Adesso mi ricordo di te. Credo di essermene sempre ricordato.'],
   },
   goalShort: S_WORDS.goal,
   tabs: { journey: S_WORDS.tab },
