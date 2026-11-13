@@ -11,6 +11,11 @@
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
 | `npm run shots:phone` | The same tour on a phone held upright (390 x 844, touch mode), into `shots/phone/`. |
 | `npm run shots:lab` | The lab frame state by state (question, after it, one task done with the panel open, folded and full screen, done with the panel open and folded, theory, done in full screen), the first state of every station and a mid state of the slider stations, on a desktop window and a phone, into `shots/lab/` (`OUT2=/dir` copies them). It also reports text cut with an ellipsis. The tasks are done with real drags. `STATION=lamps:0` picks the station walked through. |
+| `npm run build:player` | The prebuilt player: the engine without a course, `dist/player.html` (about 2.2 MB, a little smaller than a course build). Courses are put into it later without a build (below, "The prebuilt player"). |
+| `npm run build:play` | The `/play/` page, `dist/play/index.html` (about 80 KB): course files in, a game out, in the browser. It fetches `player.html` from its own folder. |
+| `npm run shots:ready` | Every station of the pocket demo and of the pattern gallery (`tests/fixtures/patterns/`), before the prediction, after one task and done, desktop and phone, into `shots/ready/`, copied to `/tmp/ready-*.png`. Tasks are done with real pointer events by reading each task's `when`. `COURSES=<slug>,...` picks the courses. |
+| `node scripts/packcheck.mjs <bundled.html> <packed.html> <course>` | Opens both games and compares what they expose: places, questions, League, and for every station its code, controls and a fingerprint of its first picture. |
+| `node scripts/playcheck.mjs [course folder]` | The `/play/` page end to end over http: files in, no problem reported, the game starts in the page; a broken course and a foreign import are refused in plain words. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`; then the duels (`scripts/duelshots.mjs`: a house duel at the start, after a hit, after a miss, won, a friendly rematch, lost; the League mid-way, lost and won) into `shots/duel/`, copied to `/tmp/duel-*.png`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
 | `npm run shots` (end) | Also runs `scripts/spineshots.mjs`: the main path in pictures (the guide's first speech, the tracker at the start, the mark over the next house, the three tabs of the menu in mid-game, a room's tracker, the League refused, the champion stepping aside, the ending card, free roaming), into `shots/spine*/`, copied to `/tmp/spine-*.png` (`OUT2=/dir` to change). |
 | `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
@@ -588,6 +593,74 @@ are not read aloud.
 
 Keys: 1 to 4 answer; arrows up and down move between answers and Enter answers; Q, W, E (or
 arrows left and right) pick the tone; Enter or Space for Next; Esc steps back.
+
+## The lab kit and ready-made labs
+
+Files: `src/lab/patterns/` (all new, small modules):
+
+| File | |
+|---|---|
+| `expr.js` | The expression language of the data: a tokenizer and a recursive-descent parser that build closures. No `eval`, no `Function`; only listed functions and the variables the caller names. Pure. |
+| `when.js` | The tries vocabulary: the learner record, `test(condition, record)`, `tracker(whens, did)`, `checkWhen` (the validator's messages). Pure. |
+| `specs.js` | What each pattern accepts (`PATTERNS`: verbs, what the learner does, what it fits) and `checkReady(station)`, used by the validator, the `/play/` page and the tests. Pure. |
+| `draw.js` | `C` (the frame's colours), `ink(pane)` (boxes, circles, lines, arrows, text that keeps 16 screen pixels and shrinks or wraps, emoji), declarative `shapes` in a 0..100 box. |
+| `author.js` | `stage`, `sliders`, `button`, `tasks`, `animate`, `spring`, `shuffle`, `hit`: what a custom station needs. |
+| `scene.js`, `sort.js`, `order.js` | The patterns: `sliderReveal` and `compare` (one picture language: plot, bars, shapes, regions, markers, readouts), `sort`, `order`. Each is a function `(ctx, data, whens) -> handle` and sets `ctx.stage.__ready` to its handle (the shots drive it). |
+| `index.js` | Exports everything; `PATTERN_FNS` maps a `kind` to its function. `lab/kit.js` re-exports it all, so a lab file imports from one place. |
+| `mount.js` | `readyMount(station)`: mounts the pattern named by `station.ready.kind` with its data. |
+
+`course/labs.js` decides what a station runs: the course's own code for that station id if there is
+any, else the pattern of `"ready"`, else the notice "no code yet". Code is looked up when the
+station opens, not when the table is built (the packed player loads lab files a moment after
+start-up). A task written `{ text, when }` reaches the frame as its text, and the conditions as
+`station.when`; the frame passes the station to the code as `ctx.station`.
+
+**Adding a pattern.** Write `src/lab/patterns/<name>.js` exporting a function `(ctx, data, whens)`
+built on `stage` and `tasks` (lay out for `pane.upright`, fonts through `d.text`, `ctx.hint` for
+each task, one strong effect with `spring` or `animate`, `ctx.stage.__ready = handle`). Register it
+in `index.js` (`PATTERN_FNS`), describe it and check its data in `specs.js` (`PATTERNS`,
+`checkReady`: messages that say what to write), add its kind to the schema's `ready.kind` enum,
+a good and a bad example to `tests/patterns.test.mjs`, a complete example to
+`references/8-ready-labs.md` (the test validates it), and a station to the gallery fixture
+`tests/fixtures/patterns/` for `npm run shots:ready`. Then look at the pictures.
+
+Built: `slider-reveal`, `compare`, `sort`, `order`. Not built (the plan named them): `mix`,
+`threshold`, `match`, `label`, `what-if`, `predict-curve`. Their verbs (`combine`, `count`,
+`pair`, `label`, `nudge`, `sketch`, `reveal`, `gap`) exist in `when.js` for custom code; the
+demo's "Guess the curve" is a predict-curve written by hand with the kit.
+
+## The prebuilt player
+
+The same engine can bundle a course at build time (as always: `scripts/use-course.mjs` writes
+`_data.js` and `_active.js` with the course inside) or read it at run time:
+`use-course.mjs --player` writes versions of those two files that read
+`<script type="application/json" id="mnemo-course">` (`src/course/payload.js`), and
+`npm run build:player` builds that into `dist/player.html` with the placeholder empty.
+
+Packing (`src/course/packing.js`, pure, shared by `scripts/pack.mjs` and the `/play/` page):
+
+1. the course is validated (`validateCourse` of the knowledge-base skill: the same function as the
+   command line);
+2. each lab file (and `anims.js`) is kept as an ES module, its engine imports rewritten to read
+   `globalThis.__mnemoKit` (`src/lab/api.js`: `lab/shell.js`, `lab/kit.js`, `lab/patterns/index.js`,
+   `systems/audio.js`); any other import, a dynamic `import()` or an `export ... from` is refused
+   with the file and line;
+3. stations with neither code (the keys of `export default { ... }`, read without running the
+   file) nor `"ready"` are named and refused;
+4. `{ slug, course, world, labs, anims }` goes into the placeholder as JSON with `<` escaped; the
+   title and `lang` of the page follow the course.
+
+At start-up the player's `_active.js` loads each lab module from a Blob URL once every engine
+module has run (`LOADED`); stations wait for it. Seeds, saves and everything else are as in a
+bundled build: the save key and the town come from the course, not from the file. The player
+holds the whole kit, so a packed game is a few kilobytes larger than its course's data.
+
+`/play/` (`player/index.html`, `player/play.js`) takes files, a folder or pasted `course.json`,
+validates and packs in the browser, starts the game in an iframe from a Blob URL, and downloads it
+as one file. Nothing is uploaded; the page says so, and says that lab code runs in the page.
+CI (`.github/workflows/build.yml`) builds the player and the page, publishes them at `/play/`,
+packs `courses/pocket-demo` with `pack.mjs` and publishes it at `/pocket-demo/`, and runs
+`packcheck.mjs` (packed chroma and packed demo against their bundled builds) and `playcheck.mjs`.
 
 ## Sound
 

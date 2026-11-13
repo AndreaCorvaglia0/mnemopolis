@@ -49,6 +49,21 @@ jobs:
             fi
           done
           echo '</ul>' >> site/index.html
+      - name: Prebuilt player, the /play/ page, and games packed without a build
+        # pack.mjs needs no packages and no bundler: the demo at /pocket-demo/ is made that way, and the
+        # packed games are compared with their bundled builds (places, questions, every station)
+        run: |
+          npm --prefix engine run build:player
+          npm --prefix engine run build:play
+          mkdir -p site/play && cp engine/dist/play/index.html site/play/ && cp engine/dist/player.html site/play/
+          ls -l site/play
+          cp site/chroma/index.html /tmp/chroma-bundled.html && cp site/pocket-demo/index.html /tmp/pocket-demo-bundled.html
+          node scripts/pack.mjs courses/chroma /tmp/chroma-packed.html
+          node scripts/pack.mjs courses/pocket-demo site/pocket-demo/index.html
+          node engine/scripts/packcheck.mjs /tmp/chroma-bundled.html /tmp/chroma-packed.html courses/chroma
+          node engine/scripts/packcheck.mjs /tmp/pocket-demo-bundled.html site/pocket-demo/index.html courses/pocket-demo
+          node engine/scripts/playcheck.mjs courses/pocket-demo
+          echo '<p><a href="play/">Make a game from a course</a>: no install, nothing uploaded.</p>' >> site/index.html
       - uses: actions/upload-artifact@v4
         with:
           name: games

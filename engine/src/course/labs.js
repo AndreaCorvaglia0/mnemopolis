@@ -5,14 +5,25 @@
 //   UPPER_LABS[id]   the advanced stations of that house, shown upstairs (mechanics/floors/);
 //                    saved as state.done['id+up:<stationId>']. Only houses that have some.
 import { DATA } from './_data.js';
-import { MOUNTS } from './_active.js';
+import { MOUNTS, LOADED } from './_active.js';
+import { readyMount } from '../lab/patterns/mount.js';
 import { isGround } from '../mechanics/floors/plan.js';
 
 const missing = (ctx) => { ctx.stage.append(Object.assign(document.createElement('div'), { className: 'lab-box', style: 'padding:24px;color:#ffb3a8', textContent: 'This station is designed in course.json but has no code yet.' })); };
 
+// Code is looked up when it is used, not when this table is built: in the prebuilt player the
+// course's lab files arrive a moment after start-up (LOADED). Custom code wins over a "ready"
+// pattern (lab/patterns/). A task may be { text, when } (ready labs): the frame shows the text.
+const custom = (p, s) => MOUNTS[p.id]?.[s.id];
 const labOf = (p, list) => ({
-  title: p.lab.title, stepper: p.type === 'process', wide: list.some((s) => MOUNTS[p.id]?.[`${s.id}Code`]),
-  stations: list.map((s) => ({ ...s, short: s.id, zone: s.beat || '', code: MOUNTS[p.id]?.[`${s.id}Code`], mount: MOUNTS[p.id]?.[s.id] || missing, coded: !!MOUNTS[p.id]?.[s.id] })),
+  title: p.lab.title, stepper: p.type === 'process', get wide() { return list.some((s) => MOUNTS[p.id]?.[`${s.id}Code`]); },
+  stations: list.map((s) => ({
+    ...s, short: s.id, zone: s.beat || '',
+    tries: (s.tries || []).map((t) => (typeof t === 'string' ? t : t.text)), when: (s.tries || []).map((t) => (typeof t === 'string' ? null : t.when || null)),
+    get code() { return MOUNTS[p.id]?.[`${s.id}Code`]; },
+    get coded() { return !!custom(p, s) || !!s.ready; },
+    mount: async (ctx) => { await LOADED; const m = custom(p, s) || (s.ready ? readyMount(s) : missing); return m(ctx); },
+  })),
 });
 // Built on first use: lab code imports the lab frame, which imports this file, so nothing here
 // may run while modules are still loading.

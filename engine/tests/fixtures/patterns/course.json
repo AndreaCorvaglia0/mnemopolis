@@ -1,0 +1,787 @@
+{
+ "$schema": "../../../../skills/knowledge-base/schema/course.schema.json",
+ "version": 1,
+ "id": "patterns",
+ "language": "en",
+ "title": "Pattern Gallery",
+ "subject": "The ready-made lab patterns",
+ "bigIdea": "Every pattern of the lab kit, once, for pictures and tests.",
+ "learner": "Developers of the engine.",
+ "goals": [
+  "Check every pattern on desktop and phone."
+ ],
+ "sources": [
+  {
+   "id": "fix",
+   "title": "Fixture",
+   "url": "https://example.org"
+  }
+ ],
+ "themes": [
+  {
+   "id": "kit",
+   "name": "Kit",
+   "idea": "The patterns."
+  }
+ ],
+ "concepts": [
+  {
+   "id": "reveal",
+   "theme": "kit",
+   "type": "mechanism",
+   "name": "Reveal",
+   "place": "Reveal House",
+   "objective": "Predict what the reveal pattern shows.",
+   "idea": "The Reveal pattern in a test course.",
+   "wrongBelief": "None: a fixture.",
+   "anchor": {
+    "type": "example",
+    "text": "A fixture."
+   },
+   "application": "Tests.",
+   "remember": [
+    "Fixture line."
+   ],
+   "explain": {
+    "q": "Why?",
+    "a": "Because."
+   },
+   "page": [
+    {
+     "title": "Fixture",
+     "text": "A fixture page."
+    }
+   ],
+   "lab": {
+    "title": "Reveal",
+    "stations": [
+     {
+      "id": "circle",
+      "tab": "Circle area",
+      "goal": "The area of a circle grows with the square of its radius.",
+      "pattern": "cause-effect",
+      "object": "Fixture object.",
+      "action": "Acts on it.",
+      "surprise": "Fixture surprise.",
+      "predict": {
+       "q": "Double the radius. The area becomes...",
+       "options": [
+        "twice as big",
+        "four times as big",
+        "the same"
+       ],
+       "answer": 1
+      },
+      "tries": [
+       {
+        "text": "Set the radius to 2 cm.",
+        "when": {
+         "reach": {
+          "control": "r",
+          "value": 2
+         }
+        }
+       },
+       {
+        "text": "Double it to 4 cm and read the area.",
+        "when": {
+         "reach": {
+          "control": "r",
+          "value": 4
+         }
+        }
+       }
+      ],
+      "takeaway": "Fixture takeaway with <b>bold</b>.",
+      "source": "A test fixture of the ready-made patterns.",
+      "ready": {
+       "kind": "slider-reveal",
+       "caption": "A circle and its area",
+       "controls": [
+        {
+         "id": "r",
+         "label": "Radius",
+         "min": 0.5,
+         "max": 4,
+         "step": 0.1,
+         "value": 1,
+         "unit": "cm"
+        }
+       ],
+       "vars": {
+        "A": "pi*r^2"
+       },
+       "plot": {
+        "x": {
+         "min": 0,
+         "max": 4,
+         "label": "radius (cm)"
+        },
+        "y": {
+         "min": 0,
+         "max": 52,
+         "label": "area (cm²)"
+        }
+       },
+       "layers": [
+        {
+         "shapes": [
+          {
+           "circle": [
+            50,
+            50,
+            "10*r"
+           ],
+           "color": "accent",
+           "opacity": 0.85,
+           "glow": true
+          },
+          {
+           "text": "r = {r:1} cm",
+           "at": [
+            50,
+            92
+           ],
+           "size": 7
+          }
+         ]
+        },
+        {
+         "region": [
+          3,
+          4
+         ],
+         "when": "r >= 3",
+         "label": "more than 28 cm²"
+        },
+        {
+         "curve": "pi*x^2",
+         "label": "area = π r²"
+        },
+        {
+         "marker": [
+          "r",
+          "A"
+         ],
+         "label": "{A:1} cm²"
+        },
+        {
+         "readout": "Double the radius: area × 4. Now {A:1} cm²"
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "questions": [
+    {
+     "level": 1,
+     "q": "Fixture question one about Reveal?",
+     "options": [
+      "Right",
+      "Wrong one",
+      "Wrong two"
+     ],
+     "answer": 0,
+     "why": "Fixture.",
+     "traps": [
+      null,
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question two about Reveal?",
+     "options": [
+      "Wrong one",
+      "Right",
+      "Wrong two"
+     ],
+     "answer": 1,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      null,
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question three about Reveal?",
+     "options": [
+      "Wrong one",
+      "Wrong two",
+      "Right"
+     ],
+     "answer": 2,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough.",
+      null
+     ]
+    }
+   ]
+  },
+  {
+   "id": "versus",
+   "theme": "kit",
+   "type": "mechanism",
+   "name": "Versus",
+   "place": "Versus House",
+   "objective": "Predict what the versus pattern shows.",
+   "idea": "The Versus pattern in a test course.",
+   "wrongBelief": "None: a fixture.",
+   "anchor": {
+    "type": "example",
+    "text": "A fixture."
+   },
+   "application": "Tests.",
+   "remember": [
+    "Fixture line."
+   ],
+   "explain": {
+    "q": "Why?",
+    "a": "Because."
+   },
+   "page": [
+    {
+     "title": "Fixture",
+     "text": "A fixture page."
+    }
+   ],
+   "lab": {
+    "title": "Versus",
+    "stations": [
+     {
+      "id": "brake",
+      "tab": "Wet road",
+      "goal": "On a wet road the same car needs a longer stopping distance.",
+      "pattern": "cause-effect",
+      "object": "Fixture object.",
+      "action": "Acts on it.",
+      "surprise": "Fixture surprise.",
+      "tries": [
+       {
+        "text": "Drive at 50 km/h on both roads.",
+        "when": {
+         "reach": {
+          "control": "kmh",
+          "value": 50
+         }
+        }
+       },
+       {
+        "text": "Go up to 100 km/h.",
+        "when": {
+         "cross": {
+          "control": "kmh",
+          "above": 95
+         }
+        }
+       }
+      ],
+      "takeaway": "Fixture takeaway with <b>bold</b>.",
+      "source": "A test fixture of the ready-made patterns.",
+      "ready": {
+       "kind": "compare",
+       "controls": [
+        {
+         "id": "kmh",
+         "label": "Speed",
+         "min": 20,
+         "max": 130,
+         "step": 5,
+         "value": 50,
+         "unit": "km/h"
+        }
+       ],
+       "cases": [
+        {
+         "id": "dry",
+         "label": "Dry road",
+         "short": "wet",
+         "vars": {
+          "mu": 0.7
+         }
+        },
+        {
+         "id": "wet",
+         "label": "Wet road",
+         "short": "dry",
+         "vars": {
+          "mu": 0.4
+         }
+        }
+       ],
+       "vars": {
+        "v": "kmh/3.6",
+        "d": "v^2/(2*mu*9.81)"
+       },
+       "layers": [
+        {
+         "shapes": [
+          {
+           "rect": [
+            0,
+            70,
+            100,
+            6
+           ],
+           "color": "grey"
+          },
+          {
+           "emoji": "🚗",
+           "at": [
+            "8",
+            64
+           ],
+           "size": 18
+          },
+          {
+           "rect": [
+            "8+min(d,100)*0.88",
+            52,
+            1.2,
+            24
+           ],
+           "color": "red"
+          },
+          {
+           "text": "{d:0} m",
+           "at": [
+            "8+min(d,100)*0.88",
+            42
+           ],
+           "size": 8,
+           "color": "gold"
+          }
+         ]
+        }
+       ],
+       "diff": {
+        "value": "d",
+        "label": "Braking distance",
+        "unit": "m",
+        "decimals": 0
+       }
+      }
+     }
+    ]
+   },
+   "questions": [
+    {
+     "level": 1,
+     "q": "Fixture question one about Versus?",
+     "options": [
+      "Right",
+      "Wrong one",
+      "Wrong two"
+     ],
+     "answer": 0,
+     "why": "Fixture.",
+     "traps": [
+      null,
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question two about Versus?",
+     "options": [
+      "Wrong one",
+      "Right",
+      "Wrong two"
+     ],
+     "answer": 1,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      null,
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question three about Versus?",
+     "options": [
+      "Wrong one",
+      "Wrong two",
+      "Right"
+     ],
+     "answer": 2,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough.",
+      null
+     ]
+    }
+   ],
+   "callbacks": [
+    {
+     "to": "reveal",
+     "text": "A call-back."
+    }
+   ]
+  },
+  {
+   "id": "bins",
+   "theme": "kit",
+   "type": "mechanism",
+   "name": "Bins",
+   "place": "Bins House",
+   "objective": "Predict what the bins pattern shows.",
+   "idea": "The Bins pattern in a test course.",
+   "wrongBelief": "None: a fixture.",
+   "anchor": {
+    "type": "example",
+    "text": "A fixture."
+   },
+   "application": "Tests.",
+   "remember": [
+    "Fixture line."
+   ],
+   "explain": {
+    "q": "Why?",
+    "a": "Because."
+   },
+   "page": [
+    {
+     "title": "Fixture",
+     "text": "A fixture page."
+    }
+   ],
+   "lab": {
+    "title": "Bins",
+    "stations": [
+     {
+      "id": "fruit",
+      "tab": "Fruit or not",
+      "goal": "Botanically, a fruit is the part that holds the seeds.",
+      "pattern": "cause-effect",
+      "object": "Fixture object.",
+      "action": "Acts on it.",
+      "surprise": "Fixture surprise.",
+      "predict": {
+       "q": "A tomato is botanically...",
+       "options": [
+        "a vegetable",
+        "a fruit",
+        "a root"
+       ],
+       "answer": 1
+      },
+      "tries": [
+       {
+        "text": "Put the tomato where it belongs.",
+        "when": {
+         "place": {
+          "item": "tomato",
+          "bin": "fruit"
+         }
+        }
+       },
+       {
+        "text": "Sort every card correctly.",
+        "when": {
+         "place": {
+          "correct": true
+         }
+        }
+       }
+      ],
+      "takeaway": "Fixture takeaway with <b>bold</b>.",
+      "source": "A test fixture of the ready-made patterns.",
+      "ready": {
+       "kind": "sort",
+       "bins": [
+        {
+         "id": "fruit",
+         "label": "Fruit",
+         "emoji": "🌸"
+        },
+        {
+         "id": "other",
+         "label": "Other part",
+         "emoji": "🌿"
+        }
+       ],
+       "cards": [
+        {
+         "id": "tomato",
+         "label": "Tomato",
+         "emoji": "🍅",
+         "bin": "fruit",
+         "why": "it grows from the flower and holds the seeds."
+        },
+        {
+         "id": "cucumber",
+         "label": "Cucumber",
+         "emoji": "🥒",
+         "bin": "fruit",
+         "why": "its seeds are inside: a fruit."
+        },
+        {
+         "id": "carrot",
+         "label": "Carrot",
+         "emoji": "🥕",
+         "bin": "other",
+         "why": "a root, with no seeds."
+        },
+        {
+         "id": "potato",
+         "label": "Potato",
+         "emoji": "🥔",
+         "bin": "other",
+         "why": "a swollen underground stem (a tuber)."
+        },
+        {
+         "id": "apple",
+         "label": "Apple",
+         "emoji": "🍎",
+         "bin": "fruit",
+         "why": "the core holds the seeds."
+        },
+        {
+         "id": "lettuce",
+         "label": "Lettuce",
+         "emoji": "🥬",
+         "bin": "other",
+         "why": "leaves."
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "questions": [
+    {
+     "level": 1,
+     "q": "Fixture question one about Bins?",
+     "options": [
+      "Right",
+      "Wrong one",
+      "Wrong two"
+     ],
+     "answer": 0,
+     "why": "Fixture.",
+     "traps": [
+      null,
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question two about Bins?",
+     "options": [
+      "Wrong one",
+      "Right",
+      "Wrong two"
+     ],
+     "answer": 1,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      null,
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question three about Bins?",
+     "options": [
+      "Wrong one",
+      "Wrong two",
+      "Right"
+     ],
+     "answer": 2,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough.",
+      null
+     ]
+    }
+   ],
+   "callbacks": [
+    {
+     "to": "reveal",
+     "text": "A call-back."
+    }
+   ]
+  },
+  {
+   "id": "chain",
+   "theme": "kit",
+   "type": "mechanism",
+   "name": "Chain",
+   "place": "Chain House",
+   "objective": "Predict what the chain pattern shows.",
+   "idea": "The Chain pattern in a test course.",
+   "wrongBelief": "None: a fixture.",
+   "anchor": {
+    "type": "example",
+    "text": "A fixture."
+   },
+   "application": "Tests.",
+   "remember": [
+    "Fixture line."
+   ],
+   "explain": {
+    "q": "Why?",
+    "a": "Because."
+   },
+   "page": [
+    {
+     "title": "Fixture",
+     "text": "A fixture page."
+    }
+   ],
+   "lab": {
+    "title": "Chain",
+    "stations": [
+     {
+      "id": "water",
+      "tab": "Water cycle",
+      "goal": "Water moves in a cycle: each stage needs the one before.",
+      "pattern": "cause-effect",
+      "object": "Fixture object.",
+      "action": "Acts on it.",
+      "surprise": "Fixture surprise.",
+      "tries": [
+       {
+        "text": "Run the sequence once.",
+        "when": {
+         "run": true
+        }
+       },
+       {
+        "text": "Put the stages in order and run it.",
+        "when": {
+         "run": "correct"
+        }
+       }
+      ],
+      "takeaway": "Fixture takeaway with <b>bold</b>.",
+      "source": "A test fixture of the ready-made patterns.",
+      "ready": {
+       "kind": "order",
+       "steps": [
+        {
+         "id": "evap",
+         "label": "The sun warms the sea: water evaporates",
+         "emoji": "☀️",
+         "result": "Water vapour rises.",
+         "early": "Evaporation needs liquid water warmed by the sun."
+        },
+        {
+         "id": "cond",
+         "label": "Vapour cools high up and condenses",
+         "emoji": "☁️",
+         "result": "Clouds form.",
+         "early": "There is no vapour to condense yet."
+        },
+        {
+         "id": "rain",
+         "label": "Droplets grow and fall",
+         "emoji": "🌧️",
+         "result": "Rain or snow.",
+         "early": "Rain needs clouds first."
+        },
+        {
+         "id": "flow",
+         "label": "Rivers carry it back to the sea",
+         "emoji": "🌊",
+         "result": "The sea is filled again.",
+         "early": "Nothing has fallen yet to flow back."
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "questions": [
+    {
+     "level": 1,
+     "q": "Fixture question one about Chain?",
+     "options": [
+      "Right",
+      "Wrong one",
+      "Wrong two"
+     ],
+     "answer": 0,
+     "why": "Fixture.",
+     "traps": [
+      null,
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question two about Chain?",
+     "options": [
+      "Wrong one",
+      "Right",
+      "Wrong two"
+     ],
+     "answer": 1,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      null,
+      "Another trap that is explained in a sentence long enough."
+     ]
+    },
+    {
+     "level": 2,
+     "q": "Fixture question three about Chain?",
+     "options": [
+      "Wrong one",
+      "Wrong two",
+      "Right"
+     ],
+     "answer": 2,
+     "why": "Fixture.",
+     "traps": [
+      "A trap that is explained in a sentence long enough.",
+      "Another trap that is explained in a sentence long enough.",
+      null
+     ]
+    }
+   ],
+   "callbacks": [
+    {
+     "to": "reveal",
+     "text": "A call-back."
+    }
+   ]
+  }
+ ],
+ "relations": [
+  {
+   "from": "versus",
+   "to": "reveal",
+   "type": "same-structure"
+  },
+  {
+   "from": "bins",
+   "to": "chain",
+   "type": "contrasts"
+  },
+  {
+   "from": "chain",
+   "to": "reveal",
+   "type": "contrasts"
+  }
+ ],
+ "finalCheck": {
+  "name": "League",
+  "size": 4,
+  "pass": 0.6
+ }
+}

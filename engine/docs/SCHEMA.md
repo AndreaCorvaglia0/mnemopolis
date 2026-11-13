@@ -66,6 +66,16 @@ A house gets an upper floor when its concept has an advanced station, a riddle u
 `further` link, and is drawn as a room (not a workshop, not a museum). The ground floor then has
 a staircase, opened by the owner's key (`state.keys[id]`).
 
+## A station without code: `ready`
+
+A station may name a ready-made pattern and give its data instead of code:
+`"ready": { "kind": "slider-reveal" | "compare" | "sort" | "order", ... }`. Its tasks are then
+written `{ "text": "...", "when": { "<verb>": ... } }`, so that they can tick. The data of each
+kind, the tries vocabulary and the expression language are in
+`skills/knowledge-base/references/8-ready-labs.md`; the validator checks them. Code in
+`labs/<conceptId>.js` for the same station id wins over `ready`. Custom code is the normal case;
+a pattern can also be called from code (`sliderReveal(ctx, data)`) and extended.
+
 ## A station's code
 
 ```js
@@ -83,6 +93,7 @@ the picture is visible from the first moment, frozen while the prediction questi
 | | |
 |---|---|
 | `ctx.stage` | The picture area: most of the screen. Append a `canvasPane` or your own elements. |
+| `ctx.station` | The station as `course.json` gives it: texts, `ready` data, and `ctx.station.when[i]`, the condition of task `i` when it is written `{ text, when }`. |
 | `ctx.controls` | Sliders, switches, read-outs: in the panel beside the picture, directly under the picture on a phone. Hidden until the prediction is made. |
 | `ctx.did(i)` | Task `i` of the station's `tries` is done. When all are, the verdict and the takeaway appear. Calls made before the prediction are kept and shown after it. |
 | `ctx.reveal()` | Show the verdict and the takeaway now. |
@@ -93,6 +104,12 @@ the picture is visible from the first moment, frozen while the prediction questi
 | `ctx.phase()`, `ctx.said()` | Optional. `'ask'`, `'explore'` or `'done'`, and the index of the answer picked (or `null`). |
 | `ctx.hint(fn)` | Optional. `fn(k)` says where to act for task `k`: `[x, y]` in the units of your `canvasPane`, a control element (or a list), or `{ el, at }`. The frame outlines the control while the task is current and pulses a ring at the point when the learner taps the step. `pane.hint(fn)` is the same for points only. |
 | `ctx.nudge(text, ms)` | Optional. A short line shown for a few seconds in the step card and the bar under the picture. Use it once, when a hint becomes useful ("Point at the overlap to read the light there"), instead of a permanent read-out. |
+
+The lab kit (`lab/kit.js`, also re-exported there: `stage`, `sliders`, `button`, `tasks`, `ink`,
+`C`, `animate`, `spring`, `shuffle`, `hit`, the expression language, the patterns) makes a
+station shorter: see "The lab author's card" in `references/8-ready-labs.md`. In a game packed
+into the prebuilt player, lab code may import only `lab/kit.js`, `lab/shell.js`,
+`lab/patterns/index.js` and `systems/audio.js`.
 
 `canvasPane(stage, w, hgt, caption, { portrait: [w2, h2] })` (in `lab/kit.js`) is the usual
 picture. You draw in your own units (`w` x `hgt`); the pane scales that box to the largest size
