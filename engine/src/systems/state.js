@@ -19,6 +19,11 @@ const fresh = () => ({
   musicOff: false,
   voiceOff: false, // read-aloud switched off by the player (only when the course has a voice)
   grassOff: false, // tall-grass questions switched off by the player
+  // ambient life (src/mechanics/): secrets found and paw prints of the trail (no points, no progress),
+  // obstacles opened, tools carried (none can be had yet: they will come from a shop)
+  life: { found: {}, prints: {} },
+  opened: {},
+  tools: {},
 });
 
 export const state = fresh();

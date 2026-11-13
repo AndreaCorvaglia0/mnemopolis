@@ -33,12 +33,29 @@
   `world.json`; two homes in the example course.
 - Tests with Node's runner (`npm test`), run by the CI workflow.
 
+- Ambient life (`engine/src/mechanics/`, the first resident of the place for game dynamics): the
+  player thinks aloud (double tap or T, a thought bubble; one thought in four or five nudges toward
+  the next house), animals that move and hide (by theme and time of day), rare secrets and one small
+  mystery (the lantern cat and its rhyme), a discoveries page, obstacles on optional side places
+  that will open with tools. Switchable in `world.json` (`"life"`), English and Italian, deterministic,
+  checked over hundreds of towns: nothing of it stands in the way of the course.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
    landscapes the first one does not.
+2. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
+   (`needs`), `canPass` and the saved `state.tools` / `state.opened` exist (`engine/src/mechanics/obstacles/`);
+   what waits behind them is a placeholder listed as "sealed".
 
 ## Later
+
+- Ambient life, ideas left out on purpose: a door knocker that answers, a weathervane on a roof,
+  footprints in snow or sand that lead somewhere, a broken bridge plank to a tiny island, birds on
+  the roofs at dusk, an attic hatch indoors, a canary; animals in the workshop and the museum;
+  musings read aloud; the night sky gaining a constellation (the town is seen from above, so there
+  is no sky to put it in: the night-sky painting carries it instead); per-course lines in
+  `world.json`; a third language.
 
 - Labs of the example course drawn for small screens (some canvas text is small on a phone).
 

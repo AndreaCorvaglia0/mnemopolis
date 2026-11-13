@@ -10,6 +10,7 @@ import { drawText, textWidth } from '../art/buildings.js';
 import { P } from '../art/palette.js';
 import { GEN } from '../gen/core.js';
 import { generateRoom } from '../gen/interior/index.js';
+import { attachRoomLife } from '../mechanics/room.js';
 
 const RW = 15, RH = 11, T = 16; // the size of the standard room
 
@@ -170,6 +171,7 @@ export class Interior extends Phaser.Scene {
     cam.setRoundPixels(true);
     this.ui.setLocation(place.name, 'room');
     this.nav = new TapNav(this, { w: RW, h: RH });
+    this.life = attachRoomLife(this); // optional ambient life (src/mechanics/)
     this.layout();
     this.scale.on('resize', this.layout, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.layout, this));
@@ -216,6 +218,7 @@ export class Interior extends Phaser.Scene {
 
   update(time) {
     this.fire?.update(time);
+    this.life?.update(time);
     const k = this.keys;
     if (this.ui.busy || this.leaving || this.player.moving) {
       Phaser.Input.Keyboard.JustDown(k.SPACE); Phaser.Input.Keyboard.JustDown(k.ENTER); Phaser.Input.Keyboard.JustDown(k.E);
@@ -223,7 +226,7 @@ export class Interior extends Phaser.Scene {
     }
     const [fx, fy] = this.player.facing();
     this.ui.setPrompt(this.master.tx === fx && this.master.ty === fy ? `Space  Talk to ${MASTERS[this.id].name}`
-      : this.exhibitTiles.has(`${fx},${fy}`) ? 'Space  Read the wall' : fx === this.room.lab[0] && fy === this.room.lab[1] ? 'Space  Enter the lab' : null);
+      : this.exhibitTiles.has(`${fx},${fy}`) ? 'Space  Read the wall' : fx === this.room.lab[0] && fy === this.room.lab[1] ? 'Space  Enter the lab' : this.life?.prompt(fx, fy) || null);
     if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) return this.interact();
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
@@ -246,6 +249,7 @@ export class Interior extends Phaser.Scene {
     if (this.master.tx === fx && this.master.ty === fy) return this.talkMaster();
     if (this.exhibitTiles.has(`${fx},${fy}`)) return this.ui.reading(this.id);
     if (fx === this.room.lab[0] && fy === this.room.lab[1]) return this.ui.lab(this.id);
+    this.life?.use(fx, fy);
   }
 
   // The master says one line and offers what the room has. No lectures.

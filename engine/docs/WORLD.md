@@ -286,3 +286,14 @@ theme's `plaza`, `side` or `corner` lists. Two tiles wide: add it to `WIDE`. **A
 variant:** a `dressing` object on the theme with the same fields (`fence`, `plots`, `plaza`,
 `side`, `corner`, `water`, `lantern`, `flowers`, `cloth`, `fruit`, `paint`). `__hb.gallery()`
 shows every piece in the three themes on its last rows.
+
+## Ambient life
+
+On top of the generated town, an optional layer (`src/mechanics/`, see "Ambient life" in
+`ENGINE.md`) adds thoughts, animals, secrets and obstacles. It changes the town in one way only:
+obstacles (a boulder, a fallen trunk, a thicket, a locked garden gate with its small hedge, a
+cellar hatch) are solid. They stand only at the mouth of optional side places, never on a door
+approach or a tile the course needs, and every walking distance the course needs is the same with
+them closed (`npm run check` and `npm run stress` prove it). `"life": false` in `world.json` leaves
+the town exactly as the rest of this page describes; `"life": {"obstacles": false}` keeps the rest
+of the layer without them.

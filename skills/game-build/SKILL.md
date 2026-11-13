@@ -110,6 +110,7 @@ correctness: every station must still work as specified.
 | Screenshots | one pass | `npm run shots` | `npm run shots` and `npm run shots:phone` |
 | Labs | build once | build once | refine after a first play |
 | Voice (read aloud) | `"voice": true` in `world.json` | `"voice": true` | `"voice": true`, plus a `say` map for acronyms and symbols the voice gets wrong |
+| Ambient life (thoughts, animals, secrets, obstacles) | on, nothing to do | on, nothing to do | on, plus one or two secrets themed on the course: `"life": {"secrets": [{"kind": "note", "text": "...", "near": "<conceptId>"}]}` in `world.json` (the text is shown as written: accurate, short, optional) |
 
 The generators can be switched off in `courses/<slug>/world.json`
 (`"gen": {"facade": false, "interior": false, "dressing": false}`) and a theme chosen

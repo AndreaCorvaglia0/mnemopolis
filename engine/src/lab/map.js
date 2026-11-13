@@ -4,6 +4,8 @@ import { overlay, h } from './shell.js';
 import { COURSE, DISTRICTS, PLACES, QUESTIONS } from '../data/content.js';
 import { LABS } from '../course/labs.js';
 import { state } from '../systems/state.js';
+import { LIFE, tr, fill, WORDS } from '../mechanics/config.js';
+import { lifePlan } from '../mechanics/active.js';
 
 const COL = ['#6f93e0', '#ef7a6d', '#4fd1c5', '#f0a45a'];
 const NATURE = { river: 'across the river', shore: 'on the shore', forest: 'in the forest', meadow: 'in the meadow', hill: 'on the hill' };
@@ -23,9 +25,17 @@ const CSS = `
 .mm-chips{display:flex;gap:6px;flex-wrap:wrap}.mm-chip{font-size:12px;border:1px solid #2a3240;border-radius:999px;padding:1px 8px;color:#6f7789}
 .mm-chip.on{border-color:#4fd1c5;color:#4fd1c5}.mm-chip.gold{border-color:#ffcf5a;color:#ffcf5a}
 .mm-tag{position:absolute;top:-9px;right:10px;background:#ffcf5a;color:#1c1a12;font-size:11px;font-weight:700;border-radius:5px;padding:0 6px}
+.mm-jr{background:#1c1a12;border:1px solid #ffcf5a;color:#ffcf5a;border-radius:8px;min-height:44px;padding:0 16px;font:inherit;cursor:pointer}
 .mm-foot{max-width:1180px;margin:18px auto 0;color:#8b93a7;font-size:14px;display:flex;gap:18px;flex-wrap:wrap;justify-content:space-between}
 `;
 let styled = false;
+// the discoveries of the ambient-life layer (src/mechanics/), when it has secrets: a button that
+// opens their page (the map resolves 'journal' and the interface opens it)
+function discoveries() {
+  if (!LIFE.secrets) return null;
+  const list = lifePlan().secrets.filter((s) => s.kind !== 'sealed'), n = list.filter((s) => state.life?.found?.[s.id]).length;
+  return h('button', { type: 'button', class: 'mm-jr' }, `${tr(WORDS.journal)}  ·  ${fill(tr(WORDS.count), { n, m: list.length })}`);
+}
 
 export function openMap() {
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
@@ -47,14 +57,15 @@ export function openMap() {
     h('div', { class: 'mm-cols' }, DISTRICTS.map((d, i) => h('div', { class: 'mm-d', style: `--c:${COL[i % COL.length]}` },
       h('div', { class: 'where' }, `${NATURE[d.nature] || ''} · landmark: ${d.landmark || 'obelisk'}`), h('h3', {}, d.name), h('div', { class: 'idea' }, d.idea),
       PLACES.filter((p) => p.district === d).map(leaf)))),
-    h('div', { class: 'mm-foot' }, h('span', {}, `Insight: ${state.insight}${state.passedLeague ? `  ·  ${COURSE.league.name} passed` : ''}`), h('span', {}, 'Houses are numbered in the order of the learning path.')));
+    h('div', { class: 'mm-foot' }, h('span', {}, `Insight: ${state.insight}${state.passedLeague ? `  ·  ${COURSE.league.name} passed` : ''}`), h('span', {}, 'Houses are numbered in the order of the learning path.'), discoveries()));
   root.append(body);
   body.focus();
   root.dataset.ready = '1';
   return new Promise((resolve) => {
-    const done = () => { window.removeEventListener('keydown', key, true); root.remove(); resolve(); };
+    const done = (v) => { window.removeEventListener('keydown', key, true); root.remove(); resolve(v); };
+    root.querySelector('.mm-jr')?.addEventListener('click', () => done('journal'));
     const key = (e) => { if (e.key === 'Escape' || e.key === 'Tab') { e.preventDefault(); done(); } };
     window.addEventListener('keydown', key, true);
-    close.onclick = done;
+    close.onclick = () => done();
   });
 }

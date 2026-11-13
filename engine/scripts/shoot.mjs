@@ -1,6 +1,6 @@
 // Drive the built game in headless Chrome and take screenshots.
 // Usage: node shoot.mjs <html> <outdir> "<steps>"
-// steps: comma-separated: wait:ms | key:Name | hold:Name:ms | shot:name | eval:js | resize:w:h
+// steps: comma-separated: wait:ms | key:Name | hold:Name:ms | shot:name | eval:js | resize:w:h | dbl:js[:ms] | click:js
 import puppeteer from 'puppeteer-core';
 import { existsSync } from 'node:fs';
 
@@ -35,6 +35,13 @@ for (const s of steps) {
     while (Date.now() - t0 < 12000 && !(ok = await page.evaluate(decodeURIComponent(b)))) await new Promise((r) => setTimeout(r, 60));
     await page.keyboard.up(a); await new Promise((r) => setTimeout(r, 500));
     logs.push(`[walk ${a}] ${ok ? 'ok' : 'TIMEOUT'}`);
+  }
+  else if (cmd === 'dbl' || cmd === 'click') { // dbl:<encoded js returning [x, y] in page pixels>  a double click (or one click) there
+    const xy = await page.evaluate(decodeURIComponent(a));
+    await page.mouse.click(xy[0], xy[1]);
+    if (cmd === 'dbl') { await new Promise((r) => setTimeout(r, +(b || 140))); await page.mouse.click(xy[0], xy[1]); }
+    await new Promise((r) => setTimeout(r, 150));
+    logs.push(`[${cmd}] ${xy.map(Math.round)}`);
   }
   else if (cmd === 'mouse') { await page.mouse.move(+a, +b, { steps: 6 }); await new Promise((r) => setTimeout(r, 150)); }
   else if (cmd === 'mdown') await page.mouse.down();

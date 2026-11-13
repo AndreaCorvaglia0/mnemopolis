@@ -13,6 +13,7 @@
     "shots": "node scripts/tour.mjs",
     "shots:phone": "PHONE=1 node scripts/tour.mjs",
     "shots:lab": "node scripts/labshots.mjs",
+    "shots:life": "node scripts/lifeshots.mjs && PHONE=1 node scripts/lifeshots.mjs",
     "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\""
   },
   "dependencies": {

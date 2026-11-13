@@ -47,4 +47,11 @@ places.forEach((p, i) => {
 steps.push(`eval:${enc("(__game.scene.getScene('UI').showAtlas(),1)")}`, 'wait:1200', 'shot:98-map', 'key:Escape', 'wait:500', ...(PHONE ? [] : ['resize:1600:1300']), `eval:${enc('__hb.gallery()')}`, 'wait:800', 'shot:99-gallery');
 const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch' : '?lite&test' } });
 console.log(`Pictures are in ${out}. Open them.`);
+// the ambient-life layer (src/mechanics/): its own pictures, into shots/life (shots/life-phone), and
+// copied to OUT2 (default /tmp) as life-*.png
+const { LIFE } = await import('../src/mechanics/config.js');
+if (LIFE.on && !r.status) {
+  const l = spawnSync('node', [path.join(here, 'lifeshots.mjs')], { stdio: 'inherit', env: { ...process.env, OUT2: process.env.OUT2 || '/tmp' } });
+  if (l.status) process.exit(l.status);
+}
 process.exit(r.status || 0);

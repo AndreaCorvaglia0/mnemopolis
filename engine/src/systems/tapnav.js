@@ -7,13 +7,17 @@
 //   const dir = keyDir || this.nav.next()                 where it reads the arrow keys
 //   if (JustDown(SPACE) || ... || this.nav.act()) ...     where it reads the action key
 const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
-const T = 16;
+const T = 16, DOUBLE = 380;
 
 export class TapNav {
   // w, h: size of the walkable grid in tiles. redirect(x, y): optional, returns another tile to aim
   // for (the town sends a tap on a building to its door).
   constructor(scene, { w, h, redirect = null }) {
     Object.assign(this, { scene, w, h, redirect, path: [], target: null, pending: false });
+    // onDouble(tx, ty, worldPoint): optional, set by the ambient-life layer. A second tap on the same
+    // spot within DOUBLE ms is offered to it first; if it takes it (returns true), the walk the first
+    // tap started stops. A single tap is never delayed.
+    this.onDouble = null; this.last = null;
     this.marker = scene.add.graphics().setDepth(8999).setVisible(false);
     scene.input.on('pointerup', (p) => this.tap(p));
     scene.events.once('shutdown', () => { this.path = []; this.pending = false; });
@@ -30,6 +34,9 @@ export class TapNav {
     if (ui.input.hitTestPointer(p).length) return; // a button of the interface
     const wp = sc.cameras.main.getWorldPoint(p.x, p.y);
     let tx = Math.floor(wp.x / T), ty = Math.floor(wp.y / T);
+    const now = sc.time.now, l = this.last;
+    this.last = { t: now, x: tx, y: ty };
+    if (this.onDouble && l && now - l.t < DOUBLE && Math.abs(l.x - tx) <= 1 && Math.abs(l.y - ty) <= 1 && this.onDouble(tx, ty, { x: wp.x, y: wp.y })) { this.cancel(); this.last = null; return; }
     if (this.redirect) [tx, ty] = this.redirect(tx, ty) || [tx, ty];
     this.plan(tx, ty);
   }

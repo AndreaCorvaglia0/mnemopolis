@@ -9,6 +9,7 @@ import { townZoom } from '../systems/view.js';
 import { hash } from '../art/px.js';
 import { GEN } from '../gen/core.js';
 import { addDressing } from '../gen/dressing.js';
+import { attachTownLife } from '../mechanics/town.js';
 
 const TOD = {
   dusk: { dark: 0.44, tint: 0x2a1d55, lit: 0.95, glow: 0.85, beam: 0.6, fire: 0.75, sun: 0.55, spark: 0.9 },
@@ -54,6 +55,7 @@ export class Town extends Phaser.Scene {
     // a tap on a building means its door
     this.nav = new TapNav(this, { w: MAP_W, h: MAP_H, redirect: (x, y) => { const b = BUILDINGS.find((o) => !o.home && x >= o.x && x < o.x + o.w && y >= o.y && y < o.y + o.h); return b ? b.doors[0] : null; } });
     this.layout();
+    this.life = attachTownLife(this); // optional ambient life: thoughts, animals, secrets, obstacles (src/mechanics/)
     this.scale.on('resize', this.layout, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.layout, this));
     if (!this.registry.get('lite')) {
@@ -330,13 +332,14 @@ export class Town extends Phaser.Scene {
   // ---------- play ----------
   update(time) {
     this.updateLighting(time);
+    this.life?.update(time);
     const k = this.keys;
     if (this.ui.busy || this.locked || this.player.moving) {
       Phaser.Input.Keyboard.JustDown(k.SPACE); Phaser.Input.Keyboard.JustDown(k.ENTER); Phaser.Input.Keyboard.JustDown(k.E);
       return;
     }
     const [px, py] = this.player.facing(), near = this.npcAt(px, py);
-    this.ui.setPrompt(near ? `Space  Talk to ${near.def.name}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? 'Space  Read the sign' : this.objects.get(`${px},${py}`)?.kind === 'monument' ? 'Space  Look at the landmark' : null);
+    this.ui.setPrompt(near ? `Space  Talk to ${near.def.name}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? 'Space  Read the sign' : this.objects.get(`${px},${py}`)?.kind === 'monument' ? 'Space  Look at the landmark' : this.life?.prompt(px, py) || null);
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
     const tapped = !key && this.nav.walking, dir = key || this.nav.next();
@@ -352,6 +355,7 @@ export class Town extends Phaser.Scene {
     state.pos = { x, y, dir: this.player.dir };
     state.steps += 1;
     this.showWhere(x, y);
+    this.life?.step(x, y);
     if (state.steps % 8 === 0) save();
     const g = this.grassIndex.get(`${x},${y}`);
     if (g) {
@@ -390,6 +394,7 @@ export class Town extends Phaser.Scene {
     if (obj && obj.kind === 'monument') { sfx.select(); return this.ui.say(obj.lines, { name: obj.title }); }
     const door = this.doors.get(`${fx},${fy}`);
     if (door) return this.tryDoor(door);
+    this.life?.use(fx, fy);
   }
 
   async talk(npc) {
