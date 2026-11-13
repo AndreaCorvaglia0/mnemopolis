@@ -11,6 +11,7 @@ import { P } from '../art/palette.js';
 import { GEN } from '../gen/core.js';
 import { generateRoom } from '../gen/interior/index.js';
 import { attachRoomLife } from '../mechanics/room.js';
+import { houseDuel, challengeLabel } from '../mechanics/duel/index.js';
 
 const RW = 15, RH = 11, T = 16; // the size of the standard room
 
@@ -261,30 +262,15 @@ export class Interior extends Phaser.Scene {
     await ui.converse(m.name, { root: { say: m.hi, options: [
       { label: 'Open the lab', do: async () => { await ui.lab(id); return 'end'; } },
       { label: 'Show me the reading wall', do: async () => { await ui.reading(id); return 'end'; } },
-      { label: `Quiz me (${Math.min(3, pool.length)} questions)`, if: () => pool.length >= 2, do: async () => { await this.quizSeries(pool); return 'end'; } },
+      { label: challengeLabel(id), if: () => pool.length >= 2, do: async () => { await this.quizSeries(pool); return 'end'; } },
       { label: 'Bye' },
     ] } });
     this.master.face('down');
   }
 
-  // Up to three questions, easiest first. Esc leaves with no penalty; two right earns the house stamp.
-  async quizSeries(pool) {
-    const m = MASTERS[this.id], ui = this.ui;
-    const sh = Phaser.Utils.Array.Shuffle([...pool]), qs = [];
-    for (const st of [1, 2, 3]) { const q = sh.find((x) => x.stars === st); if (q) qs.push(q); }
-    for (const q of sh) if (qs.length < Math.min(3, pool.length) && !qs.includes(q)) qs.push(q);
-    qs.sort((x, y) => x.stars - y.stars);
-    let right = 0;
-    for (let i = 0; i < qs.length; i++) {
-      const r = await ui.quiz(qs[i], { banner: `Question ${i + 1} of ${qs.length}` });
-      if (r.ran) return;
-      if (r.right) right += 1;
-    }
-    if (right >= Math.min(2, qs.length) && !state.stamps[this.id]) {
-      state.stamps[this.id] = true;
-      save();
-      await ui.stamp(this.id);
-      await ui.say([m.stamp], { name: m.name });
-    } else await ui.say([`${right} of ${qs.length}.`], { name: m.name });
+  // The house duel with the host (src/mechanics/duel/): a duel of eloquence over this concept's
+  // questions. Esc steps back at any time; winning gives the badge and the key to the upper floor.
+  async quizSeries() {
+    await houseDuel(this.ui, this.id);
   }
 }
