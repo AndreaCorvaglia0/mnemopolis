@@ -62,6 +62,7 @@ consulted, or when the subject itself is unclear. The items of the brief:
 - **Care**: how much effort per unit of content: light, standard or curated (table below).
   Default: standard. Size and care are independent: any size can be combined with any care.
   Do not tie the number of lab stations to care, or the reverse.
+- **Core**: which concepts make the main story (below). Default: you choose, 4 to 6.
 - **Language** of the course.
 
 Write the choices in `brief.md` under "Decisions taken without the user". State in one line
@@ -90,6 +91,18 @@ they asked to approve the map first):
 4. anything you could not verify, and any choice that is theirs to make.
 
 If the user answers with changes while you work, apply them: changing the map early is cheap.
+
+## Core and extra
+
+The **core** is the minimum set of key ideas to take home in about one hour of play: it is what
+the game's main story requires (visit each core house, do its lab, beat its expert, then the final
+check). Every other concept is an **extra**, marked `"core": false` in `course.json`: its house
+stays in town for the curious, hinted at but never listed, and the final check does not ask about
+it. Any size of course has a core of roughly 4 to 6 concepts; a large course has more extras, not a
+bigger core. The core must tell a complete story of the subject on its own, start with the first
+concept of the path, and never require an extra. The validator prints the time of the core path
+and of everything, and warns when the core is over an hour. Write the choice in `brief.md`
+("Core"). Details in `references/3-path.md`.
 
 ## Limits
 

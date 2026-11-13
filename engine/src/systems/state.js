@@ -25,6 +25,12 @@ const fresh = () => ({
   life: { found: {}, prints: {} },
   opened: {},
   tools: {},
+  // the main path (src/mechanics/quest/): the ending seen, places seen from nearby (the town map
+  // shows them), seconds played, townsfolk who already congratulated
+  ended: false,
+  seen: {},
+  played: 0,
+  cheered: {},
 });
 
 export const state = fresh();

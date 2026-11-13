@@ -3,13 +3,14 @@ import { state, save, scoreAnswer } from '../systems/state.js';
 import { sfx, initAudio, toggleMute, setMusicOn, duckMusic } from '../systems/audio.js';
 import { openPlaque } from '../lab/museum.js';
 import { COURSE, TOPICS, PLACES, PLACE, DISTRICTS, QUESTIONS, LEAGUE } from '../data/content.js';
-import { openMap } from '../lab/map.js';
+import { Q } from '../mechanics/quest/active.js';
+import { Q_WORDS, trackerLine } from '../mechanics/quest/strings.js';
+import { openMenu } from '../mechanics/quest/menu.js';
+import { openEnding } from '../mechanics/quest/ending.js';
 import { touch } from '../systems/view.js';
 import { openLab } from '../lab/shell.js';
 import { openReading } from '../lab/reading.js';
-import { LIFE, tr, WORDS } from '../mechanics/config.js';
-import { lifePlan } from '../mechanics/active.js';
-import { openJournal } from '../mechanics/secrets/journal.js';
+import { LIFE, tr, fill, WORDS } from '../mechanics/config.js';
 import { leagueDuel } from '../mechanics/duel/index.js';
 import { available as voiceAvailable, isOn as voiceOn, isSpeaking, onChange as onVoice, listen, speak, stop as stopVoice, toggle as toggleVoice, VOICE } from '../systems/voice.js';
 
@@ -19,6 +20,8 @@ const DISPLAY = '"Pixelify Sans", monospace';
 const VW = 960, VH = 540; // virtual UI canvas; the camera scales it to the screen
 const C = { bg: 0x141629, bg2: 0x1e2240, line: 0xe9e2c9, inner: 0x3a3f6b, teal: 0x4fd1c5, gold: 0xffcf5a, coral: 0xff7a6b, green: 0x7ddc8a, text: '#f1ecd9', muted: '#9aa0c3' };
 const HUD_W = 100, HUD_H = 82;
+const TRACK_H = 30; // the tracker's pill, top right
+const ROOMS = ['Interior', 'Workshop', 'Museum'];
 const PORTRAIT_W = 600;
 // one colour per district, used on question chips, stamps and the map
 const DCOL = [0x3c5ea6, 0xb9463b, 0x2a8c87, 0xd9822f];
@@ -48,6 +51,11 @@ export class UI extends Phaser.Scene {
     this.placeHUD();
     this.scale.on('resize', () => { this.layout(); this.placeHUD(); });
     window.addEventListener('touchmode', () => { if (this.where) this.setLocation(...this.where); this.placeHUD(); });
+    // the main path: the tracker follows the state, whoever changed it (labs, duels, the League)
+    this.time.addEvent({ delay: 400, loop: true, callback: () => this.refreshQuest() });
+    // time played, for the ending card: counted while the page is visible, saved now and then
+    let tick = 0;
+    setInterval(() => { if (document.visibilityState !== 'visible' || !this.hud?.visible) return; state.played = (state.played || 0) + 5; if (++tick % 6 === 0) save(); }, 5000);
     this.ready = true;
     this.events.emit('ui-ready');
   }
@@ -133,30 +141,41 @@ export class UI extends Phaser.Scene {
   }
 
   // ---------- HUD ----------
-  // Compact HUD: Insight and stamps top-left, place and keys top-right. Both stay
-  // small enough to sit in the side margins of a room.
+  // Top left: coins and one dot per house of the main path. Top right: where you are, the tracker
+  // (one line: the next step of the main path, from mechanics/quest) and the way to the menu ("Tab
+  // Menu", or a Menu button on touch). Everything else (settings, keys) lives in the menu's footer.
   makeHUD() {
     this.hud = this.add.container(0, 0).setDepth(10);
     const g = this.add.graphics();
     g.fillStyle(C.bg, 0.84).fillRoundedRect(0, 0, HUD_W, HUD_H, 10);
     g.lineStyle(2, C.line, 0.9).strokeRoundedRect(0, 0, HUD_W, HUD_H, 10);
-    const lens = this.add.graphics();
-    lens.lineStyle(3, C.gold, 1).strokeCircle(18, 20, 7);
-    lens.lineStyle(4, C.gold, 1).lineBetween(23, 25, 29, 31);
+    const coin = this.add.graphics();
+    coin.fillStyle(0x7a5a1a, 1).fillCircle(19, 21, 9).fillStyle(C.gold, 1).fillCircle(18, 20, 8).fillStyle(0xfff1b8, 1).fillRect(15, 15, 3, 3).lineStyle(2, 0x7a5a1a, 1).strokeCircle(18, 20, 5);
     this.insightText = this.text(36, 5, '0', 22, '#ffcf5a', { fontStyle: '600' });
-    this.insightLabel = this.text(36, 29, 'Insight', 11, C.muted);
+    const cw = tr(Q_WORDS.mysteries.coins);
+    this.insightLabel = this.text(36, 29, cw.charAt(0).toUpperCase() + cw.slice(1), 11, C.muted);
     this.stampG = this.add.graphics();
-    this.hud.add([g, lens, this.insightText, this.insightLabel, this.stampG]);
+    this.hud.add([g, coin, this.insightText, this.insightLabel, this.stampG]);
     this.hudRight = this.add.container(0, 0).setDepth(10);
     const ink = { stroke: '#0d0f1e', strokeThickness: 4 };
     this.loc = this.text(0, 0, '', 16, C.text, { fontStyle: '600', ...ink }).setOrigin(1, 0);
-    this.hint = this.text(0, 24, '', 12, '#c7cbe3', { align: 'right', lineSpacing: 3, ...ink }).setOrigin(1, 0);
-    // on touch screens, buttons replace the key hints
-    this.btns = this.add.container(0, 26);
-    this.hudRight.add([this.loc, this.hint, this.btns]);
+    this.hint = this.text(0, 0, '', 13, '#c7cbe3', { align: 'right', ...ink }).setOrigin(1, 0);
+    // the tracker: a pill with a chevron and one line
+    this.track = this.add.container(0, 0);
+    this.trackG = this.add.graphics();
+    this.trackFlash = this.add.graphics().setAlpha(0);
+    this.trackT = this.text(0, 0, '', 16, '#ffe9a8', { fontStyle: '600' }).setOrigin(1, 0.5);
+    // a tap or click on the tracker opens the map, where the next house is ringed
+    this.trackZ = this.add.zone(0, 0, 10, TRACK_H).setOrigin(1, 0).setInteractive({ useHandCursor: true });
+    this.trackZ.on('pointerdown', (p, lx, ly, ev) => { ev?.stopPropagation(); if (!this.busy && this.quest?.kind !== 'free') { sfx.select(); this.showAtlas('map'); } });
+    this.track.add([this.trackG, this.trackFlash, this.trackT, this.trackZ]);
+    // on touch screens, one Menu button replaces the key hint
+    this.btns = this.add.container(0, 0);
+    this.hudRight.add([this.loc, this.hint, this.track, this.btns]);
     this.lastInsight = state.insight;
     if (this.where) this.setLocation(...this.where);
     this.refreshHUD();
+    this.refreshQuest(true);
     this.setHudVisible(false);
   }
 
@@ -166,14 +185,13 @@ export class UI extends Phaser.Scene {
     if (!this.hud) return;
     this.hud.setPosition(Math.round(this.view.x0 + 10), Math.round(this.view.y0 + 10));
     this.hudRight.setPosition(Math.round(this.view.x1 - 12), Math.round(this.view.y0 + 10));
+    this.layoutRight();
   }
 
   // Screen corners a room must keep clear, in virtual pixels.
   hudSafe() {
-    return [
-      { w: 10 + HUD_W + 4, h: 10 + HUD_H + 4 },
-      { w: 12 + Math.max(this.loc.width, this.hint.width, this.touch ? this.btns.getBounds().width : 0) + 4, h: 10 + 24 + (this.touch ? 40 : this.hint.height) + 4 },
-    ];
+    const r = this.rightBox || { w: 200, h: 80 };
+    return [{ w: 10 + HUD_W + 4, h: 10 + HUD_H + 4 }, { w: 12 + r.w + 4, h: 10 + r.h + 4 }];
   }
 
   refreshHUD() {
@@ -184,8 +202,8 @@ export class UI extends Phaser.Scene {
     }
     const g = this.stampG;
     g.clear();
-    // one dot per house: outlined = not visited, teal = visited, gold = stamped
-    PLACES.forEach((p, i) => {
+    // one dot per house of the main path: outlined = not visited, teal = visited, gold = badge
+    Q.core.forEach((p, i) => {
       const x = 14 + (i % 8) * 10.5, y = 56 + Math.floor(i / 8) * 12;
       if (state.stamps[p.id]) g.fillStyle(C.gold, 1).fillCircle(x, y, 4);
       else if (state.visited[p.id]) g.fillStyle(C.teal, 1).fillCircle(x, y, 4);
@@ -193,28 +211,80 @@ export class UI extends Phaser.Scene {
     });
   }
 
+  // the room the player stands in, if any (the tracker says "Do the lab" there)
+  insideId() {
+    for (const k of ROOMS) if (this.scene.isActive(k)) return this.scene.get(k).id || null;
+    return null;
+  }
+
+  // The tracker: recomputed from the state a few times a second (cheap: one pass over the houses);
+  // when the step changes it lights up briefly and tells the town ('quest' event: the mark on a house).
+  refreshQuest(force = false) {
+    if (!this.track) return;
+    const st = Q.nextStep(state, { inside: this.insideId() }), key = Q.stepKey(st), text = trackerLine(st);
+    if (!force && key === this.questKey && text === this.trackFull) return;
+    const changed = this.questKey !== undefined && key !== this.questKey;
+    this.questKey = key;
+    this.quest = st;
+    this.trackFull = text;
+    this.layoutRight();
+    if (changed && this.hudRight.visible && st.kind !== 'free') {
+      this.tweens.add({ targets: this.track, scale: { from: 1.12, to: 1 }, duration: 380, ease: 'Back.easeOut' });
+      this.tweens.add({ targets: this.trackFlash, alpha: { from: 0.9, to: 0 }, duration: 1400, ease: 'Sine.easeOut' });
+    }
+    this.game.events.emit('quest', st);
+  }
+
+  // lays out the right column: [location] [Menu] / [tracker] / (Tab Menu)
+  layoutRight() {
+    if (!this.track || !this.view) return;
+    const touchOn = this.touch, maxW = Math.max(160, this.view.x1 - this.view.x0 - HUD_W - 44);
+    let top = 0, w = 0;
+    const bw = this.menuW || 0;
+    if (touchOn && bw) { this.loc.setPosition(-bw - 10, 9); top = 44; w = bw + 10 + this.loc.width; } else { this.loc.setPosition(0, 0); top = 24; w = this.loc.width; }
+    // the line: shrink, then cut, to stay on one line
+    const full = this.trackFull || '';
+    this.trackT.setText(full).setFontSize(16);
+    if (this.trackT.width > maxW - 34) this.trackT.setFontSize(14);
+    let s = full;
+    while (this.trackT.width > maxW - 34 && s.length > 8) { s = s.slice(0, -2); this.trackT.setText(`${s.trimEnd()}…`); }
+    const free = this.quest?.kind === 'free', tw = Math.ceil(this.trackT.width) + 34, H = TRACK_H;
+    this.trackT.setPosition(-12, H / 2 + 1).setColor(free ? '#9aa0c3' : '#ffe9a8');
+    const g = this.trackG.clear();
+    if (!free) {
+      g.fillStyle(0x000000, 0.3).fillRoundedRect(-tw + 2, 3, tw, H, H / 2);
+      g.fillStyle(C.bg, 0.9).fillRoundedRect(-tw, 0, tw, H, H / 2).lineStyle(1.5, C.gold, 0.85).strokeRoundedRect(-tw, 0, tw, H, H / 2);
+      // a chevron pointing forward
+      g.fillStyle(C.gold, 1).fillTriangle(-tw + 11, H / 2 - 5, -tw + 11, H / 2 + 5, -tw + 17, H / 2);
+    }
+    this.trackFlash.clear().fillStyle(C.gold, 0.55).fillRoundedRect(-tw, 0, tw, H, H / 2);
+    this.track.setPosition(0, top);
+    this.trackZ.setSize(tw, Math.max(H, 44)).input.hitArea.setSize(tw, Math.max(H, 44));
+    w = Math.max(w, tw);
+    let h = top + H;
+    if (!touchOn) { this.hint.setPosition(0, top + H + 5); h = top + H + 5 + this.hint.height; w = Math.max(w, this.hint.width); }
+    this.rightBox = { w, h };
+  }
+
   setLocation(name, where = 'town') {
     this.where = [name, where];
     if (!this.loc) return; // the HUD picks it up when it is built
     this.loc.setText(name);
-    const vk = (voiceAvailable() ? '\nL  voice' : '') + (LIFE.musings ? `\n${tr(LIFE.secrets ? WORDS.hintKeys : WORDS.hintKeysNoSecrets)}` : '');
-    this.hint.setText(this.touch ? '' : where === 'town' ? `Tab  Map\nN  time of day\nG  grass questions\nM  music  ·  V  all sound${vk}` : `Tab  Map\nM  music  ·  V  all sound${vk}`);
+    this.hint.setText(this.touch ? '' : tr(Q_WORDS.menuKey));
     this.btns.removeAll(true);
-    if (!this.touch) return;
-    const items = [['Map', () => this.showAtlas()], [state.musicOff ? 'Music off' : 'Music on', () => { state.musicOff = !state.musicOff; save(); setMusicOn(!state.musicOff); this.setLocation(...this.where); }]];
-    if (voiceAvailable()) items.push([voiceOn() ? 'Voice on' : 'Voice off', () => this.switchVoice()]);
-    if (where === 'town') items.push([state.grassOff ? 'Grass off' : 'Grass on', () => { state.grassOff = !state.grassOff; save(); this.setLocation(...this.where); this.toast(state.grassOff ? 'Grass questions off' : 'Grass questions on'); }]);
-    let x = 0;
-    for (const [label, fn] of items.reverse()) {
-      const t = this.text(0, 0, label, 17, C.text), w = Math.ceil(t.width) + 22;
-      x -= w;
-      const g = this.add.graphics().fillStyle(C.bg, 0.88).fillRoundedRect(x, 0, w, 36, 8).lineStyle(2, C.line, 0.9).strokeRoundedRect(x, 0, w, 36, 8);
-      t.setPosition(x + 11, 7);
-      const z = this.add.zone(x, 0, w, 36).setOrigin(0).setInteractive();
-      z.on('pointerdown', (p, lx, ly, ev) => { ev?.stopPropagation(); if (!this.busy) { sfx.select(); fn(); } });
+    this.menuW = 0;
+    if (this.touch) {
+      const label = tr(Q_WORDS.menu), t = this.text(0, 0, label, 18, C.text), w = Math.max(76, Math.ceil(t.width) + 40), H = 40;
+      const g = this.add.graphics().fillStyle(C.bg, 0.9).fillRoundedRect(-w, 0, w, H, 9).lineStyle(2, C.line, 0.9).strokeRoundedRect(-w, 0, w, H, 9);
+      // three short bars: the usual sign for a menu
+      for (let i = 0; i < 3; i++) g.fillStyle(C.line, 1).fillRect(-w + 12, 13 + i * 6, 12, 2);
+      t.setPosition(-w + 30, 9);
+      const z = this.add.zone(-w, 0, w, Math.max(H, 44)).setOrigin(0).setInteractive();
+      z.on('pointerdown', (p, lx, ly, ev) => { ev?.stopPropagation(); if (!this.busy) { sfx.select(); this.showAtlas(); } });
       this.btns.add([g, t, z]);
-      x -= 8;
+      this.menuW = w;
     }
+    this.layoutRight();
   }
 
   switchVoice() {
@@ -358,6 +428,7 @@ export class UI extends Phaser.Scene {
       kb.enabled = true;
       for (const sc of this.game.scene.getScenes(true)) sc.input.keyboard?.resetKeys();
       this.close();
+      this.refreshQuest();
     }
   }
 
@@ -617,7 +688,7 @@ export class UI extends Phaser.Scene {
   // ---------- a question from the tall grass: always an offer, never a trap ----------
   async encounter(q) {
     sfx.encounter();
-    const pick = await this.choose('Something rustles in the grass: a question. Take it?', ['Take it', 'Not now', this.touch ? 'Stop asking  (the Grass button turns them back on)' : 'Stop asking  (G turns them back on)']);
+    const pick = await this.choose('Something rustles in the grass: a question. Take it?', ['Take it', 'Not now', this.touch ? 'Stop asking  (the Menu turns them back on)' : 'Stop asking  (G or the menu turns them back on)']);
     if (pick === 2) { state.grassOff = true; save(); this.toast('Grass questions off'); if (this.where) this.setLocation(...this.where); }
     if (pick !== 0) return { ran: true };
     return this.quiz(q, { banner: 'from the tall grass' });
@@ -645,12 +716,12 @@ export class UI extends Phaser.Scene {
       g.lineStyle(6, 0xffffff, 1).strokeCircle(0, 0, 80);
       g.lineStyle(2, 0xffffff, 0.8).strokeCircle(0, 0, 70);
       for (let i = 0; i < 3; i++) this.star(g, -36 + i * 36, 36, 9, 0xffffff);
-      label = kind === 'review' ? `${LEAGUE.name} passed` : `${TOPICS[topic].name} stamp`;
+      label = kind === 'review' ? fill(tr(Q_WORDS.leagueWon), { league: LEAGUE.name }) : fill(tr(Q_WORDS.badge), { place: TOPICS[topic].name });
       sub = kind === 'review' ? COURSE.bigIdea : TOPICS[topic].card;
     }
     const F = this.frame();
     const holder = this.add.container(F.cx, F.cy - 40, [g]).setScale(3).setAngle(-25).setAlpha(0);
-    if (kind !== 'atlas') holder.add(this.text(0, -10, kind === 'review' ? 'PASS' : TOPICS[topic].name.toUpperCase(), kind === 'review' ? 40 : 19, '#ffffff', { display: kind === 'review', fontStyle: '600', align: 'center' }).setOrigin(0.5));
+    if (kind !== 'atlas') holder.add(this.text(0, -10, kind === 'review' ? tr({ en: 'WON', it: 'VINTA' }) : TOPICS[topic].name.toUpperCase(), kind === 'review' ? 40 : 19, '#ffffff', { display: kind === 'review', fontStyle: '600', align: 'center' }).setOrigin(0.5));
     c.add(holder);
     this.tweens.add({ targets: holder, scale: 1, angle: kind === 'atlas' ? 0 : -8, alpha: 1, duration: 380, ease: 'Back.easeOut', onComplete: () => this.cameras.main.shake(180, 0.008) });
     const t1 = this.text(F.cx, F.cy + 102, label, 32, '#ffcf5a', { stroke: '#1b1a2b', strokeThickness: 5, wordWrap: { width: F.w - 40 }, align: 'center' }).setOrigin(0.5).setAlpha(0);
@@ -665,10 +736,27 @@ export class UI extends Phaser.Scene {
     this.close();
   }
 
-  // ---------- the map: the course as a mind map ----------
-  async showAtlas() {
+  // ---------- the menu: Journey, Map, Mysteries (mechanics/quest/menu.js) ----------
+  // The name is kept from the days of the map: every scene's Tab calls it. tab: 'journey' | 'map' | 'mysteries'
+  async showAtlas(tab = null) {
     sfx.page();
-    if ((await this.page(() => openMap())) === 'journal') await this.page(() => openJournal(lifePlan()));
+    const town = this.scene.isActive('Town') ? this.scene.get('Town') : null, S = Q_WORDS.settings, onoff = (v) => tr(v ? S.on : S.off);
+    const settings = [
+      { label: tr(S.music), on: () => !state.musicOff, value: () => onoff(!state.musicOff), toggle: () => { state.musicOff = !state.musicOff; save(); setMusicOn(!state.musicOff); } },
+      ...(voiceAvailable() ? [{ label: tr(S.voice), on: () => voiceOn(), value: () => onoff(voiceOn()), toggle: () => { toggleVoice(); if (this.where) this.setLocation(...this.where); } }] : []),
+      { label: tr(S.grass), on: () => !state.grassOff, value: () => onoff(!state.grassOff), toggle: () => { state.grassOff = !state.grassOff; save(); } },
+      ...(town ? [{ label: tr(S.time), on: () => true, value: () => tr(S.tod)[town.tod] || town.tod, toggle: () => town.cycleTime(true) }] : []),
+    ];
+    const r = await this.page(() => openMenu({ tab, settings, touch: this.touch }));
+    this.refreshQuest(true);
+    if (r === 'ending') await this.ending();
+  }
+
+  // ---------- the ending card (mechanics/quest/ending.js) ----------
+  async ending() {
+    sfx.page();
+    await this.page(() => openEnding());
+    this.refreshQuest(true);
   }
 
   // ---------- the league: the final check ----------

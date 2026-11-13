@@ -17,7 +17,6 @@ import { townThingAt } from './musings/things.js';
 import { OBSTACLES, REWARDS, canPass } from './obstacles/kinds.js';
 import { CHAIN, rhymeFor } from './secrets/registry.js';
 import { Animals } from './animals/live.js';
-import { openJournal } from './secrets/journal.js';
 
 let C = null; // the context of the town: computed once
 const ctx = () => (C ||= lifeContext(TOWN, dressingPlan()));
@@ -287,7 +286,8 @@ class TownLife {
     }, onComplete: () => { head.destroy(); tail.destroy(); discover(sc, s, foundText(s)); } });
   }
 
-  journal() { if (this.idle) this.ui.page(() => openJournal(this.plan)); }
+  // the discoveries are the Mysteries tab of the menu (mechanics/quest/menu.js)
+  journal() { if (this.idle) this.ui.showAtlas('mysteries'); }
   destroy() { this.animals?.destroy(); this.ui.__thought?.hide(true); }
 }
 

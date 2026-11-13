@@ -22,7 +22,9 @@ engine/                    how to play one
   src/gen/interior/        composed rooms: plans, zones, trades, kinds, compose, rules, paint
   src/systems/             save, audio, movement
   src/mechanics/           game dynamics: ambient life (thoughts, animals, secrets, obstacles); later coins and a shop
-  tests/                   Node tests (npm test): rooms, homes, the course format
+  src/mechanics/quest/     the main path: core and extra, nextStep (one source for every hint), the
+                           tracker's words, the menu (Journey, Map, Mysteries), the ending card
+  tests/                   Node tests (npm test): rooms, homes, the course format, the main path, ambient life
 ```
 
 `npm test` (in `engine/` or at the root) runs the tests with Node's own runner, in a few seconds;

@@ -42,7 +42,7 @@ export const WORDS = {
   intro: { en: 'Small things found by wandering. They count for nothing, on purpose.', it: 'Piccole cose trovate girovagando. Non contano nulla, apposta.' },
   found: { en: 'Discovery {n} of {m}', it: 'Scoperta {n} di {m}' },
   firstFound: { en: 'Noted in Discoveries (J)', it: 'Annotato nelle Scoperte (J)' },
-  firstFoundTouch: { en: 'Noted in Discoveries (Map, then Discoveries)', it: 'Annotato nelle Scoperte (Mappa, poi Scoperte)' },
+  firstFoundTouch: { en: 'Noted in Discoveries (Menu, then Mysteries)', it: 'Annotato nelle Scoperte (Menu, poi Misteri)' },
   hintKeys: { en: 'T  think aloud  ·  J  discoveries', it: 'T  pensa ad alta voce  ·  J  scoperte' },
   hintKeysNoSecrets: { en: 'T  think aloud', it: 'T  pensa ad alta voce' },
   titleKeys: { en: 'T to think aloud about what you face', it: 'T per pensare ad alta voce su ciò che hai davanti' },

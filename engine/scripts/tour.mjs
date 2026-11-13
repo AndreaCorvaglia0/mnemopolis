@@ -60,4 +60,10 @@ if (LIFE.on && !r.status) {
   const l = spawnSync('node', [path.join(here, 'lifeshots.mjs')], { stdio: 'inherit', env: { ...process.env, OUT2: process.env.OUT2 || '/tmp' } });
   if (l.status) process.exit(l.status);
 }
+// the main path (src/mechanics/quest/): tracker, menu, the League's gate, the ending; into
+// shots/spine (shots/spine-phone), copied to OUT2 (default /tmp) as spine-*.png
+if (!r.status) {
+  const q = spawnSync('node', [path.join(here, 'spineshots.mjs')], { stdio: 'inherit', env: { ...process.env, OUT2: process.env.OUT2 || '/tmp' } });
+  if (q.status) process.exit(q.status);
+}
 process.exit(r.status || 0);
