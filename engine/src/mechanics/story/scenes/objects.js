@@ -244,7 +244,15 @@ const PAINT = {
     g.save(); g.translate(b.x + b.w / 2, b.y + b.h / 2); g.rotate(-0.1); g.translate(-b.w / 2, -b.h / 2);
     shadowRect(g, 0, 0, b.w, b.h, b.w * 0.05, 0.7);
     g.fillStyle = lin(g, 0, 0, b.w, b.h, [[0, '#5a3826'], [1, '#3a2418']]); g.beginPath(); g.roundRect?.(0, 0, b.w, b.h, b.w * 0.02); g.fill();
-    g.fillStyle = '#e6dcc0'; g.fillRect(b.w * 0.015, b.h * 0.94, b.w * 0.97, b.h * 0.05); g.fillRect(b.w * 0.96, b.h * 0.03, b.w * 0.03, b.h * 0.92); // the edges of the pages
+    if (!P.empty) { g.fillStyle = '#e6dcc0'; g.fillRect(b.w * 0.015, b.h * 0.94, b.w * 0.97, b.h * 0.05); g.fillRect(b.w * 0.96, b.h * 0.03, b.w * 0.03, b.h * 0.92); } // the edges of the pages
+    else { g.fillStyle = '#d8ccaa'; for (let k = 0; k < 6; k++) g.fillRect(b.w * 0.012, b.h * (0.1 + k * 0.14), b.w * 0.012, b.h * 0.05); } // the stubs of the torn pages
+    // tally marks scratched into the cover, in fives: one for every crossing (the last one fresh)
+    const n = P.tally || 0;
+    for (let i = 0; i < n; i++) {
+      const x = b.w * (0.72 + (i % 5) * 0.035), y0 = b.h * 0.12, y1 = b.h * 0.3, fresh = P.fresh && i === n - 1;
+      g.strokeStyle = fresh ? 'rgba(240,220,180,0.9)' : 'rgba(200,170,130,0.45)'; g.lineWidth = Math.max(1.5, b.w / 260); g.lineCap = 'round';
+      g.beginPath(); if (i % 5 === 4) { g.moveTo(b.w * 0.71, b.h * 0.26); g.lineTo(b.w * 0.86, b.h * 0.15); } else { g.moveTo(x, y0); g.lineTo(x + b.w * 0.005, y1); } g.stroke();
+    }
     g.fillStyle = '#8c3129'; g.fillRect(b.w * 0.3, -b.h * 0.04, b.w * 0.025, b.h * 1.15); // the ribbon
     if (!dry) { for (let i = 0; i < 9; i++) { g.fillStyle = `rgba(20,12,8,${0.15 + r() * 0.2})`; g.beginPath(); g.ellipse(r() * b.w, r() * b.h, b.w * (0.05 + r() * 0.12), b.h * (0.04 + r() * 0.1), r(), 0, Math.PI * 2); g.fill(); } }
     g.fillStyle = 'rgba(255,255,255,0.08)'; g.fillRect(0, 0, b.w, b.h * 0.12);
@@ -257,7 +265,7 @@ const PAINT = {
 export function objectPainter(kind) {
   const paint = PAINT[kind] || PAINT.page;
   return {
-    baseKeys: ['name', 'text', 'dry'],
+    baseKeys: ['name', 'text', 'dry', 'tally', 'fresh', 'empty'],
     base(g, W, H, P) { paint(g, W, H, P); },
     live(g, W, H, t, P) {
       // the lamp breathes a little; dust in its light

@@ -3,7 +3,7 @@
 // the last page is back. Then the notebook gives the word; the door asks for it in a first-person
 // close-up (the locks' door with the hatch), typed freely, matched with tolerance; after two misses
 // the character remembers the word. Up the stair: the keeper and the final remembering (the League's
-// rules: finalCheck size and pass, core concepts only), staged darker. Won: the turn (turn.js).
+// rules: finalCheck size and pass, core concepts only), staged darker. Won: the lamp (finale.js).
 import { state, save } from '../../systems/state.js';
 import { sfx } from '../../systems/audio.js';
 import { COURSE } from '../../data/content.js';
@@ -15,14 +15,14 @@ import { S_WORDS } from './words.js';
 import { STORY, tr, fill } from './config.js';
 import { doorWord } from './logic.js';
 import { cinema } from './cinema.js';
-import { playTurn } from './turn.js';
+import { playLamp } from './finale.js';
 
 export const theWord = () => doorWord(COURSE.bigIdea, STORY.word);
 export const DOOR_RIDDLE = () => ({ id: 'story-lighthouse', kind: 'door', clue: tr(S_WORDS.doorClue), answer: [theWord()], type: 'text', place: null });
 
 export async function lighthouseDoor(town) {
   const ui = town.ui, keeper = tr(S_WORDS.keeper);
-  if (state.ended) {
+  if (state.ended || state.story?.turned) {
     await ui.converse(keeper, { root: { say: tr(S_WORDS.keeperAgain), options: [{ label: tr(S_WORDS.keeperFace), do: async () => { await ui.league(); return 'end'; } }, { label: tr(S_WORDS.notNow) }] } });
     return;
   }
@@ -51,6 +51,6 @@ async function climbAndFace(town) {
     for (const l of tr(S_WORDS.climb)) await c.say(l);
   }, { scene: town });
   await ui.league();
-  if (state.passedLeague && !state.story?.turned) await playTurn(town);
+  if (state.passedLeague && !state.story?.turned) await playLamp(town);
   else if (!state.passedLeague) say(town, tr(S_WORDS.climbDown));
 }

@@ -24,6 +24,9 @@ import { Weather } from './weather.js';
 import { stageNow, greeting, curtLine, rememberedRow } from './stages.js';
 import { isFoggy } from './fog.js';
 import { lighthouseDoor, theWord } from './lighthouse.js';
+import { playEnding, TALLY } from './finale.js';
+import { view } from './paint.js';
+import { objectPainter } from './scenes/objects.js';
 import { hasAttic, MEMENTO_OF } from './remember.js';
 
 const talkDeck = new Deck();
@@ -63,7 +66,7 @@ class StoryTown {
     // memento counts as handed over, so the path never points at stairs that are not there
     for (const r of Q.coreProgress(state)) if (r.won && r.memento && !r.found && !hasAttic(r.id)) ((state.story ||= {}).mementos ||= {})[r.id] = MEMENTO_OF[r.id];
     this.weather = new Weather(scene);
-    if (state.ended) { this.lightLamp(false); this.shipLights(true, false); }
+    if (state.passedLeague) this.lightLamp(false); // the lamp lit stays lit
     if (H && (!state.story?.notebook || state.story?.left)) this.placeNotebook();
     this.refresh();
   }
@@ -73,7 +76,7 @@ class StoryTown {
     const rows = Q.progress(state), map = {};
     for (const r of rows) map[r.id] = rememberedRow(r) ? (isFoggy(r.id) ? 0.3 : 1) : 0;
     map.home = stageNow(state) === 'warm' ? 1 : 0;
-    const lg = BUILDINGS.find((b) => b.league); if (lg) map[lg.id] = state.ended ? 1 : 0;
+    const lg = BUILDINGS.find((b) => b.league); if (lg) map[lg.id] = state.ended || state.passedLeague ? 1 : 0;
     this.lit = map;
     this.weather.refresh();
   }
@@ -132,13 +135,18 @@ class StoryTown {
       if (this.shipAt) { await c.dim(1, 0); await c.zoom(0.8, 0); await c.pan(this.shipAt.x, this.shipAt.y, 0); await c.dim(0, 900); await c.sleep(1400); }
       if (this.notebookAt) { await c.pan(this.notebookAt.x, this.notebookAt.y - 10, 1600); await c.zoom(1.5, 900); }
       c.theme('opening');
-      for (const l of tr(S_WORDS.notebook)) await c.say(l);
-      const page = document.createElement('div');
-      page.textContent = fill(tr(S_WORDS.firstLine), { place: first?.name || '' });
-      page.style.cssText = 'padding:22px 26px;max-width:min(86vw,520px);background:#e9dfc4;color:#1f2d5c;font:italic clamp(22px,4vw,34px) Georgia,serif;box-shadow:0 10px 40px #000;transform:rotate(-1.5deg);background-image:radial-gradient(ellipse at 70% 30%,#cdbf9c55,transparent 60%),radial-gradient(ellipse at 20% 80%,#b9a98244,transparent 50%)';
-      c.show(page);
-      await c.say(tr(S_WORDS.notebookPrompt), { min: 2600 });
-      c.hide();
+      // the notebook, close: soaked, on the wet boards (a few marks scratched in its cover, for the attentive)
+      await c.dim(1, 600);
+      let v = view(c.root, objectPainter('notebook'), { tally: TALLY, rain: 0.7, push: 0.05 });
+      await c.dim(0, 900);
+      const L = tr(S_WORDS.notebook);
+      await c.say(L[0]); await c.say(L[1]);
+      // the one line that can still be read, in the notebook's hand
+      await c.dim(1, 500); v.stop();
+      v = view(c.root, objectPainter('leaf'), { text: fill(tr(S_WORDS.firstLine), { place: first?.name || '' }), push: 0.04 });
+      await c.dim(0, 700);
+      await c.say(L[2], { min: 3200 });
+      await c.dim(1, 600); v.stop(); await c.dim(0, 0);
     }, { scene: sc });
     state.story.notebook = true; save();
     this.notebook?.destroy(); this.notebook = null;
@@ -197,6 +205,8 @@ class StoryTown {
     const stage = stageNow(state), guide = npc.def.id === 'guide', t = TALK[npc.def.id] || { options: [] };
     // cold people answer curtly; the harbour master gives the way grudgingly; the notebook always has it
     const what = () => (stage === 'cold' && !guide ? curtLine() : sc.whatNow());
+    // the way back to the ship: everyone says goodbye, as to someone they have seen leave before
+    if (state.passedLeague && !state.ended) { await ui.say([guide ? tr(S_WORDS.berth) : talkDeck.draw('bye', tr(S_WORDS.farewell))], { name }); npc.face(npc.home); return true; }
     const opts = [[tr(Q_WORDS.ask), what], ...(stage === 'cold' ? [] : t.options.map((o) => [o[0], () => o[1]]))];
     const nodes = { root: { say: greeting(state), options: [...opts.map((o, i) => ({ label: o[0], to: `a${i}` })), { label: tr({ en: 'Bye', it: 'Ciao' }) }] } };
     opts.forEach((o, i) => { nodes[`a${i}`] = { get say() { return o[1](); }, options: [...opts.filter((_, j) => j !== i).map((x) => ({ label: x[0], to: `a${opts.indexOf(x)}` })), { label: tr({ en: 'Thanks, bye', it: 'Grazie, ciao' }) }] }; });
@@ -211,15 +221,18 @@ class StoryTown {
   onShip(x, y) { return !!HARBOUR?.shipTiles.some(([a, c]) => a === x && c === y); }
   onNotebook(x, y) { return !!this.notebook && HARBOUR && HARBOUR.notebook.x === x && HARBOUR.notebook.y === y; }
   prompt(x, y) {
-    if (this.onShip(x, y)) return `Space  ${tr(S_WORDS.ship)}`;
+    if (this.onShip(x, y)) return `Space  ${tr(state.passedLeague && !state.ended ? S_WORDS.shipLines.board : S_WORDS.ship)}`;
     if (this.onNotebook(x, y)) return `Space  ${tr(S_WORDS.notebookPrompt)}`;
     return null;
   }
   use(x, y) {
+    if (this.onShip(x, y) && state.passedLeague && !state.ended) { playEnding(this.scene); return true; }
     if (this.onShip(x, y)) { const L = S_WORDS.shipLines; say(this.scene, tr(state.ended ? L.ended : stageNow(state) === 'cold' ? L.cold : L.later)); return true; }
-    if (this.onNotebook(x, y)) { say(this.scene, tr(S_WORDS.leftIt)); return true; }
+    if (this.onNotebook(x, y)) { say(this.scene, tr(S_WORDS.dropped)); return true; }
     return false;
   }
+  // walking onto the end of the pier, once the lamp is lit: the ending
+  step(x, y) { if (state.passedLeague && !state.ended && HARBOUR?.pier.some((p) => p.x === x && p.y === y)) playEnding(this.scene); }
   // the notebook and the ship stand on tiles one cannot walk on
   blocks(x, y) { return this.onNotebook(x, y); }
 }

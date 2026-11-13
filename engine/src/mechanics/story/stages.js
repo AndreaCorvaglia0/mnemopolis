@@ -10,8 +10,8 @@ import { tr } from './config.js';
 // its lab is done; the memento upstairs is not needed for the town to warm
 export const rememberedRow = (r) => r.won || (!r.duel && r.visited && r.n >= r.m);
 export function townProgress(s) { return progressOf(Q.coreProgress(s).map((r) => ({ done: rememberedRow(r) }))); }
-export const stageNow = (s) => stageOf(townProgress(s), !!s.ended);
-export const rainNow = (s) => rainOf(townProgress(s), !!s.ended);
+export const stageNow = (s) => stageOf(townProgress(s), !!(s.ended || s.passedLeague));
+export const rainNow = (s) => rainOf(townProgress(s), !!(s.ended || s.passedLeague)); // the lamp lit: the rain stops
 
 const deck = new Deck();
 export const greeting = (s) => deck.draw(`greet:${stageNow(s)}`, tr(S_WORDS.greet[stageNow(s)]));

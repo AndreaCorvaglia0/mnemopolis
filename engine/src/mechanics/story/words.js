@@ -19,7 +19,8 @@ export const S_WORDS = {
   defaultName: { en: 'Traveller', it: 'Viaggiatore' },
   sign: { en: 'Sign', it: 'Firma' },
   nameKept: { en: 'Kept only on this device.', it: 'Resta solo su questo dispositivo.' },
-  signed: { en: '{name}. Mind the step.', it: '{name}. Attenzione al gradino.' },
+  ofCourse: { en: '"...Of course."', it: '«...Certo.»' },
+  signed: { en: '"{name}. Mind the step."', it: '«{name}. Attenzione al gradino.»' },
   skip: { en: 'Skip', it: 'Salta' },
   tapOn: { en: 'Tap to go on', it: 'Tocca per continuare' },
   keyOn: { en: 'Space to go on · Esc to skip', it: 'Spazio per continuare · Esc per saltare' },
@@ -35,14 +36,15 @@ export const S_WORDS = {
   // ---- the harbour master (the guide)
   master: { en: 'Harbour master', it: 'Capo del porto' },
   masterIntro: {
-    en: ['Another one. Nobody told me.', 'Town\'s that way. The houses have numbers, if you can read.', 'Start at number one. Don\'t ask me what\'s in it. I forget.'],
-    it: ['Un altro. Nessuno mi aveva avvisato.', 'Il paese è da quella parte. Le case hanno un numero, se sai leggere.', 'Comincia dal numero uno. Non chiedermi cosa c\'è dentro. Non me lo ricordo.'],
+    en: ['You ag— Never mind. Another one. Nobody told me.', 'Town\'s that way. The houses have numbers, if you can read.', 'Start at number one. Don\'t ask me what\'s in it. I forget.'],
+    it: ['Di nuovo t— Lascia stare. Un altro. Nessuno mi aveva avvisato.', 'Il paese è da quella parte. Le case hanno un numero, se sai leggere.', 'Comincia dal numero uno. Non chiedermi cosa c\'è dentro. Non me lo ricordo.'],
   },
   ship: { en: 'The ship', it: 'La nave' },
   shipLines: {
     cold: { en: 'The ship sits dark at the quay. Nobody on deck.', it: 'La nave è ferma e buia al molo. Nessuno sul ponte.' },
     later: { en: 'The ship waits. It is in no hurry.', it: 'La nave aspetta. Non ha fretta.' },
-    ended: { en: 'The ship is lit now. It will wait for whoever comes next.', it: 'Ora la nave è illuminata. Aspetterà chi arriva dopo.' },
+    ended: { en: 'The ship waits at the quay. It always does.', it: 'La nave aspetta al molo. Aspetta sempre.' },
+    board: { en: 'Board the ship', it: 'Sali sulla nave' },
   },
 
   // ---- people, by how much the town remembers
@@ -96,7 +98,7 @@ export const S_WORDS = {
   torn: { en: 'torn out', it: 'strappata' },
   pageOf: { en: 'house {order}', it: 'casa {order}' },
   next: { en: 'Next', it: 'Prossimo' },
-  fogMark: { en: 'fog again', it: 'di nuovo nebbia' },
+  fogMark: { en: 'fog again: go back', it: 'di nuovo nebbia: torna' },
   remembered: { en: 'remembers', it: 'ricorda' },
   notYet: { en: 'forgets', it: 'dimentica' },
   attic: { en: 'upstairs', it: 'di sopra' },
@@ -132,24 +134,32 @@ export const S_WORDS = {
   notNow: { en: 'Not now', it: 'Non ora' },
   climbDown: { en: 'You go back down. The stair remembers your steps.', it: 'Torni giù. La scala ricorda i tuoi passi.' },
 
-  // ---- the turn, and leaving
-  turn: {
-    en: ['The keeper stands, and lowers the hood.', 'You know this face.', 'The handwriting in the notebook is yours.', 'The card in your pocket says {name}.', 'You were the traveller before you.', 'Every house down there is something you once knew.'],
-    it: ['Il guardiano si alza e abbassa il cappuccio.', 'Conosci questo volto.', 'La calligrafia del taccuino è la tua.', 'Il biglietto che hai in tasca dice {name}.', 'Il viaggiatore prima di te eri tu.', 'Ogni casa, laggiù, è qualcosa che sapevi.'],
+  // ---- the lamp room, after the final remembering: the keeper lights the lamp; the register
+  keeperLamp: {
+    en: ['"What you are looking for was never here."', '"It came with you, on the ship."'],
+    it: ['«Quello che cerchi non è mai stato qui.»', '«È venuto con te, sulla nave.»'],
   },
-  leaving: {
-    en: ['The lamp catches.', 'The rain stops.', 'Down at the quay, the ship sounds its horn.'],
-    it: ['La lampada si accende.', 'Smette di piovere.', 'Giù al molo, la nave suona la sirena.'],
+  registerSeen: { en: 'On the desk, the arrivals register lies open.', it: 'Sul tavolo è aperto il registro degli arrivi.' },
+  signature: { en: 'That is my signature.', it: 'Questa è la mia firma.' },
+  // ---- the walk back to the ship: everyone says goodbye as to someone they have seen leave before
+  farewell: {
+    en: ['Safe crossing. See you.', 'Off again? Mind the weather.', 'Go on, then. You know the way back.', 'The windows stay lit. They always do, after.'],
+    it: ['Buona traversata. A presto.', 'Di nuovo in partenza? Occhio al tempo.', 'Vai, allora. La strada per tornare la conosci.', 'Le finestre restano accese. Dopo, restano sempre accese.'],
   },
-  leaveNotebook: { en: 'Leave the notebook on the quay', it: 'Lascia il taccuino sul molo' },
-  keepNotebook: { en: 'Keep it', it: 'Tienilo' },
-  leftIt: { en: 'For whoever arrives next.', it: 'Per chi arriverà dopo.' },
-  choiceQ: { en: 'The notebook is dry now.', it: 'Il taccuino adesso è asciutto.' },
-
+  berth: { en: 'Same berth as always.', it: 'Stesso ormeggio di sempre.' },
+  // ---- the quay: the pages torn out; the cover left where it was found; the purser; the loop
+  tear: {
+    en: ['The notebook is full.', 'You tear the pages out, one by one.', 'The wind takes each one home.'],
+    it: ['Il taccuino è pieno.', 'Strappi le pagine, una alla volta.', 'Il vento riporta ognuna a casa sua.'],
+  },
+  dropped: { en: 'You let the cover fall where you found it.', it: 'Lasci cadere la copertina dove l\'avevi trovata.' },
+  lessRain: { en: '"It rained a little less this time."', it: '«Questa volta ha piovuto un po\' meno.»' },
+  anotherRound: { en: '"Another round, {name}?"', it: '«Un altro giro, {name}?»' },
+  aboard: { en: 'You go aboard.', it: 'Sali a bordo.' },
   // ---- after the ending: the fog returns
-  fogHi: { en: 'Do I know you? It has gone foggy again.', it: 'Ci conosciamo? È tornata la nebbia.' },
+  fogHi: { en: 'Ah, there you are. Help me: it has gone foggy again.', it: 'Ah, eccoti. Aiutami: è tornata la nebbia.' },
   fogHelp: { en: 'Help {name} remember again', it: 'Aiuta {name} a ricordare di nuovo' },
-  fogBack: { en: 'There. It is back.', it: 'Ecco. È tornato.' },
+  fogBack: { en: 'There. It stays a little longer every time.', it: 'Ecco. Ogni volta resta un po\' di più.' },
   fogStill: { en: 'Still foggy. Another time.', it: 'Ancora nebbia. Un\'altra volta.' },
 
   // ---- the lantern cat, the only one who never forgot
@@ -157,8 +167,8 @@ export const S_WORDS = {
 
   // ---- the ending card
   card: {
-    title: { en: 'You remember.', it: 'Ricordi.' },
-    big: { en: 'The last page', it: 'L\'ultima pagina' },
+    title: { en: 'Another round.', it: 'Un altro giro.' },
+    big: { en: 'What you carry this time', it: 'Cosa porti con te, questa volta' },
   },
 };
 
@@ -171,7 +181,7 @@ export const Q_STORY = {
     mementoHere: { en: 'Look upstairs', it: 'Guarda di sopra' },
     memento: { en: 'House {order}: look upstairs', it: 'Casa {order}: guarda di sopra' },
     league: { en: 'Go to the lighthouse', it: 'Vai al faro' },
-    ending: { en: 'The ship is waiting', it: 'La nave aspetta' },
+    ending: { en: 'Go back to the ship', it: 'Torna alla nave' },
     free: { en: 'The town remembers', it: 'Il paese ricorda' },
   },
   answer: {
@@ -181,9 +191,9 @@ export const Q_STORY = {
     duel: { en: '{person}, at {place}. Sit with them and help them remember.', it: 'Vai da {person}, a {place}. Ha bisogno di ricordare.' },
     memento: { en: 'Upstairs at {place}. Nobody goes up there any more.', it: 'Di sopra, a {place}. Lassù non sale più nessuno.' },
     league: { en: 'The lighthouse. It has been dark for as long as anyone remembers, which is not long.', it: 'Il faro. È spento da che si ricordi, cioè da poco.' },
-    ending: { en: 'The ship is waiting at the quay.', it: 'La nave aspetta al molo.' },
+    ending: { en: 'The ship. You know the way.', it: 'La nave. La strada la conosci.' },
     leagueHall: { en: 'The lighthouse. It has been dark for as long as anyone remembers, which is not long.', it: 'Il faro. È spento da che si ricordi, cioè da poco.' },
-    endingHall: { en: 'The ship is waiting at the quay.', it: 'La nave aspetta al molo.' },
+    endingHall: { en: 'The ship. You know the way.', it: 'La nave. La strada la conosci.' },
     free: { en: 'Whatever you like. We remember now.', it: 'Quello che vuoi. Adesso ricordiamo.' },
   },
   hints: {
@@ -191,8 +201,8 @@ export const Q_STORY = {
     it: ['Non tutte le case del paese sono sulla tua strada, sai.', 'Ieri sera ho visto una luce {near}. Credevo che non ci abitasse nessuno.', 'C\'è un gatto con una lanterna. O l\'ho sognato.', 'Qualcuno {near} ricorda più di quanto dica.'],
   },
   congrats: {
-    en: ['The lighthouse is lit. I remember it lit, now.', 'You did this. I don\'t know how, but you did.', 'The rain stopped. I had forgotten the stars.'],
-    it: ['Il faro è acceso. Adesso me lo ricordo acceso.', 'È merito tuo. Non so come, ma è merito tuo.', 'Ha smesso di piovere. Mi ero dimenticato le stelle.'],
+    en: ['Back again. The windows stayed lit, you see.', 'There you are again. It always rains a little less, after.', 'I remember you now. I think I always did.'],
+    it: ['Di nuovo qui. Le finestre sono rimaste accese, vedi.', 'Eccoti di nuovo. Dopo, piove sempre un po\' meno.', 'Adesso mi ricordo di te. Credo di essermene sempre ricordato.'],
   },
   goalShort: S_WORDS.goal,
   tabs: { journey: S_WORDS.tab },
@@ -326,8 +336,8 @@ export const NUDGES_STORY = {
     it: ['Il faro. Tutto nel taccuino porta lì.', 'È solo {n}... e il faro è ancora spento.'],
   },
   ending: {
-    en: ['The ship is waiting.', 'Nice, {n}. The ship will not wait for ever. Or will it.'],
-    it: ['La nave aspetta.', 'Bello, {n}. La nave non aspetterà per sempre. O forse sì.'],
+    en: ['The ship. Same berth as always.', 'It\'s just {n}. The ship is waiting, and I know the way.'],
+    it: ['La nave. Stesso ormeggio di sempre.', 'È solo {n}. La nave aspetta, e la strada la conosco.'],
   },
   free: {
     en: ['The town remembers now. It still hides a thing or two.', 'No rain. I can look around properly.', 'The cat with the lantern never forgot anything, I think.'],

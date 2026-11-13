@@ -4,7 +4,8 @@
 //   __hb.story.memento(id)    the cinematic moment of finding that house's memento (upstairs)
 //   __hb.story.window(id)     the window of a house lighting up (back in town)
 //   __hb.story.door()         the lighthouse door (locked, the word, the keeper)
-//   __hb.story.turn()         the turn and leaving, then the ending card
+//   __hb.story.lamp()         the lamp room and the register (after the keeper)
+//   __hb.story.ending()       the quay, the pages, the purser, the loop, then the ending card
 //   __hb.story.fog(id)        the fog returns to a house (after the ending)
 //   __hb.story.where(what)    the town camera on 'ship' | 'lighthouse' | 'quay' | a house id
 import { state, save } from '../../systems/state.js';
@@ -12,7 +13,7 @@ import { Q } from '../quest/active.js';
 import { T, BUILDINGS, HARBOUR } from '../../world/townMap.js';
 import { findMemento, MEMENTO_OF } from './remember.js';
 import { lighthouseDoor } from './lighthouse.js';
-import { playTurn } from './turn.js';
+import { playLamp, playEnding } from './finale.js';
 import { houseDuel } from '../duel/index.js';
 import { DAY } from './config.js';
 import { view } from './paint.js';
@@ -35,7 +36,8 @@ export function storyDebug(game) {
     window: (id) => { const p = Q.byId[id]; done(p); state.stamps[id] = true; state.keys[id] = true; if (state.story.lit) delete state.story.lit[id]; save(); town().story.returned(id); return 1; },
     understood() { this.at(Q.core.length); state.story.understood = 1; save(); town().story.returned(Q.core[0].id); return 1; },
     door: () => { lighthouseDoor(town()); return 1; },
-    turn: () => { state.passedLeague = true; save(); playTurn(town()); return 1; },
+    lamp: () => { state.passedLeague = true; save(); playLamp(town()); return 1; },
+    ending: () => { state.passedLeague = true; (state.story ||= {}).turned = true; save(); playEnding(town()); return 1; },
     remember: (id) => { houseDuel(ui(), id); return 1; },
     fog(id) { state.ended = true; const f = ((state.story ||= {}).fog ||= {}); f[id] = { at: Date.now() - 2 * DAY, n: 0 }; save(); town()?.story?.refresh(); return 1; },
     where(what) {

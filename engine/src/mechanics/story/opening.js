@@ -46,7 +46,7 @@ export async function playOpening(ui) {
   await cinema(ui, async (c) => {
     c.root.style.background = '#05060c';
     await c.dim(1, 0);
-    stage = view(c.root, harbourPainter(), { dock: 0, lights: 1, rain: 1, push: 0.06, pushTime: 30 });
+    stage = view(c.root, harbourPainter(), { dock: 0, lights: 1, rain: 1, notebook: 1, push: 0.06, pushTime: 30 }); // the notebook already on the quay
     await c.dim(0, 1400);
     c.theme('opening');
     const docking = stage.fade('dock', 1, 11000);
@@ -60,6 +60,7 @@ export async function playOpening(ui) {
     stage.set({ lights: 0 });
     // the register: always asked, even after a skip (the name is used later)
     const name = await askName(c);
+    await c.say(tr(S_WORDS.ofCourse), { min: 1800 }); // the purser hesitates over the register
     await c.say(fill(tr(S_WORDS.signed), { name }));
     await c.dim(1, 900);
   });

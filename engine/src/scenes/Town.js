@@ -384,6 +384,7 @@ export class Town extends Phaser.Scene {
     state.steps += 1;
     this.showWhere(x, y);
     this.life?.step(x, y);
+    this.story?.step(x, y); // the story: the end of the pier, once the lamp is lit
     markSeen(x, y);
     if (state.steps % 8 === 0) save();
     const g = this.grassIndex.get(`${x},${y}`);
