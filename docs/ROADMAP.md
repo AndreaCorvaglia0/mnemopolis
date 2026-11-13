@@ -20,6 +20,10 @@
   house and per project (three themes, emblems), deterministic, each one switchable in
   `world.json`. Size and care of a course are independent settings of the brief.
 
+- Optional read-aloud (`engine/src/systems/voice.js`): the browser's own speech reads the reading
+  wall, lab stations, plaques and people's lines when the learner presses Listen; `"voice"` in
+  `world.json`, saved on/off switch, pronunciation map.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and

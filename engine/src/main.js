@@ -106,6 +106,7 @@ if (!TEST) {
 window.__game = game;
 import * as content from './data/content.js';
 import { state } from './systems/state.js';
+import * as voice from './systems/voice.js';
 document.title = content.COURSE.title;
 // A picture of every kind of building and every landmark: useful when working on the look.
 // With generated houses on (GEN.facade), every kind in each theme with two seeds, then the emblems.
@@ -150,6 +151,7 @@ window.__hb = {
   openReading,
   content,
   state,
+  voice,
   // Used by the automated play-through check.
   probe: () => {
     const ui = game.scene.getScene('UI');

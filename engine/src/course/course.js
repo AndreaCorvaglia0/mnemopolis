@@ -4,6 +4,7 @@
 //   { "hub": { "name", "monument", "guide": { "name", "look", "hi" } },
 //     "places": { "<conceptId>": { "kind", "host": { "name", "look", "hi" } } },
 //     "themes": { "<themeId>": { "nature", "landmark" } }, "finalCheckHost": { "name", "look" } }
+// "voice" (read aloud) is read by systems/voice.js, "gen" and "theme" by gen/core.js.
 import { DATA, WORLD } from './_data.js';
 
 // the kind of building follows from the kind of knowledge
