@@ -8,6 +8,8 @@
     "dev": "node scripts/use-course.mjs && vite",
     "check": "node scripts/use-course.mjs && node scripts/check.mjs",
     "build": "node scripts/use-course.mjs && node scripts/check.mjs && vite build",
+    "stress": "node scripts/use-course.mjs && node scripts/stress-town.mjs",
+    "doors": "node scripts/doors.mjs",
     "shots": "node scripts/tour.mjs",
     "shots:phone": "PHONE=1 node scripts/tour.mjs"
   },
