@@ -238,7 +238,7 @@ class TownLife {
       state.life.prints[i] = true; save();
       const n = Object.keys(state.life.prints).length, lines = rhymeFor(s.prints.length, LANG), sp = this.printSprites[i];
       if (sp) sc.tweens.add({ targets: [sp.img, sp.glow], alpha: 0, duration: 1200 });
-      sfx.chime?.();
+      sfx[n >= s.prints.length ? 'motif' : 'chime']?.('cat'); // the last print: the cat appears, with the motif
       const last = n >= s.prints.length;
       say(sc, `${tr({ en: 'Paw prints, glowing faintly.', it: 'Impronte di zampa, che brillano appena.' })} "${lines[n - 1]}"${last ? ` ${tr(CHAIN.last)}` : ''}`, { hold: 5200 });
       if (last) this.seatCat();

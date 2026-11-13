@@ -18,7 +18,8 @@
     "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\"",
     "build:player": "node scripts/build-player.mjs",
     "shots:ready": "node scripts/readyshots.mjs",
-    "build:play": "vite build --config vite.play.config.js"
+    "build:play": "vite build --config vite.play.config.js",
+    "sound": "node scripts/use-course.mjs && node scripts/soundcheck.mjs"
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.3.1",
