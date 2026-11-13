@@ -1,4 +1,4 @@
-// Illusion Studio: perceived colour depends on the surround.
+// Dyer's House: perceived colour depends on the surround.
 import { seg, readout } from '../../../engine/src/lab/shell.js';
 import { canvasPane, draggable } from '../../../engine/src/lab/kit.js';
 

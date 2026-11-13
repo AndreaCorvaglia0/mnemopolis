@@ -485,9 +485,14 @@
       "theme": "eye",
       "type": "view",
       "name": "Hue, saturation, lightness",
-      "place": "Hue Tower",
-      "sign": "HUE",
+      "place": "Painter's House",
+      "sign": "PAINTER",
       "emblem": "prism",
+      "expert": {
+        "name": "Marta",
+        "trade": "painter",
+        "line": "I never mix by numbers. I ask three things: which colour, how far from grey, how close to white or black."
+      },
       "objective": "Describe any colour with three words (which colour, how vivid, how light) and link them to RGB.",
       "idea": "Hue, saturation and lightness are the same colours as RGB, described the way people talk.",
       "wrongBelief": "RGB and hue, saturation, lightness are different sets of colours.",
@@ -627,9 +632,14 @@
       "theme": "eye",
       "type": "cases",
       "name": "Colour depends on context",
-      "place": "Illusion Studio",
-      "sign": "ILLUSION",
+      "place": "Dyer's House",
+      "sign": "DYER",
       "emblem": "eye",
+      "expert": {
+        "name": "Bruno",
+        "trade": "dyer",
+        "line": "A skein that matched in the vat can look wrong on the shelf. I judge every colour against what will sit next to it."
+      },
       "objective": "Show that the same patch looks different on different backgrounds, and say why that matters.",
       "idea": "The eye judges a colour against what surrounds it. The same numbers can look different.",
       "wrongBelief": "The eye measures colour like an instrument: same numbers, same appearance.",
@@ -650,7 +660,7 @@
       "callbacks": [
         {
           "to": "wheel",
-          "how": "Lightness was a dial in Hue Tower. Here the same lightness looks different."
+          "how": "Lightness was a dial in the Painter's House. Here the same lightness looks different."
         }
       ],
       "lab": {
@@ -861,7 +871,7 @@
           "title": "Colour gets coordinates",
           "who": "Albert Munsell",
           "text": "A painter and teacher, Munsell orders colours by hue, value and chroma, with steps that look equal to the eye.",
-          "why": "The ancestor of the three dials in the Hue Tower.",
+          "why": "The ancestor of the three dials in the Painter's House.",
           "src": "Munsell, A Color Notation, 1905"
         },
         {

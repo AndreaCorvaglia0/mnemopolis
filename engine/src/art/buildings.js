@@ -400,6 +400,8 @@ function cave(b) {
 const PAINTERS = {
   lab: geometryLab, archive, hall: taskHall, studio: scannerHall, observatory: lighthouse, workshop, museum: castle, cave, league: hospital,
   cottage: (b) => cottage(b, [P.roofGreen, P.roofGreenDark, '#7ea55a']),
+  // an expert's home, when the generated fronts are off: the cottage with a red roof and its name
+  home: (b) => { const res = cottage(b, [P.roofRed, P.roofRedDark, '#d0675a']); const c = res.canvas.getContext('2d'); plaque(c, b.label || 'HOME', (b.doors[0][0] - b.x) * 16 + 8, res.canvas.height - 30, P.wallCream, P.ink); return res; },
 };
 
 // Paints one building of a given painter, for the gallery picture of `npm run shots`.

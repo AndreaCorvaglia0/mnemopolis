@@ -18,6 +18,9 @@ const errors = [], warns = [];
 // emblem names come from the engine (engine/src/gen/emblems.js has no imports, so Node can read it)
 let EMBLEMS = null;
 try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'gen', 'emblems.js'); if (existsSync(f)) EMBLEMS = (await import(pathToFileURL(f).href)).EMBLEMS; } catch { EMBLEMS = null; }
+// trade names too (engine/src/gen/interior/trades.js has no imports either)
+let TRADES = null;
+try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'gen', 'interior', 'trades.js'); if (existsSync(f)) TRADES = (await import(pathToFileURL(f).href)).TRADE_NAMES; } catch { TRADES = null; }
 const err = (m) => errors.push(m), warn = (m) => warns.push(m);
 const words = (s) => String(s || '').trim().split(/\s+/).filter(Boolean).length;
 const need = (o, keys, where) => keys.forEach((k) => { if (o[k] === undefined || o[k] === '' || o[k] === null) err(`${where}: "${k}" is missing`); });
@@ -72,6 +75,20 @@ concepts.forEach((p, i) => {
   max(p.idea, 28, `${P} idea`);
   if (p.emblem !== undefined && EMBLEMS && !EMBLEMS.includes(p.emblem)) warn(`${P}: emblem "${p.emblem}" is not one of ${EMBLEMS.join(', ')}; the house will show none`);
   if (p.sign && p.sign.length > 9) err(`${P}: sign "${p.sign}" is longer than 9 characters`);
+  if (p.expert !== undefined) { // the person who lives in the concept's house
+    const e = p.expert;
+    if (!e || typeof e !== 'object' || Array.isArray(e)) err(`${P}: "expert" must be an object { name, trade, line }`);
+    else {
+      Object.keys(e).filter((k) => !['name', 'trade', 'line'].includes(k)).forEach((k) => err(`${P}: expert has an unknown field "${k}" (name, trade, line)`));
+      if (typeof e.trade !== 'string' || !e.trade.trim()) err(`${P}: expert needs a "trade" (one word, e.g. painter)`);
+      else if (TRADES && !TRADES.includes(e.trade)) warn(`${P}: expert trade "${e.trade}" is not one of ${TRADES.join(', ')}; the house will be a generic home`);
+      if (e.name !== undefined && (typeof e.name !== 'string' || !e.name.trim())) err(`${P}: expert "name" must be a non-empty string`);
+      else if (e.name && e.name.length > 8) warn(`${P}: expert name "${e.name}" is longer than 8 characters; the name plate shows 8`);
+      if (e.line !== undefined && (typeof e.line !== 'string' || !e.line.trim())) err(`${P}: expert "line" must be a non-empty string`);
+      else if (e.line) max(e.line, 30, `${P} expert line`);
+      if (p.type === 'story' && !p.lab) warn(`${P}: a story without a lab stays a museum (its timeline lives there); the expert becomes its host`);
+    }
+  }
   if (VERBS_WEAK.test(p.objective || '')) err(`${P}: the objective starts with a verb that cannot be observed ("${p.objective.split(' ')[0]}"). Use predict, explain, choose, compute, recognise...`);
   if (p.remember && (p.remember.length < 1 || p.remember.length > 3)) err(`${P}: ${p.remember.length} remember lines, keep 1 to 3`);
   rememberTotal += p.remember?.length || 0;

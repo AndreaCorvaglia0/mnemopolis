@@ -64,8 +64,8 @@ Solid arrows: "is required by". The hub is concept 1: everything else leans on i
 |---|---|---|---|---|---|
 | Lamp Quarter (river, obelisk) | 1 | Additive mixing | Three Lamps House | | |
 | | 2 | Subtractive mixing | Print Works | 1 | The same three lights, now taken away |
-| Sight Hill (hill, statue) | 3 | Hue, saturation, lightness | Hue Tower | 1 | Every colour shown also as three lamp numbers |
-| | 4 | Colour depends on context | Illusion Studio | | Lightness was a dial; here it misleads |
+| Sight Hill (hill, statue) | 3 | Hue, saturation, lightness | Painter's House (Marta, a painter) | 1 | Every colour shown also as three lamp numbers |
+| | 4 | Colour depends on context | Dyer's House (Bruno, a dyer) | | Lightness was a dial; here it misleads |
 | Old Town (forest, stones) | 5 | How we found out | Colour Museum | | Maxwell's photograph is house 1 in 1861 |
 | | 6 | Why three numbers are enough | Cone Cave | 1 | Three lamps are enough because the eye keeps three signals |
 

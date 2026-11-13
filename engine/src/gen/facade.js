@@ -14,6 +14,7 @@ import { drawEmblem } from './emblems.js';
 import { P } from '../art/palette.js';
 import { makeCanvas, rect, px, ellipse, mix, hash } from '../art/px.js';
 import { drawText, textWidth } from '../art/buildings.js';
+import { TRADES } from './interior/trades.js';
 
 const INK = P.ink;
 const tone = (c, t) => (t >= 0 ? mix(c, '#ffffff', t) : mix(c, INK, -t));
@@ -367,7 +368,7 @@ function house(F, cfg) {
   const doorStyle = cfg.door || (S.wall === 'ashlar' ? 'arched' : r.pick(['plank', 'panel', 'panel']));
   const shutters = (feat === 0 || r.chance(S.shutters.length > 1 ? 0.15 : 0.05)) && style !== 'wide' && style !== 'arched' ? M.shutter : null;
   const wst = shutters && style === 'square' ? 'narrow' : style;
-  const d = door(F, dc, doorStyle, { fanlight: cfg.fanlight ?? (doorStyle === 'panel' && r.chance(0.5)), lamp: r.chance(0.6) ? (r.chance(0.5) ? 1 : -1) : 0, w: cfg.doorW });
+  const d = door(F, dc, doorStyle, { fanlight: cfg.fanlight ?? (doorStyle === 'panel' && r.chance(0.5)), lamp: cfg.lamp ?? (r.chance(0.6) ? (r.chance(0.5) ? 1 : -1) : 0), w: cfg.doorW });
   const sg = cfg.sign !== false ? sign(F, dc, d.y - 12, { bg: cfg.signBg, fg: cfg.signFg, hang: true }) : null;
   if (sg && !sg.emblem && !info.gable && !markOn) medal(F, dc, Math.max(roofTop + 9, wallTop - 9));
   const avoid = [[d.x - 3, d.x + d.w + 3]]; if (sg) avoid.push([sg.x - 1, sg.x + sg.w + 1]);
@@ -703,7 +704,137 @@ function league(F) {
   return done(F);
 }
 
-const KIND_PAINTERS = { lab, archive, hall, studio, observatory, workshop, museum, cave, league, cottage };
+// ---------------------------------------------------------------- an expert's home
+// A private house where someone who knows the concept lives. Homes differ a lot from each other
+// (shape, storeys, roof, garden), more than institutions do, and follow the project theme. What
+// every home keeps: the name sign over the door, the house number, a name plate by the door with
+// the expert's name, and (when the trade has one) a hanging sign with the trade's icon.
+// Shapes: cottage, townhouse, narrow (a tall thin house between two small gardens), workshop (a
+// shop front below, rooms above), cabin (boards and a plank deck, for a district by the water).
+export const HOME_SHAPES = ['cottage', 'townhouse', 'narrow', 'workshop', 'cabin'];
+
+// work inside a vertical strip of the canvas (x0, width w), as if it were the whole house
+function inset(F, x0, w, fn) {
+  const saved = { W: F.W, dc: F.dc, dl: F.dl, dr: F.dr }, g0 = F.glows.length;
+  F.ctx.save(); F.lit.save(); F.ctx.translate(x0, 0); F.lit.translate(x0, 0);
+  Object.assign(F, { W: w, dc: F.dc - x0, dl: F.dl - x0, dr: F.dr - x0 });
+  const res = fn();
+  F.ctx.restore(); F.lit.restore(); Object.assign(F, saved);
+  for (let i = g0; i < F.glows.length; i++) F.glows[i][0] += x0;
+  return res;
+}
+
+function namePlate(F, d, name, at) { // a brass plate left of the door (or where the shape says)
+  if (!name) return;
+  const { ctx } = F, t = name.toUpperCase().replace(/[^A-Z0-9 .\-]/g, '').slice(0, 8), w = textWidth(t) + 6, x = at ? at[0] : d.x - 3 - w, y = at ? at[1] : d.y + 4;
+  if (x < 1) return;
+  rect(ctx, x, y, w, 9, INK); rect(ctx, x + 1, y + 1, w - 2, 7, '#d9b45a'); rect(ctx, x + 1, y + 1, w - 2, 1, '#f0d48a'); rect(ctx, x + 1, y + 7, w - 2, 1, '#a8853a');
+  drawText(ctx, t, x + 3, y + 2, INK);
+}
+
+function tradeSign(F, icon) { // a board on a post at the garden's corner, with the trade's icon
+  if (!icon) return;
+  const { ctx, W, H, M } = F, x = W - 14;
+  rect(ctx, x + 5, H - 12, 3, 12, INK); rect(ctx, x + 6, H - 12, 1, 11, M.wood.l);
+  rect(ctx, x, H - 25, 13, 13, INK); rect(ctx, x + 1, H - 24, 11, 11, M.roof.d); rect(ctx, x + 1, H - 24, 11, 1, M.roof.l);
+  drawEmblem(ctx, icon, x + 2, H - 23, 1, M.accent);
+}
+
+function fenceStub(F, x0, x1) { // a short garden fence or hedge in the theme's manner
+  const { ctx, H, M, th } = F, kind = th.dressing?.fence?.floral || 'picket';
+  if (kind === 'hedge') { rect(ctx, x0, H - 8, x1 - x0, 8, INK); rect(ctx, x0 + 1, H - 7, x1 - x0 - 2, 6, P.grassDark); for (let x = x0 + 2; x < x1 - 2; x += 3) px(ctx, x, H - 6 + (x % 2), P.grassLight); return; }
+  const c = th.dressing?.paint || M.trim;
+  rect(ctx, x0, H - 5, x1 - x0, 1, INK); rect(ctx, x0, H - 4, x1 - x0, 1, c);
+  for (let x = x0 + 1; x < x1 - 1; x += 3) { rect(ctx, x, H - 8, 2, 8, INK); px(ctx, x, H - 7, c); rect(ctx, x, H - 6, 1, 5, c); }
+}
+
+function smallTree(F, cx, bottom, r) {
+  const { ctx } = F;
+  rect(ctx, cx - 1, bottom - r - 4, 3, r + 4, INK); rect(ctx, cx, bottom - r - 4, 1, r + 4, F.M.wood.b);
+  ellipse(ctx, cx, bottom - r - 6, r + 1, r, INK); ellipse(ctx, cx, bottom - r - 6, r, r - 1, P.grassDark);
+  ellipse(ctx, cx - 2, bottom - r - 8, Math.max(1, r - 3), Math.max(1, r - 4), P.grassLight);
+  if (hash(cx, bottom, 3) > 0.4) for (const [dx, dy] of [[-2, -4], [2, -6], [0, -2]]) px(ctx, cx + dx, bottom - r - 6 + dy, P.flowerRed);
+}
+
+const HOME_PAINT = {
+  cottage(F) {
+    const res = house(F, { storeys: 1, roofs: ['slope', 'gable', 'hip'], window: F.r.pick(['square', 'square', F.S.windows[0]]), fanlight: false, lamp: 1 });
+    return { d: res.d, signY: res.wallTop + 4 };
+  },
+  townhouse(F) {
+    const res = house(F, { storeys: 2, roofs: ['slope', 'hip', 'mansard', 'gable'], fanlight: true, noChimney: false, lamp: 1, porch: false });
+    // a small balcony on the upper floor, over the door
+    const { ctx, M, dc } = F, by = res.wallTop + 18;
+    rect(ctx, dc - 12, by, 24, 2, INK); rect(ctx, dc - 11, by, 22, 1, M.stone.l);
+    for (let x = dc - 11; x <= dc + 10; x += 3) rect(ctx, x, by - 6, 1, 6, INK);
+    rect(ctx, dc - 12, by - 7, 24, 1, INK);
+    return { d: res.d, signY: res.wallTop + 26 };
+  },
+  narrow(F) {
+    const res = inset(F, 16, 48, () => house(F, { storeys: 2, extraWall: 12, roofs: ['gable', 'slope', 'mansard'], every: 1, porch: false, lamp: 1 }));
+    // two small gardens either side
+    const { H, W, r } = F;
+    smallTree(F, r.chance(0.5) ? 8 : W - 8, H - 3, 5);
+    fenceStub(F, 1, 15); fenceStub(F, W - 15, W - 1);
+    return { d: { ...res.d, x: res.d.x + 16 }, signY: res.wallTop + 6, narrow: true };
+  },
+  workshop(F) {
+    const { ctx, lit, W, H, M, S, r, dc } = F;
+    const wallH = 54, wallTop = H - wallH, type = pickRoof(F, ['slope', 'gable', 'hip', 'flat']);
+    let roofH = type === 'flat' ? 14 : pitch(F, 18, wallTop + 2);
+    roofH = Math.min(roofH, wallTop + 2);
+    wall(F, 0, wallTop, W, wallH);
+    const info = roof(F, type, 0, wallTop + 2 - roofH, W, roofH, { gx: dc });
+    if (info.gable) medal(F, info.cx, info.cy, { lit: true });
+    if (type !== 'flat' && r.chance(S.chimney)) chimney(F, r.chance(0.5) ? 8 : W - 16, Math.max(0, wallTop - roofH - 4), Math.min(14, roofH - 2));
+    // upper floor: living windows
+    windowRow(F, wallTop + 17, r.pick(S.windows), { shutters: M.feat === 0 ? M.shutter : null, box: M.feat === 1 ? { b: M.wood.b } : null, avoid: [[W - 16, W]] });
+    // the fascia between the floors, with the name sign
+    const fy = H - 32;
+    rect(ctx, 0, fy, W, 10, INK); rect(ctx, 1, fy + 1, W - 2, 8, M.roof.b); rect(ctx, 1, fy + 1, W - 2, 1, M.roof.l);
+    sign(F, W / 2, fy + 1, { bg: M.roof.b, fg: '#ffffff', ebg: M.roof.dd });
+    // the shop front: two wide windows and a glazed door
+    const d = door(F, dc, 'glass', { w: 12, h: 18 });
+    for (const cx of [dc - 23, dc + 23]) win(F, cx, H - 4, 'grid', { size: [22, 15], frame: M.trim, sill: M.stone.l, awning: M.feat === 2 ? M.roof.b : null });
+    return { d, signY: fy - 18, plate: [3, fy + 1] };
+  },
+  cabin(F) {
+    const { ctx, W, H, M, r, dc } = F;
+    const wallH = 34, wallTop = H - 6 - wallH;
+    wall(F, 4, wallTop, W - 8, wallH, { tex: 'boards', noBase: true, quoins: false });
+    const roofH = Math.min(pitch(F, 24, 32), wallTop + 2);
+    roof(F, 'gable', 1, wallTop + 2 - roofH, W - 2, roofH, { tex: 'seam', gx: dc, gw: 46 });
+    // the plank deck on stilts, its rail and the rope
+    rect(ctx, 0, H - 7, W, 4, INK); for (let x = 1; x < W - 1; x += 6) rect(ctx, x, H - 6, 5, 2, M.wood.l);
+    for (let x = 3; x < W; x += 12) { rect(ctx, x, H - 3, 3, 3, INK); px(ctx, x + 1, H - 3, M.wood.b); }
+    for (const x of [1, 12, W - 15, W - 4]) { rect(ctx, x, H - 17, 3, 10, INK); rect(ctx, x + 1, H - 16, 1, 9, M.wood.l); }
+    for (const [a, b] of [[3, 12], [W - 13, W - 4]]) for (let x = a; x < b; x++) px(ctx, x, H - 14 + Math.round(Math.sin(((x - a) / (b - a)) * Math.PI) * 2), '#d9c27a');
+    const d = door(F, dc, 'plank', { w: 10, h: 16 });
+    rect(ctx, d.x - 2, H - 7, d.w + 4, 4, M.stone.l); // the door opens onto the deck
+    for (const cx of [dc - 20, dc + 20]) win(F, cx, wallTop + 20, 'round', { size: [9, 9], frame: M.trim });
+    ellipse(ctx, dc + 20, wallTop + 29, 4, 4, INK); ellipse(ctx, dc + 20, wallTop + 29, 3, 3, '#e0574f'); ellipse(ctx, dc + 20, wallTop + 29, 1, 1, M.wall.b); px(ctx, dc + 18, wallTop + 27, '#f5f1e6');
+    return { d, signY: wallTop + 4 };
+  },
+};
+
+function home(F, o = {}) {
+  const { b, r } = F, T = TRADES[b.trade] || TRADES.home, water = b.nature === 'river' || b.nature === 'shore';
+  let shapes = T.exterior.shapes.filter((s) => s !== 'cabin' || water);
+  if (water && T.exterior.shapes.includes('cabin')) shapes = ['cabin'];
+  if (!shapes.length) shapes = ['cottage'];
+  const shape = o.shape || shapes[(r.int(0, 7) + (b.dj || 0)) % shapes.length];
+  const res = HOME_PAINT[shape](F);
+  if (shape === 'cabin') sign(F, F.dc, res.d.y - 12, { hang: true });
+  namePlate(F, res.d, b.expert, res.plate);
+  if (shape !== 'narrow' && shape !== 'cabin') { // a garden-ready front: flowers and a fence stub on the side away from the house number
+    bush(F, F.W - 30, F.H - 1, 10);
+    fenceStub(F, F.W - 16, F.W - 1);
+  }
+  tradeSign(F, T.exterior.sign);
+  return done(F, { shape });
+}
+
+const KIND_PAINTERS = { lab, archive, hall, studio, observatory, workshop, museum, cave, league, cottage, home };
 
 // The generated painter. b: a building of townMap (id, kind, paint, w, h, doors, label, emblem,
 // di = district index, dj = place in the district). o.theme and o.seed override the course's own
@@ -711,7 +842,7 @@ const KIND_PAINTERS = { lab, archive, hall, studio, observatory, workshop, museu
 export function paintFacade(b, o = {}) {
   const fn = KIND_PAINTERS[b.paint] || KIND_PAINTERS[b.kind];
   if (!fn) return null;
-  const F = start(b, o), res = fn(F);
+  const F = start(b, o), res = fn(F, o);
   return res && res.canvas ? res : done(F);
 }
 export const FACADE_KINDS = Object.keys(KIND_PAINTERS);

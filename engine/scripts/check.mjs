@@ -44,9 +44,9 @@ try {
   const { GEN } = await import('../src/gen/core.js');
   if (GEN.interior) {
     const { PLACES } = await import('../src/data/content.js');
-    const { planRoom } = await import('../src/gen/interior.js');
-    const rooms = PLACES.filter((p) => p.kind !== 'workshop' && p.kind !== 'museum').map((p) => planRoom(p)); // throws if a room breaks the rule
-    console.log(`rooms: ${rooms.map((L) => `${L.id} ${L.plan} ${L.w}x${L.h}`).join(', ')}`);
+    const { planRoom, checkRoom } = await import('../src/gen/interior/index.js');
+    const rooms = PLACES.filter((p) => p.kind !== 'workshop' && p.kind !== 'museum').map((p) => { const L = planRoom(p); checkRoom(L); return L; }); // throws if a room breaks a rule
+    console.log(`rooms: ${rooms.map((L) => `${L.id} ${L.plan} ${L.w}x${L.h} (${L.zones.map((z) => z.name).join(', ')})`).join('; ')}`);
   } else console.log('rooms: generator off, standard room');
 } catch (e) { console.log(`ERROR    ${e.message}`); bad++; }
 process.exit(bad ? 1 : 0);

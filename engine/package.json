@@ -9,7 +9,8 @@
     "check": "node scripts/use-course.mjs && node scripts/check.mjs",
     "build": "node scripts/use-course.mjs && node scripts/check.mjs && vite build",
     "shots": "node scripts/tour.mjs",
-    "shots:phone": "PHONE=1 node scripts/tour.mjs"
+    "shots:phone": "PHONE=1 node scripts/tour.mjs",
+    "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\""
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.3.1",

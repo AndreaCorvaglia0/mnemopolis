@@ -31,6 +31,8 @@ jobs:
           done
           exit $status
       - run: npm run setup
+      - name: Engine tests (rooms, homes, course format)
+        run: npm test
       - name: Build every complete course
         run: |
           mkdir -p site
