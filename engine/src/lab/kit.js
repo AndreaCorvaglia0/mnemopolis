@@ -162,3 +162,9 @@ export function hslToRgb(hh, s, l) { // h in degrees, s and l in 0..1
   const [r, g, b] = hh < 60 ? [c, x, 0] : hh < 120 ? [x, c, 0] : hh < 180 ? [0, c, x] : hh < 240 ? [0, x, c] : hh < 300 ? [x, 0, c] : [c, 0, x];
   return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
 }
+
+// The lab kit for authors (patterns/index.js): stage, sliders, button, tasks, animate, spring,
+// shuffle, hit, ink, C, color, alpha, compile, template, fmt, and the ready-made patterns as
+// functions: sliderReveal, compare, sort, order.
+export * from './patterns/index.js';
+export { h, seg, slider, readout } from './shell.js';

@@ -15,7 +15,9 @@
     "shots:lab": "node scripts/labshots.mjs",
     "shots:life": "node scripts/lifeshots.mjs && PHONE=1 node scripts/lifeshots.mjs",
     "shots:locks": "OUT2=${OUT2:-/tmp} node scripts/lockshots.mjs && OUT2=${OUT2:-/tmp} PHONE=1 node scripts/lockshots.mjs",
-    "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\""
+    "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\"",
+    "build:player": "node scripts/build-player.mjs",
+    "shots:ready": "node scripts/readyshots.mjs"
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.3.1",
