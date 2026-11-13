@@ -27,6 +27,7 @@ matter for design:
 | A surprising result | The lab is built around one surprise; the wrong prediction is the useful case |
 | Knowing there is more | Upper floors, locked doors, a boulder on a lane, silhouettes in the discoveries page |
 | A hint, not a list | Thoughts aloud, a cat with a lantern at the edge of the screen, a rhyme found line by line |
+| A question kept open | Music on scales that never resolve; a four-note motif heard only when something is found; the one resolution at the ending |
 
 ## The rule that follows
 

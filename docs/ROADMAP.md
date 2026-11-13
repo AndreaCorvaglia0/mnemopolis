@@ -56,6 +56,13 @@
   and of the main path's count. The course method gained a level and a reference on the
   progression of difficulty (`references/7-progression.md`); the example course has three riddles
   and one advanced station.
+- Sound: the chiptune replaced by a generative ambient soundscape, synthesised in the page
+  (`engine/src/systems/sound/`): a slow bed and sparse bell, pluck and glass notes on scales
+  without a leading tone, one motif heard only at discoveries, place sounds (water, wind,
+  fountain, crickets, birds) from the player's tile, a mix that follows the place, the time of
+  day and the learner's focus (ducked by 20 dB in labs, pages, locks and duels), three moods
+  (mist, lantern, deep) chosen in the menu, `world.json` or `?mood=`; checked by measurement
+  (`npm run sound`), not by ear.
 
 ## Next
 
