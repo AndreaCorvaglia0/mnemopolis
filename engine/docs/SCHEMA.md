@@ -29,6 +29,43 @@ The engine has no content of its own. `npm run course <slug>` (run automatically
 
 Character looks: `mentor`, `kid`, `nurse`, `fisher`, `archivist`, `surveyor`, `tech`, `keeper`, `tess`.
 
+## Locks and upper floors: `riddles`, `advanced`
+
+Both optional; the rules are in `skills/knowledge-base/references/7-progression.md`, the engine side
+in `ENGINE.md` ("Locks", "Upper floors").
+
+| Field | Where | Meaning |
+|---|---|---|
+| `"advanced": true` | a lab station | it lives on the house's upper floor: not in the ground-floor lab, not in the main path's `lab n/m` count. Its code is a station like any other, in `labs/<conceptId>.js` |
+| `riddles` | a concept, up to 3 | locks with a free answer: a safe, a computer, a door with a hatch |
+
+A riddle:
+
+```json
+{ "id": "marta-safe", "kind": "safe",
+  "clue": "Combination: where my green sits on the wheel. In degrees. M.",
+  "answer": 120, "type": "number", "tolerance": 3, "unit": "°",
+  "from": { "station": "dials" },
+  "inside": { "note": "Marta's note. Lightness on my dials is not how light ...", "coins": 15 },
+  "where": "upstairs" }
+```
+
+| Key | |
+|---|---|
+| `id` | unique in the course (lowercase, digits, dashes); the save keeps `locks[id]`, `tries[id]` |
+| `kind` | `safe` (digit keys for numbers and codes), `computer` (a login), `door` (a voice behind a hatch); others are drawn as a safe |
+| `clue` | the sticky note, or what the voice asks: a line or two |
+| `answer` | one accepted answer or a list; at most three words or one number |
+| `type` | `text` (default for strings), `number` (default for numbers), `code` (digits, exact) |
+| `tolerance`, `unit` | numbers only; default tolerance: exact for an integer |
+| `from` | where the answer is taught: `{ "page": true }` or `{ "station": "<id>" }`, of this concept or of `"concept": "<id>"`. The thought after a miss points there |
+| `inside` | `note` (1 to 4 sentences), `station` (an advanced station of this concept), `link` (a `further` link: its index or url), `coins`, `tool` (key, pickaxe, saw, shears), `key` (a concept id: its upper floor) |
+| `where` | `upstairs` (default) or `room` (the ground floor). Any other text is a placement hint and counts as upstairs |
+
+A house gets an upper floor when its concept has an advanced station, a riddle upstairs or a
+`further` link, and is drawn as a room (not a workshop, not a museum). The ground floor then has
+a staircase, opened by the owner's key (`state.keys[id]`).
+
 ## A station's code
 
 ```js

@@ -7,7 +7,6 @@ const fresh = () => ({
   pos: null,
   insight: 0,
   stamps: {}, // place id -> true once its house quiz is passed
-  keys: {},
   visited: {}, // place id -> true once the player has opened its lab or timeline
   done: {}, // 'place:station' -> true once the takeaway of a lab station was reached
   passedLeague: false,
@@ -25,6 +24,10 @@ const fresh = () => ({
   life: { found: {}, prints: {} },
   opened: {},
   tools: {},
+  keys: {}, // place id -> true once its owner has handed over the key of the upper floor
+  // locks (mechanics/riddles/): opened for good, and wrong answers so far (they cost nothing)
+  locks: {},
+  tries: {},
   // the main path (src/mechanics/quest/): the ending seen, places seen from nearby (the town map
   // shows them), seconds played, townsfolk who already congratulated
   ended: false,

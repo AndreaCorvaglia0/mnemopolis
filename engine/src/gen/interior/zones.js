@@ -103,7 +103,23 @@ export const ZONES = {
     back: { w: 3, h: 1, pieces: [['crystal', 0, 0], ['rock2', 1, 0]] } },
   caveCamp: { label: 'camp',
     island: { w: 3, h: 1, pieces: [['rock', 0, 0], ['chest', 1, 0], ['rock', 2, 0]] } },
+  // ---------------------------------------------------------------- upper floors (mechanics/floors/)
+  trunks: { label: 'old trunks', upper: true,
+    back: { w: 3, h: 1, pieces: [['chest', 0, 0], ['basket', 1, 0], ['chest', 2, 0]] },
+    island: { w: 3, h: 1, pieces: [['chest', 0, 0], ['basket', 1, 0], ['chest', 2, 0]] } },
+  // ---------------------------------------------------------------- fixtures: placed when the house needs them, never
+  // chosen as furniture; the first piece is the one the player uses, from the kept tile in front of it
+  stairs: { label: 'staircase', fixture: true,
+    back: { w: 2, h: 2, pieces: [['stairs', 0, 0]], keep: [[0, 1], [1, 1]] } },
+  vault: { label: 'safe', fixture: true,
+    back: { w: 1, h: 2, pieces: [['safe', 0, 0]], keep: [[0, 1]] } },
+  terminal: { label: 'computer desk', fixture: true,
+    back: { w: 2, h: 2, pieces: [['pcdesk', 0, 0], ['chair', 1, 1, { face: 'up' }]], keep: [[0, 1]] } },
+  hatch: { label: 'door with a hatch', fixture: true,
+    back: { w: 1, h: 2, pieces: [['hatchdoor', 0, 0]], keep: [[0, 1]] } },
 };
 
 export const ZONE_NAMES = Object.keys(ZONES);
+// furniture groups an upper floor is furnished with (its fixtures aside)
+export const ATTIC_ZONES = ['trunks', 'library', 'readingTable', 'sitting'];
 export const ANCHORS = ['back', 'side', 'island'];

@@ -24,6 +24,8 @@ export const PIECES = {
   candelabra: { fw: 1, ph: 30, glow: true },
   // the cave
   rock: { fw: 1, ph: 16 }, rock2: { fw: 2, ph: 22 }, stalagmite: { fw: 1, ph: 30 }, crystal: { fw: 1, ph: 26, glow: 'teal' },
+  // fixtures of floors and locks (mechanics/floors/, mechanics/riddles/)
+  stairs: { fw: 2, ph: 44 }, safe: { fw: 1, ph: 26 }, pcdesk: { fw: 2, ph: 30, glow: 'teal' }, hatchdoor: { fw: 1, ph: 40 },
   // the building
   pillar: { fw: 1, ph: 46, structure: true },
 };

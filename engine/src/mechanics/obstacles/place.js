@@ -123,6 +123,7 @@ export function roomObstacle(L, seed) {
   for (let x = 1; x < L.w - 1; x++) {
     if (L.up[x] || L.lo[x] || Math.abs(x - L.lab[0]) <= 1 || x === L.exit[0] || (x >= board[0] - 1 && x <= board[1] + 1)) continue;
     if (L.number && L.number.x === x) continue;
+    if ([...(L.locks || []), ...(L.stairs ? [L.stairs] : [])].some((f) => x >= f.x - 1 && x <= f.x + f.fw)) continue; // not beside stairs or a lock (mechanics/floors/, riddles/)
     if (L.top[x - 1] !== L.top[x] || L.top[x + 1] !== L.top[x]) continue;
     const fy = L.top[x] + 3;
     if (L.blocked[fy * L.w + x] || L.master[0] === x && L.master[1] === fy) continue;

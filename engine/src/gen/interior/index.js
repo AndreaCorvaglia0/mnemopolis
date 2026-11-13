@@ -20,7 +20,7 @@ import { T } from './plans.js';
 
 export { planRoom, profileOf } from './compose.js';
 export { roomProblems, orderProblems, allProblems } from './rules.js';
-export { PLAN_NAMES, PLANS, cellAt } from './plans.js';
+export { PLAN_NAMES, PLANS, UPPER_PLANS, cellAt } from './plans.js';
 export { ZONES, ZONE_NAMES } from './zones.js';
 export { TRADES, TRADE_NAMES } from './trades.js';
 export { KINDS } from './kinds.js';
@@ -38,7 +38,7 @@ const SIG_GLOW = { bigcrystal: 'glow-teal', prism: 'glow', orrery: 'glow', heart
 // player can walk behind it.
 export function generateRoom(place, o = {}) {
   const L = planRoom(place, o), C = L.palette;
-  const glows = [[L.lab[0] * T + 8, (L.top[L.lab[0]] + 2) * T + 4, 'glow', 0.75, 'door']];
+  const glows = [L.lab ? [L.lab[0] * T + 8, (L.top[L.lab[0]] + 2) * T + 4, 'glow', 0.75, 'door'] : null];
   for (const d of L.wall) if (d.type === 'window') glows.push([d.x * T + d.n * 8, d.top * T + 20, 'glow-teal', 0.55, 'window']);
   for (const it of L.items) { const g = PIECES[it.type]?.glow; if (g) glows.push([it.x * T + it.fw * 8, (it.y + 1) * T - it.ph + 6, g === 'teal' ? 'glow-teal' : 'glow', 0.45, it.type]); }
   const sg = L.sig;
@@ -52,7 +52,7 @@ export function generateRoom(place, o = {}) {
   });
   return {
     generated: true, plan: L.plan, layout: L,
-    w: L.w, h: L.h, blocked: L.blocked, lab: L.lab, exhibit: L.exhibit, master: L.master, exit: L.exit, start: L.start,
+    w: L.w, h: L.h, blocked: L.blocked, lab: L.lab, upper: L.upper, stairs: L.stairs, locks: L.locks, exhibit: L.exhibit, master: L.master, exit: L.exit, start: L.start,
     labGlow: glows[0], glows: glows.slice(1),
     torches: L.torches.length ? L.torches : null, dark: L.dark, step: L.step, props,
     paint(ctx) { paintBackground(ctx, L, place); },

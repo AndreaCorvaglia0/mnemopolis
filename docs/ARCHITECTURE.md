@@ -22,6 +22,8 @@ engine/                    how to play one
   src/gen/interior/        composed rooms: plans, zones, trades, kinds, compose, rules, paint
   src/systems/             save, audio, movement
   src/mechanics/           game dynamics: ambient life (thoughts, animals, secrets, obstacles); later coins and a shop
+    riddles/               locks with free answers: matching, close-ups, the thought that says where to look
+    floors/                upper floors: stairs, keys, the advanced bench, the split of ground and advanced stations
   src/mechanics/quest/     the main path: core and extra, nextStep (one source for every hint), the
                            tracker's words, the menu (Journey, Map, Mysteries), the ending card
   tests/                   Node tests (npm test): rooms, homes, the course format, the main path, ambient life
@@ -60,7 +62,7 @@ home) and a course may override them later in a separate file.
 
 One gesture per kind of thing, one look per gesture (details in `engine/docs/ENGINE.md`, "Ambient
 life"): a single tap or Space is for what matters to learning (people, doors, labs, reading, and
-obstacles as key objects) and opens the dialogue box or a page; a double tap or T is for atmosphere
+obstacles, locks and stairs as key objects) and opens the dialogue box or a page (a lock: its first-person close-up); a double tap or T is for atmosphere
 and shows a thought bubble that fades by itself; animals and happenings react to proximity with no
 interface at all; secrets are found by exploring and collected on the discoveries page. Nothing of
 the atmosphere opens while learning is on screen.

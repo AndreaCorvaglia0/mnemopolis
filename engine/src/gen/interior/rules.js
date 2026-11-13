@@ -44,6 +44,11 @@ export function roomProblems(L, pockets = false) {
   if (L.lab && !ok(L.lab[0], L.lab[1] + 1)) out.push(`the lab door at (${L.lab}) cannot be reached`);
   for (const [x, y] of L.exhibit || []) if (!ok(x, y + 1)) out.push(`the reading wall at (${x},${y}) cannot be read: the tile in front of it is unreachable`);
   if (L.master && !N4.some(([dx, dy]) => ok(L.master[0] + dx, L.master[1] + dy))) out.push(`the host at (${L.master}) cannot be reached`);
+  // fixtures (mechanics/floors/, mechanics/riddles/): the stairs and every lock are used from the tile in front
+  for (const f of [...(L.stairs ? [{ ...L.stairs, what: 'the stairs' }] : []), ...(L.locks || []).map((l) => ({ ...l, what: `the lock ${l.id}` }))]) {
+    let any = false; for (let x = f.x; x < f.x + f.fw; x++) if (ok(x, f.y + 1)) any = true;
+    if (!any) out.push(`${f.what} at (${f.x},${f.y}) cannot be used: no reachable tile in front`);
+  }
   if (pockets) for (let y = 0; y < L.h; y++) for (let x = 0; x < L.w; x++) if (passable(L, x, y) && !seen[y * L.w + x]) { out.push(`free floor at ${x},${y} cannot be reached`); return out; }
   return out;
 }
@@ -87,7 +92,8 @@ export function orderProblems(L, theme) {
   const fr = freeRatio(L);
   if (fr < MIN_FREE) out.push(`free: only ${Math.round(fr * 100)}% of the floor is free`);
   // caps
-  if (L.zones.length > zoneCap(floorTiles(L))) out.push(`caps: ${L.zones.length} zones in a room of ${floorTiles(L)} floor tiles`);
+  const nz = L.zones.filter((z) => !z.fixture).length; // stairs and locks are fixtures, not furniture groups
+  if (nz > zoneCap(floorTiles(L))) out.push(`caps: ${nz} zones in a room of ${floorTiles(L)} floor tiles`);
   const decor = L.wall.filter((d) => !d.zone).length + items.filter((i) => i.pair).length;
   if (decor > decorCap(floorTiles(L))) out.push(`caps: ${decor} decorations in a room of ${floorTiles(L)} floor tiles`);
   // nothing stray: every piece belongs to a group, a pair or is the signature; away from the walls it has a neighbour of its group

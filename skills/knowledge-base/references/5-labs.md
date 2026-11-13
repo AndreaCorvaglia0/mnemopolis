@@ -34,6 +34,11 @@ Three families of tools get the effect you are after. They agree on more than th
 
 ## The station
 
+**Ground floor or upstairs.** These stations are the ground floor: the main path, counted in
+"lab n/m". A station that adds the complication (the quantity, the exception) gets
+`"advanced": true` and lives on the house's upper floor, behind the owner's key; it does not
+count in the main path and may also be guarded by a lock. See `7-progression.md`.
+
 A lab has 1 to 3 stations (a `process` concept: up to 8, one per step). Each station is one
 idea. Its specification:
 

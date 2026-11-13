@@ -193,6 +193,25 @@ A room that breaks a rule is composed again with the next seed, then on the next
 the plain hall. `npm run check` (part of the build) checks the course's rooms; `npm test` checks
 several hundred rooms over every kind, trade, plan and theme.
 
+**Stairs and locks** (`mechanics/floors/`, `mechanics/riddles/`). A house whose concept has
+something for upstairs gets a **staircase**; a lock with `"where": "room"` stands on the ground
+floor. Both are **fixtures**: small groups in `zones.js` (`stairs`, `vault` for a safe, `terminal`
+for a desk with a computer, `hatch` for a door with a sliding hatch), placed in step 4a, after the
+host and before the back zone, against the back wall with the tile in front kept free: the stairs
+at the far end of the side opposite the learning wall, a lock near the middle of what is left. They
+do not count as furniture groups for the caps, and the reachability rule checks that each one can
+be used from the tile in front. A house with nothing upstairs has no stairs and exactly the room it
+had before.
+
+**The upper floor** is a second room of the same house from the same composer (`planRoom(place,
+{ floor: 'up' })`): the `attic` plan (12 to 14 by 9 or 10 tiles), another seed, board walls under
+rafters, a wooden floor, an heirloom as the focal point (an hourglass, a clock, a globe; a carved
+stone in a cave), trunks, books and a chair as furniture, and nobody living there. The learning
+wall becomes the advanced bench (a door labelled LAB II, only when some advanced station is not
+behind a lock) and a bookshelf with the reading list (only with `further` links). The exit mat
+becomes the stairwell down, so the walk-in contract (the entrance just above the exit) holds on
+both floors.
+
 **Signature objects** come from the kind (`kinds.js`: a lab gets a prism or an orrery, an archive
 a clock, an hourglass or a globe, a cave a great crystal or a carved stone) or, in a home, from the
 trade. A concept's known `emblem` is shown instead, big, on a pedestal, in a case or on a banner.

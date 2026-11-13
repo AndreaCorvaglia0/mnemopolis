@@ -43,6 +43,7 @@ test('every room keeps the order rules and can be walked, across kinds, trades, 
 test('every zone can be placed, keeps the rules, and paints', () => {
   for (const name of ZONE_NAMES) {
     const Z = ZONES[name];
+    if (Z.fixture || Z.upper) continue; // stairs, locks and attic furniture: tests/floors.test.mjs
     assert.ok(Z.back || Z.side || Z.island, `${name} has no layout`);
     const kinds = KIND_NAMES.filter((k) => KINDS[k].zones?.includes(name)), trades = TRADE_NAMES.filter((t) => TRADES[t].zones.includes(name));
     assert.ok(kinds.length || trades.length, `zone ${name} is used by no kind and no trade`);

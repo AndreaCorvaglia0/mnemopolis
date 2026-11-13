@@ -38,7 +38,7 @@ Do them in order. Each has a reference file: read it when you reach the step, no
 | 3 | **Map**: extract ideas, find the big idea, choose, link | first half of `map.md` | `references/2-concept-map.md` |
 | 4 | **Path**: order, themes, call-backs | second half of `map.md` | `references/3-path.md` |
 | | **Show the map** (do not wait) | the map in the conversation | below |
-| 5 | **Activate**: for every concept, what the learner does to understand it | concepts in `course.json` | `references/4-active-learning.md`, `references/5-labs.md` |
+| 5 | **Activate**: for every concept, what the learner does to understand it | concepts in `course.json` | `references/4-active-learning.md`, `references/5-labs.md`, `references/7-progression.md` |
 | 6 | **Ask**: questions for remembering and for using | questions in `course.json` | `references/6-questions.md` |
 
 Then run `node skills/knowledge-base/scripts/validate.mjs courses/<slug>` until it reports no
@@ -64,9 +64,13 @@ consulted, or when the subject itself is unclear. The items of the brief:
   Do not tie the number of lab stations to care, or the reverse.
 - **Core**: which concepts make the main story (below). Default: you choose, 4 to 6.
 - **Language** of the course.
+- **Level**: introductory (default), intermediate or advanced. Independent of size and care: it
+  caps how deep the upper floors and the extras go, never how simple the ground floors are. A hard
+  subject at the introductory level keeps simple, striking ground floors and moves its difficulty
+  upstairs. See `references/7-progression.md` (also for locks: `riddles`).
 
 Write the choices in `brief.md` under "Decisions taken without the user". State in one line
-which size and care you chose, and that the user can ask for another. If the user mentions
+which size, care and level you chose, and that the user can ask for another. If the user mentions
 limited credits or wanting it quick, choose care light (size stays what they asked, or standard).
 
 **What each level of care changes.** Accuracy never drops with care: breadth and polish change,

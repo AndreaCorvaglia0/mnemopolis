@@ -16,8 +16,9 @@
 import { seeded, THEME } from '../core.js';
 import { EMBLEMS } from '../emblems.js';
 import { mix } from '../../art/px.js';
-import { PLANS, PLAN_NAMES, cellAt, choosePlan } from './plans.js';
-import { ZONES } from './zones.js';
+import { PLANS, PLAN_NAMES, UPPER_PLANS, cellAt, choosePlan } from './plans.js';
+import { fixturesOf } from '../../mechanics/floors/plan.js';
+import { ZONES, ATTIC_ZONES } from './zones.js';
 import { TRADES, tradeOf } from './trades.js';
 import { KINDS } from './kinds.js';
 import { PIECES } from './pieces.js';
@@ -54,6 +55,9 @@ export function paletteOf(K, L, theme) {
   };
 }
 
+// o.floor: 'ground' (default) or 'up', the upper floor of a house that has one (mechanics/floors/).
+// o.fixtures: what must stand in the room besides the furniture (stairs, locks); by default it is
+// read from the concept (fixturesOf), so the game, the checks and the tests agree.
 export function planRoom(place, o = {}) {
   let err;
   // three seeds on the house's own plan, then on the next plans, then on the plain hall
@@ -63,10 +67,15 @@ export function planRoom(place, o = {}) {
 
 function composeOnce(place, attempt, o) {
   const theme = o.theme || THEME;
-  const r = seeded(`${place.id}:interior${attempt ? `:${attempt}` : ''}`);
-  const K = o.zones ? { ...profileOf(place), zones: o.zones } : profileOf(place); // o.zones: tests put one zone first
-  const plan = o.plan || choosePlan(place, Math.floor(seeded('interior:plans')() * PLAN_NAMES.length), K.plans, attempt);
-  const L = { id: place.id, kind: K.kind, trade: K.trade, plan, ...PLANS[plan](r), items: [], wall: [], torches: [], torchCols: [], rugs: [], zones: [] };
+  // ---- floors and locks (mechanics/floors/): the fixtures of this floor; upstairs a smaller, atticky room
+  const FX = o.fixtures !== undefined ? o.fixtures : fixturesOf(place, o.floor);
+  const upper = o.floor === 'up';
+  if (upper && !FX) throw new Error(`"${place.id}" has nothing for an upper floor`);
+  const r = seeded(`${place.id}:interior${upper ? ':up' : ''}${attempt ? `:${attempt}` : ''}`);
+  const K0 = o.zones ? { ...profileOf(place), zones: o.zones } : profileOf(place); // o.zones: tests put one zone first
+  const K = upper && !o.zones && !K0.dark ? { ...K0, zones: ATTIC_ZONES } : K0; // upstairs: trunks, books, a chair
+  const plan = o.plan || (upper ? 'attic' : choosePlan(place, Math.floor(seeded('interior:plans')() * PLAN_NAMES.length), K.plans, attempt));
+  const L = { id: place.id, kind: K.kind, trade: K.trade, plan, ...(PLANS[plan] || UPPER_PLANS[plan])(r), items: [], wall: [], torches: [], torchCols: [], rugs: [], zones: [], upper, locks: [], stairs: null };
   const { w, h, top } = L;
   L.occ = new Uint8Array(w * h);
   L.up = new Uint8Array(w); L.lo = new Uint8Array(w); // back-wall bands in use: upper (pictures) and lower (behind furniture)
@@ -89,7 +98,7 @@ function composeOnce(place, attempt, o) {
   for (let y = h - 2; y > F0(ex); y--) if (isFloor(ex, y)) set(ex, y, KEEP);
 
   // the focal point: the signature, centred on the axis against the back wall
-  const sig = { type: 'sig', ...pickSignature(place, K, r), focal: true };
+  const sig = { type: 'sig', ...(upper ? { emblem: null, form: null, object: K.dark ? 'tablet' : r.pick(ATTIC_SIGS) } : pickSignature(place, K, r)), focal: true };
   const fw = Number.isInteger(L.axis) ? 3 : 2, sx = Math.round(L.axis - (fw - 1) / 2), sy = F0(sx);
   for (let x = sx; x < sx + fw; x++) if (top[x] !== top[sx] || !free(x, sy)) fail('no place of honour for the signature');
   Object.assign(sig, { x: sx, y: sy, fw, fh: 1, ph: SIG_H });
@@ -131,38 +140,50 @@ function composeOnce(place, attempt, o) {
     }
     return true;
   };
+  // upstairs: the advanced lab door only when some advanced station is not behind a lock, the board
+  // (a bookshelf of further reading) only when the concept has further links
+  const wantDoor = !FX || FX.door !== false, wantBoard = !FX || FX.shelf !== false, nb = (wantDoor ? 1 : 0) + (wantBoard ? bn : 0);
   let side = r.chance(0.5) ? -1 : 1, block = null;
-  for (const s of [side, -side]) {
+  for (const s of nb ? [side, -side] : []) {
     const [a, b] = seg(s), outer = s < 0 ? a : b, want = outer - s; // one column in from the corner
     const starts = [];
-    for (let x0 = a; x0 + bn <= b; x0++) if (wallRun(x0, bn + 1)) starts.push(x0);
-    starts.sort((p, q) => Math.abs((s < 0 ? p : p + bn) - want) - Math.abs((s < 0 ? q : q + bn) - want));
-    if (starts.length) { side = s; const x0 = starts[0]; block = s < 0 ? { door: x0, board: x0 + 1 } : { door: x0 + bn, board: x0 }; block.x0 = x0; block.x1 = x0 + bn; break; }
+    for (let x0 = a; x0 + nb - 1 <= b; x0++) if (wallRun(x0, nb)) starts.push(x0);
+    starts.sort((p, q) => Math.abs((s < 0 ? p : p + nb - 1) - want) - Math.abs((s < 0 ? q : q + nb - 1) - want));
+    if (starts.length) {
+      side = s; const x0 = starts[0];
+      block = !wantBoard ? { door: x0 } : !wantDoor ? { board: x0 } : s < 0 ? { door: x0, board: x0 + 1 } : { door: x0 + bn, board: x0 };
+      block.x0 = x0; block.x1 = x0 + nb - 1; break;
+    }
   }
-  if (!block) fail('no place for the lab door and the reading wall');
-  const dX = block.door;
-  L.lab = [dX, top[dX] + 2]; mark(dX, 1, 1, 1); set(dX, F0(dX), KEEP);
-  L.board = { x0: block.board, n: bn, top: top[block.board] };
-  L.exhibit = [];
-  for (let x = block.board; x < block.board + bn; x++) { L.exhibit.push([x, F0(x)]); set(x, F0(x), USED); keep(x, F0(x) + 1); }
-  mark(block.board, bn, 1, 1);
+  if (nb && !block) fail('no place for the lab door and the reading wall');
+  if (!block) block = side < 0 ? { x0: 1, x1: 2 } : { x0: w - 3, x1: w - 2 };
+  L.lab = null; L.board = null; L.exhibit = [];
+  if (block.door != null) { const dX = block.door; L.lab = [dX, top[dX] + 2]; mark(dX, 1, 1, 1); set(dX, F0(dX), KEEP); }
+  if (block.board != null) {
+    L.board = { x0: block.board, n: bn, top: top[block.board] };
+    for (let x = block.board; x < block.board + bn; x++) { L.exhibit.push([x, F0(x)]); set(x, F0(x), USED); keep(x, F0(x) + 1); }
+    mark(block.board, bn, 1, 1);
+  }
   L.side = side;
 
   // 5. the host, beside the aisle on the learning side (on the dais: one tile away from the signature)
   let hx, hy;
-  if (L.dais) { hx = side < 0 ? sx - 2 : sx + fw + 1; hy = L.dais[3]; }
+  if (upper) { hx = null; hy = Math.floor((fm + h - 2) / 2); L.master = null; } // nobody lives upstairs
+  else if (L.dais) { hx = side < 0 ? sx - 2 : sx + fw + 1; hy = L.dais[3]; }
   else { hx = ex + side; hy = Math.max(fm + 2, Math.floor((fm + h - 2) / 2)); }
-  if (!isFloor(hx, hy) || occ(hx, hy) === USED) { hx = ex - side; hy = Math.floor((fm + h - 2) / 2); }
-  if (!isFloor(hx, hy) || occ(hx, hy) === USED) fail('no place for the host');
-  L.master = [hx, hy];
-  set(hx, hy, KEEP);
-  for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0]]) keep(hx + dx, hy + dy);
+  if (!upper) {
+    if (!isFloor(hx, hy) || occ(hx, hy) === USED) { hx = ex - side; hy = Math.floor((fm + h - 2) / 2); }
+    if (!isFloor(hx, hy) || occ(hx, hy) === USED) fail('no place for the host');
+    L.master = [hx, hy];
+    set(hx, hy, KEEP);
+    for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0]]) keep(hx + dx, hy + dy);
+  }
 
   // -- zone placement: a whole group or nothing
   const snapshot = () => ({ occ: L.occ.slice(), up: L.up.slice(), lo: L.lo.slice(), items: L.items.length, wall: L.wall.length, rugs: L.rugs.length, zones: L.zones.length });
   const restore = (s) => { L.occ.set(s.occ); L.up.set(s.up); L.lo.set(s.lo); L.items.length = s.items; L.wall.length = s.wall; L.rugs.length = s.rugs; L.zones.length = s.zones; };
   const used = new Set();
-  function placeZone(name, anchor, x0, y0, mirror) {
+  function placeZone(name, anchor, x0, y0, mirror, fixture = null) {
     const Z = ZONES[name], lay = Z[anchor], s = snapshot(), variant = Z.variants ? r.pick(Z.variants) : {};
     const X = (dx, n = 1) => (mirror ? x0 + lay.w - dx - n : x0 + dx);
     const tiles = new Set();
@@ -186,16 +207,35 @@ function composeOnce(place, attempt, o) {
     for (const [type, dx, dy, opt] of lay.pieces) {
       const P = PIECES[type], x = X(dx, P.fw), y = y0 + dy;
       for (let k = 0; k < P.fw; k++) set(x + k, y, USED);
-      L.items.push({ type, x, y, fw: P.fw, fh: 1, ph: P.ph, zone: zid, opt: { ...variant, ...opt }, v: L.items.length });
+      L.items.push({ type, x, y, fw: P.fw, fh: 1, ph: P.ph, zone: zid, opt: { ...variant, ...opt }, v: L.items.length, ...(fixture && { fixture }) });
       if (anchor === 'back' && dy === 0 && P.ph > 22) mark(x, P.fw, P.ph > 36, 1);
     }
     for (let dy = 0; dy < lay.h; dy++) for (let dx = 0; dx < lay.w; dx++) keep(x0 + dx, y0 + dy);
     if (lay.rug) { const [rx, ry, rw, rh] = lay.rug; L.rugs.push({ x: mirror ? x0 + lay.w - rx - rw : x0 + rx, y: y0 + ry, w: rw, h: rh, zone: zid, style: L.zones.length % 3 }); }
     for (const [type, dx, n] of lay.wall || []) { const x = X(dx, n); mark(x, n, 1, 0); L.wall.push({ type, x, n, top: top[x], zone: zid }); }
-    L.zones.push({ id: zid, name, anchor, x: x0, y: y0, w: lay.w, h: lay.h, mirror });
+    L.zones.push({ id: zid, name, anchor, x: x0, y: y0, w: lay.w, h: lay.h, mirror, ...(Z.fixture && { fixture: true }) });
     if (roomProblems(L, true).length || freeRatio(L) < MIN_FREE) { restore(s); return false; }
     used.add(name);
     return true;
+  }
+
+  // 4a. fixtures (mechanics/floors/, mechanics/riddles/): the stairs and the locks, each a small group
+  // against the back wall with its use tile kept free in front. The stairs go to the far end of the
+  // side opposite the learning wall; locks near the middle of what is left. Each must find a place.
+  const furniture = () => L.zones.filter((z) => !z.fixture).length;
+  const fixtures = [...(FX?.stairs ? [{ zone: 'stairs', use: { stairs: true } }] : []), ...(FX?.locks || []).map((l) => ({ zone: l.zone, use: { lock: l.id, kind: l.kind } }))];
+  for (const f of fixtures) {
+    const lay = ZONES[f.zone].back, xs = [];
+    const onHost = (x0) => L.master && L.master[1] === F0(x0) + 1 && L.master[0] >= x0 && L.master[0] < x0 + lay.w;
+    for (let x0 = 0; x0 + lay.w <= w; x0++) if ((x0 + lay.w - 1 < hon[0] || x0 > hon[1]) && !onHost(x0)) xs.push(x0);
+    const far = (x0) => (side < 0 ? -(x0 + lay.w - 1) : x0); // the stairs: far from the learning wall
+    const mid = (x0) => Math.abs(x0 + (lay.w - 1) / 2 - (side < 0 ? (hon[1] + w) / 2 : hon[0] / 2)) + (Math.sign(x0 - L.axis) === side ? 3 : 0);
+    xs.sort((p, q) => (f.use.stairs ? far(p) - far(q) : mid(p) - mid(q)));
+    let ok = false;
+    for (const x0 of xs) if (placeZone(f.zone, 'back', x0, F0(x0), x0 > L.axis && !f.use.stairs, f.use)) { ok = true; break; }
+    if (!ok) fail(`no place for the ${f.use.stairs ? 'stairs' : `lock ${f.use.lock}`}`);
+    const it = L.items.filter((i) => i.fixture === f.use).find((i) => i.type === lay.pieces[0][0]);
+    if (f.use.stairs) { it.opt = { ...it.opt, flip: it.x > L.axis }; L.stairs = { x: it.x, y: it.y, fw: it.fw }; } else L.locks.push({ id: f.use.lock, kind: f.use.kind, x: it.x, y: it.y, fw: it.fw, ph: it.ph });
   }
 
   // 4. the back zone, mirroring the learning wall's span on the other side of the focal point
@@ -213,7 +253,7 @@ function composeOnce(place, attempt, o) {
   const cap = zoneCap(floorTiles);
   let first = null;
   for (const s of [opp, side]) {
-    if (L.zones.length >= cap) break;
+    if (furniture() >= cap) break;
     const target = first ? { x: 2 * L.axis - first.cx, y: first.y } : null;
     const tryHalf = (name) => {
       const Z = ZONES[name], out = [];
@@ -245,7 +285,7 @@ function composeOnce(place, attempt, o) {
     if (!got && first) got = tryHalf(first.name); // the twin of the first group, mirrored
     if (got && !got.back && !first) first = { ...got, name: L.zones[L.zones.length - 1].name, y: got.y0 };
   }
-  if (L.zones.length < 2) fail(`only ${L.zones.length} zone fits`);
+  if (furniture() < (upper ? 1 : 2)) fail(`only ${furniture()} zone fits`);
 
   // 7. decorations, in mirrored pairs, within the cap
   const dcap = decorCap(floorTiles);
@@ -284,10 +324,11 @@ function composeOnce(place, attempt, o) {
   if (!L.label) L.label = placeLabel(L, label, mark, () => true, false);
   // the house number: top of the wall, at the end of the learning side
   const numX = (() => { const xs = []; for (let x = 0; x < w; x++) if (!L.up[x]) xs.push(x); xs.sort((a, b) => (side < 0 ? a - b : b - a)); return xs[0]; })();
-  L.number = numX == null ? null : { x: numX, top: top[numX] }; if (numX != null) mark(numX, 1, 1, 0);
+  L.number = numX == null || upper ? null : { x: numX, top: top[numX] }; if (L.number) mark(numX, 1, 1, 0);
 
   // 8. finish
   L.floor = r.pick(K.floors); L.wallStyle = r.pick(K.walls); L.tone = r.int(0, 3);
+  if (upper && !K.dark) { L.floor = 'wood'; L.wallStyle = 'attic'; } // under the roof: boards and beams
   L.step = K.step; L.dark = !!K.dark; L.home = !!K.home;
   L.palette = paletteOf(K, L, theme);
   L.blocked = new Uint8Array(w * h);
@@ -298,6 +339,8 @@ function composeOnce(place, attempt, o) {
   return L;
 }
 export const WIDE = ['chart', 'starchart', 'lightbox', 'map', 'landscape', 'cloths', 'poster'];
+
+const ATTIC_SIGS = ['hourglass', 'clock', 'bigglobe']; // the focal point upstairs: an heirloom
 
 function pickSignature(place, K, r) {
   if (K.home) return { emblem: null, form: null, object: K.sigs[0] };

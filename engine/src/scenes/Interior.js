@@ -11,6 +11,8 @@ import { P } from '../art/palette.js';
 import { GEN } from '../gen/core.js';
 import { generateRoom } from '../gen/interior/index.js';
 import { attachRoomLife } from '../mechanics/room.js';
+import { attachFloor } from '../mechanics/floors/room.js';
+import { attachLocks } from '../mechanics/riddles/room.js';
 import { houseDuel, challengeLabel } from '../mechanics/duel/index.js';
 
 const RW = 15, RH = 11, T = 16; // the size of the standard room
@@ -124,20 +126,22 @@ function roomFor(place) {
 }
 
 // The room of a house: generated (src/gen/interior/), or the standard room when
-// world.json says { "gen": { "interior": false } }.
-const roomOf = (place) => (GEN.interior ? generateRoom(place) : roomFor(place));
+// world.json says { "gen": { "interior": false } }. floor 'up': its upper floor (mechanics/floors/).
+const roomOf = (place, floor) => (GEN.interior ? generateRoom(place, floor === 'up' ? { floor: 'up' } : {}) : roomFor(place));
 
 export class Interior extends Phaser.Scene {
   constructor() { super('Interior'); }
 
-  create({ id }) {
+  // floor: 'ground' or 'up' (mechanics/floors/); at: 'stairs' when coming down from upstairs
+  create({ id, floor = 'ground', at = null }) {
     this.id = id;
+    this.floor = floor === 'up' ? 'up' : 'ground';
     this.leaving = false; // the scene object is reused between visits
     this.ui = this.scene.get('UI');
-    const place = PLACE[id], room = roomOf(place);
+    const place = PLACE[id], room = roomOf(place, this.floor);
     this.room = room;
     const RW = (this.rw = room.w), RH = (this.rh = room.h);
-    const key = `room-${id}`;
+    const key = `room-${id}${this.floor === 'up' ? '-up' : ''}`;
     if (!this.textures.exists(key)) {
       const [c, ctx] = makeCanvas(RW * T, RH * T);
       room.paint(ctx, this);
@@ -155,15 +159,18 @@ export class Interior extends Phaser.Scene {
       this.tweens.add({ targets: g, alpha: 0.4, duration: 1400 + x * 3, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     });
     // the lab door glows: it is the main thing to do in a room
-    const [gx, gy, gk, gs] = room.labGlow;
-    const dg = this.add.image(gx, gy, gk).setScale(gs).setBlendMode(Phaser.BlendModes.ADD).setDepth(5000).setAlpha(0.8);
-    this.tweens.add({ targets: dg, alpha: 0.35, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    if (room.labGlow) { // (an upper floor may have no lab door)
+      const [gx, gy, gk, gs] = room.labGlow;
+      const dg = this.add.image(gx, gy, gk).setScale(gs).setBlendMode(Phaser.BlendModes.ADD).setDepth(5000).setAlpha(0.8);
+      this.tweens.add({ targets: dg, alpha: 0.35, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    }
     this.blocked = room.blocked;
     this.exhibitTiles = new Set(room.exhibit.map(([x, y]) => `${x},${y}`));
 
     const m = MASTERS[id];
-    this.master = new Walker(this, `ch-${m.look}`, room.master[0], room.master[1], 'down');
-    this.player = new Walker(this, 'ch-player', room.start[0], room.start[1], 'up');
+    this.master = room.master ? new Walker(this, `ch-${m.look}`, room.master[0], room.master[1], 'down') : null; // nobody upstairs
+    const down = at === 'stairs' && room.stairs; // back from upstairs: at the foot of the stairs
+    this.player = down ? new Walker(this, 'ch-player', room.stairs.x, room.stairs.y + 1, 'down') : new Walker(this, 'ch-player', room.start[0], room.start[1], 'up');
     this.fire = room.torches ? new FireLight(this, RW * T, RH * T, room.torches.map(([x, y]) => [x, y + 2]), this.player.sprite, { dark: 0.55, radius: 52 }) : null;
     setMusic(room.dark ? 'castle' : 'building'); setFire(room.torches ? 0.8 : 0); setSea(0);
 
@@ -173,6 +180,9 @@ export class Interior extends Phaser.Scene {
     this.ui.setLocation(place.name, 'room');
     this.nav = new TapNav(this, { w: RW, h: RH });
     this.life = attachRoomLife(this); // optional ambient life (src/mechanics/)
+    // ---- floors and locks (mechanics/floors/, mechanics/riddles/): stairs, upper lab, shelf, locks
+    this.floorX = attachFloor(this);
+    this.extras = [this.floorX, attachLocks(this)].filter(Boolean);
     this.layout();
     this.scale.on('resize', this.layout, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.layout, this));
@@ -210,24 +220,26 @@ export class Interior extends Phaser.Scene {
   canEnter = (x, y) => {
     const { exit, lab } = this.room;
     if (x === exit[0] && y === exit[1]) return { exit: true };
-    if (x === lab[0] && y === lab[1]) return { lab: true };
+    if (lab && x === lab[0] && y === lab[1]) return { lab: true };
     if (x < 0 || y < 0 || x >= this.rw || y >= this.rh) return false;
     if (this.blocked[y * this.rw + x]) return false;
-    if (this.master.tx === x && this.master.ty === y) return false;
+    if (this.master && this.master.tx === x && this.master.ty === y) return false;
     return true;
   };
 
   update(time) {
     this.fire?.update(time);
     this.life?.update(time);
+    for (const e of this.extras) e.update?.();
     const k = this.keys;
     if (this.ui.busy || this.leaving || this.player.moving) {
       Phaser.Input.Keyboard.JustDown(k.SPACE); Phaser.Input.Keyboard.JustDown(k.ENTER); Phaser.Input.Keyboard.JustDown(k.E);
       return;
     }
     const [fx, fy] = this.player.facing();
-    this.ui.setPrompt(this.master.tx === fx && this.master.ty === fy ? `Space  Talk to ${MASTERS[this.id].name}`
-      : this.exhibitTiles.has(`${fx},${fy}`) ? 'Space  Read the wall' : fx === this.room.lab[0] && fy === this.room.lab[1] ? 'Space  Enter the lab' : this.life?.prompt(fx, fy) || null);
+    const extra = this.extras.reduce((t, e) => t || e.prompt(fx, fy), null); // stairs, locks, upper floor
+    this.ui.setPrompt(extra || (this.master && this.master.tx === fx && this.master.ty === fy ? `Space  Talk to ${MASTERS[this.id].name}`
+      : this.exhibitTiles.has(`${fx},${fy}`) ? 'Space  Read the wall' : this.room.lab && fx === this.room.lab[0] && fy === this.room.lab[1] ? 'Space  Enter the lab' : this.life?.prompt(fx, fy) || null));
     if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) return this.interact();
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
@@ -235,10 +247,14 @@ export class Interior extends Phaser.Scene {
     if (!dir) { this.player.stopAnim(); return; }
     const res = this.player.step(dir, this.canEnter, k.SHIFT.isDown || tapped ? 95 : 150, () => sfx.step(this.room.step));
     if (res && res.exit) this.leave();
-    else if (res && res.lab) { this.player.stopAnim(); this.ui.lab(this.id); }
+    else if (res && res.lab) { this.player.stopAnim(); this.useLab(); }
   }
 
+  // the lab door: the ground-floor lab, or upstairs the advanced bench (mechanics/floors/)
+  useLab() { return this.floor === 'up' ? this.floorX?.openUpperLab() : this.ui.lab(this.id); }
+
   leave() {
+    if (this.floor === 'up') return this.floorX.goDown(); // the exit upstairs is the stairs down
     this.leaving = true;
     sfx.door();
     this.cameras.main.fadeOut(220, 0, 0, 0);
@@ -247,9 +263,10 @@ export class Interior extends Phaser.Scene {
 
   async interact() {
     const [fx, fy] = this.player.facing();
-    if (this.master.tx === fx && this.master.ty === fy) return this.talkMaster();
+    for (const e of this.extras) if (await e.use(fx, fy)) return; // stairs, locks, upper floor
+    if (this.master && this.master.tx === fx && this.master.ty === fy) return this.talkMaster();
     if (this.exhibitTiles.has(`${fx},${fy}`)) return this.ui.reading(this.id);
-    if (fx === this.room.lab[0] && fy === this.room.lab[1]) return this.ui.lab(this.id);
+    if (this.room.lab && fx === this.room.lab[0] && fy === this.room.lab[1]) return this.useLab();
     this.life?.use(fx, fy);
   }
 

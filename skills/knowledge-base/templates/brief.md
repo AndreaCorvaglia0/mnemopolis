@@ -8,6 +8,7 @@
 - **Typical mistakes** (the learner's own, or common ones):
 - **Size:** small (4 to 6 concepts) / standard (7 to 10) / large (up to 16)
 - **Care:** light / standard / curated (independent of size; default standard)
+- **Level:** introductory / intermediate / advanced (default introductory; caps upper floors and extras: `references/7-progression.md`)
 - **Core:** the 4 to 6 concepts of the main story (about an hour of play); the others are extras, and why
 - **Language:**
 - **Material received:**

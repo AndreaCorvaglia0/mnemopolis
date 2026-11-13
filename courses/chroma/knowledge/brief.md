@@ -9,6 +9,7 @@
 - **Typical mistakes:** treating every mixture like paint ("more colours, darker"); believing a screen needs a lamp for each colour; trusting the eye as a measuring instrument.
 - **Size:** small (6 concepts).
 - **Care:** standard.
+- **Level:** introductory. One advanced station upstairs (Three Lamps House) and three locks.
 - **Core** (the main story, about an hour): lamps, wheel, context, cones: light adds up, three dials describe it, the eye compares, and three signals are all it keeps. Print (ink, the mirror image of light) and the history (the same idea told in time) are extras, left for the curious so that the core stays within an hour.
 - **Language:** English.
 - **Material received:** none. This is the example course of the repository, written from general reference knowledge (see `sources.md`).

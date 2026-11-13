@@ -121,7 +121,8 @@ concepts.forEach((p, i) => {
   } else {
     const st = p.lab?.stations || [], cap = p.type === 'process' ? 8 : 3;
     if (!p.lab) err(`${P}: no lab`);
-    else if (st.length < 1 || st.length > cap) err(`${P}: ${st.length} stations, a ${p.type} concept has 1 to ${cap}`);
+    const gn = st.filter((s) => !s.advanced).length; // advanced stations live upstairs (riddles.mjs)
+    if (p.lab && (gn < 1 || gn > cap)) err(`${P}: ${gn} ground-floor stations, a ${p.type} concept has 1 to ${cap}`);
     const sids = new Set();
     st.forEach((s, k) => {
       const S = `${P} station ${k + 1}`;
@@ -198,6 +199,19 @@ const isExtra = new Set(extra.map((p) => p.id));
 rel.forEach((r) => { if (r.type === 'requires' && !isExtra.has(r.from) && isExtra.has(r.to)) err(`core concept "${r.from}" requires "${r.to}", which is extra: the main story would need something it never asks for. Make "${r.to}" core or drop the requirement.`); });
 if (core.length > 6) warn(`${core.length} core concepts: a core of about 4 to 6 fits an hour of play. Mark the least essential ones "core": false.`);
 
+// ---- locks, advanced stations, progression (riddles.mjs; references/7-progression.md) ----
+{
+  const eng = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'mechanics');
+  let match = null, tools = null;
+  try { const f = path.join(eng, 'riddles', 'match.js'); if (existsSync(f)) match = await import(pathToFileURL(f).href); } catch { match = null; }
+  try { const f = path.join(eng, 'obstacles', 'kinds.js'); if (existsSync(f)) tools = Object.keys((await import(pathToFileURL(f).href)).TOOLS); } catch { tools = null; }
+  const brief = existsSync(path.join(dir, 'knowledge', 'brief.md')) ? readFileSync(path.join(dir, 'knowledge', 'brief.md'), 'utf8') : '';
+  const care = (brief.match(/\*\*Care:?\*\*:?\s*(light|standard|curated)/i) || [])[1]?.toLowerCase() || null;
+  const { checkProgression } = await import('./riddles.mjs');
+  const r = checkProgression(c, { match, tools, care });
+  r.errors.forEach(err); r.warns.forEach(warn);
+}
+
 // ---- working documents ----
 ['knowledge/brief.md', 'knowledge/sources.md', 'knowledge/map.md'].forEach((k) => { if (!existsSync(path.join(dir, k))) warn(`${k} is missing`); });
 
@@ -206,7 +220,7 @@ if (core.length > 6) warn(`${core.length} core concepts: a core of about 4 to 6 
 // the duel with each house's expert (3 to 6 questions of about 20 seconds: 1.5 minutes) and the final
 // check (about 20 seconds a question). Rounded to 5 minutes for printing.
 function playMinutes(list, round = false) {
-  const st = list.reduce((n, p) => n + (p.lab?.stations?.length || 0), 0);
+  const st = list.reduce((n, p) => n + (p.lab?.stations || []).filter((x) => !x.advanced).length, 0); // advanced stations live upstairs, off the main path
   const m = st * 6.5 + list.length * 3 + list.length * 1.5 + (f.size || 0) / 3;
   return round ? Math.round(m / 5) * 5 : m;
 }

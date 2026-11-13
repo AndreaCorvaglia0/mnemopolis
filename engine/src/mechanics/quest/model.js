@@ -22,7 +22,9 @@
 export const MIN_DUEL_QUESTIONS = 2;
 
 export const isCore = (p) => p.core !== false;
-export const stationsOf = (p) => p.lab?.stations?.length || 0;
+// the ground-floor stations only: "advanced" ones live upstairs and are not part of the main path
+// (mechanics/floors/, the same split as LABS in course/labs.js)
+export const stationsOf = (p) => p.lab?.stations?.filter((st) => !st.advanced).length || 0;
 export const hasDuel = (p) => (p.questions?.length || 0) >= MIN_DUEL_QUESTIONS;
 
 export function questOf({ places, guide = 'the guide', champion = 'the champion' }) {

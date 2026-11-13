@@ -46,6 +46,17 @@
   that will open with tools. Switchable in `world.json` (`"life"`), English and Italian, deterministic,
   checked over hundreds of towns: nothing of it stands in the way of the course.
 
+- Locks and upper floors (`engine/src/mechanics/riddles/`, `engine/src/mechanics/floors/`): riddles
+  on a concept (a safe, a computer, a door with a hatch) opened by a typed answer in a first-person
+  close-up; free answers matched with tolerance (case, accents, articles, one typo, numbers with a
+  tolerance, codes exact); a thought after each miss that says where the answer is taught, more
+  precisely from the third miss; secret notes, advanced stations, links, coins, tools and keys
+  inside. Upper floors opened by the owner's key: a second composed room with the advanced bench,
+  the locks and a shelf of further reading. Stations marked `advanced` stay out of the ground floor
+  and of the main path's count. The course method gained a level and a reference on the
+  progression of difficulty (`references/7-progression.md`); the example course has three riddles
+  and one advanced station.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
@@ -61,6 +72,11 @@
    what waits behind them is a placeholder listed as "sealed".
 
 ## Later
+
+- Locks, left out on purpose: locks in the town (a door on a hidden nook's gate, a safe in an
+  institution's hall); more kinds (a chest with a letter padlock, a diary with a clasp); a lock that
+  needs two answers; an "upper floor" for workshops and museums; a harder rematch upstairs (the duel
+  of the upper floor); per-course art for the close-ups; answers read aloud for the voice.
 
 - Ambient life, ideas left out on purpose: a door knocker that answers, a weathervane on a roof,
   footprints in snow or sand that lead somewhere, a broken bridge plank to a tiny island, birds on

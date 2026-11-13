@@ -46,6 +46,7 @@ const ITEM = {
   range: 'stove', kiln: 'stove', vat: 'vat', rack: 'loom', loom: 'loom', piano: 'instrument', harp: 'instrument', musicstand: 'instrument', globe: 'globe', scope: 'telescope',
   easel: 'easel', canvases: 'easel', chest: 'chest', basket: 'chest', papers: 'chest', computer: 'computer', screen: 'screen', lectern: 'lectern', wheel: 'wheel',
   rock: 'rock', rock2: 'rock', stalagmite: 'rock', crystal: 'crystal', pillar: 'pillar', sig: 'signature',
+  stairs: 'stairs', safe: 'safe', pcdesk: 'terminal', hatchdoor: 'hatchdoor', // floors and locks: key objects
 };
 const WALL = { window: 'window', portrait: 'picture', landscape: 'picture', botanical: 'picture', map: 'picture', starchart: 'picture', chart: 'poster', poster: 'poster', sheet: 'poster', lightbox: 'poster', clock: 'clock', banner: 'banner', cloth: 'cloth', cloths: 'cloth', pans: 'kitchen', plate: 'kitchen', herbs: 'kitchen' };
 
@@ -53,7 +54,7 @@ const WALL = { window: 'window', portrait: 'picture', landscape: 'picture', bota
 export function roomThingAt(L, x, y, extra = {}) {
   const at = (p) => p && p[0] === x && p[1] === y;
   if (at(extra.master)) return thing('host');
-  if (at(extra.exit)) return thing('exit');
+  if (at(extra.exit)) return thing(L?.upper ? 'stairs' : 'exit');
   const cl = (extra.closets || []).find((o) => o.x === x && y <= o.y && y >= o.top);
   if (cl) return { obstacle: cl, kind: 'obstacle', point: true };
   if (!L) { // the standard room

@@ -7,7 +7,7 @@
 // The panel folds away (a rail, or a one-line strip on a phone) and the stage can go full screen:
 // a bar along the picture's bottom edge then keeps the step, the result and Next in view.
 // The theory opens beside the picture (a sheet on a phone).
-import { LABS } from '../course/labs.js';
+import { LABS, UPPER_LABS } from '../course/labs.js';
 import { state, save } from '../systems/state.js';
 import { sfx } from '../systems/audio.js';
 import { touch } from '../systems/view.js';
@@ -162,9 +162,12 @@ export function overlay(title, sub, getText = null) {
 }
 
 // Opens the lab of one building. Resolves when the player goes back to town.
-export function openLab(id, start = 0) {
+// { upper: [stationIds] }: the advanced stations of its upper floor that are open to the player
+// (mechanics/floors/), saved as 'id+up:<stationId>' so that the list may grow as locks open.
+export function openLab(id, start = 0, { upper = null } = {}) {
   style();
-  const lab = LABS[id], N = lab.stations.length;
+  const lab = upper ? { ...UPPER_LABS[id], stations: UPPER_LABS[id].stations.filter((s) => upper.includes(s.id)) } : LABS[id], N = lab.stations.length;
+  const doneKey = (j) => (upper ? `${id}+up:${lab.stations[j].id}` : `${id}:${j}`);
 
   // ---- header: the lab's name (a title, not a link), the stations as steps, Listen, Theory, Close ----
   const steps = h('nav', { class: `lx-steps${N > 4 ? ' many' : ''}`, 'aria-label': TEXT.stations });
@@ -329,7 +332,7 @@ export function openLab(id, start = 0) {
   scrim.onclick = () => setTheory(false);
 
   // ---- stations as steps: number or tick, name; a label on hover, focus or a long press ----
-  const isDone = (j) => !!state.done[`${id}:${j}`];
+  const isDone = (j) => !!state.done[doneKey(j)];
   let tipTimer = 0, pressed = false;
   const showTip = (b, text) => {
     clearTimeout(tipTimer);
@@ -527,7 +530,7 @@ export function openLab(id, start = 0) {
       if (my !== token || phase === 'done') return;
       phase = 'done'; nudgeText = '';
       pointAt(-1);
-      state.done[`${id}:${i}`] = true; save(); sfx.reveal();
+      state.done[doneKey(i)] = true; save(); sfx.reveal();
       if (VOICE.auto && isOn()) speak(speech());
       renderSteps();
       if (isStack() && !full) setCollapsed(false);
