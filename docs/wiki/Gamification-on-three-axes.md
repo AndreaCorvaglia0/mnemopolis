@@ -30,7 +30,22 @@ other questions, after being told what to look at again.
 *Need: to go further than the basics, driven by curiosity.*
 Beating an owner earns the key to their upper floor, where the advanced side of the idea lives.
 Tools from the shop open the boulder, the thicket, the locked gate. Some buildings are hidden.
+
+The heart of exploring is the **lock**: a safe, a computer that wants its password, a door that
+asks for the word. You look at it in first person, read the clue on the sticky note, and type
+the answer yourself. Nothing to choose from: you have to recall it or work it out, which is
+harder than recognising it and is kept for those who went looking. A wrong answer costs nothing;
+your character mutters where the answer is taught, and you walk back there. Behind a lock is
+secret knowledge: an advanced lab, a document, sometimes a tool or a key.
+
 None of this is listed anywhere; see [Curiosity and mystery](Curiosity-and-mystery).
+
+### Depth is reached by climbing
+
+The ground floor of every house holds the essential idea, simple even when the subject is hard,
+with a picture and an interaction strong enough to stay. The complication lives upstairs, the
+neighbouring ideas in the extra buildings, the hardest recall behind the locks. A course also
+states its level (introductory by default), which caps how far the upper floors go.
 
 ### 3. Practise: the tall grass and the coins
 
