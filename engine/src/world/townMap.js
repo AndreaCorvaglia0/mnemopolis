@@ -8,6 +8,7 @@
 //   avenue and bridge = "you need the square before this theme"
 //   tall grass        = quick questions on houses already visited
 import { COURSE } from '../course/course.js';
+import { solidMap, reach } from './doors.js';
 import { w } from '../data/words.js';
 
 export const T = 16;
@@ -27,7 +28,7 @@ export const KINDS = {
 const LEAGUE = { paint: 'league', w: 8, h: 5, doors: [[3, 4], [4, 4]] };
 
 // Distances are kept short on purpose: a district's plaza is a few seconds' walk from the square.
-export function generate(C = COURSE) {
+export function generate(C = COURSE, { gate = true } = {}) {
   const GW = 160, GH = 140, cx = 80, cy = 70;
   const m = Array.from({ length: GH }, () => Array(GW).fill('g'));
   const at = (x, y) => m[y]?.[x];
@@ -160,6 +161,43 @@ export function generate(C = COURSE) {
   trail(cx + (gx > cx ? 3 : gx < cx ? -4 : -1), gy < cy ? hub.y0 - 1 : hub.y1 + 1, gx - 1, gy + (gy < cy ? 2 : -3), 0.6);
   signs.push({ x: gx + 3, y: gy + (gy < cy ? 3 : -3), lines: [w('town.meadow'), w('town.meadowText')] });
 
+  // ---- the road out of town: a straight lane, two tiles wide, from the square to the edge of the
+  // map, where the gate stands (Town.js: the champion before it; open once the League is won). It is
+  // drawn last, over grass, flowers, lanes and plazas only (never the meadow, water or a house); it is a dead end, so no other walk gets shorter or longer. A town where no side of the
+  // square has such a way out gets no gate (the ending then plays at the League hall).
+  const content = [GW, GH, 0, 0];
+  for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (m[y][x] !== 'g') { content[0] = Math.min(content[0], x); content[1] = Math.min(content[1], y); content[2] = Math.max(content[2], x); content[3] = Math.max(content[3], y); }
+  buildings.forEach((b) => { content[0] = Math.min(content[0], b.x - 1); content[1] = Math.min(content[1], b.y - 2); content[2] = Math.max(content[2], b.x + b.w); content[3] = Math.max(content[3], b.y + b.h + 1); });
+  const inHouse = (x, y, pad) => buildings.some((b) => x >= b.x - pad && x < b.x + b.w + pad && y >= b.y - pad && y < b.y + b.h + pad);
+  // landmarks, people and the houses' own signposts: the road keeps a tile away from them
+  const things = [...monuments.flatMap((o) => [[o.x, o.y], [o.x + 1, o.y]]), ...npcs.map((o) => [o.x, o.y]), ...signs.filter((o) => o.b).map((o) => [o.x, o.y])]; // lamps, benches and loose signs are settled off the lane later
+  const laneOf = ([dx, dy], off) => {
+    // u: along the lane (outward), v: across it; the two lane cells are base and base + across
+    const across = dx ? [0, 1] : [1, 0];
+    const base = dy > 0 ? [cx - 1 + off, hub.y1 + 1] : dy < 0 ? [cx - 1 + off, hub.y0 - 1] : dx > 0 ? [hub.x1 + 1, cy - 1 + off] : [hub.x0 - 1, cy - 1 + off];
+    const cells = [];
+    for (let t = 0; t < 32; t++) { // a short road: the League must not be a long walk away
+      const x = base[0] + dx * t, y = base[1] + dy * t, pair = [[x, y], [x + across[0], y + across[1]]];
+      for (const [X, Y] of pair) {
+        const ch = at(X, Y), nearSquare = t < 2 && 'cp'.includes(ch);
+        if (!nearSquare && !'gfpc'.includes(ch ?? '#')) return null;
+        if (inHouse(X, Y, 1) || things.some(([a, b]) => Math.abs(a - X) <= 1 && Math.abs(b - Y) <= 1)) return null;
+      }
+      cells.push(...pair);
+      if (x < content[0] - 2 || y < content[1] - 2 || x > content[2] + 2 || y > content[3] + 2) return { dir: [dx, dy], across, cells, end: [x, y] };
+    }
+    return null;
+  };
+  let gateLane = null;
+  // nearest the middle of a side first; south, east, west, then north (behind the League hall)
+  const offs = (lo, hi, mid) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).sort((a, b) => Math.abs(a - mid) - Math.abs(b - mid));
+  for (const [d, list] of [[[0, 1], offs(-9, 10, 3)], [[1, 0], offs(-3, 4, 1)], [[-1, 0], offs(-3, 4, 1)], [[0, -1], [...offs(10, 16, 10), ...offs(-14, -9, -9)]]]) {
+    if (!gate) break;
+    for (const off of list) { gateLane = laneOf(d, off); if (gateLane) break; }
+    if (gateLane) break;
+  }
+  if (gateLane) gateLane.cells.forEach(([x, y]) => { if (at(x, y) !== 'c') set(x, y, 'p'); });
+
   // ---- crop, forest edge, greenery ----
   let x0 = GW, y0 = GH, x1 = 0, y1 = 0;
   const grow = (x, y) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); };
@@ -194,12 +232,25 @@ export function generate(C = COURSE) {
   own.forEach((o) => taken.add(`${o.x},${o.y}`));
   const SIGNS = [...own, ...settle(signs.filter((s) => !s.b).map((s) => ({ ...s, x: s.x - x0, y: s.y - y0 })), 'g', (o) => [o.x, o.y], (o, x, y) => ({ ...o, x, y }))];
   const NPCS = npcs.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), MONUMENTS = monuments.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), PROPS = settle(props.map(sh), 'gc');
+  // the road out of town runs on to the edge of the map; the gate stands two tiles before the edge
+  let GATE = null;
+  if (gateLane) {
+    const [dx, dy] = gateLane.dir, [ax, ay] = gateLane.across;
+    let [x, y] = sh(gateLane.end);
+    while (x + dx >= 0 && y + dy >= 0 && x + dx < W && y + dy < Hh) { x += dx; y += dy; for (const k of [0, 1]) out[y + ay * k][x + ax * k] = out[y + ay * k][x + ax * k] === 'c' ? 'c' : 'p'; }
+    const gx = x - dx * 2, gy = y - dy * 2, tiles = [[gx, gy], [gx + ax, gy + ay]];
+    const stand = [gx - dx, gy - dy], aside = [gx - dx - ax, gy - dy - ay], posts = [[gx - ax, gy - ay], [gx + 2 * ax, gy + 2 * ay]];
+    out[aside[1]][aside[0]] = 'p'; // room for the champion to step aside
+    posts.forEach(([px2, py2]) => { out[py2][px2] = 'g'; taken.add(`${px2},${py2}`); PROPS.push([px2, py2, 'gatepost']); });
+    [...tiles, stand, aside].forEach(([px2, py2]) => taken.add(`${px2},${py2}`));
+    GATE = { tiles, stand, aside, posts, dir: [dx, dy], across: [ax, ay], edge: [x, y] };
+  }
   res.forEach((k) => taken.add(k)); // no tree, bush or rock grows in front of a door
   [...LAMPS, ...SIGNS.map((s) => [s.x, s.y]), ...NPCS.map((p) => [p.x, p.y]), ...MONUMENTS.flatMap((p) => [[p.x, p.y], [p.x + 1, p.y]]), ...PROPS].forEach(([x, y]) => taken.add(`${x},${y}`));
   const near = (x, y, chars, r = 1) => { for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) { const c = out[y + j]?.[x + i]; if (c && chars.includes(c)) return true; } return false; };
   for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) {
     const edge = Math.min(x, y, W - 1 - x, Hh - 1 - y) + (noise2(x * 0.3, y * 0.3, 2) - 0.5) * 3;
-    if (edge < 2.2) { if ('gfG'.includes(out[y][x])) out[y][x] = 'T'; continue; }
+    if (edge < 2.2) { if ('gfG'.includes(out[y][x]) && !(GATE && taken.has(`${x},${y}`))) out[y][x] = 'T'; continue; } // the gate's posts and apron stay clear
     if (!free(x, y) || near(x, y, 'pcwG')) continue;
     // groves, not confetti: trees gather where a slow noise field is high, and toward the edge of the map
     const grove = noise2(x * 0.16, y * 0.16, seed + 5), r = hashI(x, y, 1), water = near(x, y, '~', 2);
@@ -209,11 +260,20 @@ export function generate(C = COURSE) {
     else if (r < pTree + 0.05 + (water ? 0.25 : 0) + (grove < 0.3 ? 0.1 : 0)) out[y][x] = 'f';
     else if (water && hashI(x, y, 6) < 0.06) PROPS.push([x, y, 'boulder']);
   }
-  return {
-    W, H: Hh, TERRAIN: out.map((r) => r.join('')), BUILDINGS: buildings, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS,
+  const town = {
+    W, H: Hh, TERRAIN: out.map((r) => r.join('')), BUILDINGS: buildings, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, GATE,
     QUARTERS: quarters.map((q) => ({ ...q, x0: q.x0 - x0, y0: q.y0 - y0, x1: q.x1 - x0, y1: q.y1 - y0 })),
     START: { x: cx - 1 - x0, y: cy + 1 - y0, dir: 'up' }, HUB: { x: cx - x0, y: cy - y0 },
   };
+  // the road must not change any walk: the same town without it, every door at the same distance
+  // (trees keep a tile off lanes, so a road through a grove could open a shortcut); else no gate
+  if (GATE) {
+    const bare = generate(C, { gate: false }), d0 = reach(bare, solidMap(bare)), d1 = reach(town, solidMap(town));
+    const ox = town.HUB.x - bare.HUB.x, oy = town.HUB.y - bare.HUB.y;
+    const moved = bare.BUILDINGS.flatMap((b) => b.doors.filter(([x, y]) => d0[(y + 1) * bare.W + x] !== d1[(y + 1 + oy) * town.W + x + ox]).map(([x, y]) => `${b.id} ${d0[(y + 1) * bare.W + x]}->${d1[(y + 1 + oy) * town.W + x + ox]}`));
+    if (moved.length) return bare;
+  }
+  return town;
 }
 
 // smooth value noise in 0..1
@@ -224,7 +284,7 @@ const lower = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 const G = generate();
 export const TOWN = G; // the same data as one object (scripts that build other towns call generate(course) themselves)
 export const MAP_W = G.W, MAP_H = G.H;
-export const { TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, QUARTERS, PROPS, START, HUB } = G;
+export const { TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, QUARTERS, PROPS, START, HUB, GATE } = G;
 
 export function terrainAt(x, y) {
   if (x < 0 || y < 0 || x >= MAP_W || y >= MAP_H) return 'T';

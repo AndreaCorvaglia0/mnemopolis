@@ -13,7 +13,8 @@ import { COURSE, PLACE } from '../../data/content.js';
 import { state } from '../../systems/state.js';
 import { LIFE } from '../config.js';
 import { lifePlan } from '../active.js';
-import { journalBody } from '../secrets/journal.js';
+import { journalBody, journalStyle } from '../secrets/journal.js';
+import { lockSection } from '../riddles/journal.js';
 import { TOOLS } from '../obstacles/kinds.js';
 import { Q } from './active.js';
 import { Q_WORDS, tr, fill, trackerLine } from './strings.js';
@@ -114,6 +115,7 @@ function mysteries(busy) {
     items.length ? h('div', { class: 'qm-carry' }, items) : h('p', { class: 'qm-more', style: 'text-align:left' }, tr(W.mysteries.nothing)),
   ];
   if (LIFE.secrets) kids.push(h('div', { class: 'qm-jr' }, journalBody(lifePlan(), busy)));
+  else { const locks = lockSection(); if (locks) { journalStyle(); kids.push(h('div', { class: 'qm-jr' }, locks)); } } // opened locks belong to the game, not to ambient life
   return h('div', { class: 'qm-in' }, kids);
 }
 

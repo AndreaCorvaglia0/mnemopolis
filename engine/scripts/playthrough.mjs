@@ -24,7 +24,7 @@ import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const PHONE = !!process.env.PHONE, FAST = !!process.env.FAST, OUT = process.env.OUT || '/tmp';
-const TAG = `play${PHONE ? '-phone' : ''}${FAST ? '-ci' : ''}`;
+const TAG = `${process.env.NAME || 'play'}${PHONE ? '-phone' : ''}${FAST ? '-ci' : ''}`;
 const html = process.env.HTML || path.join(here, '..', 'dist', 'index.html');
 const CHROME = process.env.CHROME || ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'].find(existsSync);
 if (!CHROME) { console.log('No Chrome or Chromium found (set CHROME=/path): the play-through was skipped.'); process.exit(0); }
@@ -37,6 +37,7 @@ const { PLACE, QUESTIONS } = await import('../src/data/content.js');
 const { LABS } = await import('../src/course/labs.js');
 const { RIDDLES } = await import('../src/mechanics/riddles/data.js');
 const { DATA } = await import('../src/course/_data.js');
+const { GATE } = await import('../src/world/townMap.js');
 
 // ---------------------------------------------------------------- log, checks, actions
 const T0 = Date.now(), lines = [], problems = [];
@@ -201,7 +202,7 @@ const tilePage = (x, y) => ev((x, y) => { const sc = __game.scene.getScenes(true
 const vp = PHONE ? { w: 390, h: 844 } : { w: 1280, h: 760 };
 // the town scrolls: aim inside the middle of the screen, clear of the HUD; a room is all on screen
 let inTown = true;
-const onScreen = ([x, y]) => (inTown ? x > vp.w * 0.12 && x < vp.w * 0.88 && y > vp.h * 0.2 && y < vp.h * 0.8 : x > 4 && x < vp.w - 4 && y > 4 && y < vp.h - 4);
+const onScreen = ([x, y]) => (inTown ? x > 16 && x < vp.w - 16 && y > vp.h * 0.18 && y < vp.h - 80 : x > 4 && x < vp.w - 4 && y > 4 && y < vp.h - 4); // clear of the HUD and the prompt
 
 // Walk like a player who taps: tap the farthest tile of the way that is on screen, wait, again; at
 // the end tap the thing itself (a door, a person: the game walks next to it and uses it).
@@ -332,6 +333,10 @@ const RECIPES = {
   },
   'print:compare': async () => { for (const i of [0, 1, 2]) await clickEl('.lx .lab-ctl button.lab-btn', null, i); for (const i of [0, 1]) await clickEl('.lx .lab-ctl button.lab-btn', null, i); },
   'print:dots': async () => { await setSlider(0, 10); await clickEl('.lx .lab-seg button', null, 1); },
+  // the Italian test course (engine/tests/fixtures/prova)
+  'leva:altalena': async () => { await setSlider(0, 30); },
+  'piano:rampa': async () => { await setSlider(0, 4); },
+  'carrucola:paranco': async () => { await clickEl('.lx .lab-seg button', null, 0); await clickEl('.lx .lab-seg button', null, 1); },
 };
 // context:grey, written plainly: drag the second square onto the first, then the plain wall
 RECIPES['context:grey'] = async () => {
@@ -408,6 +413,7 @@ async function duel({ win = true, label = '' } = {}) {
     await until(() => document.querySelector('.dl')?.dataset.mode !== 'q', 'the feedback');
     const fb = await ev(() => document.querySelector('.dl-fb')?.textContent.slice(0, 160));
     if (turns === 1 || !win) log(`     turn ${turns}: ${win ? 'right' : 'wrong'} -> ${fb}`);
+    if (!win && turns === 1) { await sleep(400); await shot('duel-miss-rebuttal'); }
     if (/Insight/.test(fb)) fail('the duel says "Insight"');
     if (PHONE) await clickEl('.dl .dl-b.go'); else await key('Enter');
     await sleep(300);
@@ -446,9 +452,9 @@ async function challengeHost(id, { win = true, shotName = null } = {}) {
 
 // ---------------------------------------------------------------- locks and stairs
 async function useLock(r) {
-  const room = await ev(() => __game.scene.getScene('Interior').room.locks || []);
+  const [room, generated] = await ev(() => { const r = __game.scene.getScene('Interior').room; return [r.locks || [], !!r.generated]; });
   const l = room.find((x) => x.id === r.id);
-  if (!l) { fail(`lock ${r.id} is not in the room`); return; }
+  if (!l) { if (generated) fail(`lock ${r.id} is not in the room`); else log(`   lock ${r.id}: no place for it in a standard room ("gen" off)`); return; }
   await walkTo(l.x, l.y, `the ${r.kind} ${r.id}`);
   await until(() => document.querySelector('.lk')?.dataset.ready === '1', `the close-up of ${r.id}`);
   const answer = String([].concat(r.answer)[0]);
@@ -587,6 +593,8 @@ try {
 const coreIds = Q.core.map((p) => p.id);
 log(`core path: ${Q.core.map((p) => `${p.order} ${p.name} (${p.id}, ${p.kind})`).join(' · ')}; extras: ${Q.extra.map((p) => p.id).join(', ') || 'none'}`);
 const t0 = Date.now();
+// the tracker, sampled every 100 ms in the page: it must never flicker between two lines
+await ev(() => { window.__trk = []; setInterval(() => { const t = __game.scene.getScene('UI')?.trackFull; const l = window.__trk[window.__trk.length - 1]; if (t && (!l || l[1] !== t)) window.__trk.push([performance.now(), t]); }, 100); });
 // start
 await until(() => __game.scene.getScene('UI')?.phase === 'title', 'the title screen', 60000);
 await sleep(1500);
@@ -674,6 +682,17 @@ if (PHONE) { const c = await ev(() => __hb.uiToPage(480, 270)); await tap(...c);
 await until(() => __game.scene.getScene('UI').phase === 'say', 'the champion stepping aside');
 const aside = await readSay();
 log(`   champion: ${aside.join(' / ')}`);
+const gate = await ev(() => { const s = __game.scene.getScene('Town'); return s.gateImg ? (window.__gate = 1) && [s.champion.tx, s.champion.ty] : null; });
+const G = GATE;
+if (G) {
+  // the road out of town: the gate is open now; walk through it
+  await waitIdle('the champion aside');
+  await sleep(800);
+  await checkTracker({ kind: 'ending' }, 'League won, gate open');
+  await shot('gate-open');
+  await walkTo(G.tiles[0][0], G.tiles[0][1], 'the open gate');
+} else log('   (this town has no gate: the card opens at the League hall)');
+void gate;
 await until(() => document.querySelector('.qe'), 'the ending card', 30000);
 await sleep(1000);
 await shot('ending');
@@ -690,9 +709,20 @@ const free = await probe();
 const away = await pathTo(free.p[0] + 3, free.p[1] + 3);
 if (away) { await walkTo(...away[Math.min(away.length - 1, 4)], 'a few steps away'); await sleep(1500); }
 await checkTracker({ kind: 'free' }, 'walking after the ending');
+if (G) {
+  await walkTo(G.tiles[1][0], G.tiles[1][1], 'the gate again');
+  const p2 = await until(() => __game.scene.getScene('UI').phase || null, 'what the gate says after the ending', 20000);
+  const said = p2 === 'say' ? await readSay() : [];
+  log(`   through the gate again: ${p2} ${said.join(' / ')}`);
+  if (p2 === 'choose') await key('Escape');
+  await waitIdle();
+}
 } catch (e) { fail(`stopped: ${e.message}`); }
 
 // ---------------------------------------------------------------- report
+const trk = await ev(() => window.__trk || []);
+for (let i = 2; i < trk.length; i++) if (trk[i][1] === trk[i - 2][1] && trk[i][0] - trk[i - 2][0] < 1500) fail(`the tracker flickered: "${trk[i - 2][1]}" -> "${trk[i - 1][1]}" -> back within ${Math.round(trk[i][0] - trk[i - 2][0])} ms`);
+log(`tracker: ${trk.length} lines over the game: ${trk.map((x) => x[1]).join(' | ')}`);
 const st = await S();
 log(`== done in ${((Date.now() - T0) / 1000).toFixed(0)} s (core path ${corePath.toFixed(0)} s of headless time); ${actions} player actions; coins ${st.insight}; locks ${Object.keys(st.locks || {}).length}; problems ${problems.length}`);
 for (const p of problems) log(`PROBLEM: ${p}`);

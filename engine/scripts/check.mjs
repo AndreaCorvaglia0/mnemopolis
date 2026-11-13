@@ -5,15 +5,15 @@
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { SLUG } from '../src/course/_data.js';
+import { SLUG, COURSE_DIR } from '../src/course/_data.js';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const v = spawnSync('node', [path.join(root, 'skills', 'knowledge-base', 'scripts', 'validate.mjs'), path.join(root, 'courses', SLUG)], { stdio: 'inherit' });
+const v = spawnSync('node', [path.join(root, 'skills', 'knowledge-base', 'scripts', 'validate.mjs'), path.join(root, COURSE_DIR || `courses/${SLUG}`)], { stdio: 'inherit' });
 if (v.status) process.exit(v.status);
 
 const { LABS, UPPER_LABS } = await import('../src/course/labs.js');
 let bad = 0;
-for (const [id, lab] of [...Object.entries(LABS), ...Object.entries(UPPER_LABS)]) for (const s of lab.stations) if (!s.coded) { console.log(`ERROR    station "${id}.${s.id}" has no code: export it from courses/${SLUG}/labs/${id}.js`); bad++; }
+for (const [id, lab] of [...Object.entries(LABS), ...Object.entries(UPPER_LABS)]) for (const s of lab.stations) if (!s.coded) { console.log(`ERROR    station "${id}.${s.id}" has no code: export it from ${COURSE_DIR || `courses/${SLUG}`}/labs/${id}.js`); bad++; }
 // the town: it must generate, houses must stand on dry land without overlapping, and every door
 // must be reachable on foot from the square
 try {

@@ -246,3 +246,21 @@ test('the ending card claims a goal of an extra concept only for a player who di
   assert.deepEqual(goalsShown(goals, s, q), ['Plain goal', 'Core goal', 'Extra goal']);
   assert.deepEqual(goalsShown(goals, { visited: {}, done: {}, stamps: { b: true } }, q).length, 3, 'a badge counts');
 });
+
+test('an old save (before keys, locks, the map and the ending existed) still gives a sensible next step', async () => {
+  const { awardHouse, isFriendly } = await import('../src/mechanics/duel/prize.js');
+  // a save from the first versions: visited, done, stamps, passedLeague; nothing else
+  const old = { visited: { [Q.core[0].id]: true }, done: Object.fromEntries(Array.from({ length: Q.core[0].lab?.stations?.filter((s) => !s.advanced).length || 0 }, (_, i) => [`${Q.core[0].id}:${i}`, true])), stamps: { [Q.core[0].id]: true }, passedLeague: false, seenIntro: true };
+  const st = Q.nextStep(old);
+  assert.equal(st.kind, 'visit');
+  assert.equal(st.place.id, Q.core[1].id, 'the next core house, not the one already won');
+  // the badge without a key: not yet "friendly", and winning again hands over the key without a second badge
+  assert.equal(isFriendly(old, Q.core[0].id), false);
+  const prize = awardHouse(old, Q.core[0].id);
+  assert.deepEqual(prize, { badge: false, key: true });
+  assert.equal(isFriendly(old, Q.core[0].id), true);
+  // a finished old save: League won, no "ended" field: the ending step, then free roaming once seen
+  const done = { seenIntro: true, visited: {}, done: {}, stamps: Object.fromEntries(Q.core.map((p) => [p.id, true])), passedLeague: true };
+  assert.equal(Q.nextStep(done).kind, 'ending');
+  assert.equal(Q.nextStep({ ...done, ended: true }).kind, 'free');
+});

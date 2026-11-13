@@ -18,7 +18,8 @@
     "play": "node scripts/playthrough.mjs",
     "play:phone": "PHONE=1 node scripts/playthrough.mjs",
     "play:ci": "FAST=1 node scripts/playthrough.mjs",
-    "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\""
+    "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\"",
+    "shots:it": "node scripts/itshots.mjs"
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.3.1",

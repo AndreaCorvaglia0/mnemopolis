@@ -15,6 +15,10 @@
 | `npm run shots` (end) | Also runs `scripts/spineshots.mjs`: the main path in pictures (the guide's first speech, the tracker at the start, the mark over the next house, the three tabs of the menu in mid-game, a room's tracker, the League refused, the champion stepping aside, the ending card, free roaming), into `shots/spine*/`, copied to `/tmp/spine-*.png` (`OUT2=/dir` to change). |
 | `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
 | `npm run shots:locks` | Pictures of locks and upper floors: a room with stairs, the stairs refused without the key, the upper floor, each close-up before typing, misses with the thought, each lock opened, the discoveries page, the advanced station, the way back down; desktop then phone (with the phone keyboard open), into `shots/locks*/`, copied to `/tmp/locks-*.png`. |
+| `npm run play` | A real play-through (`scripts/playthrough.mjs`): a bot plays the built game from the title to the ending through the real screens, as a player would (taps or clicks on tiles and buttons, keys, drags on the lab pictures, typing into locks; it knows the right answers from the course). It checks the tracker at every step against its own plan, loses one duel on purpose and takes the rematch, opens the menu at the start, in mid-game and at the end, answers one tall-grass question, visits an extra house, types one wrong answer into every lock first, walks through the town gate. Pictures `/tmp/play-*.png`, log `/tmp/play-log.txt` (`OUT=` to change). It only reads the state (`__hb`, the scenes), except that every run starts from a fresh save. Exit code 1 on any problem. About 8 minutes of headless Chrome for the example course. |
+| `npm run play:phone` | The same on a phone held upright (390 x 844, taps): `/tmp/play-phone-*`. About 10 minutes. |
+| `npm run play:ci` | The same story, with the player carried in front of each door instead of walking the town (the one place where the bot writes state). `Q='&nolife'` adds to the address (also try `world.json` `"gen": false` or `"voice": false`). |
+| `npm run shots:it` | The Italian test course (`engine/tests/fixtures/prova`: three simple machines, a lab, a workshop, an expert's home with a temper and a safe; never published) played through on a desktop window and a phone: `/tmp/it-*.png`, `/tmp/it-phone-*.png`. Then the engine points back at the course it used. `COURSE=prova npm run build` builds that course alone. |
 | `npm run dev` | Live server while editing, if a browser is available. |
 
 Add `?lite` to the address for lighter graphics. The game also switches to them by itself on a
@@ -162,6 +166,19 @@ The lab is the core learning screen. Its rules, each answering something learner
   by `language` in `course.json` (English for anything else). Another language is one more entry
   in `STRINGS` with the same keys.
 
+## Words
+
+Every word a player reads is in English and Italian, chosen by `language` in `course.json`
+(English for anything else, `mechanics/config.js`). The older interface (title screen, HUD and
+toasts, prompts, dialogue options, the tall-grass quiz, the badge card, the reading wall, the mind
+map, the museum's plaques, the code panel, the guide's default lines, signs) reads
+`src/data/words.js` through `w('ui.musicOff')`, `w('town.talkTo', { name })`; the newer modules keep
+their own tables (`quest/strings.js`, `duel/lines.js`, `riddles/kinds.js`, `floors/room.js`,
+`lab/shell.js`, `mechanics/config.js`, the musings). A prompt is written `Space  <what>`; the HUD
+turns it into `Spazio  <what>` or, on touch, `Tocca qui: <what>`. `tests/words.test.mjs` walks every
+table: each entry has both languages, the same `{placeholders}`, the same keys. A string written
+straight into a scene escapes that test: `npm run shots:it` is where it shows.
+
 Round two (this version) answered two simulated first-time users on the first redesign: the
 verdict and Next vanished when the panel was folded; the answer card went stale; the step list
 read as a checklist to tick; the lock pill covered the yellow ink; captions said "Drag" while
@@ -230,6 +247,10 @@ src/mechanics/quest/
   `lab` (n/m; `here` when the player stands in it: "Do the lab") -> `duel` (`person`: the host);
   then `league` (`Q.leagueOpen`), `ending` (League won, card not seen), `free` (after
   `state.ended`). `stepKey(step)` changes exactly when the tracker's line should.
+- **Pitfall paid for**: the key that closes a box (the badge card) must not act again in the scene
+  underneath. On a slow machine the scene's next update can come after the 180 ms cooldown, and its
+  `JustDown(SPACE)` was still true: the host's dialogue reopened by itself. `UI.close()` now
+  consumes Space, Enter and E in every active scene.
 - **Tracker** (`UI.refreshQuest`, `layoutRight`): top right, under the place name; one line in a
   pill, cut to stay on one line; recomputed every 400 ms from the state (so it follows labs, duels
   and the League whoever changed them), lights up when the step changes, and emits `quest` on
@@ -243,17 +264,41 @@ src/mechanics/quest/
   never a name). After the ending each congratulates once (`state.cheered`).
 - **Thoughts**: the nudge of `musings/think.js` is built from the step (`nudgeLine`); after the
   ending it turns to curiosity (`NUDGES.free`).
-- **League hall**: the champion (`LEAGUE.host`) stands before the hall's second door. Talking to
-  the champion or using the door: while closed, one line naming what is missing (`gateLine`); open, the
-  League duel (`ui.league()`); won, `Town.ending()`: the champion steps aside, one line in character,
-  `state.ended`, the ending card (`ui.ending()`), which the Journey tab can reopen. `world.json`
-  `"next": { "title", "url" }` adds "On to <title>" to the card.
+- **League and gate**: the champion (`LEAGUE.host`) stands before the town gate at the end of the
+  road out of town ("The road out of town" below), or before the League hall's second door in a town
+  without a gate. Talking to the champion or walking into the gate: while the League is closed, one
+  line naming what is missing (`gateLine`); open, the League duel (`ui.league()`); won, `Town.ending()`:
+  the champion steps aside with one line in character and the gate opens; walking through it sets
+  `state.ended` and opens the ending card (`ui.ending()`), which the Journey tab can reopen. Without
+  a gate the card opens at once. `world.json` `"next": { "title", "url" }` adds "On to <title>" to
+  the card and to the gate afterwards. The card lists the goals the path taught (`goalsShown`).
 
 **Adding a step kind**: return it from `nextStep` in `model.js` (with what it needs: `place`,
 `person`, `n`, `m`), give it a tracker line and a "what should I do" answer in `strings.js` (both
 languages; `npm test` checks), a nudge in `musings/lines.js` (`NUDGES`, mapped in
 `think.js:nudgeKind`), and if it names a building, `Town.pointAt` finds it by id. Then walk it in
 `tests/quest.test.mjs` (`act` says how a simulated player completes it).
+
+## The road out of town
+
+`world/townMap.js` lays, after everything else, a straight lane two tiles wide from one side of
+the square to the edge of the map (south first, then east, west, north; at most 32 tiles; only
+over grass, flowers, lanes and plazas, never through the meadow, water, a house, or beside a
+landmark, a person or a house's signpost), and returns `GATE = { tiles, stand, aside, posts, dir,
+across, edge }`: the two gate tiles two tiles before the edge, where the champion stands and where
+they step aside, the two stone posts (props `gatepost`). The road is a dead end: the generator
+builds the same town without it and drops the road if any door's walking distance changes
+(trees keep a tile off lanes, so a road through a grove could open a shortcut). The stress test
+checks it again with the dressing of every theme and reports how many towns have a gate (about
+four in five).
+
+`scenes/Town.js`: the gate is drawn by `world/gateArt.js` (shut, open; front view when the road
+leaves north or south, side view east or west); walking into it or pressing Space before it is
+`useGate()`: before the League, the champion's business (`league()`); after the win (the champion
+steps aside, the gate swings open, the tracker says the road is open, the mark floats over the
+gate) the ending card; afterwards "the next town is not built yet", or the `next` link. The League
+hall's door carries a note that sends the player to the gate. A town without a gate plays the
+ending at the League hall as before.
 
 ## Ambient life
 
@@ -448,6 +493,13 @@ screen }`, the spots in art pixels), a fixture zone in `gen/interior/zones.js` w
 the lock, the piece in `pieces.js` and its painter in `furniture.js`, its musings in
 `musings/lines.js` (with `point: true`). `npm test` checks all of them.
 
+**Layout.** Nothing may cover the place where the answer shows (the safe's display, the login
+line on the screen). The sticky note is always in the controls (on a wide screen the side column,
+on a phone above the keys), as a note taken off the lock; the voice behind a door stays a bubble
+over the hatch, where nothing is typed (in the controls on a short stage); the thought after a miss
+goes in the controls, above the keys. On an upright screen the picture is as tall as it needs, no
+taller, so there are no dark bands. The password field shows its letters.
+
 **Debug:** `__hb.riddles()` lists the course's riddles with their answers; `npm run shots:locks`.
 
 ## Upper floors
@@ -472,6 +524,13 @@ the lock, the piece in `pieces.js` and its painter in `furniture.js`, its musing
   [stationIds] })`), saved as `state.done['id+up:<stationId>']`.
 - **Keys for testing:** `?keys=all` or `?keys=wheel,context` in the address, `__hb.giveKey('wheel')`
   (or `'all'`) in the console.
+- **The look upstairs** differs on purpose: the room composer begins the plaque with UPSTAIRS (DI
+  SOPRA) and paints it gold on dark wood, `paint.js` hangs a lamp from the beam
+  (`upstairsLamp(L)`), and `floors/room.js` lays a warm dusk over the room with a pool of light
+  under the lamp and a soft light around the player.
+- **The locked closet** (ambient life's indoor obstacle) goes on a ground floor with a tidy wall,
+  else under the roof (`planLife(..., { uppers })`, `closet.floor`).
+- A key is shown and mentioned (duel prize, badge card, Mysteries) only for a house with an upstairs.
 
 
 ## Duels

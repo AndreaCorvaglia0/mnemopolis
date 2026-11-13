@@ -13,7 +13,7 @@ const PIECE = {
 };
 const BED = { cabbage: 'garden', carrot: 'garden', beans: 'garden', soil: 'garden', bloom0: 'flowers', bloom1: 'flowers', bloom2: 'flowers', lawn: 'grass', scarecrow: 'scarecrow', barrels: 'barrel', birdbath: 'birdbath', topiary: 'bush' };
 const TERRAIN = { T: 'tree', b: 'bush', F: 'fence', '~': 'water', w: 'bridge', R: 'cliff', e: 'cliff', r: 'rock', s: 'sand', G: 'tallgrass', f: 'flowers', g: 'grass', p: 'path', c: 'plaza', d: 'sand' };
-const PROP = { bench: 'bench', boulder: 'rock', crate: 'crates', boat: 'boat' };
+const PROP = { bench: 'bench', boulder: 'rock', crate: 'crates', boat: 'boat', gatepost: 'landmark' };
 const thing = (kind) => (kind ? { kind, point: !!LINES[kind]?.point } : null);
 
 export function townThingAt(c, plan, x, y) {

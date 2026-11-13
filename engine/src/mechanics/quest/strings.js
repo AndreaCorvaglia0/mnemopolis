@@ -41,8 +41,11 @@ export const Q_WORDS = {
     visit: { en: 'House {order}, {place}, {near}. Follow the numbers on the walls.', it: 'La casa {order}, {place}, {near}. Segui i numeri sui muri.' },
     lab: { en: 'Go back to {place}: its lab is not finished ({n} of {m}).', it: 'Torna a {place}: il suo laboratorio non è finito ({n} di {m}).' },
     duel: { en: '{person} at {place} is waiting for you: talk to them and challenge them to a duel.', it: '{person}, a {place}, ti aspetta: parlaci e sfidalo a duello.' },
-    league: { en: 'You\'ve beaten every expert. The League hall is right here on the square.', it: 'Hai battuto tutti gli esperti. La sala della Lega è proprio qui in piazza.' },
-    ending: { en: 'The champion is waiting for you by the League hall.', it: 'Il campione ti aspetta davanti alla sala della Lega.' },
+    league: { en: 'You\'ve beaten every expert. The champion waits at the town gate, at the end of the road from the square.', it: 'Hai battuto tutti gli esperti. Il campione ti aspetta alla porta della città, in fondo alla strada che parte dalla piazza.' },
+    ending: { en: 'The gate at the end of the road is open: walk through it.', it: 'La porta in fondo alla strada è aperta: attraversala.' },
+    // a town without a gate (the generator found no way to the edge): the League hall on the square
+    leagueHall: { en: 'You\'ve beaten every expert. The League hall is right here on the square.', it: 'Hai battuto tutti gli esperti. La sala della Lega è proprio qui in piazza.' },
+    endingHall: { en: 'The champion is waiting for you by the League hall.', it: 'Il campione ti aspetta davanti alla sala della Lega.' },
     free: { en: 'Whatever you like. The town is yours now.', it: 'Quello che vuoi. Ora la città è tua.' },
   },
   // ---- hints at the extras: never their names (docs/DESIGN.md: hinted, never listed) ----
@@ -66,6 +69,16 @@ export const Q_WORDS = {
     notNow: { en: 'Not now', it: 'Non ora' },
     again: { en: 'You already beat me. A friendly rematch, for the fun of it?', it: 'Mi hai già battuto. Una rivincita amichevole, per divertimento?' },
     ok: { en: 'I\'ll be back', it: 'Tornerò' },
+  },
+  // ---- the town gate, at the end of the road out of town (Town.js) ----
+  townGate: {
+    prompt: { en: 'The town gate', it: 'La porta della città' },
+    through: { en: 'Walk through the gate', it: 'Attraversa la porta' },
+    opens: { en: 'The gate swings open.', it: 'La porta si spalanca.' },
+    next: { en: 'The road goes on, out of {title}. The next town is not built yet.', it: 'La strada prosegue, fuori da {title}. La prossima città non è ancora costruita.' },
+    nextOn: { en: 'The road goes on to {next}.', it: 'La strada prosegue verso {next}.' },
+    stay: { en: 'Stay a little longer', it: 'Resta ancora un po\'' },
+    hall: { en: 'Nobody inside. A note on the door: "At the town gate. {person}"', it: 'Dentro non c\'è nessuno. Un biglietto sulla porta: "Sono alla porta della città. {person}"' },
   },
   // the card shown when a badge is won (UI.stamp)
   badge: { en: 'Badge: {place}', it: 'Distintivo: {place}' },
@@ -168,8 +181,9 @@ export function trackerLine(st, lang = LANG) {
 
 // What a person answers to "what should I do?"
 export const nearOf = (p, lang = LANG) => tr(NEAR[p?.district?.landmark] || NEAR.here, lang);
-export function answerLine(st, lang = LANG) {
-  return fill(tr(Q_WORDS.answer[st.kind], lang), { person: st.person, order: st.order, place: st.place?.name, n: st.n, m: st.m, near: nearOf(st.place, lang) });
+export function answerLine(st, lang = LANG, { gate = true } = {}) {
+  const key = !gate && (st.kind === 'league' || st.kind === 'ending') ? `${st.kind}Hall` : st.kind;
+  return fill(tr(Q_WORDS.answer[key], lang), { person: st.person, order: st.order, place: st.place?.name, n: st.n, m: st.m, near: nearOf(st.place, lang) });
 }
 
 // The champion's line at the League hall while it is closed. missing: progress rows not done.
