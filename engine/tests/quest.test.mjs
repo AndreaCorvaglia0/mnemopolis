@@ -16,6 +16,7 @@ import { endingNumbers, goalsShown } from '../src/mechanics/quest/ending.js';
 import { PLACES, QUESTIONS } from '../src/data/content.js';
 import { KINDS } from '../src/world/townMap.js';
 import { rng } from '../scripts/synthetic.mjs';
+import { STORY } from '../src/mechanics/story/config.js';
 
 const LANGS = ['en', 'it'];
 const fresh = () => ({ seenIntro: false, visited: {}, done: {}, stamps: {}, keys: {}, passedLeague: false, ended: false });
@@ -26,6 +27,7 @@ function act(s, st, Qx) {
   else if (st.kind === 'visit') s.visited[st.place.id] = true;
   else if (st.kind === 'lab') { s.visited[st.place.id] = true; s.done[`${st.place.id}:${st.n}`] = true; }
   else if (st.kind === 'duel') { s.stamps[st.place.id] = true; s.keys[st.place.id] = true; }
+  else if (st.kind === 'memento') { ((s.story ||= {}).mementos ||= {})[st.place.id] = true; }
   else if (st.kind === 'league') { assert.ok(Qx.leagueOpen(s), 'the League is proposed while closed'); s.passedLeague = true; }
   else if (st.kind === 'ending') s.ended = true;
 }
@@ -60,6 +62,7 @@ test('the example course: core and extra as course.json says, and a whole game i
   const { kinds } = playThrough(Q);
   // intro, then for each core house visit (or lab at once), its stations, its duel; league; ending; free
   assert.equal(kinds.filter((k) => k === 'duel').length, 4);
+  assert.equal(kinds.filter((k) => k === 'memento').length, STORY.on ? 4 : 0, 'in the story, a look upstairs after each remembering');
   assert.equal(kinds.filter((k) => k === 'league').length, 1);
 });
 
@@ -177,7 +180,7 @@ test('places are seen from nearby, extras show as "?" only then, and the ending 
   assert.equal(knownAs({ id: ex.id }, { visited: {}, seen: { [ex.id]: true } }), 'mystery');
   assert.equal(knownAs({ id: Q.core[1].id }, { visited: {}, seen: {} }), 'core');
   const n = endingNumbers({ q: { a: { seen: 3, right: 2 }, b: { seen: 1, right: 1 } }, bets: { 3: [2, 3] }, visited: { a: true }, life: { found: { s1: 1 } }, played: 600 }, [{ id: 'a' }, { id: 'b' }], [{ id: 's1' }, { id: 's2' }]);
-  assert.deepEqual(n, { answered: 4, right: 3, accuracy: 75, certain: [2, 3], played: 600, left: 2 });
+  assert.deepEqual(n, { answered: 4, right: 3, accuracy: 75, played: 600, left: 2 }, 'an old save with bets: no confidence statistic any more');
 });
 
 test('an old save without the new fields loads with them', async () => {
@@ -192,7 +195,8 @@ test('an old save without the new fields loads with them', async () => {
   assert.equal(state.ended, false);
   assert.deepEqual(state.seen, {});
   assert.equal(state.played, 0);
-  assert.deepEqual([Q.nextStep(state).kind, Q.nextStep(state).place.id], ['visit', 'wheel'], 'the old save goes on where it was');
+  // (in the story the first house still keeps its memento upstairs: that is where it goes on)
+  assert.deepEqual([Q.nextStep(state).kind, Q.nextStep(state).place.id], STORY.on ? ['memento', 'lamps'] : ['visit', 'wheel'], 'the old save goes on where it was');
   delete globalThis.localStorage;
 });
 
@@ -251,7 +255,7 @@ test('an old save (before keys, locks, the map and the ending existed) still giv
   const { awardHouse, isFriendly } = await import('../src/mechanics/duel/prize.js');
   // a save from the first versions: visited, done, stamps, passedLeague; nothing else
   const old = { visited: { [Q.core[0].id]: true }, done: Object.fromEntries(Array.from({ length: Q.core[0].lab?.stations?.filter((s) => !s.advanced).length || 0 }, (_, i) => [`${Q.core[0].id}:${i}`, true])), stamps: { [Q.core[0].id]: true }, passedLeague: false, seenIntro: true };
-  const st = Q.nextStep(old);
+  const st = Q.nextStep(STORY.on ? { ...old, story: { mementos: { [Q.core[0].id]: true } } } : old);
   assert.equal(st.kind, 'visit');
   assert.equal(st.place.id, Q.core[1].id, 'the next core house, not the one already won');
   // the badge without a key: not yet "friendly", and winning again hands over the key without a second badge
@@ -260,7 +264,7 @@ test('an old save (before keys, locks, the map and the ending existed) still giv
   assert.deepEqual(prize, { badge: false, key: true });
   assert.equal(isFriendly(old, Q.core[0].id), true);
   // a finished old save: League won, no "ended" field: the ending step, then free roaming once seen
-  const done = { seenIntro: true, visited: {}, done: {}, stamps: Object.fromEntries(Q.core.map((p) => [p.id, true])), passedLeague: true };
+  const done = { seenIntro: true, visited: {}, done: {}, stamps: Object.fromEntries(Q.core.map((p) => [p.id, true])), passedLeague: true, story: { mementos: Object.fromEntries(Q.core.map((p) => [p.id, true])) } };
   assert.equal(Q.nextStep(done).kind, 'ending');
   assert.equal(Q.nextStep({ ...done, ended: true }).kind, 'free');
 });

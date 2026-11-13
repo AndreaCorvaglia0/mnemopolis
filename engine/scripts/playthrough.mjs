@@ -590,9 +590,6 @@ async function tallGrass() {
   await shot('grass-question');
   if (PHONE) { const at = await ev((i) => __hb.uiToPage(...__game.scene.getScene('UI').quizState.at[i]), qq.answer); await tap(...at); }
   else { for (let n = 0; n < 5; n++) { const s = await ev(() => __game.scene.getScene('UI').quizState.sel()); if (s === qq.answer) break; await key('ArrowDown'); } await key('Space'); }
-  await until(() => __game.scene.getScene('UI').phase === 'quiz-bet', 'the bet');
-  await sleep(300);
-  if (PHONE) { const at = await ev(() => __hb.uiToPage(...__game.scene.getScene('UI').quizState.bets[1])); await tap(...at); } else await key('Digit2');
   await until(() => __game.scene.getScene('UI').phase === 'quiz-reveal', 'the reveal');
   await sleep(600);
   const txt = await ev(() => __game.scene.getScene('UI').children.list.filter((o) => o.type === 'Container').flatMap((c) => c.list).filter((o) => o.type === 'Text').map((o) => o.text).join(' | '));

@@ -25,16 +25,15 @@ const right = `(()=>{const q=${Q};document.querySelectorAll('.dl-o')[q.answer].c
 // a wrong option, one with a trap when the question has one
 const wrong = `(()=>{const q=${Q};const t=q.options.map((_,i)=>i).filter(i=>i!==q.answer);const i=t.find(i=>q.traps&&q.traps[i])??t[0];document.querySelectorAll('.dl-o')[i].click();return 1})()`;
 const next = "(document.querySelector('.dl-b.go').click(),1)";
-const tone = (k) => `(document.querySelectorAll('.dl-t')[${k}].click(),1)`;
 // play until the end: right answers (or wrong ones)
 const playOut = (ok) => `(()=>{let n=0;while(${mode}!=='end'&&n++<40){if(${mode}==='q')(${ok ? right : wrong});else (${next});}return ${mode}})()`;
 const duel = (id) => `(()=>{const s=__game.scene.getScene('Interior');s.quizSeries();return 1})()`;
 const steps = ['wait:9000', `eval:${enc('__hb.state.seenIntro=true')}`, 'key:Space', 'wait:5000',
   `eval:${enc(`(()=>{const s=__game.scene.getScene('Town');s.scene.start('Interior',{id:'${A}'});return 1})()`)}`, 'wait:2500',
-  // 1. the start: opening line, tone "State" preselected, the question
+  // 1. the start: opening line, the question
   `eval:${enc(duel(A))}`, 'wait:1200', 'shot:01-house-start',
-  // 2. a right answer, proclaimed
-  `eval:${enc(tone(2))}`, 'wait:200', `eval:${enc(right)}`, 'wait:500', 'shot:02-house-hit',
+  // 2. a right answer
+  `eval:${enc(right)}`, 'wait:500', 'shot:02-house-hit',
   // 3. a wrong answer: the rebuttal with the trap
   `eval:${enc(next)}`, 'wait:300', `eval:${enc(wrong)}`, 'wait:500', 'shot:03-house-miss',
   // 4. right until won: the key handed over
