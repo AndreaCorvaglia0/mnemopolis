@@ -4,7 +4,7 @@
 // the story switched off giving the plain town.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { stageOf, rainOf, progressOf, mementoOrder, mementosFor, MEMENTO_ORDER, pageText, doorWord, fogInterval, fogDue, fogCleared, fogStart, foggy, FOG_DAYS, DAY_MS, FOG_BARS } from '../src/mechanics/story/logic.js';
+import { stageOf, rainOf, progressOf, mementoOrder, mementosFor, MEMENTO_ORDER, pageText, doorWord, fogInterval, fogDue, fogCleared, fogStart, foggy, FOG_DAYS, DAY_MS, FOG_BARS, endingOf } from '../src/mechanics/story/logic.js';
 import { S_WORDS, Q_STORY, REMEMBER, R_TEMPERS, KEEPER, NUDGES_STORY } from '../src/mechanics/story/words.js';
 import { storyConfig, STORY } from '../src/mechanics/story/config.js';
 import { questOf } from '../src/mechanics/quest/model.js';
@@ -111,7 +111,7 @@ test('every word of the story in English and Italian, the same placeholders; spa
     assert.ok(s.length <= 140, `short: ${s}`);
   }
   // captions are one sentence each
-  for (const k of ['opening', 'notebook', 'turn', 'leaving', 'climb', 'understood']) for (const l of LANGS) for (const s of S_WORDS[k][l]) assert.ok((s.match(/[.?]\s/g) || []).length === 0, `one sentence: ${s}`);
+  for (const k of ['opening', 'notebook', 'tear', 'keeperLamp', 'climb', 'understood']) for (const l of LANGS) for (const s of S_WORDS[k][l]) assert.ok((s.match(/[.?]\s/g) || []).length === 0, `one sentence: ${s}`);
   assert.deepEqual(Object.keys(REMEMBER.it).sort(), Object.keys(REMEMBER.en).sort());
   for (const t of Object.values(R_TEMPERS)) assert.deepEqual(Object.keys(t.it).sort(), Object.keys(t.en).sort());
   assert.deepEqual(Object.keys(KEEPER.it).sort(), Object.keys(KEEPER.en).sort());
@@ -149,4 +149,9 @@ test('the story switched off is the plain town: no harbour, no attic, no memento
   assert.equal(mergeWords(Q_BASE, {}).tracker.league.en, Q_BASE.tracker.league.en);
   assert.equal(Q_WORDS.tracker.league.en, STORY.on ? 'Go to the lighthouse' : Q_BASE.tracker.league.en);
   assert.equal(mergeWords(Q_BASE, Q_STORY).tracker.visit, Q_BASE.tracker.visit, 'what the story does not change stays');
+});
+
+test('one function chooses the ending; today always the bitter loop', () => {
+  assert.equal(endingOf({}), 'loop');
+  assert.equal(endingOf({ passedLeague: true, locks: { a: 1 }, life: { found: { x: 1 } } }), 'loop');
 });

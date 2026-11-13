@@ -106,6 +106,11 @@
 
 ## Later
 
+- Endings by score and completion (`docs/STORY.md`, "Endings (planned)"): the bitter loop stays the
+  ending of the main path alone; side missions (locks, upper floors, hidden buildings, secrets,
+  houses kept from the fog) could earn happier ones (the notebook kept, the purser's line changed,
+  the crossing remembered). Not designed yet; `endingOf` in `story/logic.js` is where it plugs in.
+
 - Locks, left out on purpose: locks in the town (a door on a hidden nook's gate, a safe in an
   institution's hall); more kinds (a chest with a letter padlock, a diary with a clasp); a lock that
   needs two answers; an "upper floor" for workshops and museums; a harder rematch upstairs (the duel

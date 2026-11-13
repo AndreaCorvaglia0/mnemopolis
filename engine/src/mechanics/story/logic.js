@@ -80,3 +80,11 @@ export const fogStart = (now) => ({ at: now, n: 0 });
 export const foggy = (fog = {}, now) => Object.keys(fog).filter((id) => fogDue(fog[id], now));
 // the two questions of a short return: bars of a small remembering
 export const FOG_BARS = { conviction: 2, composure: 2, turns: 3, pass: 2 / 3 };
+
+// Which ending plays when the player boards the ship (finale.js, ENDINGS). One function of the
+// state, so that a happier ending can be chosen from score and completion later (docs/STORY.md,
+// "Endings (planned)": locks opened, upper floors, hidden buildings, secrets, houses kept from the
+// fog). Today it is always the bitter, identical loop.
+export function endingOf(s) {
+  return 'loop';
+}

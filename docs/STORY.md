@@ -118,6 +118,17 @@ misses the character remembers it, so nobody is stuck there.
   had. The cat is the only one in town who never forgot.
 - The ending can be seen again; the notebook stays readable.
 
+## Endings (planned)
+
+Not designed yet, not built: a plan note. The bitter ending with the identical loop is the ending
+of a player who did only the main path. Depending on score and completion (the side missions:
+locks opened, upper floors, hidden buildings, secrets, houses kept from the fog) there could be
+happier endings, for example: the notebook is kept instead of torn; the purser's line changes; the
+crossing is remembered. One function of the state chooses the ending, `endingOf` in
+`engine/src/mechanics/story/logic.js`, and today it always answers `'loop'`; each answer has its
+sequence in `ENDINGS` in `finale.js`. A new ending is a new answer there and a new entry here,
+nothing else.
+
 ## What changes in the game
 
 | Part | Change |

@@ -20,6 +20,7 @@ import { lampRoomPainter, registerPainter, pagesPainter, gangwayPainter } from '
 import { startFog } from './fog.js';
 import { S_WORDS } from './words.js';
 import { tr, fill } from './config.js';
+import { endingOf } from './logic.js';
 
 export const TALLY = 4;
 
@@ -75,14 +76,14 @@ export async function playLamp(town) {
   s?.lightLamp(true); s?.weather.set(0); s?.refresh();
 }
 
-export async function playEnding(town) {
-  const ui = town.ui, name = state.story?.name || tr(S_WORDS.defaultName);
-  if (state.ended || town.story?.ending) return;
-  town.story.ending = true;
-  await cinema(ui, async (c) => {
+// The ending sequences, one per kind that endingOf (logic.js) can return. Today only the bitter,
+// identical loop exists (docs/STORY.md, "Endings (planned)"): a happier ending is a new entry here
+// and a new answer of endingOf, nothing else.
+const ENDINGS = {
+  async loop(c, { name }) {
     c.root.style.background = '#05060a';
     await c.dim(1, 0);
-    // the pages, torn out, taken home by the wind
+    // the pages, torn out, scattered along the quay
     let v = await cut(c, null, pagesPainter(), { pages: Math.max(3, Q.core.length), push: 0.04 });
     await c.dim(0, 1200);
     c.theme('fragment');
@@ -111,7 +112,15 @@ export async function playEnding(town) {
     await c.wait(2500);
     await c.dim(1, 1200);
     v.stop();
-  });
+  },
+};
+
+export async function playEnding(town) {
+  const ui = town.ui, name = state.story?.name || tr(S_WORDS.defaultName);
+  if (state.ended || town.story?.ending) return;
+  town.story.ending = true;
+  const ending = ENDINGS[endingOf(state)] || ENDINGS.loop;
+  await cinema(ui, (c) => ending(c, { name }));
   state.ended = true;
   Object.assign((state.story ||= {}), { left: true, rounds: (state.story.rounds || 0) + 1 });
   save();
