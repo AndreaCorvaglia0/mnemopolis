@@ -44,7 +44,10 @@
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
    landscapes the first one does not.
-2. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
+2. The game around the course, in the order of `docs/DESIGN.md`: the spine (core and extra
+   concepts, the next step, tracker, menu, ending), duels of eloquence and the League as a duel,
+   then coins, shop, keys and upper floors; ambient music.
+3. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
    (`needs`), `canPass` and the saved `state.tools` / `state.opened` exist (`engine/src/mechanics/obstacles/`);
    what waits behind them is a placeholder listed as "sealed".
 

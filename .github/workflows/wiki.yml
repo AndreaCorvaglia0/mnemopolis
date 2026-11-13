@@ -1,0 +1,30 @@
+# Publishes docs/wiki/ to the repository's wiki. The wiki must exist first: enable Wikis in the
+# repository settings and save one page by hand (GitHub creates the wiki's git repository then).
+name: wiki
+on:
+  push:
+    branches: [main]
+    paths: ['docs/wiki/**', '.github/workflows/wiki.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push docs/wiki to the wiki
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! git clone "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" wiki; then
+            echo "::warning::The wiki does not exist yet. Enable Wikis in Settings and save a first page, then run this workflow again."
+            exit 0
+          fi
+          rsync -a --delete --exclude .git docs/wiki/ wiki/
+          cd wiki
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Update from docs/wiki at ${GITHUB_SHA::7}"
+          git push

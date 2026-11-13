@@ -1,5 +1,8 @@
 # Architecture
 
+The design of the game itself (main story, duels, the three axes, guidance) is in `DESIGN.md`;
+the reasons are in `wiki/`, published to the repository's wiki.
+
 Three layers, each replaceable without touching the others.
 
 ```
