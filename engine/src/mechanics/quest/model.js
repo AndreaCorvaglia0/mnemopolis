@@ -58,11 +58,11 @@ export function questOf({ places, guide = 'the guide', champion = 'the champion'
       if (r.done) continue;
       const p = r.place, here = ctx.inside === p.id;
       const base = { place: p, order: p.order, here };
-      if (r.won && r.memento && !r.found) return { kind: 'memento', ...base, here: ctx.inside === `${p.id}+up` }; // remembered: upstairs, whatever else
+      if (r.won && r.memento && !r.found) return { kind: 'memento', ...base, here: ctx.inside === p.id || ctx.inside === `${p.id}+up` }; // remembered: upstairs, whatever else
       if (!r.visited && !(here && r.m)) return { kind: 'visit', ...base };
       if (r.n < r.m) return { kind: 'lab', ...base, n: r.n, m: r.m };
       if (r.duel && !r.won) return { kind: 'duel', ...base, person: p.host?.name || p.expert?.name || 'the host' };
-      if (r.memento && !r.found) return { kind: 'memento', ...base, here: ctx.inside === `${p.id}+up` };
+      if (r.memento && !r.found) return { kind: 'memento', ...base, here: ctx.inside === p.id || ctx.inside === `${p.id}+up` };
       return { kind: 'visit', ...base }; // not reached: a house without a duel is done once visited with its lab finished
     }
     if (!s.passedLeague) return { kind: 'league', person: champion };

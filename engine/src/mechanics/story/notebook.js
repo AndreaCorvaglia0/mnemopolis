@@ -29,7 +29,9 @@ export const NB_CSS = `
 .nb .fog{display:inline-block;padding:0 8px;border-radius:10px;background:#d9dde3;color:#4a5160;font:15px/24px system-ui,sans-serif}
 .nb .page{margin:6px 0 0;padding:0 0 2px}
 .nb .page .from{font:15px/24px system-ui,sans-serif;color:#7a6a48}
-.nb .stub{height:30px;margin:6px 0 2px;background:linear-gradient(135deg,transparent 0 8px,#efe6cf 8px) 0 0/16px 100%,repeating-linear-gradient(#e2d6b8 0 31px,#cfd8e0 31px 32px);clip-path:polygon(0 0,100% 0,100% 40%,92% 70%,84% 45%,76% 80%,68% 50%,60% 85%,52% 55%,44% 90%,36% 60%,28% 85%,20% 50%,12% 80%,4% 55%,0 70%);opacity:.8;font:15px/30px system-ui,sans-serif;color:#8a7a58;padding-left:10px}
+.nb .stub{position:relative;height:36px;margin:6px 0 2px;padding:2px 0 0 10px;font:15px/20px system-ui,sans-serif;color:#6a5a3a}
+.nb .stub::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,#e2d6b8 0 10px,#d8cba9 10px 20px);clip-path:polygon(0 0,100% 0,100% 55%,92% 85%,84% 60%,76% 95%,68% 65%,60% 100%,52% 70%,44% 100%,36% 75%,28% 100%,20% 65%,12% 95%,4% 70%,0 85%);opacity:.85}
+.nb .stub span{position:relative}
 .nb .last{font-size:19px;color:#1f2d5c}
 .nb .btn{margin-top:10px;min-height:46px;padding:0 18px;border-radius:10px;border:0;background:#2a2318;color:#f3e9cf;font:700 16px system-ui,sans-serif;cursor:pointer}
 @media (max-width:520px){.nb{padding:16px 14px 20px 24px;font-size:16px}.nb .next{font-size:19px}}
@@ -48,7 +50,7 @@ function status(r) {
 export function notebookView(onEnding) {
   const st = Q.nextStep(state), rows = Q.coreProgress(state), cur = st.place?.id;
   const kids = [];
-  kids.push(h('h3', {}, tr(S_WORDS.next)), h('p', { class: 'hand next', style: 'margin:0' }, state.ended ? tr(S_WORDS.endedLine) : trackerLine(st)));
+  kids.push(h('p', { class: 'hand next', style: 'margin:0' }, state.ended ? tr(S_WORDS.endedLine) : trackerLine(st)));
   if (!state.ended) for (const l of tr(S_WORDS.goal)) kids.push(h('p', { class: 'goal', style: 'margin:0' }, l));
   // the way
   kids.push(h('h3', {}, tr(S_WORDS.theWay)));
@@ -63,7 +65,7 @@ export function notebookView(onEnding) {
   for (const r of rows) {
     const found = !!state.story?.mementos?.[r.id];
     if (found) kids.push(h('div', { class: 'page' }, h('div', { class: 'from' }, fill(tr(S_WORDS.pageOf), { order: r.order })), h('p', { class: 'hand', style: 'margin:0' }, pageText(PLACE[r.id]))));
-    else kids.push(h('div', { class: 'stub', 'aria-label': tr(S_WORDS.torn) }, tr(S_WORDS.torn)));
+    else kids.push(h('div', { class: 'stub' }, h('span', {}, `${fill(tr(S_WORDS.pageOf), { order: r.order })} · ${tr(S_WORDS.torn)}`)));
   }
   if (Q.leagueOpen(state) || state.ended) kids.push(h('p', { class: 'hand last', style: 'margin:8px 0 0' }, COURSE.bigIdea), h('p', { class: 'hand last', style: 'margin:0' }, fill(tr(S_WORDS.lastLine), { word: theWord() })));
   if (state.ended && onEnding) kids.push(h('button', { type: 'button', class: 'btn', onclick: onEnding }, tr({ en: 'See the ending again', it: 'Rivedi il finale' })));

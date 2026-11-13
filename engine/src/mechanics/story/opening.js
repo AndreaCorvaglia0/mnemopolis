@@ -57,7 +57,7 @@ class Stage {
       rect(g, x, y, 3 + Math.floor((y - hz) / 20), 1, '#1d2a40');
     }
     // the quay, in the foreground on the left: planks on posts, a lamp
-    const wl = Math.round(H * (H > W ? 0.66 : 0.84)), qx = Math.round(W * (H > W ? 0.22 : 0.3));
+    const wl = Math.round(H * (H > W ? 0.72 : 0.84)), qx = Math.round(W * (H > W ? 0.22 : 0.3));
     rect(g, 0, wl - 6, qx, 4, '#3a2a20'); rect(g, 0, wl - 6, qx, 1, '#5a4030');
     for (let x = 4; x < qx; x += 14) rect(g, x, wl - 2, 3, 14, '#241a14');
     rect(g, qx - 10, wl - 34, 2, 28, '#1b1a2b'); rect(g, qx - 12, wl - 38, 6, 5, '#1b1a2b');

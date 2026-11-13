@@ -64,20 +64,20 @@ export const MEMENTOS = {
     const [pc, pg] = makeCanvas(80, 70);
     // the sky and the ground, in grey
     for (let y = 0; y < 70; y++) rect(pg, 0, y, 80, 1, y < 44 ? mix('#b8b8b8', '#9c9c9c', y / 44) : mix('#7c7c7c', '#5e5e5e', (y - 44) / 26));
-    if (o.house) { const k = Math.min(56 / o.house.width, 40 / o.house.height); const w = Math.round(o.house.width * k), hh = Math.round(o.house.height * k); pg.imageSmoothingEnabled = false; pg.drawImage(o.house, 40 - w / 2, 46 - hh, w, hh); }
+    if (o.house) { const k = Math.min(48 / o.house.width, 34 / o.house.height); const w = Math.round(o.house.width * k), hh = Math.round(o.house.height * k); pg.imageSmoothingEnabled = false; pg.drawImage(o.house, 40 - w / 2, 42 - hh, w, hh); }
     else { rect(pg, 16, 18, 48, 30, '#8a8a8a'); for (let k = 0; k < 14; k++) rect(pg, 12 + k, 18 - k, 56 - 2 * k, 1, '#555'); rect(pg, 36, 32, 8, 16, '#3a3a3a'); }
     // four people in front, the third smaller (a child)
     // four people in front of it, the third smaller (a child)
-    const person = (x, hh, dark) => { rect(pg, x - 3, 68 - hh, 7, hh - 6, dark ? '#262626' : '#3c3c3c'); ellipse(pg, x, 68 - hh - 2, 3, 3, '#d8d8d8'); rect(pg, x - 2, 62, 2, 6, '#222'); rect(pg, x + 1, 62, 2, 6, '#222'); };
-    rect(pg, 0, 54, 80, 16, '#6a6a6a');
-    person(22, 22, true); person(34, 24, false); person(46, 15, true); person(58, 21, false);
+    const person = (x, hh, dark) => { rect(pg, x - 3, 68 - hh, 7, hh - 6, dark ? '#262626' : '#3c3c3c'); ellipse(pg, x, 68 - hh - 2, 3, 3, '#9a9a9a'); rect(pg, x - 2, 62, 2, 6, '#222'); rect(pg, x + 1, 62, 2, 6, '#222'); };
+    rect(pg, 0, 42, 80, 28, '#6a6a6a'); // the ground in front of the house
+    person(22, 20, true); person(34, 22, false); person(46, 14, true); person(58, 19, false);
     // grey everything, then age it
     const img = pg.getImageData(0, 0, 80, 70), d = img.data;
     for (let i = 0; i < d.length; i += 4) { const v = d[i] * 0.3 + d[i + 1] * 0.59 + d[i + 2] * 0.11, n = (hash(i, 1, 3) - 0.5) * 18; d[i] = Math.min(255, v * 1.02 + 10 + n); d[i + 1] = Math.min(255, v + 4 + n); d[i + 2] = Math.min(255, v * 0.92 + n); }
     pg.putImageData(img, 0, 0);
     // the scratched face: the second figure's head, scored out
     pg.strokeStyle = '#f4f0e6'; pg.lineWidth = 1;
-    for (const [a, b, c2, d2] of [[30, 39, 38, 46], [31, 46, 38, 38], [29, 43, 39, 42], [32, 38, 36, 47]]) { pg.beginPath(); pg.moveTo(a + 0.5, b + 0.5); pg.lineTo(c2 + 0.5, d2 + 0.5); pg.stroke(); }
+    for (const [a, b, c2, d2] of [[30, 41, 38, 48], [31, 48, 38, 40], [29, 45, 39, 44], [32, 40, 36, 49]]) { pg.beginPath(); pg.moveTo(a + 0.5, b + 0.5); pg.lineTo(c2 + 0.5, d2 + 0.5); pg.stroke(); }
     g.drawImage(pc, 40, 20);
     rect(g, 40, 92, 80, 12, '#f1ece0'); scribble(g, 48, 97, 60, 1, 4, '#8a8072');
   } },
@@ -131,7 +131,7 @@ export const MEMENTOS = {
 export function mementoCanvas(kind, o = {}) {
   const M = MEMENTOS[kind] || MEMENTOS.page;
   const [cv, g] = makeCanvas(AW, AH);
-  const wrap = h('div', { class: 'mm' }, cv);
+  const wrap = h('div', { class: 'st-mm' }, cv);
   wrap.style.cssText = 'position:relative;width:min(96vw,calc((100vh - 2 * max(12vh,86px) - 12px) * 4 / 3));aspect-ratio:4/3';
   cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;box-shadow:0 10px 40px #000';
   if (M.text) {

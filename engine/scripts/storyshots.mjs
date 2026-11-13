@@ -90,7 +90,7 @@ async function run(phone) {
     await sleep(3500);
     if (n === '12') await shot('12a-upstairs-memento');
     await ev((x) => __hb.story.memento(x), id);
-    await until(() => document.querySelector('.cn .mm'), 'the close-up');
+    await until(() => document.querySelector('.cn .st-mm'), 'the close-up');
     await sleep(2200); await shot(`${n}-memento-${kind}`);
     if (n === '12') { await cap('comes back|torna al'); await sleep(1200); await shot('12b-memento-page-restored'); }
     await ev(() => { document.querySelector('.cn-skip')?.click(); return 1; });
@@ -146,6 +146,18 @@ async function run(phone) {
   await noCinema();
   await ev(() => { __hb.story.where('lighthouse'); return 1; });
   await sleep(2500); await shot('28-town-after');
+  // ---- 8. after the ending: the fog returns to a house (its windows dim, the notebook marks it, its owner forgets)
+  await ev(() => __hb.story.follow());
+  await ev((id) => __hb.story.fog(id), first);
+  await ev(() => { __game.scene.getScene('UI').showAtlas('journey'); return 1; });
+  await until(() => document.querySelector('.nb .fog'), 'the fog mark');
+  await sleep(800); await shot('29-notebook-fog');
+  await key('Escape'); await sleep(800);
+  await ev((id) => { __game.scene.getScene('Town').scene.start('Interior', { id }); return 1; }, first);
+  await sleep(3000);
+  await ev(() => { __game.scene.getScene('Interior').storyRoom.talk(); return 1; });
+  await until(() => __game.scene.getScene('UI').choice, 'the owner in the fog');
+  await sleep(800); await shot('30-fog-owner');
   await browser.close();
 }
 
