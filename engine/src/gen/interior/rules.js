@@ -76,6 +76,8 @@ export function orderProblems(L, theme) {
     if (Math.abs(c - L.axis) > 0.5 && !honour) out.push(`focal: the ${s.object || s.emblem} at ${s.x} is off the axis ${L.axis}`);
     if (!againstWall(L, s)) out.push('focal: the signature does not stand against the back wall');
   }
+  // the concept's name stays readable: three lines do not stand over the signature
+  if (L.label && focal.length === 1 && L.label.lines.length > 2) { const s = focal[0], a = L.label.cx / 16 - L.label.n / 2, b = L.label.cx / 16 + L.label.n / 2; if (a < s.x + s.fw && b > s.x) out.push('label: three lines of the name run into the signature'); }
   // rugs only under groups
   for (const g of L.rugs) {
     const inside = items.filter((i) => i.zone === g.zone && i.x >= g.x && i.x + i.fw <= g.x + g.w && i.y >= g.y && i.y < g.y + g.h);

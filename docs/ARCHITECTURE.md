@@ -15,17 +15,26 @@ engine/                    how to play one
   src/scenes/              town, standard room, workshop, museum, interface
   src/lab/                 frame of a lab station, reading page, map, helpers
   src/art/                 everything drawn in code (the look)
-  src/gen/                 optional generators: house fronts, rooms, town dressing, themes
+  src/gen/                 optional generators: house fronts, town dressing, themes
+  src/gen/interior/        composed rooms: plans, zones, trades, kinds, compose, rules, paint
   src/systems/             save, audio, movement
+  tests/                   Node tests (npm test): rooms, homes, the course format
 ```
+
+`npm test` (in `engine/` or at the root) runs the tests with Node's own runner, in a few seconds;
+the CI workflow runs it before building. The room generator is split so that each file has one
+job: `plans.js` (room shapes), `zones.js` (groups of furniture, as data), `trades.js` (experts'
+trades, as data), `kinds.js` (each building kind's room), `pieces.js` (furniture sizes),
+`compose.js` (the composition, pure data, runs in Node), `rules.js` (the rules, as lists of
+problems), `furniture.js` and `paint.js` (pixels), `index.js` (the public API).
 
 ## The contract: `course.json`
 
 Defined by `skills/knowledge-base/schema/course.schema.json`. It holds everything the learner
 reads and the specification of everything they do. It holds nothing about pixels: no building
 kinds, no characters, no coordinates. The engine derives those (a `mechanism` becomes a lab
-building, a `process` a workshop, a `story` a museum) and a course may override them later in
-a separate file.
+building, a `process` a workshop, a `story` a museum, a concept with an `expert` that person's
+home) and a course may override them later in a separate file.
 
 ## Where future work goes
 
@@ -36,6 +45,7 @@ a separate file.
 | A new kind of lab interaction | a helper in `engine/src/lab/`, a row in `references/5-labs.md` | scenes |
 | Game dynamics (points to spend, shops, quests, streaks) | a new `engine/src/mechanics/`, reading progress from `systems/state.js` | the course format: dynamics are a property of the game, not of the knowledge |
 | Art: buildings, landmarks, landscapes, characters | `engine/src/art/`, registered in `engine/src/world/` | lab code |
+| A room zone, an expert's trade, a room plan, a furniture piece | one entry in the registry of `engine/src/gen/interior/` (`zones.js`, `trades.js`, `plans.js`, `pieces.js`); `npm test` checks it | the composition and the rules |
 | A generated variation (house style, room plan, dressing piece, theme) | `engine/src/gen/`, each module behind its switch in `world.json` (`"gen"`), seeded by the course id | the hand-made fallback it replaces |
 | Another front end (cards, a printable workbook, a 3D world) | a sibling of `engine/` reading the same `course.json` | |
 

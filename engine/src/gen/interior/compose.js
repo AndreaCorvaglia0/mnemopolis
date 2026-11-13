@@ -321,7 +321,7 @@ function placeLabel(L, label, mark, room, centred) {
   const tries = [split(1), split(2), split(3)].filter(Boolean), cx = (L.axis + 0.5) * 16;
   if (centred) tries.length = Math.min(tries.length, 2); // three lines would run into the signature
   const free = (c0, c1) => { for (let x = c0; x <= c1; x++) if (x < 0 || x >= L.w || L.up[x] || L.top[x] !== L.top[c0]) return false; return true; };
-  for (const ls of tries) {
+  for (const ls of centred ? tries : []) {
     const pw = Math.max(...ls.map(textWidth)) + 8, c0 = Math.floor((cx - pw / 2) / 16), c1 = Math.floor((cx + pw / 2 - 1) / 16);
     if (!free(c0, c1) || !room(c0, c1)) continue;
     mark(c0, c1 - c0 + 1, 1, 0);
