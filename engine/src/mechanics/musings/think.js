@@ -21,23 +21,24 @@ export class Deck {
   }
 }
 
-// The nudge: always true. It names the first house of the learning path not yet visited (the same
-// one the map marks "next"), with where it is; inside that very house, the lab; when every house is
-// visited, the final check; when that is passed too, a done line.
-//   g = { places: [{ id, name, order, district: { id, landmark } }], visited: {id: true},
-//         passedFinal, finalName, here: districtId | null, inside: placeId | null }
-export function nudgeTarget(g) {
-  const next = g.places.find((p) => !g.visited[p.id]);
-  if (next && g.inside === next.id) return { kind: 'here', place: next };
-  if (next) return { kind: 'next', place: next };
-  if (!g.passedFinal) return { kind: 'final' };
-  return { kind: 'done' };
+// The nudge: always true, and always the same advice as the tracker. It is built from the ONE next
+// step of the main path (mechanics/quest/model.js, nextStep): the house to visit next with where it
+// is, the lab of the house the player stands in, a duel, the League, the ending; after the ending,
+// curiosity about what the town still hides.
+//   g = { step: nextStep(state, { inside }), here: districtId | null }
+//   a step's place carries { name, order, district: { id, landmark } }
+export function nudgeKind(step) {
+  const k = step.kind;
+  if (k === 'visit' || k === 'lab') return step.here ? 'here' : k === 'lab' ? 'lab' : 'visit';
+  if (k === 'duel') return step.here ? 'duelHere' : 'duel';
+  if (k === 'intro') return step.place ? 'visit' : 'free';
+  return k; // league, ending, free
 }
 
 export function nudgeLine(g, noun, lang, pick = (l) => l[0]) {
-  const t = nudgeTarget(g), list = NUDGES[t.kind][lang] || NUDGES[t.kind].en;
-  const p = t.place, near = p ? (g.here && p.district?.id === g.here ? NEAR.here : NEAR[p.district?.landmark] || NEAR.here) : null;
-  return { target: t, text: fill(pick(list), { n: noun, place: p?.name, near: near?.[lang] ?? near?.en, order: p?.order, final: g.finalName }) };
+  const st = g.step, kind = nudgeKind(st), list = NUDGES[kind][lang] || NUDGES[kind].en;
+  const p = st.place, near = p ? (g.here && p.district?.id === g.here ? NEAR.here : NEAR[p.district?.landmark] || NEAR.here) : null;
+  return { target: { kind, step: st, place: p }, text: fill(pick(list), { n: noun, place: p?.name, near: near?.[lang] ?? near?.en, order: p?.order, final: g.finalName, person: st.person }) };
 }
 
 // One musing about a thing of kind `kind`. count = how many musings so far (the 4th and the 9th of

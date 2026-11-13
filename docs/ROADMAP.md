@@ -20,6 +20,12 @@
   house and per project (three themes, emblems), deterministic, each one switchable in
   `world.json`. Size and care of a course are independent settings of the brief.
 
+- The spine of the game (`engine/src/mechanics/quest/`): core and extra concepts (`"core": false`,
+  validated, with the time of the core path), one `nextStep` behind every hint, a one-line tracker
+  and a mark over the next house, people who answer "what now?" and hint at more, a menu with
+  Journey, Map (the town as explored, and the mind map) and Mysteries, the League gated by the core
+  houses, and an ending card.
+
 - Optional read-aloud (`engine/src/systems/voice.js`): the browser's own speech reads the reading
   wall, lab stations, plaques and people's lines when the learner presses Listen; `"voice"` in
   `world.json`, saved on/off switch, pronunciation map.
@@ -44,9 +50,9 @@
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
    landscapes the first one does not.
-2. The game around the course, in the order of `docs/DESIGN.md`: the spine (core and extra
-   concepts, the next step, tracker, menu, ending), duels of eloquence and the League as a duel,
-   then coins, shop, keys and upper floors; ambient music.
+2. The game around the course, in the order of `docs/DESIGN.md`: duels of eloquence and the
+   League as a duel (the spine is done), then coins, shop, keys and upper floors; ambient music;
+   a gate on the town's edge for the ending (today the scene plays at the League hall).
 3. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
    (`needs`), `canPass` and the saved `state.tools` / `state.opened` exist (`engine/src/mechanics/obstacles/`);
    what waits behind them is a placeholder listed as "sealed".

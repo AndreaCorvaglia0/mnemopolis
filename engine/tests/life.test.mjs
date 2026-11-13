@@ -3,7 +3,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { LINES, NUDGES, NEAR } from '../src/mechanics/musings/lines.js';
-import { Deck, musing, nudgeTarget, nudgeLine, isNudgeTurn } from '../src/mechanics/musings/think.js';
+import { Deck, musing, nudgeKind, nudgeLine, isNudgeTurn } from '../src/mechanics/musings/think.js';
+import { questOf } from '../src/mechanics/quest/model.js';
 import { townThingAt, roomThingAt } from '../src/mechanics/musings/things.js';
 import { SECRETS, RHYME, rhymeFor, HINTS, CHAIN } from '../src/mechanics/secrets/registry.js';
 import { OBSTACLES, TOOLS, REWARDS, canPass, isOpen, toolsFromQuery } from '../src/mechanics/obstacles/kinds.js';
@@ -48,38 +49,38 @@ test('lines cycle: every line once before any repeats, never the same line twice
   }
 });
 
+// three houses with a lab of one station each; "c" is an extra
 const PL = [
-  { id: 'a', name: 'Lamp House', order: 1, district: { id: 'd0', landmark: 'fountain' } },
-  { id: 'b', name: 'Dyer\'s House', order: 2, district: { id: 'd0', landmark: 'fountain' } },
-  { id: 'c', name: 'Cone Cave', order: 3, district: { id: 'd1', landmark: 'obelisk' } },
+  { id: 'a', name: 'Lamp House', order: 1, kind: 'lab', lab: { stations: [{}] }, questions: [{}, {}], host: { name: 'Lux' }, district: { id: 'd0', landmark: 'fountain' } },
+  { id: 'b', name: 'Dyer\'s House', order: 2, kind: 'home', lab: { stations: [{}] }, questions: [{}, {}], host: { name: 'Bruno' }, district: { id: 'd0', landmark: 'fountain' } },
+  { id: 'c', name: 'Cone Cave', order: 3, kind: 'cave', core: false, lab: { stations: [{}] }, questions: [{}, {}], district: { id: 'd1', landmark: 'obelisk' } },
 ];
-test('nudges always point to an existing place not yet visited, then to the final check, then say done', () => {
-  for (let mask = 0; mask < 8; mask++) for (const inside of [null, 'a', 'b', 'c']) for (const lang of LANGS) {
-    const visited = Object.fromEntries(PL.filter((_, i) => mask & (1 << i)).map((p) => [p.id, true]));
-    for (const passedFinal of [false, true]) {
-      const g = { places: PL, visited, passedFinal, finalName: 'Colour League', here: 'd1', inside };
-      const t = nudgeTarget(g), { text } = nudgeLine(g, 'a tree', lang, (l) => l[l.length - 1]);
-      const next = PL.find((p) => !visited[p.id]);
-      if (next) {
-        assert.ok(t.place && !visited[t.place.id], 'points to a finished place');
-        assert.equal(t.place.id, next.id, 'not the first unvisited place of the path');
-        if (t.kind === 'next') assert.ok(text.includes(next.name), `the line does not name the place: ${text}`);
-        else assert.equal(inside, next.id);
-      } else if (!passedFinal) { assert.equal(t.kind, 'final'); }
-      else assert.equal(t.kind, 'done');
-      assert.ok(!/\{\w+\}/.test(text), `a hole in the line: ${text}`);
-      for (const p of PL) if (visited[p.id] && t.kind === 'next') assert.ok(!text.includes(p.name), `names a visited place: ${text}`);
+const QPL = questOf({ places: PL, guide: 'Iris', champion: 'Ada' });
+test('nudges say what the tracker says: the next step of the main path, never an extra, then the League, then curiosity', () => {
+  // every combination of visited, lab done and badge for the three houses
+  for (let mask = 0; mask < 512; mask++) for (const inside of [null, 'a', 'b', 'c']) for (const lang of LANGS) for (const passedLeague of [false, true]) for (const ended of [false, true]) {
+    const bit = (k) => !!(mask & (1 << k)), s = { seenIntro: true, passedLeague, ended, visited: {}, done: {}, stamps: {} };
+    PL.forEach((p, i) => { if (bit(i)) s.visited[p.id] = true; if (bit(i + 3)) s.done[`${p.id}:0`] = true; if (bit(i + 6)) s.stamps[p.id] = true; });
+    const step = QPL.nextStep(s, { inside }), g = { step, finalName: 'Colour League', here: 'd1' };
+    const { text, target } = nudgeLine(g, 'a tree', lang, (l) => l[l.length - 1]);
+    assert.equal(target.kind, nudgeKind(step));
+    assert.ok(!/\{\w+\}/.test(text), `a hole in the line: ${text}`);
+    assert.ok(!text.includes('Cone Cave'), `names the extra: ${text}`);
+    if (ended) assert.equal(target.kind, 'free');
+    else if (step.place) {
+      assert.ok(!s.stamps[step.place.id], 'points to a finished place');
+      if (target.kind === 'visit' || target.kind === 'duel') assert.ok(text.includes(step.place.name) || text.includes(step.person), `does not name the place: ${text}`);
     }
   }
   // "right around here" when the place is in the player's district
-  const g = { places: PL, visited: { a: true, b: true }, passedFinal: false, finalName: 'L', here: 'd1', inside: null };
+  const g = { step: QPL.nextStep({ seenIntro: true, visited: {}, done: {}, stamps: {} }), finalName: 'L', here: 'd0' };
   assert.ok(nudgeLine(g, 'x', 'en', (l) => l[0]).text.includes('right around here'));
 });
 
 test('about one musing in four or five is a nudge, never on things with a function', () => {
   let n = 0; for (let i = 0; i < 900; i++) if (isNudgeTurn(i)) n++;
   assert.ok(n / 900 > 0.18 && n / 900 < 0.26, `${n / 900}`);
-  const game = { places: PL, visited: {}, passedFinal: false, finalName: 'L', here: null, inside: null }, deck = new Deck();
+  const game = { step: QPL.nextStep({ seenIntro: true, visited: {}, done: {}, stamps: {} }), finalName: 'L', here: null }, deck = new Deck();
   for (let i = 0; i < 40; i++) { const m = musing('person', { count: i, deck, game }); assert.equal(m.nudge, null); assert.ok(LINES.person.en.includes(m.text)); }
   let nudges = 0; for (let i = 0; i < 45; i++) if (musing('tree', { count: i, deck, game }).nudge) nudges++;
   assert.equal(nudges, 10);

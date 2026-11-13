@@ -1,0 +1,71 @@
+// The main path: which concepts are core, how far the player is, and the ONE next step. Pure: no
+// browser, no Phaser; Node tests drive it over whole games (tests/quest.test.mjs).
+//
+// Every hint of the game comes from nextStep(): the tracker, the mark over a house, what people say,
+// the thoughts aloud, the Journey tab of the menu, the "next" tag of the mind map.
+//
+//   const Q = questOf({ places, guide, champion })     any course (tests, synthetic towns)
+//   import { Q } from './active.js'                    the active course (the game)
+//
+// A place is the engine's view of a concept (data/content.js PLACES): { id, order, name, kind,
+// core, lab: { stations }, questions, host: { name } }. Only `id` and `order` are required.
+//
+// Rules (docs/DESIGN.md, "Main story"):
+//   core       a concept is core unless course.json says "core": false; core houses gate the League
+//   duel       a house has a duel when its host can be challenged: a room scene with a host who
+//              quizzes (not the workshop's conveyor belt, not the museum's timeline: see DUEL_ROOMS)
+//              and at least two questions. The duel module may widen this: change hasDuel only.
+//   done       a house with a duel: its badge (state.stamps[id]). A house without one: visited, and
+//              every lab station finished if it has a lab. A badge always counts, whatever the house.
+//   steps      intro -> for each core house in path order: visit -> lab (n/m) -> duel
+//              -> league -> ending -> free (after state.ended)
+export const DUEL_ROOMS = ['lab', 'archive', 'hall', 'studio', 'observatory', 'cave', 'home'];
+export const MIN_DUEL_QUESTIONS = 2;
+
+export const isCore = (p) => p.core !== false;
+export const stationsOf = (p) => p.lab?.stations?.length || 0;
+export const hasDuel = (p) => DUEL_ROOMS.includes(p.kind || 'lab') && (p.questions?.length || 0) >= MIN_DUEL_QUESTIONS;
+
+export function questOf({ places, guide = 'the guide', champion = 'the champion' }) {
+  const all = [...places].sort((a, b) => a.order - b.order);
+  // a course that marks nothing has everything core; one that marks everything extra is not valid,
+  // but the game must not get stuck: then everything is core
+  const core = all.some(isCore) ? all.filter(isCore) : all;
+  const extra = all.filter((p) => !core.includes(p));
+  const byId = Object.fromEntries(all.map((p) => [p.id, p]));
+
+  // per place: what the player has done there
+  function placeProgress(p, s) {
+    const m = stationsOf(p), n = Array.from({ length: m }, (_, i) => !!s.done?.[`${p.id}:${i}`]).filter(Boolean).length;
+    const visited = !!s.visited?.[p.id], duel = hasDuel(p), won = !!s.stamps?.[p.id];
+    const done = won || (!duel && visited && n >= m);
+    return { id: p.id, place: p, order: p.order, core: core.includes(p), visited, n, m, duel, won, key: !!s.keys?.[p.id], done };
+  }
+  const progress = (s) => all.map((p) => placeProgress(p, s));
+  const coreProgress = (s) => core.map((p) => placeProgress(p, s));
+  const missing = (s) => coreProgress(s).filter((r) => !r.done);
+  const leagueOpen = (s) => missing(s).length === 0;
+
+  // ctx.inside: the id of the room the player is in (the tracker says "Do the lab" there, not "go to")
+  function nextStep(s, ctx = {}) {
+    if (s.ended) return { kind: 'free' };
+    if (!s.seenIntro) return { kind: 'intro', person: guide };
+    for (const r of coreProgress(s)) {
+      if (r.done) continue;
+      const p = r.place, here = ctx.inside === p.id;
+      const base = { place: p, order: p.order, here };
+      if (!r.visited && !(here && r.m)) return { kind: 'visit', ...base };
+      if (r.n < r.m) return { kind: 'lab', ...base, n: r.n, m: r.m };
+      if (r.duel) return { kind: 'duel', ...base, person: p.host?.name || p.expert?.name || 'the host' };
+      return { kind: 'visit', ...base }; // not reached: a house without a duel is done once visited with its lab finished
+    }
+    if (!s.passedLeague) return { kind: 'league', person: champion };
+    return { kind: 'ending', person: champion };
+  }
+
+  // a step as a short stable key: the tracker highlights itself when it changes
+  const stepKey = (st) => [st.kind, st.place?.id, st.n, st.m, st.here].join(':');
+
+  return { all, core, extra, byId, placeProgress, progress, coreProgress, missing, leagueOpen, nextStep, stepKey,
+    corePlaces: () => core, extraPlaces: () => extra };
+}
