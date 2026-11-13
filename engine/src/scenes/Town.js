@@ -504,8 +504,8 @@ export class Town extends Phaser.Scene {
     this.mark = this.add.image(0, 0, 'quest-chev').setOrigin(0.5, 1).setDepth(9500).setVisible(false);
     this.markTween = null;
     const on = (st) => this.pointAt(st);
-    this.ui.events.on('quest', on);
-    this.events.once('shutdown', () => this.ui.events.off('quest', on));
+    this.game.events.on('quest', on);
+    this.events.once('shutdown', () => this.game.events.off('quest', on));
     if (this.ui.quest) this.pointAt(this.ui.quest);
   }
 

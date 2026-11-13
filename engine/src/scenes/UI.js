@@ -231,7 +231,7 @@ export class UI extends Phaser.Scene {
       this.tweens.add({ targets: this.track, scale: { from: 1.12, to: 1 }, duration: 380, ease: 'Back.easeOut' });
       this.tweens.add({ targets: this.trackFlash, alpha: { from: 0.9, to: 0 }, duration: 1400, ease: 'Sine.easeOut' });
     }
-    this.events.emit('quest', st);
+    this.game.events.emit('quest', st);
   }
 
   // lays out the right column: [location] [Menu] / [tracker] / (Tab Menu)

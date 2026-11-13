@@ -225,8 +225,8 @@ src/mechanics/quest/
   `state.ended`). `stepKey(step)` changes exactly when the tracker's line should.
 - **Tracker** (`UI.refreshQuest`, `layoutRight`): top right, under the place name; one line in a
   pill, cut to stay on one line; recomputed every 400 ms from the state (so it follows labs, duels
-  and the League whoever changed them), lights up when the step changes, and emits `quest` on the UI
-  scene's events. A tap or click on it opens the Map tab. `Tab  Menu` under it on a keyboard, a Menu
+  and the League whoever changed them), lights up when the step changes, and emits `quest` on
+  `game.events`. A tap or click on it opens the Map tab. `Tab  Menu` under it on a keyboard, a Menu
   button on touch: the key hints of old live in the menu's footer.
 - **Mark**: `Town.pointAt` puts a small gold chevron, bobbing, above the door of the house the step
   names (or the League hall). It is a world sprite: off screen means not seen. No arrows anywhere.

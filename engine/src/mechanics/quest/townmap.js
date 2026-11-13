@@ -92,7 +92,10 @@ export const MAP_CSS = `
 .qt-mk.core{background:#2a3142;color:#e8eaf0;border-color:#d8d0b4}
 .qt-mk.mystery{background:#3a3f5a;color:#ffcf5a;border-color:#ffcf5a}
 .qt-mk.league{background:#ffcf5a;color:#1c1a12}
-.qt-mk.next{background:var(--gold);color:#1c1a12;border-color:#1c1a12;animation:qtnext 1s ease-in-out infinite alternate}
+.hb-over .qt-mk{color:#131821}.hb-over .qt-mk.core{color:#e8eaf0}.hb-over .qt-mk.mystery{color:#ffcf5a}.hb-over .qt-mk.league{color:#1c1a12}
+.qt-mk.visited{border-width:3px}
+.hb-over .qt-mk.next{color:#1c1a12}
+.qt-mk.next{background:var(--gold);border-color:#1c1a12;animation:qtnext 1s ease-in-out infinite alternate}
 @keyframes qtnext{from{box-shadow:0 0 0 2px var(--gold)}to{box-shadow:0 0 0 6px #ffcf5a55}}
 .qt-mk.on{outline:3px solid var(--acc);outline-offset:1px}
 .qt-sq{position:absolute;transform:translate(-50%,-50%);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#f1ecd9;text-shadow:0 1px 2px #000,0 0 3px #000;pointer-events:none}
