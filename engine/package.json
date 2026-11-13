@@ -11,7 +11,8 @@
     "stress": "node scripts/use-course.mjs && node scripts/stress-town.mjs",
     "doors": "node scripts/doors.mjs",
     "shots": "node scripts/tour.mjs",
-    "shots:phone": "PHONE=1 node scripts/tour.mjs"
+    "shots:phone": "PHONE=1 node scripts/tour.mjs",
+    "shots:lab": "node scripts/labshots.mjs"
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.3.1",

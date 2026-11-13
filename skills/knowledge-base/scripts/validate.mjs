@@ -111,6 +111,8 @@ concepts.forEach((p, i) => {
       if (s.pattern === 'sandbox' && k !== st.length - 1) err(`${S}: a sandbox comes last`);
       if (/^(use|try|play|explore|learn)\b/i.test(s.goal || '')) warn(`${S}: the goal reads like an instruction. State the idea instead.`);
       if (s.predict && (s.predict.options?.length < 3 || s.predict.options?.length > 4)) err(`${S}: predict needs 3 or 4 options`);
+      if (s.predict && s.predict.answer != null && !(Number.isInteger(s.predict.answer) && s.predict.answer >= 0 && s.predict.answer < (s.predict.options?.length || 0))) err(`${S}: predict.answer must be the index of one of the options (0 = the first)`);
+      if (s.predict && s.predict.answer == null) warn(`${S}: predict has no answer. Without it the lab cannot tell the learner whether the prediction was right.`);
     });
     if (st.length && !st.some((s) => s.predict || ['predict-test', 'puzzle', 'match', 'sort-cases', 'role-play', 'break-it'].includes(s.pattern))) warn(`${P}: no station asks the learner to predict, decide or work something out. Watching an effect is not enough.`);
   }
