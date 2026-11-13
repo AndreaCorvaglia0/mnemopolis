@@ -36,6 +36,25 @@ offended to have been helped). Never grim, never mocking the learner.
 | 9 | The turn | The keeper has your face. The handwriting is yours. The card bears the name you gave the purser. You were the traveller before you | Change of frame: the town is a memory palace, yours |
 | 10 | Leaving | The lamp is lit, the rain stops, the ship sounds its horn. You may leave the notebook on the quay for whoever arrives next | Ending card; the loop closes |
 
+## Cinematic moments
+
+A few moments are staged, briefly, like film: black bars slide in at the top and bottom, the HUD
+hides, the camera moves by itself, one line of text at a time, and a short theme plays. Each lasts
+seconds, can be skipped with a tap, and returns control at once.
+
+| Moment | Staging |
+|---|---|
+| Opening | The ship in the rain, the gangway, the lights going out; two or three lines of context |
+| The notebook | The camera closes on the quay; the cover; the first legible line |
+| Each memento | The close-up, a held note of the theme, the page restoring itself |
+| The town remembering | A window lighting, seen from above, after each house |
+| The lighthouse understood | The camera lifts to the dark tower when the last page is read |
+| The turn | The longest: the keeper, the handwriting, the card |
+| Leaving | The lamp, the rain stopping, the horn |
+
+The theme is one melody of the course's key, the only tune in the game, built on the motif that
+already marks discoveries; it is heard in fragments at the mementos and whole only at the turn.
+
 ## Remembering (in place of the duel)
 
 Same rules as the duel in `DESIGN.md` (turns, tolerance, no loss on failure), without the tones, a different
