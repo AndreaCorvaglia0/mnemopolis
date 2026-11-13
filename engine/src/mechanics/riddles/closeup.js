@@ -228,7 +228,7 @@ export function openCloseup(r, o = {}) {
   async function opening(rewards) {
     think.hidden = true;
     reaction(T(K.open), true);
-    sfx.chime?.();
+    sfx.motif?.('lock');
     if (kind === 'safe') { await tween(650, (q) => { s.turn = q; }); await wait(150); sfx.door?.(); await tween(900, (q) => { s.open = q * q * (3 - 2 * q); }); }
     else if (kind === 'computer') { await tween(500, (q) => { s.open = q; }); }
     else { await tween(260, (q) => { s.hatch = 1 - q; }); await tween(520, (q) => { s.bolts = q; }); await wait(160); sfx.door?.(); await tween(850, (q) => { s.open = q * q * (3 - 2 * q); }); }

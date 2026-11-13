@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { state, save, scoreAnswer } from '../systems/state.js';
-import { sfx, initAudio, toggleMute, setMusicOn, duckMusic } from '../systems/audio.js';
+import { sfx, initAudio, toggleMute, setMusicOn, duckMusic, moodSetting } from '../systems/audio.js';
 import { openPlaque } from '../lab/museum.js';
 import { COURSE, TOPICS, PLACES, PLACE, DISTRICTS, QUESTIONS, LEAGUE } from '../data/content.js';
 import { Q } from '../mechanics/quest/active.js';
@@ -743,6 +743,7 @@ export class UI extends Phaser.Scene {
     const town = this.scene.isActive('Town') ? this.scene.get('Town') : null, S = Q_WORDS.settings, onoff = (v) => tr(v ? S.on : S.off);
     const settings = [
       { label: tr(S.music), on: () => !state.musicOff, value: () => onoff(!state.musicOff), toggle: () => { state.musicOff = !state.musicOff; save(); setMusicOn(!state.musicOff); } },
+      ...moodSetting(), // mist, lantern, deep (systems/sound/)
       ...(voiceAvailable() ? [{ label: tr(S.voice), on: () => voiceOn(), value: () => onoff(voiceOn()), toggle: () => { toggleVoice(); if (this.where) this.setLocation(...this.where); } }] : []),
       { label: tr(S.grass), on: () => !state.grassOff, value: () => onoff(!state.grassOff), toggle: () => { state.grassOff = !state.grassOff; save(); } },
       ...(town ? [{ label: tr(S.time), on: () => true, value: () => tr(S.tod)[town.tod] || town.tod, toggle: () => town.cycleTime(true) }] : []),
@@ -754,7 +755,7 @@ export class UI extends Phaser.Scene {
 
   // ---------- the ending card (mechanics/quest/ending.js) ----------
   async ending() {
-    sfx.page();
+    sfx.page(); sfx.motif?.('ending');
     await this.page(() => openEnding());
     this.refreshQuest(true);
   }

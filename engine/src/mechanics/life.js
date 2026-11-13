@@ -51,7 +51,7 @@ export function discover(scene, s, text) {
   if (state.life.found[s.id]) return false;
   state.life.found[s.id] = Date.now();
   save();
-  sfx.chime?.();
+  sfx.motif?.('secret'); // the motif (systems/sound/), or the chime without music
   const hold = Math.max(3200, Math.min(6000, 1500 + (text?.length || 0) * 45));
   if (text) say(scene, text, { hold });
   if (s.kind !== 'sealed') {
