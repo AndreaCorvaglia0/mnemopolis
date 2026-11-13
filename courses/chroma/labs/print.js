@@ -1,5 +1,5 @@
 // Print Works (a workshop: three machines on one belt): subtractive mixing.
-import { h, seg, slider, readout } from '../../../engine/src/lab/shell.js';
+import { h, seg, slider } from '../../../engine/src/lab/shell.js';
 import { canvasPane, draggable, rgbCss } from '../../../engine/src/lab/kit.js';
 
 function refit(items, from, to) { items.forEach((it) => { it.x *= to.W / from.W; it.y *= to.H / from.H; it.r = to.r; }); }
@@ -9,7 +9,7 @@ async function inks(ctx) {
   const layout = () => (pane.W < pane.H ? { W: 480, H: 530, r: 88, at: [[135, 160], [345, 160], [240, 370]] } : { W: 720, H: 480, r: 105, at: [[190, 170], [530, 170], [360, 340]] });
   let L = layout();
   const dots = [['#00ffff', 'cyan'], ['#ff00ff', 'magenta'], ['#ffff00', 'yellow']].map(([c, n], i) => ({ x: L.at[i][0], y: L.at[i][1], r: L.r, c, n }));
-  const out = readout('Point at the paper, or touch it, to see which light comes back from that spot.');
+  let told = false;
   const read = (x, y) => {
     if (x < 0 || y < 0 || x >= pane.W || y >= pane.H) return null;
     const [r, g, b] = pane.g.getImageData(x, y, 1, 1).data, t = (v) => (v > 127 ? '<b>comes back</b>' : '<span style="color:#ff9a8d">absorbed</span>');
@@ -22,14 +22,16 @@ async function inks(ctx) {
     dots.forEach((l) => { g.fillStyle = l.c; g.beginPath(); g.arc(l.x, l.y, l.r, 0, 7); g.fill(); });
     g.globalCompositeOperation = 'source-over';
     const by = (n) => dots.find((d) => d.n === n), d = (a, b) => Math.hypot(by(a).x - by(b).x, by(a).y - by(b).y) / (L.r / 105);
-    if (d('cyan', 'yellow') < 150) ctx.did(0);
+    if (d('cyan', 'yellow') < 150) {
+      ctx.did(0);
+      if (!told) { told = true; ctx.nudge?.('Point at the overlap, or touch it, to see which light comes back.', 9000); }
+    }
     if (d('cyan', 'magenta') < 120 && d('magenta', 'yellow') < 120 && d('cyan', 'yellow') < 120) ctx.did(1);
   };
   pane.onResize(() => { const L2 = layout(); if (L2.W !== L.W) refit(dots, L, L2); L = L2; draw(); });
-  ctx.controls.append(out);
   draggable(pane, dots, draw, { bounds: () => [50, 50, pane.W - 50, pane.H - 50] });
-  pane.hover((x, y) => { const t = read(x, y); if (t) out.innerHTML = t; });
   pane.tip(read);
+  pane.hint((k) => { const d = dots.find((o) => o.n === (k === 0 ? 'cyan' : 'magenta')); return [d.x, d.y]; });
   draw();
 }
 
@@ -58,6 +60,7 @@ async function compare(ctx) {
   const row = h('div', { style: 'display:flex;gap:8px', role: 'group', 'aria-label': 'Colours' });
   Object.keys(on).forEach((k) => { const b = h('button', { type: 'button', class: 'lab-btn', style: 'flex:1', 'aria-pressed': 'false', onclick: () => { on[k] = !on[k]; b.setAttribute('aria-pressed', String(on[k])); draw(); } }, k); row.append(b); });
   ctx.controls.append(h('div', { class: 'lab-k' }, 'Switch colours on and off'), row);
+  ctx.hint?.(() => row);
   draw();
 }
 
@@ -78,7 +81,10 @@ async function dotsStation(ctx) {
     if (st.view === 'tone') ctx.did(1);
   };
   pane.onResize(draw);
-  ctx.controls.append(slider('Step closer', 1, 12, 1, (v) => { st.zoom = v; draw(); }, { fmt: (v) => `${v}×` }), seg([['dots', 'The print'], ['tone', 'The original tones']], 'dots', (v) => { st.view = v; draw(); }));
+  const closer = slider('Step closer', 1, 12, 1, (v) => { st.zoom = v; draw(); }, { fmt: (v) => `${v}×` });
+  const view = seg([['dots', 'The print'], ['tone', 'The original tones']], 'dots', (v) => { st.view = v; draw(); });
+  ctx.controls.append(closer, view);
+  ctx.hint?.((k) => (k === 0 ? closer : view));
   draw();
 }
 

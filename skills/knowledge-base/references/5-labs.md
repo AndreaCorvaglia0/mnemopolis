@@ -46,7 +46,7 @@ idea. Its specification:
 | `object` | The concrete thing on the stage. A light on a wall, a file, a curve, a sentence, a cell. |
 | `action` | What the learner does to it, with their hands. A verb. |
 | `surprise` | The exact moment the wrong belief breaks. |
-| `predict` | Optional. A question to commit to before touching anything, with 3 or 4 options, and `answer`: the index of the option the exploration proves right. The learner sees the picture while answering, so the question must be about it; words such as "left" and "right" can change place on a phone, so name things by what they are. |
+| `predict` | Optional. A question to commit to before touching anything, with 3 or 4 options, `answer`: the index of the option the exploration proves right, and optionally `why`: one short sentence giving the reason, shown with the verdict. The learner sees the picture while answering, so the question must be about it; words such as "left" and "right" can change place on a phone, so name things by what they are. |
 | `controls` | At most two, besides acting on the stage directly. |
 | `tries` | 1 to 3 small tasks, each with an end state a program can detect. They tick themselves. If there is a `predict`, the first task leads to the state that answers it. |
 | `takeaway` | The rule, one or two sentences, key words in bold. Shown only after the tasks are done. |
@@ -127,7 +127,7 @@ work that way.
 
 The station's picture fills the screen from the start. If there is a `predict`, the question
 comes first, over the frozen picture; then "You said X. Now check it"; then the tasks, one
-highlighted at a time; when all are done, the verdict on the prediction and the `takeaway`, with
+at a time as "Now: <task>"; when all are done, the verdict on the prediction and the `takeaway`, with
 a button to the next station. Design for that order: the picture must make the question
 concrete, and the first task must lead to the moment that settles it.
 

@@ -125,7 +125,8 @@
                 "Purple",
                 "White"
               ],
-              "answer": 1
+              "answer": 1,
+              "why": "Red light and green light add up, and the eye sees their sum as yellow."
             },
             "controls": [],
             "tries": [
@@ -325,7 +326,8 @@
                 "Black",
                 "White"
               ],
-              "answer": 0
+              "answer": 0,
+              "why": "Cyan absorbs the red light and yellow absorbs the blue: only green comes back."
             }
           },
           {
@@ -684,7 +686,8 @@
                 "The one on the light side",
                 "They are identical"
               ],
-              "answer": 2
+              "answer": 2,
+              "why": "Both squares are the same grey, 128, 128, 128. The surround changes how they look."
             },
             "controls": [
               "Wall: dark-to-light or plain"
@@ -712,7 +715,8 @@
                 "No, the one on yellow is bluer",
                 "No, the one on blue is bluer"
               ],
-              "answer": 0
+              "answer": 0,
+              "why": "Both patches are the same neutral grey. The wall around each one tints how it looks."
             },
             "controls": [
               "Walls: coloured or covered"

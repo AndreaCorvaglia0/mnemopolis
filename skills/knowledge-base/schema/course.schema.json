@@ -608,6 +608,10 @@
               "type": "integer",
               "minimum": 0,
               "description": "Index of the option that the exploration shows to be right. The lab states the verdict after the tasks."
+            },
+            "why": {
+              "type": "string",
+              "description": "Optional. One short sentence saying why the answer is right, shown with the verdict after the tasks (\"Red and green light add up to yellow.\"). May use <b>."
             }
           }
         },

@@ -39,8 +39,8 @@ The specification in `course.json` is the contract. Each field tells you somethi
 |---|---|
 | `object` | What is drawn on the stage. The stage is most of the screen: fill it (see below) |
 | `action` | The interaction, on the stage itself whenever possible (`canvasPane`, `draggable`) |
-| `controls` | At most two controls in `ctx.controls` (`slider`, `seg`) |
-| `tries` | For each task, a condition on the state that calls `ctx.did(i)` when it becomes true |
+| `controls` | At most two controls in `ctx.controls` (`slider`, `seg`), with full-word labels. On a phone they sit right under the picture |
+| `tries` | For each task, a condition on the state that calls `ctx.did(i)` when it becomes true, and `ctx.hint(k => ...)`: where to act for it (a point on the picture or the control it needs) |
 | `surprise` | The state the first task must lead to. Check that it is actually reachable and visible |
 | `predict` | Nothing: the frame asks it while your picture is shown, frozen, and gives the verdict at the end (from `predict.answer`). Draw the starting state so that it does not give the answer away |
 | `goal`, `takeaway`, `source` | Nothing: the frame shows them (`source` only in the theory drawer) |
@@ -68,6 +68,10 @@ Rules:
   thresholds forgiving for a finger. Where a chart has values, offer them with `pane.tip(fn)`.
 - **No text that answers the question.** Captions and read-outs must not reveal the prediction
   before the learner has found it on the stage.
+- **No permanent instructions.** A hint that matters at one moment ("Point at the overlap to
+  read the light") is `ctx.nudge(text)` at that moment; a read-out that follows the pointer is
+  `pane.tip`. Name things in full words on the picture ("light A", "lamp B: red part"), not
+  single letters.
 - **The flow is the frame's.** Do not draw your own instructions, ticks, "well done" or Next
   buttons: call `ctx.did(i)` and the frame does the rest. Check with `npm run shots:lab` and
   `npm run shots:phone`.
