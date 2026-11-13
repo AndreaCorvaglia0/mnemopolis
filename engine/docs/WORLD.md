@@ -50,6 +50,13 @@ edge beside it), `forest` (a grove around it), `meadow` (flower fields and stret
 The town is compact on purpose. `npm run check` reports the walking distance from the square to
 the farthest door and warns above 45 steps. Night is the default time of day (N changes it).
 
+**Nothing stands in front of a door.** For every door (houses, the guide's house, the league hall): the
+tile below it, the 3 tiles below the door row (and their neighbours) and the two rows in front of the facade
+are free of anything solid except the house's own signpost, and the tile below the door can be reached on foot
+from the start. `generate()` in `src/world/townMap.js` reserves these tiles before landscapes, lamps, signs,
+benches, trees and bushes are placed, and the dressing keeps off them. `npm run check` tests it for the course
+(`door approach`, `src/world/doors.js`); `npm run stress` tests it on hundreds of synthetic towns.
+
 Landmarks (`landmark`, and `hub.monument`): `fountain`, `obelisk`, `statue`, `arch`, `bell`,
 `stones`. Each can be used once.
 
