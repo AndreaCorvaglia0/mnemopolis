@@ -72,6 +72,14 @@ export const sfx = {
   reveal: () => [784, 988, 1175].forEach((f, i) => tone(f, 0.14, 'triangle', 0.05, i * 0.07)),
   tick: () => tone(1200, 0.015, 'square', 0.015),
   splash: () => noise(0.25, 'lowpass', 900, 0.04, 0, -500),
+  // ambient life: soft, short, quieter than the learning sounds
+  chime: () => [1046, 1318].forEach((f, i) => tone(f, 0.18, 'triangle', 0.025, i * 0.09)),
+  thud: () => { tone(90, 0.09, 'triangle', 0.06, 0, -30); noise(0.05, 'lowpass', 400, 0.03); },
+  plop: () => { tone(420, 0.06, 'sine', 0.03, 0, -260); noise(0.12, 'lowpass', 700, 0.02, 0.03); },
+  flutter: () => { for (let i = 0; i < 4; i++) noise(0.03, 'bandpass', 2400, 0.012, i * 0.05); },
+  purr: () => { for (let i = 0; i < 6; i++) tone(55, 0.07, 'sawtooth', 0.012, i * 0.09); },
+  echo: () => [0, 0.35, 0.7].forEach((d, i) => tone(392, 0.12, 'triangle', 0.03 / (i + 1), d)),
+  creak: () => { tone(180, 0.25, 'sawtooth', 0.02, 0, 120); tone(120, 0.12, 'triangle', 0.04, 0.22); },
 };
 
 function getNoise() {

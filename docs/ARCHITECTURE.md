@@ -18,6 +18,7 @@ engine/                    how to play one
   src/gen/                 optional generators: house fronts, town dressing, themes
   src/gen/interior/        composed rooms: plans, zones, trades, kinds, compose, rules, paint
   src/systems/             save, audio, movement
+  src/mechanics/           game dynamics: ambient life (thoughts, animals, secrets, obstacles); later coins and a shop
   tests/                   Node tests (npm test): rooms, homes, the course format
 ```
 
@@ -43,11 +44,21 @@ home) and a course may override them later in a separate file.
 | A new learning technique or rule | `skills/knowledge-base/references/`, and a check in `scripts/validate.mjs` | the engine |
 | A new field in the course | the schema, the validator, the example, then the engine | |
 | A new kind of lab interaction | a helper in `engine/src/lab/`, a row in `references/5-labs.md` | scenes |
-| Game dynamics (points to spend, shops, quests, streaks) | a new `engine/src/mechanics/`, reading progress from `systems/state.js` | the course format: dynamics are a property of the game, not of the knowledge |
+| Game dynamics (points to spend, shops, quests, streaks) | `engine/src/mechanics/`, reading progress from `systems/state.js`; its first resident is the ambient-life layer | the course format: dynamics are a property of the game, not of the knowledge |
+| Coins, a shop, tools that open obstacles | `engine/src/mechanics/`: the obstacles and `canPass(obstacle, state)` are there (`obstacles/kinds.js`), reading `state.tools`; a shop only has to write that | the course, and anything the course needs: an obstacle never stands in the way of learning |
 | Art: buildings, landmarks, landscapes, characters | `engine/src/art/`, registered in `engine/src/world/` | lab code |
 | A room zone, an expert's trade, a room plan, a furniture piece | one entry in the registry of `engine/src/gen/interior/` (`zones.js`, `trades.js`, `plans.js`, `pieces.js`); `npm test` checks it | the composition and the rules |
 | A generated variation (house style, room plan, dressing piece, theme) | `engine/src/gen/`, each module behind its switch in `world.json` (`"gen"`), seeded by the course id | the hand-made fallback it replaces |
 | Another front end (cards, a printable workbook, a 3D world) | a sibling of `engine/` reading the same `course.json` | |
+
+## Interaction grammar
+
+One gesture per kind of thing, one look per gesture (details in `engine/docs/ENGINE.md`, "Ambient
+life"): a single tap or Space is for what matters to learning (people, doors, labs, reading, and
+obstacles as key objects) and opens the dialogue box or a page; a double tap or T is for atmosphere
+and shows a thought bubble that fades by itself; animals and happenings react to proximity with no
+interface at all; secrets are found by exploring and collected on the discoveries page. Nothing of
+the atmosphere opens while learning is on screen.
 
 ## Decisions
 

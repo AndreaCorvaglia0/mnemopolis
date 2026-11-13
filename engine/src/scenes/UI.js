@@ -7,6 +7,9 @@ import { openMap } from '../lab/map.js';
 import { touch } from '../systems/view.js';
 import { openLab } from '../lab/shell.js';
 import { openReading } from '../lab/reading.js';
+import { LIFE, tr, WORDS } from '../mechanics/config.js';
+import { lifePlan } from '../mechanics/active.js';
+import { openJournal } from '../mechanics/secrets/journal.js';
 import { available as voiceAvailable, isOn as voiceOn, isSpeaking, onChange as onVoice, listen, speak, stop as stopVoice, toggle as toggleVoice, VOICE } from '../systems/voice.js';
 
 // DotGothic16 for reading (clear C/O and 5/S at small sizes); Pixelify Sans for big display lines.
@@ -193,7 +196,7 @@ export class UI extends Phaser.Scene {
     this.where = [name, where];
     if (!this.loc) return; // the HUD picks it up when it is built
     this.loc.setText(name);
-    const vk = voiceAvailable() ? '\nL  voice' : '';
+    const vk = (voiceAvailable() ? '\nL  voice' : '') + (LIFE.musings ? `\n${tr(LIFE.secrets ? WORDS.hintKeys : WORDS.hintKeysNoSecrets)}` : '');
     this.hint.setText(this.touch ? '' : where === 'town' ? `Tab  Map\nN  time of day\nG  grass questions\nM  music  ·  V  all sound${vk}` : `Tab  Map\nM  music  ·  V  all sound${vk}`);
     this.btns.removeAll(true);
     if (!this.touch) return;
@@ -257,7 +260,7 @@ export class UI extends Phaser.Scene {
       const title = this.text(F.cx, cy - 100, COURSE.title.toUpperCase(), Math.min(76, Math.floor((F.w * 1.05) / n)), '#ffcf5a', { display: true, fontStyle: '600', stroke: '#1b1a2b', strokeThickness: 10 }).setOrigin(0.5);
       const sub = this.text(F.cx, cy - 32, COURSE.subject, 24, '#f1ecd9', { display: true, stroke: '#1b1a2b', strokeThickness: 6, ...wrap }).setOrigin(0.5);
       const press = this.text(F.cx, cy + 110, this.touch ? 'Tap to start' : 'Press Space or click to start', 26, '#4fd1c5', { display: true, stroke: '#1b1a2b', strokeThickness: 6 }).setOrigin(0.5);
-      const ctr = this.text(F.cx, cy + 156, this.touch ? 'Tap where you want to go.\nTap a person, a sign or a door to use it.' : 'Arrows or WASD to walk  ·  Shift to run  ·  Space to talk  ·  or click where you want to go', 16, '#f1ecd9', { stroke: '#1b1a2b', strokeThickness: 5, ...wrap }).setOrigin(0.5);
+      const ctr = this.text(F.cx, cy + 156, (this.touch ? 'Tap where you want to go.\nTap a person, a sign or a door to use it.' : 'Arrows or WASD to walk  ·  Shift to run  ·  Space to talk  ·  or click where you want to go') + (LIFE.musings ? (this.touch ? `\n${tr(WORDS.titleTouch)}` : `\n${tr(WORDS.titleKeys)}`) : ''), 16, '#f1ecd9', { stroke: '#1b1a2b', strokeThickness: 5, ...wrap }).setOrigin(0.5);
       const cred = this.text(F.cx, F.b - 28, COURSE.credit || '', 13, '#cfd3e8', { stroke: '#1b1a2b', strokeThickness: 4, ...wrap }).setOrigin(0.5);
       c.add([shade, title, sub, press, ctr, cred]);
       this.tweens.add({ targets: press, alpha: 0.25, duration: 700, yoyo: true, repeat: -1 });
@@ -664,7 +667,7 @@ export class UI extends Phaser.Scene {
   // ---------- the map: the course as a mind map ----------
   async showAtlas() {
     sfx.page();
-    await this.page(() => openMap());
+    if ((await this.page(() => openMap())) === 'journal') await this.page(() => openJournal(lifePlan()));
   }
 
   // ---------- the league: the final check ----------

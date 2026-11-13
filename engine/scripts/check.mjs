@@ -57,4 +57,18 @@ try {
     console.log(`rooms: ${rooms.map((L) => `${L.id} ${L.plan} ${L.w}x${L.h} (${L.zones.map((z) => z.name).join(', ')})`).join('; ')}`);
   } else console.log('rooms: generator off, standard room');
 } catch (e) { console.log(`ERROR    ${e.message}`); bad++; }
+// ambient life (src/mechanics/): obstacles never in the way of the course (with them closed, every
+// lane, plaza, door step and the tiles beside people, signs and landmarks keep their walking distance;
+// open, what is behind is reachable), every secret's trigger reachable on foot and near a lane,
+// animal spots never on a door approach
+try {
+  const { LIFE } = await import('../src/mechanics/config.js');
+  if (LIFE.on) {
+    const { lifePlan, checkActiveLife } = await import('../src/mechanics/active.js');
+    const plan = lifePlan(), problems = checkActiveLife();
+    problems.forEach((p) => { console.log(`ERROR    life: ${p}`); bad++; });
+    const n = plan.secrets.filter((x) => x.kind !== 'sealed').length;
+    console.log(`life: ${plan.obstacles.length} obstacles in town (${plan.obstacles.map((o) => `${o.kind} at ${o.x},${o.y}`).join(', ') || 'none'}), ${plan.closets.length} in rooms (${plan.closets.map((o) => o.place).join(', ') || 'none'}); ${n} secrets (${plan.secrets.filter((x) => x.kind !== 'sealed').map((x) => x.kind).join(', ')}) and ${plan.secrets.length - n} sealed; ${plan.animals.town.length} animals (${plan.animals.town.map((a) => a.kind).join(', ')})${plan.animals.inside.length ? ', a cat asleep indoors' : ''}; ${problems.length ? 'PROBLEMS' : 'nothing in the way, everything reachable'}`);
+  } else console.log('life: off');
+} catch (e) { console.log(`ERROR    life: ${e.message}`); bad++; }
 process.exit(bad ? 1 : 0);

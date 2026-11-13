@@ -110,6 +110,10 @@ window.__game = game;
 import * as content from './data/content.js';
 import { state } from './systems/state.js';
 import * as voice from './systems/voice.js';
+import { give } from './mechanics/life.js';
+import { lifePlan } from './mechanics/active.js';
+import { openJournal } from './mechanics/secrets/journal.js';
+import { lifeSheet } from './mechanics/sheet.js';
 document.title = content.COURSE.title;
 // A picture of every kind of building and every landmark: useful when working on the look.
 // With generated houses on (GEN.facade), every kind in each theme with two seeds, then the emblems.
@@ -182,6 +186,11 @@ window.__hb = {
   content,
   state,
   voice,
+  // ambient life: grant a tool to test the opening of obstacles (__hb.give('key')); the plan of the town
+  give,
+  life: () => lifePlan(),
+  journal: () => openJournal(lifePlan()),
+  lifeSheet,
   // Used by the automated play-through check.
   probe: () => {
     const ui = game.scene.getScene('UI');

@@ -6,12 +6,13 @@
 |---|---|
 | `npm install` | Once. Needs Node 18 or later. |
 | `npm run course <slug>` | Points the engine at `courses/<slug>/` (default `chroma`, or `COURSE=`). Run by the commands below. |
-| `npm test` | Node tests, a few seconds: hundreds of composed rooms against their rules, every zone and trade, home fronts, the `expert` field of the course format. |
+| `npm test` | Node tests, about half a minute: hundreds of composed rooms against their rules, every zone and trade, home fronts, the `expert` field of the course format, and the ambient-life layer over 240 synthetic towns. |
 | `npm run check` | Validates the knowledge base, and that every designed station has code. |
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
 | `npm run shots:phone` | The same tour on a phone held upright (390 x 844, touch mode), into `shots/phone/`. |
 | `npm run shots:lab` | The lab frame state by state (question, after it, one task done with the panel open, folded and full screen, done with the panel open and folded, theory, done in full screen), the first state of every station and a mid state of the slider stations, on a desktop window and a phone, into `shots/lab/` (`OUT2=/dir` copies them). It also reports text cut with an ellipsis. The tasks are done with real drags. `STATION=lamps:0` picks the station walked through. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
+| `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
 | `npm run dev` | Live server while editing, if a browser is available. |
 
 Add `?lite` to the address for lighter graphics. The game also switches to them by itself on a
@@ -32,6 +33,7 @@ engine/src/
                    code.js (code panel), reading.js (reading wall), map.js (the map), museum.js (plaques)
   art/             everything drawn in code: ground, buildings, sprites, palette
   systems/         state (save), audio (music and sounds), voice (read aloud), walker (movement)
+  mechanics/       optional ambient life: thoughts, animals, secrets, obstacles (see "Ambient life")
   data/content.js  read-only views of the course for the scenes
 ```
 
@@ -186,3 +188,132 @@ network, nothing added to the page size. Everything is in `src/systems/voice.js`
   sandboxed frames speech is missing or silent: after two attempts that never start, the controls
   hide themselves. Headless Chrome cannot be heard, so checks record the calls to
   `speechSynthesis` instead (`__hb.voice.debug()` in the console shows the state).
+
+## Ambient life
+
+An optional layer of atmosphere in `src/mechanics/` (the place for game dynamics: they are a
+property of the game, not of the course). It costs nothing per course and is on by default. Four
+parts: **musings** (the player thinks aloud), **animals**, **secrets** (rare, optional discoveries,
+one small mystery), **obstacles** (things that bar an optional side place and will open one day).
+
+### The interaction grammar
+
+Each kind of thing has its own gesture and its own look, so the learning flow never gets muddled:
+
+| What | Gesture | What the learner sees |
+|---|---|---|
+| Things that matter for learning: people, doors, signs, landmarks, the lab door, the reading wall; and obstacles (key objects) | single tap or click, Space | the dialogue box at the bottom, a page, or for an obstacle a short thought ("Locked. I'd need a key.") and a padlock with the tool that will open it |
+| Atmosphere: anything else | double tap or double click on a thing within 3 tiles, or T for what the player faces (across empty ground, the first thing up to 3 tiles ahead) | a thought bubble above the head: a pale cloud with small circles, no name, no arrow, gone by itself in 2 to 4 s, never stacked, clear of the HUD, no sound but a soft tick, not read aloud |
+| Animals and happenings | coming close | no interface at all: the cat runs and hides, birds take off, the apple falls |
+| Secrets | exploring: walking somewhere, thinking about something, standing still | the thought bubble, then a small toast "Discovery 3 of 9"; the discoveries page (J, or the button on the map) |
+
+Rules: the normal interaction always wins (T on a person only says "Maybe I should just say
+hello."; a double tap on a house, a door, a sign, a person or an obstacle is an ordinary tap).
+Nothing of this layer opens or reacts while a lab, a reading page, a dialogue, a quiz or the map is
+open (`ui.busy`); it adds two keys, T and J, used nowhere else.
+
+**The touch gesture: double tap, with the walk cancelled.** A single tap acts at once, as before
+(no waiting to see whether a second tap comes, so single taps never feel late). If a second tap
+lands on the same spot within 380 ms, on a thing within 3 tiles that has no function and cannot be
+walked on, the walk the first tap started stops (at most a step or two toward the thing, which reads
+as "going to look") and the player turns to it and thinks. A double tap on ground one can walk on
+(grass, lanes, floor, rugs) is never taken: people double-tap where they want to go when impatient.
+Long press was considered and left out: it cannot be discovered, it fights the browser's own long
+press (selection, callouts), and the owner asked for a double tap. On a computer, a double click
+does the same, and T is there for the keyboard. The title screen names the gesture.
+
+### Switches
+
+`courses/<slug>/world.json`:
+
+```
+"life": false                                                              everything off: the game is exactly as without it
+"life": { "musings": true, "animals": true, "secrets": true, "obstacles": true }    parts on or off (all on by default)
+"life": { "secrets": [ { "kind": "note", "text": "...", "near": "<conceptId>" } ] } curated: a note or two themed on the course,
+                                                                           found near that concept's house
+```
+
+`?nolife` in the address switches the layer off; `?tools=key,pickaxe` grants tools for testing the
+opening of obstacles (also `__hb.give('key')` in the console). `__hb.life()` shows the plan of the
+town, `__hb.lifeSheet()` a contact sheet of the layer's pictures, `npm run shots:life` its pictures
+(also run at the end of `npm run shots` and `shots:phone`, copied to `/tmp/life-*.png`).
+
+### Files
+
+```
+src/mechanics/
+  config.js          switches, language (English or Italian, by the course), the layer's own words
+  context.js         what the planners know of a town (solid tiles, distances, door approaches, lanes)
+  plan.js            planLife() and checkLife(): obstacles, secrets and animal spots as plain data   (Node)
+  active.js          the plan of the active course, cached
+  life.js            the scene side shared by town and rooms: saved state, thinking, finding
+  town.js, room.js   the scene side of the town and of a room
+  bubble.js          the thought bubble
+  textures.js, sheet.js   pictures, registered once; a contact sheet
+  musings/   lines.js (the registry of lines by kind of thing, nudges), think.js (cycling, nudge: pure),
+             things.js (what kind of thing is at a tile, from data the town and rooms already have)
+  animals/   cast.js (who, when, where, how they react), place.js (spots, pure), art.js, live.js
+  secrets/   registry.js (kinds, texts, the rhyme), place.js (pure), art.js, paintings.js, journal.js
+  obstacles/ kinds.js (registry, canPass), place.js (pure), art.js
+```
+
+Everything placed is deterministic (`seeded('life:...')`); behaviour (when a bird takes off, which
+line comes next) uses `Math.random` and is cosmetic. Per frame the layer does nothing in proportion
+to the map: the animals are about a dozen sprites, looked at every 200 ms and only near the camera;
+secrets are checked when the player arrives on a tile.
+
+### What there is
+
+- **Musings**: 89 kinds of thing outdoors, indoors and animals, 3 to 6 lines each (319 in each
+  language). About one musing in four or five is a **nudge** built from the game state by one pure
+  function (`nudgeTarget`, tested): the first house of the path not yet visited (the same one the
+  map marks "next"), with its landmark or "right around here"; inside that very house, its lab; then
+  the final check; then a done line. Nudges never name a visited place. Sometimes a nudge hints at an
+  undiscovered secret nearby ("Did something just move over there?").
+- **Animals**: a cat (two in the citadel theme) that runs to cover and comes back elsewhere later;
+  sparrows on the plazas by day; an owl in a tree at night that turns its head to follow you; a frog
+  by the water that jumps in with rings; a squirrel in the trees by day; a dog asleep beside a home
+  that lifts its head and wags; rings of fish in the water. Harbour adds a seagull and a crab, nordic
+  a hare (day) and a fox (night), citadel a crow. Indoors, a cat asleep on an armchair in one home.
+  Dusk counts as day and night. Fireflies are the town's own and unchanged.
+- **Secrets** (about 6 to 10 per town, plus what waits behind obstacles): an apple that falls when
+  you walk under its tree; a hollow tree with a brass button (found by thinking about it); a loose
+  stone with an old coin at the edge of a plaza; a bottle with a message in the water; a shooting
+  star for whoever stands still by a bench at night; a well that echoes (where the dressing has a
+  well); one or two paintings in rooms that open in large (five original paintings drawn in code:
+  a landscape, a cat's portrait, a still life, an old map of this very town with a cross on an
+  undiscovered secret, a night sky with a cat constellation); notes from `world.json`.
+- **The mystery: the lantern cat.** At night a small light is glimpsed at the edge of the view, a
+  dark cat carrying a lantern, walking toward the nearest trail it left. Four to six trails of
+  glowing paw prints lie near the landmarks, benches and signs, each a step or two off a lane; each
+  one found gives the next line of a rhyme whose last line sends you back to the square. There the
+  cat waits, can be petted (T or a double tap), and its portrait joins the discoveries. Complete
+  today, with no obstacle in its way.
+- **Obstacles** (2 to 4 in town, 1 or 2 in rooms): a boulder (pickaxe), a fallen trunk (saw) or a
+  bramble thicket (shears) at the mouth of a dead-end nook the town already has; a locked gate
+  (key) in a small hedged garden added for it; a cellar hatch with a padlock (key) beside a house;
+  a small locked door (key) on a room's back wall where nothing else hangs. Behind each, something
+  to look forward to and in view where possible (a chest, a glint, a strange plant), listed as
+  "sealed" in the discoveries until opened. No tool can be had yet: `canPass(obstacle, state)`
+  reads `state.tools`, empty today. **Hard rule**, checked by `npm run check`, the stress test and
+  the tests: with every obstacle closed, every lane, plaza, door step and the tiles beside people,
+  signs and landmarks keep exactly their walking distance, nothing reachable becomes unreachable
+  except the nook behind, every obstacle can be walked up to, and opened, what is behind is
+  reachable. Obstacles stand on no door approach and no required tile.
+
+### How to add
+
+- **A line**: append it to both languages of its kind in `musings/lines.js`. Short, light, dry,
+  generic for any subject, never about the interface. `npm test` checks both languages are there.
+- **A kind of thing**: an entry in `lines.js` (with its noun `n`), and the tile, piece or furniture
+  type that produces it in `musings/things.js`.
+- **An animal**: an entry in `animals/cast.js` (when, perch, react, radius), its frames in
+  `animals/art.js` (four 16 x 16 frames: two idle, two moving), its lines in `lines.js`; add it to
+  `BASE` or to a theme in `BY_THEME`. A new kind of perch is one predicate in `animals/place.js`.
+- **A secret**: an entry in `secrets/registry.js` (title, found, how, glyph), its placement in
+  `secrets/place.js` (a trigger tile the player can stand on, at most 4 steps from a lane), its
+  trigger in `town.js` (`step` for walking, `think` for thinking). `checkLife` and the tests check
+  reachability over hundreds of towns.
+- **An obstacle**: an entry in `obstacles/kinds.js` (needs, where, name, say, opened, lines), its
+  closed and open look in `obstacles/art.js`; a new kind of place for it in `obstacles/place.js`,
+  where every candidate must pass `keepsDistances`.
