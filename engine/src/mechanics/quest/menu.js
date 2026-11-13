@@ -20,6 +20,8 @@ import { Q } from './active.js';
 import { Q_WORDS, tr, fill, trackerLine } from './strings.js';
 import { townMapView, MAP_CSS } from './townmap.js';
 import { floorsOf } from '../floors/plan.js';
+import { STORY } from '../story/config.js';
+import { notebookView, mementoSection, NB_CSS } from '../story/notebook.js';
 
 const TABS = ['journey', 'map', 'mysteries'];
 const W = Q_WORDS;
@@ -69,6 +71,7 @@ const CSS = `
 .qm-keys kbd{font:inherit;color:var(--text);white-space:nowrap}
 .qm-jr .jr-in{max-width:none}
 ${MAP_CSS}
+${NB_CSS}
 `;
 let styled = false;
 
@@ -111,6 +114,7 @@ function mysteries(busy) {
   for (const [t, has] of Object.entries(state.tools || {})) if (has && TOOLS[t]) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '⚒'), tr(TOOLS[t])));
   const kids = [
     h('div', { class: 'qm-coins' }, h('b', {}, String(state.insight || 0)), tr(W.mysteries.coins)),
+    ...(STORY.on ? [mementoSection()] : []), // the story: the things found upstairs that were never theirs
     h('div', { class: 'qm-h' }, tr(W.mysteries.carry)),
     items.length ? h('div', { class: 'qm-carry' }, items) : h('p', { class: 'qm-more', style: 'text-align:left' }, tr(W.mysteries.nothing)),
   ];
@@ -150,7 +154,7 @@ export function openMenu({ tab = null, settings = [], touch = false } = {}) {
   function show(t) {
     cur = t;
     btns.forEach((b, i) => b.setAttribute('aria-selected', String(TABS[i] === t)));
-    body.replaceChildren(t === 'journey' ? journey(() => done('ending')) : t === 'map' ? mapTab() : mysteries((v) => { busy = v; }));
+    body.replaceChildren(t === 'journey' ? (STORY.on ? notebookView(() => done('ending')) : journey(() => done('ending'))) : t === 'map' ? mapTab() : mysteries((v) => { busy = v; }));
     body.scrollTop = 0;
     root.dataset.tab = t;
   }

@@ -136,6 +136,7 @@ export const sfx = {
     if (scape && playing() && ctx.state === 'running') return scape.theme(kind);
     fx.sfx.chime(); return 0;
   },
+  horn: () => { if (scape && !muted && ctx.state === 'running') return scape.horn(); return 0; },
   tension: (on) => { where = { ...where, focus: on ? 'duel' : where.focus === 'duel' ? 'page' : where.focus }; applyMix(0.8); },
 };
 

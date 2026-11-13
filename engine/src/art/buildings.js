@@ -1,4 +1,6 @@
 // Buildings. Each one gets a day texture plus a "lit" overlay for windows at dusk.
+import { STORY } from '../mechanics/story/config.js';
+import { paintLighthouse } from '../mechanics/story/art.js';
 import { P } from './palette.js';
 import { makeCanvas, rect, px, ellipse, hash, mix, addTex } from './px.js';
 import { GEN } from '../gen/core.js';
@@ -411,7 +413,8 @@ export function makeBuildings(scene, buildings) {
   const info = {};
   for (const b of buildings) {
     // generated houses when GEN.facade is on (gen/facade.js); these painters are the fallback
-    const res = (GEN.facade && paintFacade(b)) || PAINTERS[b.paint](b);
+    // the story: the League hall is an unmarked lighthouse, dark until the end (mechanics/story/art.js)
+    const res = (STORY.on && b.league && paintLighthouse(b)) || (GEN.facade && paintFacade(b)) || PAINTERS[b.paint](b);
     if (b.order) { // house number: the order of the learning path, visible from the street
       const ctx = res.canvas.getContext('2d'), H = res.canvas.height, t = String(b.order), w = textWidth(t) + 4;
       rect(ctx, 2, H - 10, w + 2, 9, P.ink); rect(ctx, 3, H - 9, w, 7, P.gold); drawText(ctx, t, 5, H - 8, P.ink);

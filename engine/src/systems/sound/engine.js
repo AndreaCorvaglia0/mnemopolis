@@ -224,6 +224,14 @@ export function createSoundscape(ctx, { piece, rng, out = ctx.destination, volum
       if (th.cadence) return th.length + api.cue('ending', at + th.length + 0.3) + 0.3;
       return th.length + 2.5;
     },
+    // the ship's horn (the story's leaving): the foghorn's two beating saws, near and long
+    horn(at = ctx.currentTime + 0.05) {
+      const f = hz(piece.root - 12), env = node.gain(0), lp = node.filter('lowpass', 420, 0.9), pk = LEVELS.drone * 2.4, d = 5.5;
+      env.gain.setValueAtTime(0, at); env.gain.linearRampToValueAtTime(pk, at + 0.6); env.gain.setValueAtTime(pk, at + d - 1.6); env.gain.linearRampToValueAtTime(0, at + d);
+      for (const m of [1, 1.007, 2.003]) { const o = node.osc('sawtooth', f * m); o.connect(lp); o.start(at); o.stop(at + d + 0.1); }
+      lp.connect(env); env.connect(cueOut);
+      return d;
+    },
     // the motif, in the variation of the moment; not ducked: it is the answer to the learner
     cue(kind, at = ctx.currentTime + 0.05) {
       const c = CUES[kind]; if (!c) return 0;

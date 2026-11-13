@@ -328,9 +328,10 @@ function makeHarbour(out, taken, e, d, a, W, H) {
   // the ship, in tiles: where its centre is across, and where its waterline is (the bottom of the picture)
   const [p0, p1] = [at(5, 0), at(5, 1)];
   let ship;
-  if (d[1] > 0) ship = { cx: p0[0] + 1, bottom: p0[1] + 7, flip: false, side: 'end' }; // the road goes south: the ship below the pier
+  // (the picture is 11 x 7 tiles, its waterline at the bottom; the pier ends against the hull)
+  if (d[1] > 0) ship = { cx: p0[0] + 1, bottom: p0[1] + 6, flip: false, side: 'end' }; // the road goes south: the ship below the pier
   else if (d[1] < 0) ship = { cx: p0[0] + 1, bottom: p0[1] + 0.2, flip: false, side: 'end' }; // north: above it
-  else ship = { cx: (p0[0] + (d[0] > 0 ? 6.5 : -5.5)), bottom: Math.min(p0[1], p1[1]) + 0.1, flip: d[0] < 0, side: 'along' }; // east or west: alongside, north of the pier
+  else ship = { cx: (p0[0] + (d[0] > 0 ? 4.5 : -3.5)), bottom: Math.min(p0[1], p1[1]) + 0.1, flip: d[0] < 0, side: 'along' }; // east or west: alongside, north of the pier
   return {
     dir: d, across: a, end: e,
     start: { ...tile(2, 1), dir: d[0] > 0 ? 'left' : d[0] < 0 ? 'right' : d[1] > 0 ? 'up' : 'down' },

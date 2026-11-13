@@ -8,7 +8,7 @@
 //   isGround(station)            a station of the ground-floor lab (not "advanced")
 //
 // A house has an upper floor when its concept has anything for it: an advanced station, a riddle
-// that lives upstairs, or a "further" link. Only houses drawn as composed rooms (not the workshop
+// that lives upstairs, or a "further" link; in the story, every core house (`attic`). Only houses drawn as composed rooms (not the workshop
 // of a process, not the museum of a story) have floors: their stations and riddles stay where the
 // scene can show them, and the validator warns.
 import { LOCK_KINDS } from '../riddles/kinds.js';
@@ -24,7 +24,8 @@ export function floorsOf(place) {
   const up = riddles.filter((r) => whereOf(r) === 'upstairs'), room = riddles.filter((r) => whereOf(r) === 'room');
   const further = place?.further || [];
   return {
-    up: !!(advanced.length || up.length || further.length) && ROOM_SCENE(place || {}),
+    // place.attic: the story gives every core house an upstairs for its memento (data/content.js)
+    up: !!(advanced.length || up.length || further.length || place?.attic) && ROOM_SCENE(place || {}),
     advanced, open: advanced.filter((s) => !guarded.has(s.id)), guarded: [...guarded], further, riddles: { up, room },
   };
 }

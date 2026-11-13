@@ -33,6 +33,9 @@ const fresh = () => ({
   seen: {},
   played: 0,
   cheered: {},
+  // the story (src/mechanics/story/, docs/STORY.md): the name given to the purser, the arrival, the
+  // notebook, the mementos found, windows lit, the lighthouse, the turn, the returning fog
+  story: {},
 });
 
 export const state = fresh();

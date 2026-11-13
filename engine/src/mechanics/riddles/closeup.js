@@ -98,8 +98,8 @@ export function openCloseup(r, o = {}) {
   const stage = h('div', { class: 'lk-stage' }, cv, layer, think);
   const ctl = h('div', { class: 'lk-ctl' });
   const main = h('div', { class: 'lk-main' }, stage, ctl);
-  const root = h('div', { class: 'lk', role: 'dialog', 'aria-label': `${T(K.title)}. ${r.clue}` },
-    h('div', { class: 'lk-top' }, h('h1', { html: `${T(K.title)}${o.title ? ` <span>· ${o.title}</span>` : ''}` }), back), main);
+  const root = h('div', { class: 'lk', role: 'dialog', 'aria-label': `${o.heading || T(K.title)}. ${r.clue}` },
+    h('div', { class: 'lk-top' }, h('h1', { html: `${o.heading || T(K.title)}${o.title ? ` <span>· ${o.title}</span>` : ''}` }), back), main);
   document.body.append(root);
   const g = cv.getContext('2d');
   g.imageSmoothingEnabled = false;
@@ -130,7 +130,7 @@ export function openCloseup(r, o = {}) {
       const scr = h('div', { class: 'lk-screen' }, h('div', { class: 'row' }, `${T(W.user)}: ${o.owner || '...'}`), h('div', { class: 'row' }, `${T(W.password)}:`, input), msg);
       layer.append(scr);
       ctl.append(h('div', { class: 'lk-row' }, h('label', { style: 'flex:1' }, T(K.ask)), tryBtn));
-    } else ctl.append(h('div', { class: 'lk-row' }, h('label', {}, T(K.ask))), h('div', { class: 'lk-row' }, input, tryBtn));
+    } else ctl.append(h('div', { class: 'lk-row' }, h('label', {}, o.ask || T(K.ask))), h('div', { class: 'lk-row' }, input, tryBtn));
     if (r.unit && type !== 'text') ctl.querySelector('.lk-row:last-child')?.insertBefore(h('span', {}, r.unit), tryBtn);
   }
   const setValue = (v) => { value = v; if (disp) { disp.classList.remove('err'); disp.textContent = v || '_ _ _'; if (r.unit && v) disp.append(h('span', {}, r.unit)); } tryBtn.disabled = !value.trim(); };
@@ -226,7 +226,7 @@ export function openCloseup(r, o = {}) {
     s.err = true;
     await tween(reduced() ? 0 : 420, (q) => { s.shake = Math.sin(q * Math.PI * 6) * 3 * (1 - q); });
     s.shake = 0;
-    thinkLine(res.thought);
+    thinkLine(o.thought?.(res) ?? res.thought); // o.thought: a caller's own line (the lighthouse door says the word after two misses)
     o.onMiss?.(res);
     setTimeout(() => { s.err = false; if (keypad) setValue(''); else { input.select(); } }, 650);
     if (kind === 'door') setTimeout(() => { if (alive && !s.open) clueEl.replaceChildren(h('small', {}, T(W.voice)), `"${r.clue}"`); }, 2600);
@@ -243,6 +243,7 @@ export function openCloseup(r, o = {}) {
     else { await tween(260, (q) => { s.hatch = 1 - q; }); await tween(520, (q) => { s.bolts = q; }); await wait(160); sfx.door?.(); await tween(850, (q) => { s.open = q * q * (3 - 2 * q); }); }
     result.opened = true;
     o.onOpen?.(rewards);
+    if (o.closeOnOpen) { await wait(700); done(); return; } // nothing inside to show: what is behind is a scene of its own
     showInside(rewards, true);
   }
 

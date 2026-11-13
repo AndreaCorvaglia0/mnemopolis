@@ -2,11 +2,14 @@
 import { COURSE } from '../course/course.js';
 import { introLines } from '../mechanics/quest/strings.js';
 import { w } from './words.js';
+import { STORY } from '../mechanics/story/config.js';
 
 export { COURSE };
 export const DISTRICTS = COURSE.districts;
 // every place, in learning order, with its district and its house number
-export const PLACES = DISTRICTS.flatMap((d) => d.places.map((p) => ({ ...p, district: d }))).map((p, i) => ({ ...p, order: i + 1 }));
+// the story (docs/STORY.md): every core house keeps an attic upstairs, for its memento (floors/plan.js)
+const anyCore = DISTRICTS.some((d) => d.places.some((p) => p.core !== false));
+export const PLACES = DISTRICTS.flatMap((d) => d.places.map((p) => ({ ...p, district: d }))).map((p, i) => ({ ...p, order: i + 1, ...(STORY.on && (p.core !== false || !anyCore) ? { attic: true } : {}) }));
 export const PLACE = Object.fromEntries(PLACES.map((p) => [p.id, p]));
 
 export const TOPICS = Object.fromEntries(PLACES.map((p) => [p.id, { name: p.name, card: p.concept }]));

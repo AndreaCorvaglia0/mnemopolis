@@ -194,6 +194,7 @@ export function storyTextures(scene) {
   if (!T.exists('story-rain-a')) { addTex(scene, 'story-rain-a', rainTile(1, 26, [6, 10], 0.6)); addTex(scene, 'story-rain-b', rainTile(7, 18, [3, 6], 0.35)); }
   if (!T.exists('story-notebook')) addTex(scene, 'story-notebook', notebookIcon());
   if (!T.exists('story-splash')) addTex(scene, 'story-splash', splash());
+  if (!T.exists('story-memento')) { const [c, g] = makeCanvas(10, 8); rect(g, 0, 1, 10, 7, INK); rect(g, 1, 2, 8, 5, '#efe6cf'); rect(g, 1, 6, 8, 1, '#c9bc9a'); rect(g, 2, 3, 5, 1, '#8a7a9a'); rect(g, 2, 5, 4, 1, '#8a7a9a'); px(g, 8, 1, '#ffcf5a'); addTex(scene, 'story-memento', c); }
   if (!T.exists('ch-keeper-hood') && T.exists('ch-player')) {
     const sheet = hoodedSheet(T.get('ch-player').getSourceImage());
     addSheet(scene, 'ch-keeper-hood', sheet, 16, 24);

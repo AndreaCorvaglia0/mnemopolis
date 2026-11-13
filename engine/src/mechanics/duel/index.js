@@ -14,6 +14,8 @@ import { CHALLENGE } from './lines.js';
 import { STORY } from '../story/config.js';
 import { R_TEMPERS, KEEPER, REMEMBER, REMEMBER_STOCK, REMEMBER_CHALLENGE, S_WORDS } from '../story/words.js';
 import { fill, tr } from '../config.js';
+import { findMemento } from '../story/remember.js';
+import { noteRemembered } from '../story/fog.js';
 import { floorsOf } from '../floors/plan.js';
 import { Q } from '../quest/active.js';
 
@@ -54,6 +56,10 @@ export async function houseDuel(ui, id) {
     }));
     ui.refreshHUD();
     if (res.won && res.prize?.badge && !STORY.on) await ui.stamp(id); // the story lights a window instead (story/town.js)
+    if (res.won && STORY.on) {
+      noteRemembered(id); // after the ending: the returning fog starts its schedule for this house
+      if (res.prize?.badge && !floorsOf(PLACE[id]).up) await findMemento(ui, id, { given: true }); // no upstairs: the owner hands it over
+    }
     if (res.next === 'rematch') continue;
     if (res.next === 'reading') await ui.reading(id);
     return res;

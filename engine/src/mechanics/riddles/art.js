@@ -193,3 +193,6 @@ export function lockTextures(scene) {
     rect(c, 2, 10, 9, 5, INK); rect(c, 3, 11, 7, 3, '#e05a4f'); rect(c, 5, 12, 3, 1, '#ffffff'); // a "no" tag
   });
 }
+
+// the painters' helpers, for other first-person close-ups (the story's mementos, mechanics/story/)
+export { room as closeRoom, vignette as closeVignette, dust as closeDust, glowAt as closeGlow, paper as closePaper, INK as CLOSE_INK };
