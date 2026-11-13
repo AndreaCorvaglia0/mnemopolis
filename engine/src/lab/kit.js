@@ -107,7 +107,7 @@ export function canvasPane(stage, w, hgt, caption = '', opts = {}) {
   });
   el.__pane = pane;
   fit();
-  const ro = new ResizeObserver(() => { if (fit()) resizers.forEach((f) => f(pane)); });
+  const ro = new ResizeObserver(() => { if (fit()) { tipEl.hidden = true; resizers.forEach((f) => f(pane)); } });
   ro.observe(wrap);
   // stop observing once the station is gone
   const gone = new MutationObserver(() => { if (!el.isConnected) { ro.disconnect(); gone.disconnect(); } });
