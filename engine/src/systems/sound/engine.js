@@ -15,7 +15,7 @@ import { Planner, hz, snap, CUES } from './theory.js';
 
 // Every level in one place (linear gains). Measured, not guessed: see ENGINE.md "Sound".
 export const LEVELS = {
-  master: 0.36, // times the volume of world.json (default 0.6)
+  master: 0.9, // times the volume of world.json (default 0.6); raised from 0.36: inaudible on phone speakers
   pad: 0.038, note: 0.08, cue: 0.09, drone: 0.05, choir: 0.018, pulse: 0.03, creak: 0.025,
   water: 0.035, wind: 0.024, fountain: 0.03, cricket: 0.0035, bird: 0.006, sfx: 0.42, // sfx: the old master was 0.5
 };
@@ -174,7 +174,7 @@ export function createSoundscape(ctx, { piece, rng, out = ctx.destination, volum
       mix = m;
       glide(bedOut.gain, m.bed * (piece.bed ?? 1), at, tc);
       glide(notesOut.gain, m.notes, at, tc);
-      glide(padLP.frequency, m.padCut, at, tc); glide(noteLP.frequency, m.noteCut, at, tc);
+      glide(padLP.frequency, m.padCut * 1.6, at, tc); // x1.6: small speakers reproduce little below 400 Hz glide(noteLP.frequency, m.noteCut, at, tc);
       glide(hallSend.gain, m.hall, at, tc); glide(roomSend.gain, m.room, at, tc);
       glide(place.gain, m.place, at, tc);
     },
