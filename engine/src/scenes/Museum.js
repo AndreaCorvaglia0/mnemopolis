@@ -7,6 +7,7 @@ import { makeCanvas, rect, px, hash, addTex } from '../art/px.js';
 import { drawText, textWidth } from '../art/buildings.js';
 import { FireLight, bracket } from '../art/fire.js';
 import { PLACE, MASTERS } from '../data/content.js';
+import { houseDuel, challengeLabel, houseQuestions } from '../mechanics/duel/index.js';
 import { state, save } from '../systems/state.js';
 
 // The main corridor of the castle: walk east and you walk forward in time.
@@ -137,7 +138,7 @@ export class Museum extends Phaser.Scene {
     sfx.select();
     const bye = { label: 'Thanks' };
     await ui.converse(m.name, {
-      root: { say: m.hi, options: [kinds.length ? { label: 'What do the colours mean?', to: 'col' } : null, { label: 'Start from the first plaque', do: async () => { await ui.plaque(this.list, 0, this.place.kinds); return 'end'; } }, bye].filter(Boolean) },
+      root: { say: m.hi, options: [kinds.length ? { label: 'What do the colours mean?', to: 'col' } : null, { label: 'Start from the first plaque', do: async () => { await ui.plaque(this.list, 0, this.place.kinds); return 'end'; } }, houseQuestions(this.id).length >= 2 ? { label: challengeLabel(this.id), do: async () => { await houseDuel(ui, this.id); return 'end'; } } : null, bye].filter(Boolean) },
       col: { say: `The colour of a plaque is its thread: ${kinds.map((k) => k[0]).join(', ')}.`, options: [bye] },
     });
     this.guide.face('down');

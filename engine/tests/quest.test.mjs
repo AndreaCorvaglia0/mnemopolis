@@ -8,12 +8,13 @@ import { mkdtempSync, cpSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { questOf, isCore, hasDuel, DUEL_ROOMS } from '../src/mechanics/quest/model.js';
+import { questOf, isCore, hasDuel, MIN_DUEL_QUESTIONS } from '../src/mechanics/quest/model.js';
 import { Q } from '../src/mechanics/quest/active.js';
 import { Q_WORDS, trackerLine, answerLine, gateLine, introLines, listOf } from '../src/mechanics/quest/strings.js';
 import { markSeen, knownAs } from '../src/mechanics/quest/townmap.js';
 import { endingNumbers } from '../src/mechanics/quest/ending.js';
-import { PLACES } from '../src/data/content.js';
+import { PLACES, QUESTIONS } from '../src/data/content.js';
+import { KINDS } from '../src/world/townMap.js';
 import { rng } from '../scripts/synthetic.mjs';
 
 const LANGS = ['en', 'it'];
@@ -74,7 +75,7 @@ test('a player who wanders, does extras and houses out of order is never pointed
 
 // synthetic courses: random sizes, kinds, labs, questions and core marks
 function synth(i) {
-  const r = rng(i * 31 + 5), n = 3 + Math.floor(r() * 14), kinds = [...DUEL_ROOMS, 'workshop', 'museum'];
+  const r = rng(i * 31 + 5), n = 3 + Math.floor(r() * 14), kinds = Object.keys(KINDS);
   const places = Array.from({ length: n }, (_, k) => {
     const kind = kinds[Math.floor(r() * kinds.length)], st = kind === 'museum' ? 0 : 1 + Math.floor(r() * 3);
     return { id: `p${k}`, order: k + 1, name: `Place ${k + 1}`, kind, lab: st ? { stations: Array(st).fill({}) } : undefined, questions: Array(Math.floor(r() * 5)).fill({}), host: { name: `Host${k}` }, ...(k > 0 && r() < 0.4 ? { core: false } : {}) };
@@ -94,25 +95,30 @@ test('synthetic courses: every game runs intro -> core houses in order -> league
 test('leagueOpen: every core house done, whatever the extras; houses without a duel are done when visited with their lab', () => {
   const places = [
     { id: 'a', order: 1, kind: 'lab', lab: { stations: [{}, {}] }, questions: [{}, {}, {}] },
-    { id: 'w', order: 2, kind: 'workshop', lab: { stations: [{}] }, questions: [{}, {}] },
-    { id: 'm', order: 3, kind: 'museum', questions: [{}, {}] },
-    { id: 'q', order: 4, kind: 'lab', lab: { stations: [{}] }, questions: [{}] },
+    { id: 'w', order: 2, kind: 'workshop', lab: { stations: [{}] }, questions: [{}] },
+    { id: 'm', order: 3, kind: 'museum', questions: [] },
+    { id: 'h', order: 4, kind: 'museum', questions: [{}, {}] },
     { id: 'x', order: 5, kind: 'cave', core: false, lab: { stations: [{}] }, questions: [{}, {}] },
   ];
   const Qx = questOf({ places });
-  assert.equal(hasDuel(places[0]), true);
-  assert.equal(hasDuel(places[1]), false, 'the workshop has no host duel');
-  assert.equal(hasDuel(places[2]), false, 'the museum has no host duel');
-  assert.equal(hasDuel(places[3]), false, 'one question is not a duel');
+  assert.deepEqual(places.map(hasDuel), [true, false, false, true, true], 'a duel wherever the host has two questions, whatever the room');
   const s = { ...fresh(), seenIntro: true };
   assert.equal(Qx.leagueOpen(s), false);
   s.stamps.a = true;
-  s.visited.w = true; assert.equal(Qx.placeProgress(places[1], s).done, false, 'the workshop needs its lab');
-  s.done['w:0'] = true; s.visited.m = true; s.visited.q = true; s.done['q:0'] = true;
+  s.visited.w = true; assert.equal(Qx.placeProgress(places[1], s).done, false, 'no duel: the lab is needed');
+  s.done['w:0'] = true; s.visited.m = true; s.visited.h = true;
+  assert.equal(Qx.leagueOpen(s), false, 'the museum with questions needs its duel');
+  s.stamps.h = true;
   assert.equal(Qx.leagueOpen(s), true, 'the extra is not needed');
-  assert.deepEqual(Qx.missing({ ...fresh(), stamps: { a: true } }).map((r) => r.id), ['w', 'm', 'q']);
-  // a badge always counts, even where today there is no duel (the duel module may add one)
-  assert.equal(Qx.placeProgress(places[1], { ...fresh(), stamps: { w: true } }).done, true);
+  assert.deepEqual(Qx.missing({ ...fresh(), stamps: { a: true } }).map((r) => r.id), ['w', 'm', 'h']);
+  assert.equal(Qx.placeProgress(places[1], { ...fresh(), stamps: { w: true } }).done, true, 'a badge always counts');
+});
+
+test('the League is always reachable: every core house that needs a badge has a host who offers the duel', () => {
+  // the hosts of every scene (Interior.talkMaster, Workshop.talk, Museum.talk) offer the challenge
+  // from MIN_DUEL_QUESTIONS questions of the house (duel/index.js houseQuestions): the same rule as hasDuel
+  for (const p of Q.core) if (hasDuel(p)) assert.ok(QUESTIONS.filter((q) => q.topic === p.id).length >= MIN_DUEL_QUESTIONS, `${p.id}: a badge no one can give`);
+  for (let i = 0; i < 120; i++) { const Qx = synth(i); playThrough(Qx); }
 });
 
 test('core and extra: unmarked means core; a course with no core left falls back to everything', () => {

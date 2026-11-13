@@ -21,6 +21,9 @@ try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 // trade names too (engine/src/gen/interior/trades.js has no imports either)
 let TRADES = null;
 try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'gen', 'interior', 'trades.js'); if (existsSync(f)) TRADES = (await import(pathToFileURL(f).href)).TRADE_NAMES; } catch { TRADES = null; }
+// and the tempers of the duels (engine/src/mechanics/duel/tempers.js, no imports)
+let TEMPERS = null;
+try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'mechanics', 'duel', 'tempers.js'); if (existsSync(f)) TEMPERS = (await import(pathToFileURL(f).href)).TEMPER_NAMES; } catch { TEMPERS = null; }
 const err = (m) => errors.push(m), warn = (m) => warns.push(m);
 const words = (s) => String(s || '').trim().split(/\s+/).filter(Boolean).length;
 const need = (o, keys, where) => keys.forEach((k) => { if (o[k] === undefined || o[k] === '' || o[k] === null) err(`${where}: "${k}" is missing`); });
@@ -80,7 +83,9 @@ concepts.forEach((p, i) => {
     const e = p.expert;
     if (!e || typeof e !== 'object' || Array.isArray(e)) err(`${P}: "expert" must be an object { name, trade, line }`);
     else {
-      Object.keys(e).filter((k) => !['name', 'trade', 'line'].includes(k)).forEach((k) => err(`${P}: expert has an unknown field "${k}" (name, trade, line)`));
+      Object.keys(e).filter((k) => !['name', 'trade', 'line', 'temper'].includes(k)).forEach((k) => err(`${P}: expert has an unknown field "${k}" (name, trade, line, temper)`));
+      if (e.temper !== undefined && (typeof e.temper !== 'string' || !e.temper.trim())) err(`${P}: expert "temper" must be a non-empty string`);
+      else if (e.temper && TEMPERS && !TEMPERS.includes(e.temper)) warn(`${P}: expert temper "${e.temper}" is not one of ${TEMPERS.join(', ')}; the engine picks one by seed`);
       if (typeof e.trade !== 'string' || !e.trade.trim()) err(`${P}: expert needs a "trade" (one word, e.g. painter)`);
       else if (TRADES && !TRADES.includes(e.trade)) warn(`${P}: expert trade "${e.trade}" is not one of ${TRADES.join(', ')}; the house will be a generic home`);
       if (e.name !== undefined && (typeof e.name !== 'string' || !e.name.trim())) err(`${P}: expert "name" must be a non-empty string`);

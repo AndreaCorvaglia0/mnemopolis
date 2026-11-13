@@ -12,19 +12,18 @@
 //
 // Rules (docs/DESIGN.md, "Main story"):
 //   core       a concept is core unless course.json says "core": false; core houses gate the League
-//   duel       a house has a duel when its host can be challenged: a room scene with a host who
-//              quizzes (not the workshop's conveyor belt, not the museum's timeline: see DUEL_ROOMS)
-//              and at least two questions. The duel module may widen this: change hasDuel only.
-//   done       a house with a duel: its badge (state.stamps[id]). A house without one: visited, and
-//              every lab station finished if it has a lab. A badge always counts, whatever the house.
+//   duel       a house has a duel when its host can be challenged: every room has a host (the
+//              workshop's and the museum's too), so it is a matter of questions: at least two
+//              (the host offers the challenge from two). Change hasDuel only.
+//   done       a house with a duel: its badge (state.stamps[id]). A house without one (fewer than two
+//              questions): visited, and every lab station finished if it has a lab. A badge always counts, whatever the house.
 //   steps      intro -> for each core house in path order: visit -> lab (n/m) -> duel
 //              -> league -> ending -> free (after state.ended)
-export const DUEL_ROOMS = ['lab', 'archive', 'hall', 'studio', 'observatory', 'cave', 'home'];
 export const MIN_DUEL_QUESTIONS = 2;
 
 export const isCore = (p) => p.core !== false;
 export const stationsOf = (p) => p.lab?.stations?.length || 0;
-export const hasDuel = (p) => DUEL_ROOMS.includes(p.kind || 'lab') && (p.questions?.length || 0) >= MIN_DUEL_QUESTIONS;
+export const hasDuel = (p) => (p.questions?.length || 0) >= MIN_DUEL_QUESTIONS;
 
 export function questOf({ places, guide = 'the guide', champion = 'the champion' }) {
   const all = [...places].sort((a, b) => a.order - b.order);

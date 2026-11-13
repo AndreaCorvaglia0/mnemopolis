@@ -10,7 +10,8 @@ import { openEnding } from '../mechanics/quest/ending.js';
 import { touch } from '../systems/view.js';
 import { openLab } from '../lab/shell.js';
 import { openReading } from '../lab/reading.js';
-import { LIFE, tr, WORDS } from '../mechanics/config.js';
+import { LIFE, tr, fill, WORDS } from '../mechanics/config.js';
+import { leagueDuel } from '../mechanics/duel/index.js';
 import { available as voiceAvailable, isOn as voiceOn, isSpeaking, onChange as onVoice, listen, speak, stop as stopVoice, toggle as toggleVoice, VOICE } from '../systems/voice.js';
 
 // DotGothic16 for reading (clear C/O and 5/S at small sizes); Pixelify Sans for big display lines.
@@ -715,12 +716,12 @@ export class UI extends Phaser.Scene {
       g.lineStyle(6, 0xffffff, 1).strokeCircle(0, 0, 80);
       g.lineStyle(2, 0xffffff, 0.8).strokeCircle(0, 0, 70);
       for (let i = 0; i < 3; i++) this.star(g, -36 + i * 36, 36, 9, 0xffffff);
-      label = kind === 'review' ? `${LEAGUE.name} passed` : `${TOPICS[topic].name} stamp`;
+      label = kind === 'review' ? fill(tr(Q_WORDS.leagueWon), { league: LEAGUE.name }) : fill(tr(Q_WORDS.badge), { place: TOPICS[topic].name });
       sub = kind === 'review' ? COURSE.bigIdea : TOPICS[topic].card;
     }
     const F = this.frame();
     const holder = this.add.container(F.cx, F.cy - 40, [g]).setScale(3).setAngle(-25).setAlpha(0);
-    if (kind !== 'atlas') holder.add(this.text(0, -10, kind === 'review' ? 'PASS' : TOPICS[topic].name.toUpperCase(), kind === 'review' ? 40 : 19, '#ffffff', { display: kind === 'review', fontStyle: '600', align: 'center' }).setOrigin(0.5));
+    if (kind !== 'atlas') holder.add(this.text(0, -10, kind === 'review' ? tr({ en: 'WON', it: 'VINTA' }) : TOPICS[topic].name.toUpperCase(), kind === 'review' ? 40 : 19, '#ffffff', { display: kind === 'review', fontStyle: '600', align: 'center' }).setOrigin(0.5));
     c.add(holder);
     this.tweens.add({ targets: holder, scale: 1, angle: kind === 'atlas' ? 0 : -8, alpha: 1, duration: 380, ease: 'Back.easeOut', onComplete: () => this.cameras.main.shake(180, 0.008) });
     const t1 = this.text(F.cx, F.cy + 102, label, 32, '#ffcf5a', { stroke: '#1b1a2b', strokeThickness: 5, wordWrap: { width: F.w - 40 }, align: 'center' }).setOrigin(0.5).setAlpha(0);
@@ -759,24 +760,9 @@ export class UI extends Phaser.Scene {
   }
 
   // ---------- the league: the final check ----------
-  // Questions of level 2 and 3, spread over all houses and shuffled so that districts alternate.
+  // A duel with the League's champion (src/mechanics/duel/): levels 2 and 3, spread over all houses.
+  // Winning sets state.passedLeague; Esc steps back at any time.
   async league() {
-    const byPlace = PLACES.map((p) => Phaser.Utils.Array.Shuffle(QUESTIONS.filter((q) => q.topic === p.id && q.stars >= 2))), picked = [];
-    for (let round = 0; picked.length < LEAGUE.size && byPlace.some((l) => l.length > round); round++) for (const l of byPlace) if (l[round] && picked.length < LEAGUE.size) picked.push(l[round]);
-    if (!picked.length) return;
-    Phaser.Utils.Array.Shuffle(picked);
-    let right = 0;
-    for (let i = 0; i < picked.length; i++) {
-      const res = await this.quiz(picked[i], { banner: `${LEAGUE.name}  ·  ${i + 1} of ${picked.length}` });
-      if (res.ran) return;
-      if (res.right) right += 1;
-    }
-    const name = LEAGUE.host?.name || 'Judge', need = Math.ceil(picked.length * LEAGUE.pass);
-    if (right >= need) {
-      state.passedLeague = true;
-      save();
-      await this.stamp(null, 'review');
-      await this.say([`${right} of ${picked.length}. The league badge is yours.`], { name });
-    } else await this.say([`${right} of ${picked.length}. You need ${need}.`, this.touch ? 'The Map button shows which houses to visit again.' : 'The map (Tab) shows which houses to visit again.'], { name });
+    await leagueDuel(this);
   }
 }

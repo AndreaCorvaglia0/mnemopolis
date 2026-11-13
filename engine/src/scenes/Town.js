@@ -464,7 +464,7 @@ export class Town extends Phaser.Scene {
     if (state.passedLeague && !state.ended) return this.ending();
     if (!Q.leagueOpen(state)) { await this.ui.say([gateLine(Q.missing(state))], { name }); this.champion?.face('down'); return; }
     await this.ui.converse(name, {
-      root: { say: state.passedLeague ? tr(G.again) : fill(tr(G.open), { league: LEAGUE.name, size: LEAGUE.size, pass: Math.round(LEAGUE.pass * 100) }), options: [
+      root: { say: state.passedLeague ? tr(G.again) : fill(tr(G.open), { league: LEAGUE.name }), options: [
         { label: tr(G.start), do: async () => { await this.ui.league(); return 'end'; } },
         { label: tr(G.notNow) },
       ] },

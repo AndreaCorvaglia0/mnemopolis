@@ -53,9 +53,9 @@ afterwards: the town stays open for exploring and practising, without limit
   above 60 minutes. Extra concepts keep their houses and their numbers; they are never listed in
   the Journey and show as "?" on the map once the player has walked near them, and in the mind map
   until visited.
-- **Badge.** `state.stamps[id]` (exists): the duel with the host of that house is won. A house
-  whose room has no host to duel (the workshop's belt, the museum's timeline) or fewer than two
-  questions counts as done when visited with every lab station finished; a badge always counts.
+- **Badge.** `state.stamps[id]` (exists): the duel with the host of that house is won. Every
+  room's host offers the duel (the workshop's and the museum's too) when the house has at least two
+  questions; a house with fewer counts as done when visited with every lab station finished.
 - **League.** `state.passedLeague` (exists). Opens when every core house is done. Until then the
   champion says in one line what is missing ("Two experts still think they know better than you:
   houses 4 and 6.").
@@ -72,21 +72,35 @@ afterwards: the town stays open for exploring and practising, without limit
 A skin over questions the course already has; no new content is required.
 
 - Two bars: the opponent's **conviction**, the player's **composure**.
-- Each turn is one question. Before answering the player picks a **tone** (the existing
-  confidence bet): *murmur*, *state*, *proclaim*. A right answer lands an argument (1, 2 or 3);
-  a wrong one costs composure (more with a bolder tone) and the opponent's rebuttal explains the
-  mistake with the `trap` of the chosen option.
-- **House duel**: questions of that concept (levels 1 and 2), short (3 to 6 turns), tolerant of
-  about two slips. Winning gives the badge and the owner's key.
-- **League**: `finalCheck.size` turns across all core concepts in rounds by district;
-  the tolerance is derived from `finalCheck.pass`.
-- **Losing**: nothing is taken. The opponent says, in character, which idea to look at again; the
-  reading wall and the lab are one step away; a rematch draws other questions.
-- **Calibration** is tested by simulation: a learner right 70% of the time usually wins a house
-  duel; one right 40% of the time usually loses; no duel exceeds six turns.
-- **Tempers.** How an owner gives up the key depends on a temper (smitten, sore loser, admirer,
-  pretends to have let you win, theatrical, absent-minded...), from a registry, in English and
-  Italian, chosen by seed or by `expert.temper`. Comic, never mean.
+- Each turn is one question. With it the player picks a **tone** (the existing confidence bet):
+  *murmur*, *state*, *proclaim*, preselected at *state* every turn so that one tap on an answer
+  commits both. A right answer lands an argument (1, 2 or 3); a wrong one costs composure
+  (1, 2 or 4) and the opponent's rebuttal explains the mistake with the `trap` of the chosen option
+  and the question's `why`. A right answer is followed by its `why`, never by "correct" alone.
+- **House duel**: questions of that concept (levels 1 and 2 first, level 3 only to fill), at
+  most six turns (fewer if the concept has fewer questions); conviction 7, composure 5: with every
+  answer stated, three right before three wrong. Winning gives the badge and the owner's key.
+  Once won, the duel becomes a **friendly rematch** (levels 2 and 3 first, nothing new to win).
+- **League**: `finalCheck.size` turns of levels 2 and 3, one question from each house per round,
+  shuffled; conviction `2 × ceil(size × pass)`, composure `2 × (size − need) + 1`, so that with
+  every answer stated the duel is won exactly at the pass mark. The house of a question is named
+  only after it is answered.
+- **Out of questions**: the fuller bar (as a share of its start) wins; on an exact tie the player
+  wins only with at least the pass share right (2/3 in a house).
+- **Losing**: nothing is taken, coins included (a wrong answer in a duel costs composure, not
+  coins). The opponent says, in character, which idea to look at again: in a house the concept,
+  the reading wall and the lab; in the League the houses of the missed questions, by number and
+  name. Rematch draws other questions at once. Step back (Esc) leaves at any time.
+- **Calibration** is tested by simulation (`engine/tests/duel.test.mjs`, table in
+  `engine/docs/ENGINE.md`): with six questions a learner right 70% of the time wins about three
+  duels in four and one right 40% of the time loses more than four in five; at 90% one nearly
+  always wins; always proclaiming does worse than a calibrated tone; the League is a coin flip
+  at the pass mark and won nine times in ten fifteen points above it. Concepts with fewer
+  questions make less decisive duels.
+- **Tempers.** How an owner duels and gives up the key depends on a temper (smitten, sore loser,
+  admirer, insists they let you win, theatrical, absent-minded, proud craftsman), from a
+  registry, in English and Italian, chosen by seed or by `expert.temper`. The League's champion
+  is grander and steps aside when beaten. Comic, never mean.
 
 ## Explore
 
