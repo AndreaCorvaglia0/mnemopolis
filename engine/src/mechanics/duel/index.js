@@ -11,6 +11,7 @@ import { houseBars, leagueBars, houseTiers, leagueQuestions, duelDelta } from '.
 import { awardHouse, awardLeague, isFriendly } from './prize.js';
 import { openDuel } from './screen.js';
 import { CHALLENGE } from './lines.js';
+import { floorsOf } from '../floors/plan.js';
 
 // The temper of a house: `expert.temper` in course.json if it names one, else seeded by the place.
 export function temperOf(id) {
@@ -43,7 +44,7 @@ export async function houseDuel(ui, id) {
   for (;;) {
     const friendly = isFriendly(state, id);
     const res = await ui.page(() => openDuel({
-      kind: 'house', houseId: id, friendly, bars: houseBars(pool.length), tiers: houseTiers(pool, friendly), pick: pickQuestion,
+      kind: 'house', houseId: id, friendly, upstairs: floorsOf(PLACE[id]).up, room: PLACE[id].kind, bars: houseBars(pool.length), tiers: houseTiers(pool, friendly), pick: pickQuestion,
       score, place, sprite: sprite(ui), opponent: { name: m.name, look: m.look, lines },
       onEnd: (d) => { if (!d.won) return {}; const p = awardHouse(state, id); save(); return p; },
     }));

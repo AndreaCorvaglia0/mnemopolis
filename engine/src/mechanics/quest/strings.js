@@ -68,7 +68,8 @@ export const Q_WORDS = {
     ok: { en: 'I\'ll be back', it: 'Tornerò' },
   },
   // the card shown when a badge is won (UI.stamp)
-  badge: { en: '{place}: badge', it: '{place}: distintivo' },
+  badge: { en: 'Badge: {place}', it: 'Distintivo: {place}' },
+  badgeKey: { en: 'The key to the upstairs is yours.', it: 'La chiave del piano di sopra è tua.' },
   leagueWon: { en: '{league}: won', it: '{league}: vinta' },
   numbers: { en: ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'], it: ['Nessun', 'Un', 'Due', 'Tre', 'Quattro', 'Cinque', 'Sei', 'Sette', 'Otto', 'Nove', 'Dieci'] },
   and: { en: 'and', it: 'e' },

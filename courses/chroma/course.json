@@ -5,10 +5,16 @@
   "language": "en",
   "title": "Chroma Town",
   "subject": "How colour works",
-  "bigIdea": "Colour is three numbers: three lights on a screen, three inks on paper, three signals in the eye.",
+  "bigIdea": "Colour is three numbers: three lights on a screen, three signals in the eye.",
   "learner": "A curious adult with no background in colour science who uses screens and printers every day.",
   "goals": [
-    "Predict the result of mixing coloured lights and of mixing inks.",
+    "Predict the result of mixing coloured lights.",
+    {
+      "text": "Predict the result of mixing inks, the mirror image of mixing lights.",
+      "concepts": [
+        "print"
+      ]
+    },
     "Describe a colour with hue, saturation and lightness and relate it to RGB.",
     "Explain why three numbers are enough to describe a colour, and why the same numbers can look different."
   ],
@@ -225,9 +231,9 @@
           "why": "Lights add. Red and green together stimulate the eye like yellow does.",
           "traps": [
             null,
-            "paint-mixing intuition",
-            "confusion with red + blue",
-            "confusion with all three lights"
+            "Mixing paints gives a muddy brown, so it feels natural for lights too; but lights add up, and red plus green light makes the eye see yellow.",
+            "Purple is what red and blue make together; green is the other light here, and red plus green gives yellow.",
+            "White needs all three lights; with only red and green, blue is missing, and the sum is yellow."
           ]
         },
         {
@@ -242,10 +248,10 @@
           "answer": 1,
           "why": "Adding light always makes the result brighter. All three at full strength is white.",
           "traps": [
-            "paint-mixing intuition: more colours, darker",
+            "In paint, more colours make a darker mix; light works the other way: every lamp you add makes the wall brighter.",
             null,
-            "equal amounts always give grey",
-            "paint-mixing intuition"
+            "Equal amounts do give a grey, but at full strength the grey is as light as it can be: white.",
+            "Brown is what paints do when mixed; three lights at full strength add up to the brightest colour, white."
           ]
         },
         {
@@ -259,8 +265,8 @@
           "answer": 2,
           "why": "Each pixel has a red, a green and a blue lamp, each with its own brightness from 0 to 255.",
           "traps": [
-            "thinks of brightness only",
-            "believes a screen emits each colour as its own light",
+            "One number would be enough for brightness alone; a colour needs a value for each of the three lamps of the pixel.",
+            "Light can be described by its wavelength, but a screen has no lamp for each colour: it mixes three.",
             null
           ]
         },
@@ -276,9 +282,9 @@
           "answer": 3,
           "why": "Equal amounts of the three lights have no hue. The amount sets how light the grey is.",
           "traps": [
-            "reads only the first number",
-            "thinks equal lights cancel out",
-            "equal means white, forgetting the amount",
+            "Red is the first number, so it is easy to read it alone; but all three are equal, and equal amounts have no hue.",
+            "Equal lights might seem to cancel each other; lights only add, so three equal lights make a grey, not darkness.",
+            "Three equal lights do give a neutral colour, but 120 is about half of 255: the result is a mid grey, not white.",
             null
           ]
         },
@@ -295,9 +301,27 @@
           "why": "Yellow on a screen is red plus green. Blue stays dark.",
           "traps": [
             null,
-            "does not recall that yellow is red + green",
-            "does not recall that yellow is red + green",
-            "believes the screen has a yellow lamp"
+            "Green is one of the two lights that make yellow; switch it off and only red is left.",
+            "Red is one of the two lights that make yellow; switch it off and only green is left.",
+            "A yellow lamp would be the simplest explanation, but a pixel has only red, green and blue: yellow is red plus green."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A web designer wants a pixel to show magenta. Which of its lamps are on?",
+          "options": [
+            "Red and green",
+            "Green and blue",
+            "Only a magenta lamp",
+            "Red and blue"
+          ],
+          "answer": 3,
+          "why": "Red light plus blue light gives magenta. Green stays dark.",
+          "traps": [
+            "Red and green together give yellow, not magenta; magenta needs blue instead of green.",
+            "Green and blue together give cyan; magenta needs red with the blue.",
+            "A magenta lamp would be the simple answer, but a pixel has only red, green and blue: magenta is red plus blue.",
+            null
           ]
         }
       ],
@@ -468,10 +492,10 @@
           "answer": 1,
           "why": "White minus red leaves green plus blue, which is cyan.",
           "traps": [
-            "names a light that cyan sends back, not the one it removes",
+            "Cyan does look a bit bluish, so it seems to keep blue; in fact it sends blue back and removes red.",
             null,
-            "names a light that cyan sends back, not the one it removes",
-            "thinks any ink absorbs everything"
+            "Cyan looks greenish-blue, which is the hint: it sends green back, so green is not what it removes.",
+            "Black ink absorbs everything; a coloured ink removes only one of the three lights, or the paper would look black."
           ]
         },
         {
@@ -486,10 +510,10 @@
           "answer": 2,
           "why": "Every ink removes some light. More inks, less light left.",
           "traps": [
-            "applies the rule of lights to ink",
-            "more ink means more colour",
+            "That is the rule of lights, where adding makes brighter; ink starts from white paper and takes light away.",
+            "More ink can look like more colour, but each ink removes light, so the mix gets darker and duller.",
             null,
-            "applies the rule of lights to ink"
+            "White is what three lights make together; three inks together remove almost all the light and give near black."
           ]
         },
         {
@@ -503,9 +527,9 @@
           "answer": 1,
           "why": "It prints ink or no ink. Small dots leave more white paper, and the eye averages the two.",
           "traps": [
-            "assumes a printer can dilute ink",
+            "Watering ink down is how a painter makes it lighter; a printer cannot dilute its ink: it prints ink or no ink.",
             null,
-            "assumes a printer can vary the thickness"
+            "A thinner layer sounds plausible, but a printer cannot vary the thickness of its ink; it changes the size of its dots."
           ]
         },
         {
@@ -521,9 +545,9 @@
           "why": "Yellow removes blue, magenta removes green. Only red is left.",
           "traps": [
             null,
-            "mixes up which light each ink removes",
-            "mixes up which light each ink removes",
-            "thinks any two inks give black"
+            "Blue is a light that yellow ink removes, so it cannot come back from yellow ink.",
+            "Green is the light that magenta ink removes, so it cannot come back from magenta ink.",
+            "Two inks remove two lights, not all three; the third light, red, still comes back from the paper."
           ]
         },
         {
@@ -538,10 +562,10 @@
           "answer": 1,
           "why": "A printer puts ink or no ink. Tone comes from the size of the dots; the eye averages them.",
           "traps": [
-            "assumes a printer can dilute ink",
+            "A smooth grey suggests grey ink, but a printer cannot dilute its ink: tone comes from the size of black dots.",
             null,
-            "assumes a printer can dilute ink",
-            "confuses print with screen"
+            "Several grey inks would also make smooth greys, but tone in print comes from black dots of different sizes on white paper.",
+            "Tiny lamps are how a screen makes colour; paper sends no light of its own, it only reflects it."
           ]
         }
       ],
@@ -634,9 +658,9 @@
           "why": "Hue is the position around the colour wheel.",
           "traps": [
             null,
-            "confuses how vivid with which colour",
-            "confuses light or dark with which colour",
-            "not one of the three dials"
+            "Saturation changes how vivid a colour is, not which colour it is; red stays red, only duller or more vivid.",
+            "Lightness changes how close to white or black a colour is, not which colour it is.",
+            "Contrast is a real word for differences between colours, but it is not one of the three dials."
           ]
         },
         {
@@ -651,9 +675,9 @@
           "answer": 3,
           "why": "With no saturation there is no hue left: only a grey whose lightness you chose.",
           "traps": [
-            "confuses saturation with lightness",
-            "confuses saturation with lightness",
-            "reads the scale backwards",
+            "Black is what lightness at zero gives; saturation at zero keeps the lightness and removes the hue.",
+            "White is what lightness at the top gives; saturation at zero keeps the lightness and removes the hue.",
+            "Full saturation is the pure colour; zero is the other end of the scale, where no colour is left.",
             null
           ]
         },
@@ -668,8 +692,8 @@
           "answer": 2,
           "why": "Lowering lightness moves any colour toward black without changing which colour it is.",
           "traps": [
-            "confuses darker with a different colour",
-            "confuses duller with darker",
+            "A dark red can look like a different colour, maroon or brown; but the hue stays red, only the lightness goes down.",
+            "A darker red also looks duller, which points to saturation; but saturation heads toward grey, not toward black.",
             null
           ]
         },
@@ -685,10 +709,46 @@
           "answer": 1,
           "why": "Same hue as red, pushed toward white.",
           "traps": [
-            "reads lightness backwards",
+            "Pastel colours are soft, which can sound like low; but low lightness heads toward black, and pink is red toward white.",
             null,
-            "thinks pink is a hue of its own",
-            "zero saturation would be grey"
+            "Pink has its own name, so it seems to be its own hue; on the wheel it sits where red is, only lighter.",
+            "Pink is softer than red, which suggests less saturation; but zero saturation would leave a grey, not pink."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "You keep a colour's hue and saturation and slide its lightness to 100%. What do you get?",
+          "options": [
+            "White",
+            "The pure colour",
+            "Black",
+            "A mid grey"
+          ],
+          "answer": 0,
+          "why": "Lightness is how close to white or black: at the top every colour becomes white.",
+          "traps": [
+            null,
+            "The pure colour sits at lightness 50%; going higher moves it toward white.",
+            "Black is the other end of the lightness dial, at 0%.",
+            "A grey comes from saturation at zero; lightness at the top gives white whatever the saturation."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "In HSL a colour has saturation 0 and lightness 50%. What are its red, green and blue numbers?",
+          "options": [
+            "255, 0, 0",
+            "0, 0, 0",
+            "Three equal numbers, about halfway",
+            "Only red is set; green and blue are 0"
+          ],
+          "answer": 2,
+          "why": "No saturation means no hue: a grey, and on a screen a grey is three equal numbers. Lightness 50% puts them about halfway up.",
+          "traps": [
+            "255, 0, 0 is pure red at full saturation; with saturation at zero no hue is left.",
+            "0, 0, 0 is black, which needs lightness 0%; at 50% the grey is in the middle.",
+            null,
+            "Hue 0 is red on the wheel, but with saturation at zero the hue no longer counts: all three numbers are equal."
           ]
         }
       ],
@@ -703,7 +763,7 @@
           "clue": "Combination: where my green sits on the wheel. In degrees. M.",
           "answer": 120,
           "type": "number",
-          "tolerance": 3,
+          "tolerance": 1,
           "unit": "°",
           "from": {
             "station": "dials"
@@ -837,10 +897,10 @@
           "answer": 2,
           "why": "Perceived colour depends on the surround. The numbers stay the same.",
           "traps": [
-            "believes the eye measures colour",
-            "blames the device",
+            "If the eye measured colour like an instrument, the same numbers would always look the same; it compares with the surround instead.",
+            "Old screens can show colours badly, but this happens on any screen and on paper: the cause is the eye.",
             null,
-            "blames the medium"
+            "Print has its own quirks, but this happens on screens too: the eye judges a colour against its neighbours."
           ]
         },
         {
@@ -855,8 +915,8 @@
           "why": "The eye pushes a neutral patch away from its surround, toward the opposite colour.",
           "traps": [
             null,
-            "expects the surround to rub off on the patch",
-            "believes the eye measures colour"
+            "It is easy to expect the yellow to rub off on the patch; the eye does the opposite and pushes it away from yellow, toward blue.",
+            "If the eye were a measuring instrument the grey would stay neutral; it compares with the wall and shifts the patch."
           ]
         },
         {
@@ -872,9 +932,9 @@
           "why": "The eye exaggerates the difference from the surround: simultaneous contrast.",
           "traps": [
             null,
-            "expects the surround to rub off on the patch",
-            "believes the eye measures colour",
-            "confuses a lightness effect with a hue shift"
+            "It seems natural that a dark surround would darken the patch; the eye exaggerates the difference, so the patch looks lighter.",
+            "If the eye measured light, nothing would change; it compares the patch with the background and shifts it.",
+            "Bluish is what a yellow surround does to a grey; a dark surround changes how light the patch looks, not its hue."
           ]
         },
         {
@@ -889,10 +949,44 @@
           "answer": 1,
           "why": "Judge a colour on the background it will actually be used on.",
           "traps": [
-            "blames the file",
+            "When a colour looks wrong, it is tempting to blame the file; the numbers did not change, the background did.",
             null,
-            "names the brightness but misses the comparison",
-            "blames the numbers"
+            "White pages are brighter, but that alone does not change the text's numbers; what changes is the comparison the eye makes.",
+            "RGB numbers are exact; the same numbers look different because the eye judges them against a new surround."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Two identical grey squares sit side by side, one on a black wall and one on a white wall. Which looks darker?",
+          "options": [
+            "The one on the white wall",
+            "The one on the black wall",
+            "Neither: they are the same grey"
+          ],
+          "answer": 0,
+          "why": "The eye exaggerates the difference from the surround: on white the grey looks darker, on black it looks lighter.",
+          "traps": [
+            null,
+            "It feels as if a dark wall should darken what sits on it; the eye does the opposite and makes that square look lighter.",
+            "The numbers are the same, but the eye judges each square against its own wall, so they do not look the same."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A photographer judges a grey card lying on a bright red tablecloth and finds it slightly blue-green. What should she do before trusting her eye?",
+          "options": [
+            "Add a little red to the card in the photo",
+            "Nothing: the card is greenish",
+            "Look at it again under a brighter lamp",
+            "Measure the card, or look at it against a neutral grey"
+          ],
+          "answer": 3,
+          "why": "A coloured surround pushes a neutral patch toward the opposite colour, so the red cloth makes the grey look blue-green. A measurement or a neutral background removes the trick.",
+          "traps": [
+            "Adding red would fix a card that really is blue-green, but the tint is in the eye, caused by the red cloth.",
+            "The eye is not a measuring instrument: it shifts the grey away from the red around it.",
+            "More light makes everything brighter, but the red cloth is still there and the eye still compares the card with it.",
+            null
           ]
         }
       ],
@@ -1027,10 +1121,10 @@
           "answer": 2,
           "why": "Newton, with two prisms, in 1672.",
           "traps": [
-            "confuses the receptor idea with the prism",
-            "confuses the photograph with the prism",
+            "Young is famous for colour, but his idea was three kinds of receptor in the eye, not the prism.",
+            "Maxwell worked with colour too, but he made the three-colour photograph, almost two centuries after the prism.",
             null,
-            "confuses the notation with the prism"
+            "Munsell gave colours a notation in 1905; the prism experiment is much older, from 1672."
           ]
         },
         {
@@ -1044,9 +1138,9 @@
           "answer": 1,
           "why": "Young reasoned that the eye could not hold a separate receptor for every colour.",
           "traps": [
-            "confuses with the prism",
+            "Newton is the best-known name in colour, but his discovery was that white light is a mixture, with prisms.",
             null,
-            "confuses with the colour notation"
+            "Munsell is known for a way of naming colours, from 1905; the three receptors were Young's idea, a century earlier."
           ]
         },
         {
@@ -1060,8 +1154,8 @@
           "answer": 2,
           "why": "Colour-matching functions measured on people: any light becomes three numbers that predict a match.",
           "traps": [
-            "confuses with Maxwell, 1861",
-            "confuses with 1996",
+            "A colour photograph sounds like a natural milestone, but that was Maxwell in 1861, seventy years before.",
+            "sRGB is a standard for screens too, but it came in 1996, long after 1931.",
             null
           ]
         },
@@ -1077,10 +1171,10 @@
           "answer": 1,
           "why": "Red, green and blue filters: three channels, as a screen does today.",
           "traps": [
-            "assumes colour plates existed",
+            "A single colour plate would be the simple way, but colour plates did not exist yet: he used three filtered pictures.",
             null,
-            "assumes the colour was painted on",
-            "confuses with Newton"
+            "Colour photographs were often painted by hand in that century, but Maxwell's colour came from three filters.",
+            "A prism splits light, as in Newton's experiment; Maxwell used red, green and blue filters instead."
           ]
         }
       ],
@@ -1182,10 +1276,10 @@
           "answer": 1,
           "why": "Three kinds of cone, three signals. Everything else about the light is lost.",
           "traps": [
-            "thinks of brightness only",
+            "One signal would be enough for brightness alone; three kinds of cone each send their own.",
             null,
-            "counts the colours of the rainbow",
-            "believes the eye records the whole spectrum"
+            "The rainbow is often drawn with seven colours, but the eye keeps only three signals for any light.",
+            "If the eye recorded every wavelength, different lights could never look identical; it keeps only three numbers."
           ]
         },
         {
@@ -1199,8 +1293,8 @@
           "answer": 2,
           "why": "The eye keeps only the three signals. Same signals, same colour.",
           "traps": [
-            "thinks of brightness only",
-            "believes the eye records the whole spectrum",
+            "Equal brightness is not enough: two lights can be equally bright and still look like different colours.",
+            "Two different pure wavelengths look different colours; what decides a match is the three cone signals.",
             null
           ]
         },
@@ -1217,9 +1311,9 @@
           "why": "The eye only keeps three signals. Same signals, same colour, whatever the light was made of.",
           "traps": [
             null,
-            "believes a colour needs its own light",
-            "believes a colour needs its own light",
-            "overcorrects: yellow is as real as any colour"
+            "It seems that yellow should need yellow light; but the eye only keeps three signals, and red plus green gives the same ones.",
+            "A hidden yellow lamp would explain it, but a screen has only red, green and blue; red plus green does the job.",
+            "Yellow is as real a colour as any other; on a screen it is made from red and green, but it still looks yellow."
           ]
         },
         {
@@ -1234,10 +1328,46 @@
           "answer": 1,
           "why": "Metamerism is what makes screens and printing possible.",
           "traps": [
-            "a real term for a different idea",
+            "Complementary colours are real, but they are pairs that sit opposite each other, not lights that look the same.",
             null,
-            "a real term for a different idea",
-            "a real term for a different idea"
+            "Primaries are the few colours you mix others from, not two lights that look identical.",
+            "Saturated means vivid, far from grey; it says nothing about two different lights looking the same."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A yellow sign and a yellow screen beside it look exactly the same colour to you. What can you be sure of?",
+          "options": [
+            "They give your cones the same three signals",
+            "They send out exactly the same light",
+            "They both send out a single yellow wavelength",
+            "They are equally bright, nothing more"
+          ],
+          "answer": 0,
+          "why": "Looking identical means the same three cone signals. The light itself can differ: the screen makes its yellow from red and green.",
+          "traps": [
+            null,
+            "Identical-looking lights seem to be identical light, but different mixtures can give the same three signals.",
+            "A pure yellow wavelength would look yellow, but the screen makes yellow from red and green light and still matches.",
+            "Equal brightness alone does not make two colours look the same; all three cone signals must match."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "Why can a screen show the yellow of a sunflower with only red, green and blue lamps?",
+          "options": [
+            "Because the sunflower reflects only red and green light",
+            "Because the screen has a tiny yellow filter",
+            "Because red plus green gives the eye the same three signals as the flower's yellow",
+            "Because the camera that took the photo saw only yellow"
+          ],
+          "answer": 2,
+          "why": "The eye keeps three signals. A screen does not copy the light of the flower: it makes a light that gives the same three signals.",
+          "traps": [
+            "It sounds tidy if the flower sent out the screen's two lights, but the screen does not need to copy the light: only the three signals.",
+            "A hidden yellow part would explain it, but a screen has only red, green and blue: the match happens in the eye.",
+            null,
+            "What a camera saw does not decide it; the screen works because the eye keeps only three signals."
           ]
         }
       ],

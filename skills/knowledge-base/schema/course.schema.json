@@ -51,9 +51,20 @@
     "goals": {
       "type": "array",
       "items": {
-        "type": "string"
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["text"],
+            "additionalProperties": false,
+            "properties": {
+              "text": { "type": "string" },
+              "concepts": { "type": "array", "items": { "type": "string" }, "description": "Concept ids that teach this goal. The ending card lists the goal only when each is core or was finished by the player. Leave out for a goal of the core path." }
+            }
+          }
+        ]
       },
-      "description": "What the learner can do at the end. Each starts with a verb."
+      "description": "What the learner can do at the end. Each starts with a verb. A goal taught only by extra concepts names them: { \"text\": \"...\", \"concepts\": [\"print\"] }."
     },
     "credit": {
       "type": "string"

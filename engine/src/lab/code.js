@@ -2,6 +2,7 @@
 // change are highlighted inside the code, some lines can be switched off, and every line explains
 // itself when you point at it. Nothing is typed and nothing is executed: the station recomputes
 // its picture from the state of the snippet.
+import { w } from '../data/words.js';
 import { h } from './shell.js';
 import { sfx } from '../systems/audio.js';
 
@@ -36,7 +37,7 @@ function paint(text) {
 export function codePanel(spec, onChange) {
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
   const state = { ...Object.fromEntries(Object.entries(spec.knobs || {}).map(([k, v]) => [k, v.value])), ...(spec.toggles || {}) };
-  const note = h('div', { class: 'cp-note', html: spec.hint || 'Point at a line to see why it is there. <b>Highlighted values can be changed.</b>' });
+  const note = h('div', { class: 'cp-note', html: spec.hint || w('code.hint') });
   const rows = [];
   const panel = h('div', { class: 'cp' });
   spec.lines.forEach((ln, i) => {
@@ -54,7 +55,7 @@ export function codePanel(spec, onChange) {
     const gutter = h('span', { class: 'cp-g' });
     const row = h('div', { class: 'cp-l', onmouseenter: () => { if (ln.note) note.innerHTML = ln.note; } }, gutter, t);
     if (ln.toggle) {
-      const cb = h('input', { type: 'checkbox', checked: state[ln.toggle] ? '' : null, title: 'Switch this line on or off', onchange: () => { state[ln.toggle] = cb.checked; row.classList.toggle('off', !cb.checked); sfx.tick(); onChange(state, ln.toggle); } });
+      const cb = h('input', { type: 'checkbox', checked: state[ln.toggle] ? '' : null, title: w('code.toggle'), onchange: () => { state[ln.toggle] = cb.checked; row.classList.toggle('off', !cb.checked); sfx.tick(); onChange(state, ln.toggle); } });
       gutter.append(cb);
       row.classList.toggle('off', !state[ln.toggle]);
     }

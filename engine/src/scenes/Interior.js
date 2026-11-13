@@ -14,6 +14,7 @@ import { attachRoomLife } from '../mechanics/room.js';
 import { attachFloor } from '../mechanics/floors/room.js';
 import { attachLocks } from '../mechanics/riddles/room.js';
 import { houseDuel, challengeLabel } from '../mechanics/duel/index.js';
+import { w } from '../data/words.js';
 
 const RW = 15, RH = 11, T = 16; // the size of the standard room
 
@@ -238,8 +239,8 @@ export class Interior extends Phaser.Scene {
     }
     const [fx, fy] = this.player.facing();
     const extra = this.extras.reduce((t, e) => t || e.prompt(fx, fy), null); // stairs, locks, upper floor
-    this.ui.setPrompt(extra || (this.master && this.master.tx === fx && this.master.ty === fy ? `Space  Talk to ${MASTERS[this.id].name}`
-      : this.exhibitTiles.has(`${fx},${fy}`) ? 'Space  Read the wall' : this.room.lab && fx === this.room.lab[0] && fy === this.room.lab[1] ? 'Space  Enter the lab' : this.life?.prompt(fx, fy) || null));
+    this.ui.setPrompt(extra || (this.master && this.master.tx === fx && this.master.ty === fy ? `Space  ${w('town.talkTo', { name: MASTERS[this.id].name })}`
+      : this.exhibitTiles.has(`${fx},${fy}`) ? `Space  ${w('room.readWall')}` : this.room.lab && fx === this.room.lab[0] && fy === this.room.lab[1] ? `Space  ${w('room.enterLab')}` : this.life?.prompt(fx, fy) || null));
     if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) return this.interact();
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
@@ -277,10 +278,10 @@ export class Interior extends Phaser.Scene {
     this.master.faceToward(this.player.tx, this.player.ty);
     sfx.select();
     await ui.converse(m.name, { root: { say: m.hi, options: [
-      { label: 'Open the lab', do: async () => { await ui.lab(id); return 'end'; } },
-      { label: 'Show me the reading wall', do: async () => { await ui.reading(id); return 'end'; } },
+      { label: w('room.openLab'), do: async () => { await ui.lab(id); return 'end'; } },
+      { label: w('room.showWall'), do: async () => { await ui.reading(id); return 'end'; } },
       { label: challengeLabel(id), if: () => pool.length >= 2, do: async () => { await this.quizSeries(pool); return 'end'; } },
-      { label: 'Bye' },
+      { label: w('town.bye') },
     ] } });
     this.master.face('down');
   }

@@ -1,4 +1,5 @@
 // A plaque of a museum timeline. The timeline itself lives in the course database (place.timeline).
+import { w } from '../data/words.js';
 import { h, listenButton, listenKey, listen, stopVoice, speak, script, VOICE, isOn } from './shell.js';
 import { sfx } from '../systems/audio.js';
 import { touch } from '../systems/view.js';
@@ -28,9 +29,9 @@ export function openPlaque(list, start, kinds = {}) {
   return new Promise((resolve) => {
     const show = () => {
       const m = list[i], [kn, kc] = kinds[m.kind] || ['', '#ffcf5a'];
-      card.replaceChildren(h('button', { class: 'x', 'aria-label': 'Close', onclick: () => done() }, '✕'), ...(say ? [say] : []), kn ? h('span', { class: 'tag', style: `color:${kc}` }, kn) : null, h('div', { class: 'yr' }, String(m.year)), h('h2', {}, m.title), h('div', { class: 'who' }, m.who || ''),
-        h('div', {}, m.text), m.why ? h('div', { class: 'why' }, m.why) : null, m.src ? h('div', { class: 'src' }, `Source: ${m.src}`) : null,
-        h('nav', {}, h('button', { disabled: i === 0 ? '' : null, onclick: () => go(-1) }, '← earlier'), h('span', {}, touch.on ? `${i + 1} of ${list.length}` : `${i + 1} of ${list.length}  ·  Esc to close`), h('button', { disabled: i === list.length - 1 ? '' : null, onclick: () => go(1) }, 'later →')));
+      card.replaceChildren(h('button', { class: 'x', 'aria-label': w('plaque.close'), onclick: () => done() }, '✕'), ...(say ? [say] : []), kn ? h('span', { class: 'tag', style: `color:${kc}` }, kn) : null, h('div', { class: 'yr' }, String(m.year)), h('h2', {}, m.title), h('div', { class: 'who' }, m.who || ''),
+        h('div', {}, m.text), m.why ? h('div', { class: 'why' }, m.why) : null, m.src ? h('div', { class: 'src' }, w('plaque.source', { src: m.src })) : null,
+        h('nav', {}, h('button', { disabled: i === 0 ? '' : null, onclick: () => go(-1) }, w('plaque.earlier')), h('span', {}, w(touch.on ? 'plaque.of' : 'plaque.ofKeys', { i: i + 1, n: list.length })), h('button', { disabled: i === list.length - 1 ? '' : null, onclick: () => go(1) }, w('plaque.later'))));
     };
     const go = (d) => { const n = Math.max(0, Math.min(list.length - 1, i + d)); if (n !== i) { i = n; stopVoice(); sfx.page(); show(); if (VOICE.auto && isOn()) speak(spoken()); } };
     const done = () => { stopVoice(); window.removeEventListener('keydown', key, true); bg.remove(); resolve(i); };

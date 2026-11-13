@@ -160,14 +160,16 @@ export function openDuel(cfg) {
       (d.won ? them : me).el.classList.add('beaten');
       prize = cfg.onEnd?.(d, asked, results) || {};
       const league = cfg.kind === 'league';
-      if (d.won) speak(league ? T.lose : prize.key ? T.lose : T.again);
+      // the key is mentioned only where there is an upstairs to open (cfg.upstairs)
+      const keyShown = prize.key && cfg.upstairs !== false;
+      if (d.won) speak(league ? T.lose : keyShown ? T.lose : prize.badge ? W.yieldBadge : T.again);
       else speak(T.win);
       const parts = [h('h2', {}, d.won ? (league ? W.leagueWon : W.won) : (league ? W.leagueLost : W.lost)),
         h('p', { class: 'sub' }, fill(W.score, { r: d.right, n: d.turn }) + (d.how === 'time' ? ` · ${W.outOfTurns}` : ''))];
       if (d.won && (prize.badge || prize.key || prize.first)) {
         const row = h('div', { class: 'dl-prizes' });
         if (prize.badge || prize.first) row.append(h('div', { class: 'dl-prize new', html: `${BADGE_SVG}<span>${W.badge}</span>` }));
-        if (prize.key) row.append(h('div', { class: 'dl-prize new', html: `${KEY_SVG}<span>${W.key}</span>` }));
+        if (keyShown) row.append(h('div', { class: 'dl-prize new', html: `${KEY_SVG}<span>${W.key}</span>` }));
         parts.push(row);
         sfx.reveal();
       }
@@ -179,7 +181,7 @@ export function openDuel(cfg) {
           if (topics.length) parts.push(h('div', { class: 'dl-advice' }, h('b', {}, W.reviewLeague), ul));
         } else {
           const p = cfg.place(cfg.houseId);
-          parts.push(h('div', { class: 'dl-advice' }, h('b', {}, `${W.review}: ${p.concept}.`), h('p', { style: 'margin:4px 0 0' }, W.reviewHouse)));
+          parts.push(h('div', { class: 'dl-advice' }, h('b', {}, `${W.review}: ${p.concept}.`), h('p', { style: 'margin:4px 0 0' }, cfg.room === 'workshop' ? W.reviewWorkshop : cfg.room === 'museum' ? W.reviewMuseum : W.reviewHouse)));
         }
         parts.push(h('p', { class: 'sub', style: 'margin-top:10px' }, W.nothingLost));
       }

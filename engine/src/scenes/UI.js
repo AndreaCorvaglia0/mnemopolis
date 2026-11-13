@@ -11,6 +11,8 @@ import { touch } from '../systems/view.js';
 import { openLab } from '../lab/shell.js';
 import { openReading } from '../lab/reading.js';
 import { LIFE, tr, fill, WORDS } from '../mechanics/config.js';
+import { w, promptOf } from '../data/words.js';
+import { floorsOf } from '../mechanics/floors/plan.js';
 import { leagueDuel } from '../mechanics/duel/index.js';
 import { available as voiceAvailable, isOn as voiceOn, isSpeaking, onChange as onVoice, listen, speak, stop as stopVoice, toggle as toggleVoice, VOICE } from '../systems/voice.js';
 
@@ -39,8 +41,8 @@ export class UI extends Phaser.Scene {
     this.res = 1;
     this.keys = this.input.keyboard.addKeys('SPACE,ENTER,E,ESC,UP,DOWN,LEFT,RIGHT,W,S,A,D,ONE,TWO,THREE,TAB');
     this.input.keyboard.on('keydown', () => initAudio());
-    this.input.keyboard.on('keydown-M', () => { state.musicOff = !state.musicOff; save(); setMusicOn(!state.musicOff); this.toast(state.musicOff ? 'Music off' : 'Music on'); });
-    this.input.keyboard.on('keydown-V', () => { const off = toggleMute(); if (off) stopVoice(); this.toast(off ? 'All sound off' : 'Sound on'); });
+    this.input.keyboard.on('keydown-M', () => { state.musicOff = !state.musicOff; save(); setMusicOn(!state.musicOff); this.toast(w(state.musicOff ? 'ui.musicOff' : 'ui.musicOn')); });
+    this.input.keyboard.on('keydown-V', () => { const off = toggleMute(); if (off) stopVoice(); this.toast(w(off ? 'ui.soundOff' : 'ui.soundOn')); });
     // read-aloud on or off (only when the course has a voice); inside a dialogue L means Listen
     this.input.keyboard.on('keydown-L', () => { if (voiceAvailable() && !this.modals) this.switchVoice(); });
     // a browser that turns out unable to speak loses the voice controls
@@ -93,7 +95,6 @@ export class UI extends Phaser.Scene {
 
   // words for the current input: keyboard or finger
   get touch() { return touch.on; }
-  hintAct() { return this.touch ? 'Tap' : 'Space'; }
 
   dim(color, alpha) { return this.add.rectangle(VW / 2, VH / 2, 6000, 4000, color, alpha); }
 
@@ -128,7 +129,13 @@ export class UI extends Phaser.Scene {
   }
 
   open(phase = 'modal') { this.modals += 1; this.phase = phase; this.setPrompt(null); }
-  close() { this.modals = Math.max(0, this.modals - 1); this.cooldown = this.time.now + 180; if (!this.modals) this.phase = null; }
+  close() {
+    this.modals = Math.max(0, this.modals - 1); this.cooldown = this.time.now + 180; if (!this.modals) this.phase = null;
+    // The key that closed a box must not act again in the scene underneath: on a slow machine the
+    // scene's next update can come after the cooldown, and its JustDown(SPACE) would still be true
+    // (it reopened the host's dialogue after the badge card, or used whatever the player faced).
+    for (const sc of this.game.scene.getScenes(true)) for (const k of ['SPACE', 'ENTER', 'E']) if (sc !== this && sc.keys?.[k]) Phaser.Input.Keyboard.JustDown(sc.keys[k]);
+  }
 
   waitKey(keys = ['SPACE', 'ENTER', 'E'], allowClick = true) {
     return new Promise((resolve) => {
@@ -290,7 +297,7 @@ export class UI extends Phaser.Scene {
   switchVoice() {
     const on = toggleVoice();
     if (this.where) this.setLocation(...this.where);
-    this.toast(on ? (this.touch ? 'Voice on: tap Listen on a page' : 'Voice on: L or Listen reads a page') : 'Voice off');
+    this.toast(w(on ? (this.touch ? 'ui.voiceOnTouch' : 'ui.voiceOnKeys') : 'ui.voiceOff'));
   }
 
   // A Listen / Stop control inside a dialogue box, at (x, y) with origin (1, 0.5). L does the same.
@@ -300,7 +307,7 @@ export class UI extends Phaser.Scene {
     const t = this.text(x, y, '', this.touch ? 17 : 14, C.muted).setOrigin(1, 0.5);
     // the tap area is larger than the word, for a finger
     const z = this.add.zone(x + 8, y, 120, 40).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
-    const draw = () => { const on = isSpeaking(); t.setText(this.touch ? (on ? 'Stop' : 'Listen') : on ? 'L  Stop' : 'L  Listen').setColor(on ? '#4fd1c5' : C.muted); };
+    const draw = () => { const on = isSpeaking(); t.setText(w(this.touch ? (on ? 'ui.stop' : 'ui.listen') : on ? 'ui.stopKey' : 'ui.listenKey')).setColor(on ? '#4fd1c5' : C.muted); };
     z.on('pointerdown', (p, lx, ly, ev) => { ev?.stopPropagation(); listen(getText); });
     c.add(z);
     const key = () => listen(getText);
@@ -330,8 +337,8 @@ export class UI extends Phaser.Scene {
       const F = this.frame(), cy = F.cy, n = Math.max(8, COURSE.title.length), wrap = { wordWrap: { width: F.w - 60 }, align: 'center' };
       const title = this.text(F.cx, cy - 100, COURSE.title.toUpperCase(), Math.min(76, Math.floor((F.w * 1.05) / n)), '#ffcf5a', { display: true, fontStyle: '600', stroke: '#1b1a2b', strokeThickness: 10 }).setOrigin(0.5);
       const sub = this.text(F.cx, cy - 32, COURSE.subject, 24, '#f1ecd9', { display: true, stroke: '#1b1a2b', strokeThickness: 6, ...wrap }).setOrigin(0.5);
-      const press = this.text(F.cx, cy + 110, this.touch ? 'Tap to start' : 'Press Space or click to start', 26, '#4fd1c5', { display: true, stroke: '#1b1a2b', strokeThickness: 6 }).setOrigin(0.5);
-      const ctr = this.text(F.cx, cy + 156, (this.touch ? 'Tap where you want to go.\nTap a person, a sign or a door to use it.' : 'Arrows or WASD to walk  ·  Shift to run  ·  Space to talk  ·  or click where you want to go') + (LIFE.musings ? (this.touch ? `\n${tr(WORDS.titleTouch)}` : `\n${tr(WORDS.titleKeys)}`) : ''), 16, '#f1ecd9', { stroke: '#1b1a2b', strokeThickness: 5, ...wrap }).setOrigin(0.5);
+      const press = this.text(F.cx, cy + 110, w(this.touch ? 'title.startTouch' : 'title.startKeys'), 26, '#4fd1c5', { display: true, stroke: '#1b1a2b', strokeThickness: 6 }).setOrigin(0.5);
+      const ctr = this.text(F.cx, cy + 156, w(this.touch ? 'title.helpTouch' : 'title.helpKeys') + (LIFE.musings ? (this.touch ? `\n${tr(WORDS.titleTouch)}` : `\n${tr(WORDS.titleKeys)}`) : ''), 16, '#f1ecd9', { stroke: '#1b1a2b', strokeThickness: 5, ...wrap }).setOrigin(0.5);
       const cred = this.text(F.cx, F.b - 28, COURSE.credit || '', 13, '#cfd3e8', { stroke: '#1b1a2b', strokeThickness: 4, ...wrap }).setOrigin(0.5);
       c.add([shade, title, sub, press, ctr, cred]);
       this.tweens.add({ targets: press, alpha: 0.25, duration: 700, yoyo: true, repeat: -1 });
@@ -387,6 +394,7 @@ export class UI extends Phaser.Scene {
     for (const line of lines) {
       arrow.setVisible(false);
       current = line;
+      this.saying = { name, line }; // read by the automated play-through (__hb.probe)
       stopVoice();
       if (unvoice && VOICE.auto) speak(line);
       await this.typewrite(body, line);
@@ -396,6 +404,7 @@ export class UI extends Phaser.Scene {
       if (key === 'ESC') break; // walk away at any point
     }
     unvoice?.();
+    this.saying = null;
     c.destroy();
     this.close();
   }
@@ -458,7 +467,7 @@ export class UI extends Phaser.Scene {
     this.promptBox?.destroy();
     this.promptBox = null;
     if (!textOrNull) return;
-    const F = this.frame(), y = F.b - 28, label = this.touch ? textOrNull.replace(/^Space {2}/, 'Tap here: ') : textOrNull;
+    const F = this.frame(), y = F.b - 28, label = /^Space {2}/.test(textOrNull) ? promptOf(textOrNull.slice(7), this.touch) : textOrNull;
     const t = this.text(F.cx, y, label, this.touch ? 19 : 16, '#1b1a2b').setOrigin(0.5);
     const w = t.width + 24, h = this.touch ? 36 : 28;
     const g = this.add.graphics();
@@ -512,9 +521,11 @@ export class UI extends Phaser.Scene {
       return r;
     });
     const cursor = this.text(x0 + 44, rows[0].y, '▶', 19, '#4fd1c5');
-    const leave = this.text(x0 + pw - 28, top + H - 20, this.touch ? 'Leave  ✕' : 'Esc to leave', this.touch ? 16 : 13, C.muted).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+    const leave = this.text(x0 + pw - 28, top + H - 20, w(this.touch ? 'ui.leaveTouch' : 'ui.leaveKeys'), this.touch ? 16 : 13, C.muted).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
     c.add([cursor, leave]);
     let sel = 0;
+    // read by the automated play-through (__hb.probe): what is asked, the options and where they are
+    this.choice = { name, question, options, sel: () => sel, at: rows.map((r) => [r.z.x + r.z.width / 2, r.z.y + r.z.height / 2]) };
     const draw = () => { cursor.setY(rows[sel].y); rows.forEach((r, i) => r.t.setColor(i === sel ? '#4fd1c5' : C.text)); };
     draw();
     const choice = await new Promise((resolve) => {
@@ -530,6 +541,7 @@ export class UI extends Phaser.Scene {
     });
     sfx.select();
     unvoice?.();
+    this.choice = null;
     c.destroy();
     this.close();
     return choice;
@@ -574,14 +586,14 @@ export class UI extends Phaser.Scene {
     const card = this.add.graphics();
     c.add(card);
     const drawCard = (h) => this.panelInto(card.clear(), x0, top, cw, h);
-    const topic = q.topic ? TOPICS[q.topic].name.toUpperCase() : 'CASE REVIEW';
+    const topic = q.topic ? TOPICS[q.topic].name.toUpperCase() : w('quiz.review');
     const chipT = this.text(0, top + 40, topic, 15, '#ffffff').setOrigin(0.5);
     const chipW = Math.round(chipT.width) + 28;
     chipT.setX(x0 + 26 + chipW / 2);
     const chip = this.add.graphics().fillStyle(TOPIC_COL[q.topic || 'review'], 1).fillRoundedRect(x0 + 26, top + 26, chipW, 28, 6);
     const sg = this.add.graphics();
     for (let i = 0; i < 3; i++) this.star(sg, x0 + 42 + chipW + i * 26, top + 40, 10, i < q.stars ? C.gold : 0x3a3f6b);
-    const leave = this.text(x0 + cw - 26, top + 40, this.touch ? 'Leave  ✕' : 'Esc to leave', this.touch ? 16 : 13, C.muted).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+    const leave = this.text(x0 + cw - 26, top + 40, w(this.touch ? 'ui.leaveTouch' : 'ui.leaveKeys'), this.touch ? 16 : 13, C.muted).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
     c.add([chip, chipT, sg, leave]);
     let qy = top + 68;
     if (banner) { c.add(this.text(tx - 8, top + 72, banner, 15, '#4fd1c5')); qy += 26; }
@@ -601,8 +613,8 @@ export class UI extends Phaser.Scene {
     });
     let sel = this.touch ? -1 : 0;
     drawRows(sel);
-    this.quizState = { answer: q.answer, sel: () => sel };
-    const help = this.text(F.cx, by + 16, this.touch ? 'Tap an answer' : '↑ ↓ to choose, Space to confirm', 15, C.muted).setOrigin(0.5);
+    this.quizState = { answer: q.answer, sel: () => sel, at: rows.map((r) => [tx + tw / 2, r.y + r.h / 2]) }; // read by the play-through
+    const help = this.text(F.cx, by + 16, w(this.touch ? 'quiz.tapAnswer' : 'quiz.keysAnswer'), 15, C.muted).setOrigin(0.5);
     c.add(help);
     drawCard(P ? help.y + 30 - top : 492);
 
@@ -622,9 +634,9 @@ export class UI extends Phaser.Scene {
 
     // confidence bet: three buttons in a row, or stacked on a narrow screen
     rows.forEach((r) => r.z.disableInteractive());
-    help.setText(this.touch ? 'How sure are you? Tap one.' : 'How sure are you?  1, 2 or 3  (or click)');
+    help.setText(w(this.touch ? 'quiz.sureTouch' : 'quiz.sureKeys'));
     this.phase = 'quiz-bet';
-    const bets = [['Guessing', '+1 / 0'], ['Fairly sure', '+2 / -2'], ['Certain', '+3 / -6']];
+    const bets = w('quiz.bets').map((l, i) => [l, ['+1 / 0', '+2 / -2', '+3 / -6'][i]]);
     const bw = P ? tw : 236, bh = 58;
     help.setY(by + 10);
     const b0 = by + 28;
@@ -633,11 +645,12 @@ export class UI extends Phaser.Scene {
       const g = this.add.graphics();
       g.fillStyle(C.bg2, 1).fillRoundedRect(x, y, bw, bh, 8).lineStyle(2, [C.teal, C.gold, C.coral][i], 1).strokeRoundedRect(x, y, bw, bh, 8);
       const t1 = this.text(x + bw / 2, y + 19, `${i + 1}  ${label}`, 19, C.text).setOrigin(0.5);
-      const t2 = this.text(x + bw / 2, y + 41, `marks ${pay}  × ${q.stars * 5}`, 14, C.muted).setOrigin(0.5);
+      const t2 = this.text(x + bw / 2, y + 41, w('quiz.pays', { pay, k: q.stars * 5 }), 14, C.muted).setOrigin(0.5);
       const z = this.add.zone(x, y, bw, bh).setOrigin(0).setInteractive({ useHandCursor: true });
       c.add([g, t1, t2, z]);
       return [g, t1, t2, z];
     });
+    this.quizState.bets = betObjs.map(([, , , z]) => [z.x + z.width / 2, z.y + z.height / 2]);
     const betBottom = P ? b0 + 3 * (bh + 8) - 8 : b0 + bh;
     drawCard(P ? betBottom + 20 - top : 492);
     const conf = await new Promise((resolve) => {
@@ -659,8 +672,8 @@ export class UI extends Phaser.Scene {
     this.refreshHUD();
 
     // reveal: the box grows with the explanation
-    const verdict = right ? ['Right!', 'Spot on.', 'Exactly.'][Math.floor(Math.random() * 3)] : 'Not quite.';
-    const dtxt = `${delta >= 0 ? '+' : ''}${delta} Insight`;
+    const verdict = right ? w('quiz.right')[Math.floor(Math.random() * 3)] : w('quiz.wrong');
+    const dtxt = w('quiz.coins', { d: `${delta >= 0 ? '+' : ''}${delta}` });
     const rx = x0 + 26, rw = cw - 52;
     let why, dt, bh2;
     if (P) {
@@ -676,7 +689,7 @@ export class UI extends Phaser.Scene {
     const rg = this.add.graphics().fillStyle(right ? 0x163b2c : 0x3b1620, 1).fillRoundedRect(rx, by, rw, bh2, 8).lineStyle(2, right ? C.green : C.coral, 1).strokeRoundedRect(rx, by, rw, bh2, 8);
     c.add([rg, why, dt]);
     this.tweens.add({ targets: dt, scale: { from: 1.6, to: 1 }, duration: 300, ease: 'Back.easeOut' });
-    help.setText(this.touch ? 'Tap to continue' : 'Space to continue').setY(P ? by + bh2 + 22 : Math.min(top + 482, by + bh2 + 16));
+    help.setText(w(this.touch ? 'ui.tapContinue' : 'ui.spaceContinue')).setY(P ? by + bh2 + 22 : Math.min(top + 482, by + bh2 + 16));
     drawCard(P ? help.y + 26 - top : 492);
     this.phase = 'quiz-reveal';
     await this.waitKey();
@@ -688,13 +701,13 @@ export class UI extends Phaser.Scene {
   // ---------- a question from the tall grass: always an offer, never a trap ----------
   async encounter(q) {
     sfx.encounter();
-    const pick = await this.choose('Something rustles in the grass: a question. Take it?', ['Take it', 'Not now', this.touch ? 'Stop asking  (the Menu turns them back on)' : 'Stop asking  (G or the menu turns them back on)']);
-    if (pick === 2) { state.grassOff = true; save(); this.toast('Grass questions off'); if (this.where) this.setLocation(...this.where); }
+    const pick = await this.choose(w('quiz.grass'), [w('quiz.take'), w('quiz.notNow'), w(this.touch ? 'quiz.stopTouch' : 'quiz.stopKeys')]);
+    if (pick === 2) { state.grassOff = true; save(); this.toast(w('ui.grassOff')); if (this.where) this.setLocation(...this.where); }
     if (pick !== 0) return { ran: true };
-    return this.quiz(q, { banner: 'from the tall grass' });
+    return this.quiz(q, { banner: w('quiz.banner') });
   }
 
-  // ---------- stamps and the atlas item ----------
+  // ---------- the badge card (a house duel won) and the League's card ----------
   async stamp(topic, kind = 'stamp') {
     this.open('stamp');
     sfx.stamp();
@@ -702,31 +715,25 @@ export class UI extends Phaser.Scene {
     c.add(this.dim(0x070812, 0.6));
     const g = this.add.graphics();
     let label, sub;
-    if (kind === 'atlas') {
-      g.fillStyle(0x5c3f27, 1).fillRoundedRect(-70, -90, 140, 180, 10);
-      g.fillStyle(0x7d5737, 1).fillRoundedRect(-62, -84, 128, 168, 8);
-      g.lineStyle(3, C.gold, 1).strokeRoundedRect(-50, -70, 104, 140, 6);
-      g.lineStyle(3, C.gold, 1).strokeCircle(2, -8, 26);
-      g.lineBetween(2, -34, 2, 18); g.lineBetween(-24, -8, 28, -8);
-      label = 'You received the Atlas';
-      sub = 'Every master you meet will stamp it. Tab to open it.';
-    } else {
+    {
       const col = TOPIC_COL[topic] || TOPIC_COL.review;
       g.fillStyle(col, 1).fillCircle(0, 0, 92);
       g.lineStyle(6, 0xffffff, 1).strokeCircle(0, 0, 80);
       g.lineStyle(2, 0xffffff, 0.8).strokeCircle(0, 0, 70);
       for (let i = 0; i < 3; i++) this.star(g, -36 + i * 36, 36, 9, 0xffffff);
       label = kind === 'review' ? fill(tr(Q_WORDS.leagueWon), { league: LEAGUE.name }) : fill(tr(Q_WORDS.badge), { place: TOPICS[topic].name });
-      sub = kind === 'review' ? COURSE.bigIdea : TOPICS[topic].card;
+      sub = kind === 'review' ? COURSE.bigIdea : TOPICS[topic].card + (floorsOf(PLACE[topic]).up ? `\n${tr(Q_WORDS.badgeKey)}` : '');
     }
     const F = this.frame();
     const holder = this.add.container(F.cx, F.cy - 40, [g]).setScale(3).setAngle(-25).setAlpha(0);
-    if (kind !== 'atlas') holder.add(this.text(0, -10, kind === 'review' ? tr({ en: 'WON', it: 'VINTA' }) : TOPICS[topic].name.toUpperCase(), kind === 'review' ? 40 : 19, '#ffffff', { display: kind === 'review', fontStyle: '600', align: 'center' }).setOrigin(0.5));
+    const seal = this.text(0, -10, kind === 'review' ? w('stamp.won') : TOPICS[topic].name.toUpperCase(), kind === 'review' ? 40 : 19, '#ffffff', { display: kind === 'review', fontStyle: '600', align: 'center', wordWrap: { width: 130 } }).setOrigin(0.5);
+    for (let fs = 18; seal.width > 140 && fs >= 12; fs--) seal.setFontSize(fs); // the name stays inside the seal
+    holder.add(seal);
     c.add(holder);
-    this.tweens.add({ targets: holder, scale: 1, angle: kind === 'atlas' ? 0 : -8, alpha: 1, duration: 380, ease: 'Back.easeOut', onComplete: () => this.cameras.main.shake(180, 0.008) });
+    this.tweens.add({ targets: holder, scale: 1, angle: -8, alpha: 1, duration: 380, ease: 'Back.easeOut', onComplete: () => this.cameras.main.shake(180, 0.008) });
     const t1 = this.text(F.cx, F.cy + 102, label, 32, '#ffcf5a', { stroke: '#1b1a2b', strokeThickness: 5, wordWrap: { width: F.w - 40 }, align: 'center' }).setOrigin(0.5).setAlpha(0);
     const t2 = this.text(F.cx, F.cy + 150, sub, 20, C.text, { wordWrap: { width: F.w - 60 }, align: 'center' }).setOrigin(0.5, 0).setAlpha(0);
-    const t3 = this.text(F.cx, F.b - 40, this.touch ? 'Tap to continue' : 'Space to continue', 16, '#4fd1c5').setOrigin(0.5).setAlpha(0);
+    const t3 = this.text(F.cx, F.b - 40, w(this.touch ? 'ui.tapContinue' : 'ui.spaceContinue'), 16, '#4fd1c5').setOrigin(0.5).setAlpha(0);
     c.add([t1, t2, t3]);
     this.tweens.add({ targets: [t1, t2, t3], alpha: 1, duration: 300, delay: 420 });
     await new Promise((r) => this.time.delayedCall(500, r));

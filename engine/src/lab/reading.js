@@ -3,12 +3,13 @@
 //   concept and idea -> "think of it as" (the anchor) -> the author's sections (course.json)
 //   -> "where you meet it" (the application)
 //   -> "explain it yourself" -> "remember" (the 1 to 3 facts the review meadows will ask again).
+import { w } from '../data/words.js';
 import { overlay, h, listen, listenKey, stopVoice, speak, script, VOICE, isOn } from './shell.js';
 import { PLACE } from '../data/content.js';
 import { ANIMS } from '../course/_active.js';
 
 const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-const ANCHOR = { analogy: 'Think of it as', metaphor: 'Think of it as', example: 'Picture this', contrast: 'Compare' };
+const ANCHOR = w('page.anchor'), THINK = ANCHOR.analogy;
 
 // the author's sections, from course.json
 function sections(p) {
@@ -16,11 +17,11 @@ function sections(p) {
 }
 
 function frame(p, body) {
-  const anchor = p.anchor ? `<p class="hb-key"><b>${ANCHOR[p.anchor.type] || 'Think of it as'}:</b> ${esc(p.anchor.text)}${p.anchor.limits ? `<br><span style="color:#8b93a7">Where it stops working: ${esc(p.anchor.limits)}</span>` : ''}</p>` : '';
-  const use = p.application ? `<h3>Where you meet it</h3><p>${esc(p.application)}</p>` : '';
-  const explain = p.explain ? `<h3>Explain it yourself</h3><p>${esc(p.explain.q)}</p><details class="hb-det"><summary>Say your answer out loud first, then compare</summary><p>${esc(p.explain.a)}</p></details>` : '';
-  const remember = p.remember?.length ? `<h3>Remember</h3><ul class="hb-rem">${p.remember.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>` : '';
-  const more = p.further?.length ? `<h3>Go further</h3><ul>${p.further.map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener" style="color:#4fd1c5">${esc(f.title)}</a>: ${esc(f.why)}</li>`).join('')}</ul>` : '';
+  const anchor = p.anchor ? `<p class="hb-key"><b>${ANCHOR[p.anchor.type] || THINK}:</b> ${esc(p.anchor.text)}${p.anchor.limits ? `<br><span style="color:#8b93a7">${w('page.stops')}: ${esc(p.anchor.limits)}</span>` : ''}</p>` : '';
+  const use = p.application ? `<h3>${w('page.meet')}</h3><p>${esc(p.application)}</p>` : '';
+  const explain = p.explain ? `<h3>${w('page.explain')}</h3><p>${esc(p.explain.q)}</p><details class="hb-det"><summary>${w('page.sayFirst')}</summary><p>${esc(p.explain.a)}</p></details>` : '';
+  const remember = p.remember?.length ? `<h3>${w('page.remember')}</h3><ul class="hb-rem">${p.remember.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>` : '';
+  const more = p.further?.length ? `<h3>${w('page.further')}</h3><ul>${p.further.map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener" style="color:#4fd1c5">${esc(f.title)}</a>: ${esc(f.why)}</li>`).join('')}</ul>` : '';
   return `<div class="hb-num">${p.order} · ${esc(p.district.name)}</div><h2>${esc(p.concept)}</h2><p class="lead">${esc(p.idea)}</p>${anchor}${body || ''}${use}${explain}${remember}${more}`;
 }
 
@@ -28,9 +29,9 @@ function frame(p, body) {
 // without the links.
 function spoken(p) {
   if (!p) return '';
-  return script([p.concept, p.idea, p.anchor && `${ANCHOR[p.anchor.type] || 'Think of it as'}: ${p.anchor.text}`, p.anchor?.limits && `Where it stops working: ${p.anchor.limits}`,
-    ...(p.page || []).flatMap((x) => [x.title, x.text]), p.application && 'Where you meet it', p.application,
-    p.explain && 'Explain it yourself', p.explain?.q, p.remember?.length && 'Remember', ...(p.remember || [])]);
+  return script([p.concept, p.idea, p.anchor && `${ANCHOR[p.anchor.type] || THINK}: ${p.anchor.text}`, p.anchor?.limits && `${w('page.stops')}: ${p.anchor.limits}`,
+    ...(p.page || []).flatMap((x) => [x.title, x.text]), p.application && w('page.meet'), p.application,
+    p.explain && w('page.explain'), p.explain?.q, p.remember?.length && w('page.remember'), ...(p.remember || [])]);
 }
 
 // The article of a place (or of a free page): used by the reading wall and by the lab's theory
@@ -63,9 +64,9 @@ export function readingArticle(id) {
 // Opens the page of a place (or a free page from pages.js by id). Resolves with 'lab' if the reader asks for the lab.
 export function openReading(id, anchor = null) {
   const { p, art, start } = readingArticle(id);
-  const { root, close } = overlay(p ? p.name : '', p ? 'Reading wall' : 'Deep dive', p ? () => spoken(p) : null);
+  const { root, close } = overlay(p ? p.name : '', p ? w('page.wall') : w('page.deep'), p ? () => spoken(p) : null);
   const hasLab = p && p.kind !== 'museum';
-  const go = h('button', { class: 'hb-go' }, !p ? 'Back →' : p.kind === 'workshop' ? 'Go to the machines →' : 'Try it in the lab →');
+  const go = h('button', { class: 'hb-go' }, !p ? w('page.back') : p.kind === 'workshop' ? w('page.machines') : w('page.tryLab'));
   if (hasLab || !p) art.append(go);
   const scroller = h('div', { class: 'hb-page', tabindex: '0' }, art);
   root.append(scroller);

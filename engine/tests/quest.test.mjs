@@ -12,7 +12,7 @@ import { questOf, isCore, hasDuel, MIN_DUEL_QUESTIONS } from '../src/mechanics/q
 import { Q } from '../src/mechanics/quest/active.js';
 import { Q_WORDS, trackerLine, answerLine, gateLine, introLines, listOf } from '../src/mechanics/quest/strings.js';
 import { markSeen, knownAs } from '../src/mechanics/quest/townmap.js';
-import { endingNumbers } from '../src/mechanics/quest/ending.js';
+import { endingNumbers, goalsShown } from '../src/mechanics/quest/ending.js';
 import { PLACES, QUESTIONS } from '../src/data/content.js';
 import { KINDS } from '../src/world/townMap.js';
 import { rng } from '../scripts/synthetic.mjs';
@@ -233,4 +233,16 @@ test('the validator warns when the core path is over an hour, and says what to d
   assert.match(all.out, /core path is about \d+ minutes.*"core": false/);
   const m = all.out.match(/core path about (\d+) min; everything about (\d+) min/);
   assert.equal(m[1], m[2], 'everything core: the two numbers agree');
+});
+
+test('the ending card claims a goal of an extra concept only for a player who did that concept', () => {
+  const places = [{ id: 'a', order: 1, lab: { stations: [{}] }, questions: [1, 2] }, { id: 'b', order: 2, core: false, lab: { stations: [{}, {}] }, questions: [1, 2] }, { id: 'c', order: 3, questions: [1, 2] }];
+  const q = questOf({ places }), goals = ['Plain goal', { text: 'Core goal', concepts: ['a'] }, { text: 'Extra goal', concepts: ['b'] }];
+  const s = { visited: {}, done: {}, stamps: {} };
+  assert.deepEqual(goalsShown(goals, s, q), ['Plain goal', 'Core goal']);
+  s.visited.b = true; s.done['b:0'] = true;
+  assert.deepEqual(goalsShown(goals, s, q), ['Plain goal', 'Core goal'], 'half a lab is not enough');
+  s.done['b:1'] = true;
+  assert.deepEqual(goalsShown(goals, s, q), ['Plain goal', 'Core goal', 'Extra goal']);
+  assert.deepEqual(goalsShown(goals, { visited: {}, done: {}, stamps: { b: true } }, q).length, 3, 'a badge counts');
 });

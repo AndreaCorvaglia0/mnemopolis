@@ -15,6 +15,7 @@ import { Q_WORDS, tr, fill, answerLine, gateLine } from '../mechanics/quest/stri
 import { markSeen } from '../mechanics/quest/townmap.js';
 import { NEAR } from '../mechanics/musings/lines.js';
 import { Deck } from '../mechanics/musings/think.js';
+import { w } from '../data/words.js';
 
 const talkDeck = new Deck(); // people's hints and congratulations cycle before repeating
 const TOD = {
@@ -78,7 +79,7 @@ export class Town extends Phaser.Scene {
     this.keys = this.input.keyboard.addKeys('W,A,S,D,UP,DOWN,LEFT,RIGHT,SHIFT,SPACE,ENTER,E,N,M,TAB,ESC');
     this.input.keyboard.on('keydown', () => initAudio());
     this.input.keyboard.on('keydown-N', () => { if (!this.ui.busy) this.cycleTime(); });
-    this.input.keyboard.on('keydown-G', () => { if (this.ui.busy) return; state.grassOff = !state.grassOff; save(); this.ui.toast(state.grassOff ? 'Grass questions off' : 'Grass questions on'); });
+    this.input.keyboard.on('keydown-G', () => { if (this.ui.busy) return; state.grassOff = !state.grassOff; save(); this.ui.toast(w(state.grassOff ? 'ui.grassOff' : 'ui.grassOn')); });
     this.input.keyboard.on('keydown-TAB', (e) => { e.preventDefault?.(); if (!this.ui.busy) this.ui.showAtlas(); });
     this.grassSteps = 0;
 
@@ -241,16 +242,16 @@ export class Town extends Phaser.Scene {
 
   makeNPCs() {
     for (const n of NPCS) {
-      const w = new Walker(this, `ch-${n.look}`, n.x, n.y, n.dir);
-      w.def = n;
-      w.home = n.dir;
-      this.npcs.push(w);
+      const nw = new Walker(this, `ch-${n.look}`, n.x, n.y, n.dir);
+      nw.def = n;
+      nw.home = n.dir;
+      this.npcs.push(nw);
     }
     this.time.addEvent({ delay: 2600, loop: true, callback: () => {
-      for (const w of this.npcs) {
+      for (const npc of this.npcs) {
         
         if (this.ui.busy || Math.random() > 0.35) continue;
-        w.face(Phaser.Utils.Array.GetRandom(['up', 'down', 'left', 'right']));
+        npc.face(Phaser.Utils.Array.GetRandom(['up', 'down', 'left', 'right']));
       }
     } });
   }
@@ -310,7 +311,7 @@ export class Town extends Phaser.Scene {
       for (const k of ['dark', 'lit', 'glow', 'beam', 'fire', 'sun', 'spark']) this.cur[k] = a[k] + (b[k] - a[k]) * t;
       this.cur.tint = b.tint;
     } });
-    this.ui.toast({ dusk: 'Dusk', night: 'Night', day: 'Day' }[next]);
+    this.ui.toast(w('ui.tod')[next]);
   }
 
   updateLighting(time) {
@@ -348,7 +349,7 @@ export class Town extends Phaser.Scene {
       return;
     }
     const [px, py] = this.player.facing(), near = this.npcAt(px, py);
-    this.ui.setPrompt(near ? `Space  Talk to ${near.def.name}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? 'Space  Read the sign' : this.objects.get(`${px},${py}`)?.kind === 'monument' ? 'Space  Look at the landmark' : this.life?.prompt(px, py) || null);
+    this.ui.setPrompt(near ? `Space  ${w('town.talkTo', { name: near.def.name })}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? `Space  ${w('town.readSign')}` : this.objects.get(`${px},${py}`)?.kind === 'monument' ? `Space  ${w('town.landmark')}` : this.life?.prompt(px, py) || null);
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
     const tapped = !key && this.nav.walking, dir = key || this.nav.next();
@@ -400,7 +401,7 @@ export class Town extends Phaser.Scene {
     const npc = this.npcAt(fx, fy);
     if (npc) return this.talk(npc);
     const obj = this.objects.get(`${fx},${fy}`);
-    if (obj && obj.kind === 'sign') { sfx.select(); return this.ui.say(obj.lines, { name: 'Sign' }); }
+    if (obj && obj.kind === 'sign') { sfx.select(); return this.ui.say(obj.lines, { name: w('town.sign') }); }
     if (obj && obj.kind === 'monument') { sfx.select(); return this.ui.say(obj.lines, { name: obj.title }); }
     const door = this.doors.get(`${fx},${fy}`);
     if (door) return this.tryDoor(door);
@@ -419,10 +420,10 @@ export class Town extends Phaser.Scene {
     }
     // One line, then the player picks what to ask. Every answer is one line too. "What should I do
     // now?" answers from the main path (the same step as the tracker), and sometimes hints at more.
-    const t = TALK[npc.def.id] || { hi: '...', options: [] }, bye = { label: 'Bye' };
+    const t = TALK[npc.def.id] || { hi: '...', options: [] }, bye = { label: w('town.bye') };
     const opts = [[tr(Q_WORDS.ask), () => this.whatNow()], ...t.options.map((o) => [o[0], () => o[1]])];
     const nodes = { root: { say: t.hi, options: [...opts.map((o, i) => ({ label: o[0], to: `a${i}` })), bye] } };
-    opts.forEach((o, i) => { nodes[`a${i}`] = { get say() { return o[1](); }, options: [...opts.filter((_, j) => j !== i).map((x) => ({ label: x[0], to: `a${opts.indexOf(x)}` })), { label: 'Thanks, bye' }] }; });
+    opts.forEach((o, i) => { nodes[`a${i}`] = { get say() { return o[1](); }, options: [...opts.filter((_, j) => j !== i).map((x) => ({ label: x[0], to: `a${opts.indexOf(x)}` })), { label: w('town.thanksBye') }] }; });
     await this.ui.converse(npc.def.name, nodes);
     npc.face(npc.home);
   }
@@ -448,17 +449,17 @@ export class Town extends Phaser.Scene {
     const at = state.ended && free(aside) ? aside : free(front) ? front : free(aside) ? aside : null;
     if (!at) return;
     const h = LEAGUE.host || {}, key = this.textures.exists(`ch-${h.look}`) ? `ch-${h.look}` : 'ch-mentor';
-    const w = new Walker(this, key, at[0], at[1], 'down');
-    w.def = { id: 'champion', name: h.name || 'Judge', look: h.look };
-    w.home = 'down';
-    w.aside = free(aside) ? aside : null;
-    this.npcs.push(w);
-    this.champion = w;
+    const cw = new Walker(this, key, at[0], at[1], 'down');
+    cw.def = { id: 'champion', name: h.name || w('town.judge'), look: h.look };
+    cw.home = 'down';
+    cw.aside = free(aside) ? aside : null;
+    this.npcs.push(cw);
+    this.champion = cw;
   }
 
   // The League hall: closed until every house of the main path is done; then the League, as before.
   async league() {
-    const name = LEAGUE.host?.name || 'Judge', G = Q_WORDS.gate;
+    const name = LEAGUE.host?.name || w('town.judge'), G = Q_WORDS.gate;
     this.champion?.faceToward(this.player.tx, this.player.ty);
     sfx.select();
     if (state.passedLeague && !state.ended) return this.ending();
@@ -476,7 +477,7 @@ export class Town extends Phaser.Scene {
   // The League is won: the champion steps aside, says a line in character, the ending card opens.
   async ending() {
     this.locked = true;
-    const c = this.champion, name = LEAGUE.host?.name || 'Judge';
+    const c = this.champion, name = LEAGUE.host?.name || w('town.judge');
     c?.faceToward(this.player.tx, this.player.ty);
     await this.ui.say(tr(Q_WORDS.aside), { name });
     if (c?.aside && !(c.tx === c.aside[0] && c.ty === c.aside[1])) {

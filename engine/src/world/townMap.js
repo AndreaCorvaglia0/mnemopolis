@@ -8,6 +8,7 @@
 //   avenue and bridge = "you need the square before this theme"
 //   tall grass        = quick questions on houses already visited
 import { COURSE } from '../course/course.js';
+import { w } from '../data/words.js';
 
 export const T = 16;
 
@@ -70,7 +71,7 @@ export function generate(C = COURSE) {
   boxes.push([cx - 8, hub.y0 - 7, cx + 9, hub.y1 + 1]);
   lamps.push([hub.x0, hub.y0], [hub.x1 + 1, hub.y1], [hub.x0 - 1, hub.y1]);
   props.push([hub.x0 + 2, hub.y1, 'bench'], [hub.x1 - 2, hub.y1, 'bench']);
-  signs.push({ b: 'league', x: cx + 2, y: hub.y0, lines: [C.hub.name.toUpperCase(), C.bigIdea, 'Tab opens the map.'] });
+  signs.push({ b: 'league', x: cx + 2, y: hub.y0, lines: [C.hub.name.toUpperCase(), C.bigIdea, w('town.mapSign')] });
 
   // ---- districts: a small plaza with its landmark, houses around it ----
   // local layout (plaza centre = 0,0): two houses above the plaza, two below at its sides
@@ -138,7 +139,7 @@ export function generate(C = COURSE) {
       else if (j === 2) { road(...L(d0, row), ...L(-4, row)); road(...L(-4, 3), ...L(-4, row)); }
       else { road(...L(3, row), ...L(d1, row)); road(...L(3, 3), ...L(3, row)); }
       if (j === 0) road(...L(-2, -2), ...L(-2, -2));
-      signs.push({ b: b.id, x: ax + (j % 2 === 0 ? d0 - 1 : d1 + 1), y: ay + row, lines: [`${b.order}. ${p.name.toUpperCase()}`, p.concept, p.objective ? `Here you learn to: ${lower(p.objective)}` : null].filter(Boolean) });
+      signs.push({ b: b.id, x: ax + (j % 2 === 0 ? d0 - 1 : d1 + 1), y: ay + row, lines: [`${b.order}. ${p.name.toUpperCase()}`, p.concept, p.objective ? w('town.learnHere', { what: lower(p.objective) }) : null].filter(Boolean) });
     });
     monuments.push({ x: ax - 1, y: ay, kind: d.landmark || 'obelisk', title: d.name, lines: [d.name.toUpperCase(), d.idea, ...d.places.map((p, j) => `${first + j}. ${p.name}: ${p.concept}`)] });
     lamps.push(L(-5, 2), L(4, -1));
@@ -157,7 +158,7 @@ export function generate(C = COURSE) {
   const [gx, gy] = spots.find(([x, y]) => !boxes.slice(1).some(([x0, y0, x1, y1]) => x + 6 >= x0 && x - 6 <= x1 && y + 3 >= y0 && y - 3 <= y1)) || spots[0];
   blob(gx, gy, 5, 2.4, (x, y, k) => { if (k < 1 && at(x, y) === 'g') set(x, y, 'G'); }, 0.15);
   trail(cx + (gx > cx ? 3 : gx < cx ? -4 : -1), gy < cy ? hub.y0 - 1 : hub.y1 + 1, gx - 1, gy + (gy < cy ? 2 : -3), 0.6);
-  signs.push({ x: gx + 3, y: gy + (gy < cy ? 3 : -3), lines: ['REVIEW MEADOW', 'Quick questions hide in the tall grass, only about houses you have visited. G switches them off.'] });
+  signs.push({ x: gx + 3, y: gy + (gy < cy ? 3 : -3), lines: [w('town.meadow'), w('town.meadowText')] });
 
   // ---- crop, forest edge, greenery ----
   let x0 = GW, y0 = GH, x1 = 0, y1 = 0;

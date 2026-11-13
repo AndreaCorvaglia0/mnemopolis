@@ -10,6 +10,7 @@ import { state } from '../../systems/state.js';
 import { LIFE } from '../config.js';
 import { lifePlan } from '../active.js';
 import { Q_WORDS, tr, fill, playedText } from './strings.js';
+import { Q } from './active.js';
 
 const W = Q_WORDS.card;
 const CSS = `
@@ -42,11 +43,20 @@ export function endingNumbers(s = state, places = PLACES, secrets = null) {
   return { answered: seen, right, accuracy: seen ? Math.round((100 * right) / seen) : 0, certain: [cr, ct], played: s.played || 0, left: housesLeft + secretsLeft };
 }
 
+// What the card claims the player can now do: the course goals that the path taught. A goal is a
+// string (always shown) or { "text", "concepts": [ids] } (course.json): shown when every concept it
+// names is core (the League proved it) or was finished by the player (lab done, or its badge).
+// quest: questOf(...) of the course. Pure.
+export function goalsShown(goals = [], s = state, quest = Q) {
+  const ok = (id) => { const p = quest.byId[id]; if (!p) return true; if (quest.core.includes(p)) return true; const r = quest.placeProgress(p, s); return r.won || (r.visited && r.n >= r.m); };
+  return goals.map((g) => (typeof g === 'string' ? { text: g } : g)).filter((g) => g?.text && (g.concepts || []).every(ok)).map((g) => g.text);
+}
+
 export function openEnding() {
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
   const { root, close } = overlay(COURSE.title, '');
   const secrets = LIFE.secrets ? lifePlan().secrets.filter((x) => x.kind !== 'sealed') : null;
-  const n = endingNumbers(state, PLACES, secrets), next = WORLD?.next;
+  const n = endingNumbers(state, PLACES, secrets), next = WORLD?.next, goals = goalsShown(DATA.goals);
   const nums = [h('div', { class: 'qe-n' }, h('b', {}, String(n.answered)), h('span', {}, tr(W.answered)))];
   if (n.answered) nums.push(h('div', { class: 'qe-n' }, h('b', {}, `${n.accuracy}%`), h('span', {}, tr(W.accuracy))));
   if (n.played >= 60) nums.push(h('div', { class: 'qe-n' }, h('b', {}, playedText(n.played)), h('span', {}, tr(W.time))));
@@ -57,7 +67,7 @@ export function openEnding() {
     h('p', { class: 'qe-k' }, tr(W.title)),
     h('h2', {}, COURSE.title),
     h('div', { class: 'qe-sec', style: 'text-align:center;background:#1c1a12;border-color:#4d4220' }, h('h3', {}, tr(W.big)), h('p', { class: 'qe-big', style: 'padding:0;border:0' }, COURSE.bigIdea)),
-    DATA.goals?.length ? h('div', { class: 'qe-sec' }, h('h3', {}, tr(W.can)), h('ul', {}, DATA.goals.map((g) => h('li', {}, g)))) : null,
+    goals.length ? h('div', { class: 'qe-sec' }, h('h3', {}, tr(W.can)), h('ul', {}, goals.map((g) => h('li', {}, g)))) : null,
     h('div', { class: 'qe-sec' }, h('h3', {}, tr(W.numbers)), h('div', { class: 'qe-nums' }, nums),
       n.certain[1] ? h('p', { class: 'qe-p' }, fill(tr(W.sure), { r: n.certain[0], t: n.certain[1] })) : null),
     h('p', { class: 'qe-left' }, n.left ? fill(tr(W.left), { n: n.left }) : tr(W.leftNone)),

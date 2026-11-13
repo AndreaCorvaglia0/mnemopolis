@@ -18,6 +18,7 @@ import { TOOLS } from '../obstacles/kinds.js';
 import { Q } from './active.js';
 import { Q_WORDS, tr, fill, trackerLine } from './strings.js';
 import { townMapView, MAP_CSS } from './townmap.js';
+import { floorsOf } from '../floors/plan.js';
 
 const TABS = ['journey', 'map', 'mysteries'];
 const W = Q_WORDS;
@@ -104,7 +105,8 @@ function mapTab() {
 
 function mysteries(busy) {
   const items = [];
-  for (const [id, has] of Object.entries(state.keys || {})) if (has && PLACE[id]) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '🗝'), fill(tr(W.mysteries.key), { place: PLACE[id].name })));
+  // a key matters only where there is an upstairs to open (a house without one gets none to show)
+  for (const [id, has] of Object.entries(state.keys || {})) if (has && PLACE[id] && floorsOf(PLACE[id]).up) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '🗝'), fill(tr(W.mysteries.key), { place: PLACE[id].name })));
   for (const [t, has] of Object.entries(state.tools || {})) if (has && TOOLS[t]) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '⚒'), tr(TOOLS[t])));
   const kids = [
     h('div', { class: 'qm-coins' }, h('b', {}, String(state.insight || 0)), tr(W.mysteries.coins)),
