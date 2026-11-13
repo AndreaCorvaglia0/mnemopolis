@@ -11,7 +11,7 @@
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
 | `npm run shots:phone` | The same tour on a phone held upright (390 x 844, touch mode), into `shots/phone/`. |
 | `npm run shots:lab` | The lab frame state by state (question, after it, one task done with the panel open, folded and full screen, done with the panel open and folded, theory, done in full screen), the first state of every station and a mid state of the slider stations, on a desktop window and a phone, into `shots/lab/` (`OUT2=/dir` copies them). It also reports text cut with an ellipsis. The tasks are done with real drags. `STATION=lamps:0` picks the station walked through. |
-| `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
+| `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`; then the duels (`scripts/duelshots.mjs`: a house duel at the start, after a hit, after a miss, won, a friendly rematch, lost; the League mid-way, lost and won) into `shots/duel/`, copied to `/tmp/duel-*.png`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
 | `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
 | `npm run dev` | Live server while editing, if a browser is available. |
 
@@ -33,7 +33,8 @@ engine/src/
                    code.js (code panel), reading.js (reading wall), map.js (the map), museum.js (plaques)
   art/             everything drawn in code: ground, buildings, sprites, palette
   systems/         state (save), audio (music and sounds), voice (read aloud), walker (movement)
-  mechanics/       optional ambient life: thoughts, animals, secrets, obstacles (see "Ambient life")
+  mechanics/       optional ambient life: thoughts, animals, secrets, obstacles (see "Ambient life");
+                   duel/: the duel of eloquence (see "Duels")
   data/content.js  read-only views of the course for the scenes
 ```
 
@@ -45,9 +46,11 @@ Course work happens in `courses/<slug>/`, not here. See `WORLD.md` for what a cu
 - `state.visited[id]` is set when the learner opens a lab or a museum. Review questions come
   only from visited houses.
 - `state.done['id:k']` is set when station `k` shows its takeaway. The map shows `lab 2/3`.
-- `state.stamps[id]` is set when the house quiz is passed (two of three). `state.passedLeague`
-  for the league. `state.insight` holds the points (certainty-based: sure and right earns more,
-  sure and wrong costs). Points are stored for a later version; nothing spends them yet.
+- `state.stamps[id]` (badge) and `state.keys[id]` (key to the upper floor) are set when the duel
+  with the host of that house is won; `state.passedLeague` when the League's duel is won (see
+  "Duels"). `state.insight` holds the points (certainty-based: sure and right earns more, sure and
+  wrong costs, except in duels, where a wrong answer costs composure and no points). Points are
+  stored for a later version; nothing spends them yet.
 
 ## Pitfalls already paid for
 
@@ -317,3 +320,116 @@ secrets are checked when the player arrives on a tile.
 - **An obstacle**: an entry in `obstacles/kinds.js` (needs, where, name, say, opened, lines), its
   closed and open look in `obstacles/art.js`; a new kind of place for it in `obstacles/place.js`,
   where every candidate must pass `keepsDistances`.
+
+## Duels
+
+The house quiz and the League are a **duel of eloquence**: a skin over the course's questions
+(`docs/DESIGN.md` is the specification; the reasons are in the wiki). Everything is in
+`src/mechanics/duel/`:
+
+```
+rules.js    the rules as pure functions (Node): bars, a turn, the end, which questions, feedback,
+            and the simulation used to tune the numbers
+tempers.js  the registry of tempers (no imports: the course validator reads the names)
+lines.js    stock phrases of debating and every word of the screen, English and Italian
+prize.js    what winning gives, on the state object: badge, key, League (each once)
+screen.js   the duel screen (HTML over the game, opened with ui.page), style.js its look
+index.js    houseDuel(ui, id) (Interior.quizSeries) and leagueDuel(ui) (UI.league)
+```
+
+### Rules
+
+| | House duel | League |
+|---|---|---|
+| Questions | the concept's own; levels 1 and 2 first, level 3 only to fill; a friendly rematch (house already won) puts levels 2 and 3 first | `finalCheck.size` of levels 2 and 3, one from each house per round, shuffled |
+| Turns | at most `min(6, questions of the concept)` | `finalCheck.size` |
+| Opponent's conviction | 7 | `2 × ceil(size × pass)` (12 for 8 at 0.7) |
+| Player's composure | 5 | `2 × (size − need) + 1` (5 for 8 at 0.7) |
+
+Each turn the player picks a **tone** (the confidence bet), preselected at *State* every turn, and
+taps an answer: one tap commits both. Right: the opponent loses 1, 2 or 3 (murmur, state,
+proclaim). Wrong: the player loses 1, 2 or 4 composure. A bar at zero ends the duel. When the
+turns (or the questions) run out, the fuller bar, as a share of its start, wins; on an exact tie
+the player wins only with at least the pass share right (2/3 in a house, `pass` in the League).
+
+With every answer *stated*, a house duel is "three right before three wrong", and the League is
+exactly the old pass mark: `ceil(size × pass)` right wins, one slip more loses (tested for sizes
+8 to 12). Proclaiming wins sooner and risks more; murmuring is safe and slow, and over a short
+duel the slow side tends to run out of turns.
+
+**Coins in a duel**: a right answer earns the usual certainty-based reward (`scoreAnswer`, which
+also keeps the question history and the bet statistics); a wrong answer takes no coins, whatever
+the tone. Its cost is composure: charging twice for the same mistake would contradict "mistakes
+cost nothing but a turn". **Losing** takes nothing; Rematch draws other questions at once
+(`pickQuestion` prefers unseen, then missed ones). **Step back** (Esc) leaves at any time; only
+coins already earned stay.
+
+**Why the tone comes before the answer, preselected**: one tap per turn in the common case, and
+the stake is visible before committing: the striped part of each bar is what the chosen tone puts
+at risk (theirs if right, yours if wrong). Answer first, then tone (the old quiz) costs two taps
+every turn and shows the stake only once the answer is chosen. Resetting to *State* every turn keeps a bold tone a decision about
+this question, not a leftover.
+
+### Simulated win rates
+
+Simulated learners are right on a question with probability `p_q`, drawn around their mean `p`
+(Beta, concentration 6: some questions known well, some not). *state* always states; *calibrated*
+feels `p_q` and proclaims above 0.75, murmurs below 0.45; *reckless* always proclaims.
+`npm test` prints this table (4000 duels per cell):
+
+| Duel | p=.4 state | p=.4 calibrated | p=.6 state | p=.6 calibrated | p=.6 reckless | p=.7 state | p=.7 calibrated | p=.9 state |
+|---|---|---|---|---|---|---|---|---|
+| house, 4 questions | 17% | 33% | 47% | 58% | 46% | 65% | 73% | 95% |
+| house, 5 questions | 31% | 28% | 67% | 61% | 46% | 84% | 76% | 99% |
+| house, 6 questions | 18% | 28% | 54% | 61% | 46% | 75% | 76% | 98% |
+
+League (8 turns, pass 0.7): at p = pass about a coin flip (state 56%, calibrated 57%, reckless
+54%); at p = pass + 0.15, 90% (state) and 83% (calibrated); at p = pass − 0.15, 23%. No duel ever
+lasted more than its turns (6 in a house, 8 in this League).
+
+Reading it: with six questions the targets hold (p = 0.7 wins about 75%, p = 0.4 loses over 80%
+when stating). Fewer questions discriminate less, and no rule can fix that: with four questions
+a learner at 0.7 who always states wins 65% (73% calibrated); with five, a learner at 0.4 still
+wins about 30%. A calibrated learner at 0.4 wins more often than one who always states because
+they proclaim what they do know well: that is the bet doing its job. Recklessness never pays: at
+0.6 the reckless player wins 46%, the calibrated one about 60%. Concepts with five or six
+questions make the fairest duels (`skills/knowledge-base/references/6-questions.md`).
+
+### Feedback
+
+After a wrong answer the rebuttal shows the chosen option and the right one, side by side, then
+"Why <chosen> tempts:" with the option's `trap`, then the right answer with the question's `why`.
+Without a trap: the right answer and `why` only. After a right answer: `why`, never just
+"correct". In the League the house of the question is named only after answering (recognising
+which idea a question needs is part of the League). A lost duel ends with what to look at again:
+the concept, the reading wall here and the lab (house duel, with a Read the wall button), or the
+houses of the missed questions by number and name (League); then Rematch and Not now.
+
+### Tempers and lines
+
+A house owner's temper comes from `expert.temper` in `course.json` when it names one (the
+validator warns about unknown names), otherwise from `seeded('<id>:temper')`. Tempers:
+smitten, sore (sore loser), admirer, letwin (insists they let you win), theatrical, absent
+(absent-minded), craftsman (proud craftsman). The League's champion has its own, grander temper
+(`CHAMPION`), and steps aside when beaten: the duel sets `state.passedLeague` and returns.
+
+- **A temper**: one more entry in `TEMPERS` with `open`, `hit` (2+), `score` (2+), `lose` (hands
+  over the key), `again` (a friendly rematch lost), `win` (in character; the screen adds what to
+  review), in `en` and `it`. Add its name to the description of `expert.temper` in
+  `course.schema.json`. `npm test` checks both languages, lengths, and that `lose` mentions the key.
+- **A stock phrase**: append it to both languages in `STOCK` (`lines.js`). Short; about debating,
+  never about the learner. Lines cycle without immediate repeats (`Deck`).
+- **Another language**: one more key in `TEMPERS[*]`, `CHAMPION`, `STOCK`, `WORDS`, `CHALLENGE`.
+
+### The screen
+
+Readable first: the question is the largest text (20 to 22 px), answers are 52 px buttons 8 px
+apart, the tone is three buttons with what each lands and risks, the turn counter sits between
+the fighters, Step back is always in the header. The two characters are the game's own painters
+(side frame, scaled up, crisp); the opponent is the host or expert with their look, the League's
+the champion. Bars shake and drop when hit; with `prefers-reduced-motion` nothing moves. Sounds
+are the soft existing ones (`confirm`, `bump`, `reveal`) and follow the sound switches; questions
+are not read aloud.
+
+Keys: 1 to 4 answer; arrows up and down move between answers and Enter answers; Q, W, E (or
+arrows left and right) pick the tone; Enter or Space for Next; Esc steps back.

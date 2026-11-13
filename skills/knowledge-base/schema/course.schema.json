@@ -519,6 +519,10 @@
             "line": {
               "type": "string",
               "description": "Optional. One sentence in their voice that carries the concept's idea; it is what they say first. 30 words at most."
+            },
+            "temper": {
+              "type": "string",
+              "description": "Optional. How they duel and how they hand over the key when beaten: one of the tempers in engine/src/mechanics/duel/tempers.js (smitten, sore, admirer, letwin, theatrical, absent, craftsman). Without it, or with an unknown word, the engine picks one by seed."
             }
           }
         }

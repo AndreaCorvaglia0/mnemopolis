@@ -7,6 +7,7 @@ const fresh = () => ({
   pos: null,
   insight: 0,
   stamps: {}, // place id -> true once its house quiz is passed
+  keys: {},
   visited: {}, // place id -> true once the player has opened its lab or timeline
   done: {}, // 'place:station' -> true once the takeaway of a lab station was reached
   passedLeague: false,
