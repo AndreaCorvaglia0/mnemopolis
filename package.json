@@ -10,6 +10,7 @@
     "stress": "npm --prefix engine run stress --",
     "build": "npm --prefix engine run build",
     "shots": "npm --prefix engine run shots",
-    "shots:phone": "npm --prefix engine run shots:phone"
+    "shots:phone": "npm --prefix engine run shots:phone",
+    "test": "npm --prefix engine test"
   }
 }

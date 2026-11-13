@@ -24,6 +24,15 @@
   wall, lab stations, plaques and people's lines when the learner presses Listen; `"voice"` in
   `world.json`, saved on/off switch, pronunciation map.
 
+- Composed rooms (`engine/src/gen/interior/`): a room is an axis, a focal point and two or three
+  groups of furniture from a registry, with order rules (tall pieces against walls, one focal
+  point, rugs under groups, 55% free floor, pairs in rhythm) checked in code; six plans, no dead
+  space; readable labels in caves.
+- Experts' homes: an optional `expert` on a concept (validated) turns its house into the home of a
+  person with a trade (twelve trades, five house shapes, three themes); `"homes": "auto"` in
+  `world.json`; two homes in the example course.
+- Tests with Node's runner (`npm test`), run by the CI workflow.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
@@ -34,8 +43,8 @@
 - Labs of the example course drawn for small screens (some canvas text is small on a phone).
 
 - Game dynamics: spending points, shops, avatar items, quests.
-- Generators: more variety for studio, museum and league hall; more room plans; signature
-  objects matched to the kind of house; more themes.
+- Generators: more variety for studio, museum and league hall; more themes; more zones and
+  trades; room plans with two rooms seen through a doorway.
 - More art: landmarks, seasons.
 - Per-option feedback on questions, using the `traps` already in the course.
 - Courses in several towns, linked.

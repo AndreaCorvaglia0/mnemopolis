@@ -38,6 +38,19 @@ Optionally, a concept can have an `emblem`: a small icon that stands for it, sho
 and in its room as a memory cue. Choose it from the names in `engine/src/gen/emblems.js`.
 Skip it at care light.
 
+**An expert's home.** A concept may also live in a person's house instead of an institution:
+`"expert": { "name": "Marta", "trade": "painter", "line": "one sentence in their voice" }`.
+The house becomes their home, furnished for their trade, and they are the host who explains.
+People remember a person and their house better than an office, so homes suit stories, cases,
+crafts and judgement ("a dyer knows that colours change next to each other"). Keep institutions
+(lab, archive, observatory...) for mechanisms and reference material, and mix the two: two or
+three homes in a town are enough. Choose a trade from `engine/src/gen/interior/trades.js`
+(cartographer, dyer, cook, musician, gardener, clockmaker, doctor, painter, scholar, potter,
+weaver, printer); another word gives a generic home. Pick a trade with an honest link to the
+concept, write the line so that it carries the concept's idea, and keep it true: the expert is a
+character, not a source. The name fits a name plate (8 characters). Give the place a name that
+says whose house it is ("Painter's House").
+
 ## D. Call-backs: repetition by design
 
 Forgetting is fought by meeting an idea again, later, in a different setting. Plan it:

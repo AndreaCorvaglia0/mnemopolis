@@ -12,7 +12,8 @@
     "doors": "node scripts/doors.mjs",
     "shots": "node scripts/tour.mjs",
     "shots:phone": "PHONE=1 node scripts/tour.mjs",
-    "shots:lab": "node scripts/labshots.mjs"
+    "shots:lab": "node scripts/labshots.mjs",
+    "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\""
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.3.1",

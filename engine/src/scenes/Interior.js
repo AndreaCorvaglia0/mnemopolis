@@ -9,7 +9,7 @@ import { makeCanvas, rect, px, ellipse, hash, mix, addTex } from '../art/px.js';
 import { drawText, textWidth } from '../art/buildings.js';
 import { P } from '../art/palette.js';
 import { GEN } from '../gen/core.js';
-import { generateRoom } from '../gen/interior.js';
+import { generateRoom } from '../gen/interior/index.js';
 
 const RW = 15, RH = 11, T = 16; // the size of the standard room
 
@@ -121,7 +121,7 @@ function roomFor(place) {
   };
 }
 
-// The room of a house: generated (src/gen/interior.js), or the standard room when
+// The room of a house: generated (src/gen/interior/), or the standard room when
 // world.json says { "gen": { "interior": false } }.
 const roomOf = (place) => (GEN.interior ? generateRoom(place) : roomFor(place));
 

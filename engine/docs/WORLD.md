@@ -34,12 +34,18 @@ generated from the course so that these three hold by construction. Nobody place
 | `cave` | A cave mouth with lanterns | An optional deep dive | Torch-lit room |
 | `workshop` | A factory with a saw-tooth roof | A process in steps | A conveyor belt; each lab station is a machine (up to 8) |
 | `museum` | A castle | A story in time | A torch-lit corridor; one plaque per event, oldest on the left |
+| `home` | A private house with a name plate and a trade sign | A concept explained by a person (an `expert`) | The expert's room, furnished for their trade; they are the host |
 
 `npm run shots` saves a picture of every kind of building and landmark (`shots/99-gallery.png`).
 
 Every standard room is the same on purpose: the lab door glows on the left, the reading wall is
 next to it, the host stands in the middle. Colour and floor change with the kind. The learner
 learns the room once.
+
+**The principle of the look: outside is generated with irregularity, inside is composed.** The
+town is varied and natural: lanes wind, houses differ, gardens and groves grow where they fit.
+Rooms are the opposite: a grid, an axis, groups of furniture and order, so that each room tells at
+a glance what it is for and nothing lies around at random.
 
 ## Landscapes and landmarks
 
@@ -114,7 +120,8 @@ This is already a complete, coherent world, and it is where the effort should go
 3. A new landmark: add a painter to `MONUMENTS` in `src/art/sprites.js` (32 × 48 pixels, drawn
    with rectangles and ellipses) and its name to `scripts/check.mjs`.
 4. A new kind of building: a painter in `src/art/buildings.js`, an entry in `KINDS` in
-   `src/world/townMap.js`, a theme in `THEME` in `src/scenes/Interior.js`.
+   `src/world/townMap.js`, a theme in `THEME` in `src/scenes/Interior.js`, a room profile in
+   `KINDS` in `src/gen/interior/kinds.js`.
 5. A new landscape: a rule in `generate()` in `src/world/townMap.js`, and possibly new
    ground painting in `src/art/ground.js`.
 6. Music: tracks are chord lists in `src/systems/audio.js`.
@@ -125,46 +132,121 @@ several rounds of screenshots to get right.
 ## What not to change
 
 - The limits (4 districts, 4 houses each). They are what keeps the town in one head.
-- The sameness of rooms and of the lab frame.
+- The sameness of what the learner uses in a room (lab door, reading wall, host, exit) and of the
+  lab frame.
 - The rule that everything is generated from `course.js`. A hand-placed exception breaks the
   correspondence between town and map.
 
 ## Generated rooms
 
-Optional, on by default: `src/gen/interior.js` builds a different room for every house, the same
+Optional, on by default: `src/gen/interior/` composes a different room for every house, the same
 on every build (seeded by the course id and the house id). Switch it off in
 `courses/<slug>/world.json` with `{ "gen": { "interior": false } }`: every house then gets the
 standard room described above, unchanged.
 
 **What stays, in every room:** the lab door (wooden, glowing, labelled LAB), the reading wall (a
-board over a desk; the player reads it from the tile in front of the desk), the host standing
-free near the middle, the exit mat in the front wall with the entrance just above it, the concept
-written on the back wall and the gold house number. Their place changes with the plan; their look
-does not.
+board over a desk; the player reads it from the tile in front of the desk), the host, the exit mat
+in the front wall with the entrance just above it, the concept written on the back wall and the
+gold house number. Their place changes with the plan; their look does not.
 
-**What varies:** the plan (`hall` wide and low, `square` compact, `ell` with a corner cut away,
-`alcove` with a recess for the signature object, `dais` with a raised platform; 11 to 16 tiles
-wide, 9 to 12 high, so a phone held upright keeps zoom 3), floor and wall treatment, furniture by
-kind of house (lab benches and cabinets, archive shelves and drawers, hall long tables and banners,
-studio easels and examination tables, observatory telescopes and chart tables, cave rocks,
-crystals and torches), rugs, plants, night windows, and one large **signature object**: the
-concept's `emblem` drawn big on a pedestal, in a display case or on a standing banner, or, without
-a known emblem, an object chosen by the seed (orrery, globe, crystal, clock, tree, prism,
-hourglass). Neighbouring houses never share a plan. Materials come from the project's `THEME`
-(wood, stone, accent, wall tone), so the rooms of one course belong together.
+**How a room is composed** (`compose.js`), in this order:
 
-**Rules.** Pieces are placed one at a time: against the back wall, against a side wall, or
-free-standing with a walkway all around. A piece is refused if it covers a reserved tile (the
-walkway up from the exit, the tiles in front of the door and the reading wall, the host's
-neighbours, the space in front of the signature) or leaves any free tile unreachable. Then a
-breadth-first search from the entrance checks the door, every reading-wall tile, the host and the
-exit; a room that fails is drawn again with the next seed, and `npm run check` (part of the
-build) reports any room that still fails.
+1. A **plan** (`plans.js`): `hall` wide and low, `square` compact, `ell` with a corner cut away
+   (the back wall steps forward, or a small courtyard garden takes the front corner), `alcove` with
+   a recess, `dais` with a raised platform, `nave` with a pair of pillars. 11 to 16 tiles wide and
+   9 to 12 high, so a phone held upright keeps zoom 3. Nothing inside the room's box is left as
+   dark empty space: above a lower back wall the wall goes on up, a front notch is a garden.
+   Neighbouring houses never share a plan.
+2. The **axis**, from the exit straight up to the back wall, kept free as an aisle; at its end the
+   **focal point**: the signature object on a plinth (in the alcove, on the dais), and the concept's
+   name centred above it.
+3. The **learning wall** on one side of the focal point: lab door and reading wall together.
+4. The **back zone** on the other side, mirroring the learning wall's span.
+5. The **host** beside the aisle, on the learning side (on the dais, one tile from the signature).
+6. One or two **floor zones**, one in each half of the room, the second placed as the mirror of the
+   first; a free-standing group keeps a walkway all around it.
+7. **Decorations** in mirrored pairs: plants in the front corners, a pair flanking the signature,
+   windows and pictures on the back wall, torches in a cave.
 
-**Add a plan:** a function in `PLANS` returning `{ w, h, top, bot }` (per column: the row where
-the back wall starts, the row of the front wall). **Add a furniture piece:** an entry in `PIECES`
-(footprint, height, allowed modes), a painter in `PAINT`, and its name in a kind's `furniture`
-list in `KINDS`. Run `npm run check`, then look at the rooms with `npm run shots`.
+A **zone** (`zones.js`) is a small hand-designed group with fixed relative positions: desk, chair
+and lamp; two armchairs and a small table on a rug; shelves with a ladder; a bench with its stool;
+three dye vats under hanging cloth. The generator chooses which zones (by kind of building or by
+the expert's trade), their variant, and where they stand (against the back wall, a side wall, or
+free on the floor), never single stray objects. Materials come from the project's `THEME` (wood,
+stone, accent, wall tone) and the kind's own colours, so the rooms of one course belong together.
+
+**The rules** (`rules.js`, pure functions returning a list of problems):
+
+| Rule | What it checks |
+|---|---|
+| reachable | the entrance, the lab door, every reading-wall tile and the host are reached on foot from the exit; no free tile is cut off |
+| tall | furniture taller than 27 px stands against a wall |
+| focal | exactly one focal point, on the axis or in the alcove or on the dais, against the back wall |
+| rug | a rug lies only under a group of two or more pieces |
+| free | at least 55% of the floor tiles stay free |
+| caps | 2 zones, 3 from 70 floor tiles; one decoration per 12 floor tiles |
+| isolated | a piece away from the walls has a neighbour from its own group |
+| rhythm | decorations come in pairs mirrored about the axis, or alone on it |
+| palette | materials from the project theme plus one accent; pieces are tinted by palette names only |
+
+A room that breaks a rule is composed again with the next seed, then on the next plan, then on
+the plain hall. `npm run check` (part of the build) checks the course's rooms; `npm test` checks
+several hundred rooms over every kind, trade, plan and theme.
+
+**Signature objects** come from the kind (`kinds.js`: a lab gets a prism or an orrery, an archive
+a clock, an hourglass or a globe, a cave a great crystal or a carved stone) or, in a home, from the
+trade. A concept's known `emblem` is shown instead, big, on a pedestal, in a case or on a banner.
+
+**Look at rooms:** `__hb.rooms()` in the browser console shows the course's rooms and a sample of
+other kinds; `__hb.homes()` shows a home of every trade in the three themes.
+
+## Experts' homes
+
+A concept with `"expert": { "name", "trade", "line" }` in `course.json` lives in its expert's home
+(kind `home`) instead of an institution; the expert is the host, dressed for the trade, and says
+their line first. `world.json` may still give the concept another kind. Without experts nothing
+changes, unless `world.json` asks for `"homes": "auto"`: then concepts of type `story`, `cases`
+and `choice` become homes, with a trade that suits the type and a name chosen by the seed (a
+story without a lab keeps its museum). The mapping is in one place: `kindOf` and `expertOf` in
+`src/course/course.js`.
+
+**Outside** (`home` in `src/gen/facade.js`): homes differ more than institutions do: a cottage
+with a big roof, a town house with a balcony, a tall narrow house between two small gardens, a
+house with a workshop on the ground floor, a boarded cabin on a deck (in a district by a river or
+a shore). The trade says which shapes it likes. Every home keeps the name sign, the house number,
+a brass name plate with the expert's name and, at the garden corner, a post with the trade's icon;
+the roof, walls and windows follow the theme. Footprint 5 x 5, door in the middle. With
+`"gen": { "facade": false }` a home is the hand-drawn cottage with its name.
+
+**Inside:** a home, not an institution: wallpaper or panelling, wooden floors, and zones that say
+who lives there (the cartographer's map table and plan chests, the dyer's vats under hanging cloth,
+the cook's range and pantry, the musician's piano, the gardener's potting bench, the clockmaker's
+bench, the doctor's examination corner and remedies, the painter's easel, the scholar's library,
+the potter's kiln and wheel, the weaver's loom, the printer's type cases). The lab door is the same
+door, glowing and labelled LAB.
+
+**Trades** (`src/gen/interior/trades.js`): cartographer, dyer, cook, musician, gardener,
+clockmaker, doctor, painter, scholar, potter, weaver, printer, and `home` for any other word. Each
+gives its zones (most typical first), its signature object, its pictures, the host's look and its
+exterior shapes and sign.
+
+## How to add...
+
+Every registry is plain data: adding one is adding one entry. Then run `npm test`, which composes
+rooms with the new entry and checks every rule, and look at `__hb.rooms()` / `__hb.homes()`.
+
+- **A plan:** a function in `PLANS` (`interior/plans.js`) returning `{ w, h, top, bot }` (per
+  column: the row where the back wall starts, the row of the front wall) and any marks (`alcove`,
+  `dais`, `pillars`).
+- **A furniture piece:** footprint and height in `PIECES` (`interior/pieces.js`), a painter in
+  `PAINT` (`interior/furniture.js`).
+- **A zone:** an entry in `ZONES` (`interior/zones.js`) with a `back`, `side` or `island` layout,
+  and its name in a kind (`interior/kinds.js`) or a trade.
+- **A trade:** an entry in `TRADES` (`interior/trades.js`); a new signature object is a painter in
+  `SIGNATURES` (`interior/furniture.js`), a new look an entry in `LOOKS` (`src/art/sprites.js`).
+- **A wall decoration:** a painter in `DECOR` (`interior/paint.js`).
+- **A home shape:** a painter in `HOME_PAINT` (`src/gen/facade.js`) and its name in `HOME_SHAPES`
+  and in the trades that may use it.
 
 ## Generated dressing
 

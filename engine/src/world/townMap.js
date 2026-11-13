@@ -21,6 +21,7 @@ export const KINDS = {
   workshop: { paint: 'workshop', w: 6, h: 5, doors: [[2, 4]], scene: 'Workshop' }, // a process: ordered steps on a belt
   museum: { paint: 'museum', w: 8, h: 6, doors: [[3, 5], [4, 5]], scene: 'Museum' }, // a story in time
   cave: { paint: 'cave', w: 5, h: 4, doors: [[2, 3]] }, // an optional deep dive
+  home: { paint: 'home', w: 5, h: 5, doors: [[2, 4]] }, // an expert's home: a person who explains (see course.js)
 };
 const LEAGUE = { paint: 'league', w: 8, h: 5, doors: [[3, 4], [4, 4]] };
 
@@ -128,7 +129,7 @@ export function generate(C = COURSE) {
     const first = order + 1;
     d.places.forEach((p, j) => {
       const k = ks[j], s = spot[j], bx = ax + s.x, by = ay + s.b - k.h + 1;
-      const b = { id: p.id, kind: p.kind, name: p.name, label: (p.sign || p.name).toUpperCase().slice(0, 9), paint: k.paint, scene: k.scene, x: bx, y: by, w: k.w, h: k.h, open: true, district: d.id, di: i, dj: j, emblem: p.emblem, order: ++order };
+      const b = { id: p.id, kind: p.kind, name: p.name, label: (p.sign || p.name).toUpperCase().slice(0, 9), paint: k.paint, scene: k.scene, x: bx, y: by, w: k.w, h: k.h, open: true, district: d.id, di: i, dj: j, emblem: p.emblem, order: ++order, trade: p.trade, expert: p.expert?.name, nature: d.nature };
       b.doors = k.doors.map(([dx, dy]) => [bx + dx, by + dy]);
       buildings.push(b);
       const d0 = b.doors[0][0] - ax, d1 = b.doors[b.doors.length - 1][0] - ax, row = s.b + 1;
