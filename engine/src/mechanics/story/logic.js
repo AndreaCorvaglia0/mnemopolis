@@ -88,3 +88,20 @@ export const FOG_BARS = { conviction: 2, composure: 2, turns: 3, pass: 2 / 3 };
 export function endingOf(s) {
   return 'loop';
 }
+
+// The notebook's log (notebook.js, the Clues section): what the character has learnt, in the order
+// it was learnt, derived from the state (so an old save shows it too). rows: Q.coreProgress(s).
+// Entries: { k: 'master' | 'remembered' | 'memento' | 'word' | 'door' | 'register' | 'tore', ... }
+export function notesOf(s, rows) {
+  const out = [], st = s.story || {};
+  if (s.seenIntro && rows[0]) out.push({ k: 'master', id: rows[0].id, order: rows[0].order });
+  rows.forEach((r, i) => {
+    if (r.won) out.push({ k: 'remembered', id: r.id, order: r.order, next: rows[i + 1]?.order ?? null });
+    if (st.mementos?.[r.id]) out.push({ k: 'memento', id: r.id, order: r.order, kind: st.mementos[r.id] });
+  });
+  if (rows.length && rows.every((r) => r.done)) out.push({ k: 'word' });
+  if (st.door || s.passedLeague) out.push({ k: 'door' });
+  if (s.passedLeague) out.push({ k: 'register' });
+  if (s.ended) out.push({ k: 'tore' });
+  return out;
+}

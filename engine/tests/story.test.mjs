@@ -155,3 +155,15 @@ test('one function chooses the ending; today always the bitter loop', () => {
   assert.equal(endingOf({}), 'loop');
   assert.equal(endingOf({ passedLeague: true, locks: { a: 1 }, life: { found: { x: 1 } } }), 'loop');
 });
+
+test('the notebook writes down what was learnt, in order, from the state alone', async () => {
+  const { notesOf } = await import('../src/mechanics/story/logic.js');
+  const rows = [{ id: 'a', order: 1, won: true, done: true }, { id: 'b', order: 2, won: false, done: false }];
+  assert.deepEqual(notesOf({}, rows.map((r) => ({ ...r, won: false, done: false }))), [], 'nothing before the quay');
+  const s = { seenIntro: true, story: { mementos: { a: 'page' } } };
+  assert.deepEqual(notesOf(s, rows).map((n) => n.k), ['master', 'remembered', 'memento']);
+  assert.equal(notesOf(s, rows)[1].next, 2);
+  const all = rows.map((r) => ({ ...r, won: true, done: true }));
+  assert.deepEqual(notesOf({ ...s, passedLeague: true, ended: true }, all).map((n) => n.k), ['master', 'remembered', 'memento', 'remembered', 'word', 'door', 'register', 'tore']);
+  assert.equal(notesOf(s, all)[3].next, null, 'the last house points to the lighthouse');
+});

@@ -1,7 +1,8 @@
 // Pictures of the story (docs/STORY.md), desktop then phone: the arrival, the name, the notebook, the
-// cold town, remembering (start, right, false memory, remembered), mementos, the notebook tab, a
-// window lighting up, the lighthouse dark, understood, its door, the keeper, the turn, the lamp lit,
-// the ending card. Jumps between moments with __hb.story (src/mechanics/story/debug.js).
+// cold town, remembering (start, right, false memory, remembered), mementos, the notebook (the menu:
+// its three sections at the start, mid-game and after the ending), a window lighting up, the
+// lighthouse dark, understood, its door, the keeper, the lamp and the register, the walk back, the
+// pages on the quay, the cover, the purser, the loop, the ending card, the fog returning. Jumps between moments with __hb.story (src/mechanics/story/debug.js).
 //   node scripts/storyshots.mjs            (npm run shots:story) -> /tmp/story-*.png, /tmp/story-phone-*.png
 //   PHONE=1 / DESK=1 only one of the two; OUT=/dir to change where they go
 import puppeteer from 'puppeteer-core';
@@ -32,6 +33,16 @@ async function run(phone) {
   const tapOn = () => ev(() => { const r = document.querySelector('.cn'); r?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })); return 1; });
   const noCinema = () => until(() => !document.querySelector('.cn'), 'the end of a cinematic moment', 120000);
   const key = async (k) => { await page.keyboard.press(k); await sleep(150); };
+  // the notebook (the menu): its three sections; on a phone also the second page of each
+  const notebook = async (tag) => {
+    await ev(() => { __game.scene.getScene('UI').showAtlas('journey'); return 1; });
+    await until(() => document.querySelector('.nbk[data-ready]'), 'the notebook');
+    for (const [i, t] of [['1', 'journey'], ['2', 'map'], ['3', 'clues']]) {
+      await key(i); await sleep(700); await shot(`nb-${tag}-${t}`);
+      if (phone) { await ev(() => { document.querySelector('.nbk-pg.l .nbk-turn button')?.click(); return 1; }); await sleep(500); await shot(`nb-${tag}-${t}-2`); }
+    }
+    await key('Escape'); await sleep(800);
+  };
   const fresh = async (setup) => {
     const url = `file://${html}?test&lite${phone ? '&touch' : ''}`;
     await page.goto(url); await ev(() => localStorage.clear()); await page.goto(url); // a new game: no save
@@ -51,11 +62,12 @@ async function run(phone) {
   await sleep(600); await shot('03-name');
   await ev(() => { const i = document.querySelector('.cn input'); i.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); return 1; });
   await cap('boards|assi'); await sleep(1500);
-  await until(() => /House 1|Casa 1/.test(document.querySelector('.cn-mid')?.textContent || ''), 'the first line'); await sleep(1500); await shot('04-quay-notebook');
+  await cap('one line|una riga'); await sleep(4000); await shot('04-quay-notebook');
   await noCinema();
   await until(() => __game.scene.getScene('UI').saying, 'the harbour master');
   await sleep(1200); await shot('05-harbour-master');
   for (let i = 0; i < 6 && (await ev(() => !!__game.scene.getScene('UI').saying)); i++) { await key('Space'); await sleep(900); }
+  await sleep(800); await notebook('start');
 
   // ---- 2. the cold town: dark windows, heavy rain
   await ev(() => { __hb.story.where(__hb.content.PLACES.find((p) => p.core !== false).id); return 1; });
@@ -90,7 +102,7 @@ async function run(phone) {
     if (await ev((x) => !['workshop', 'museum'].includes(__hb.content.PLACE[x].kind), id)) { await ev((x) => { const sc = __game.scene.getScenes(true).find((o) => ['Interior', 'Town'].includes(o.sys.settings.key)); sc.scene.start('Interior', { id: x, floor: 'up' }); return 1; }, id); await sleep(3500); }
     if (n === '12') await shot('12a-upstairs-memento');
     await ev((x) => __hb.story.memento(x), id);
-    await until(() => document.querySelector('.cn .st-mm'), 'the close-up');
+    await until(() => document.querySelector('.cn canvas'), 'the close-up');
     await sleep(2200); await shot(`${n}-memento-${kind}`);
     if (n === '12') { await cap('comes back|torna al'); await sleep(1200); await shot('12b-memento-page-restored'); }
     await ev(() => { document.querySelector('.cn-skip')?.click(); return 1; });
@@ -100,10 +112,7 @@ async function run(phone) {
   // ---- 5. the notebook tab, mid-game; a window lighting up
   await fresh(() => { __hb.story.at(2); return 1; });
   await sleep(2000);
-  await ev(() => { __game.scene.getScene('UI').showAtlas('journey'); return 1; });
-  await until(() => document.querySelector('.nb'), 'the notebook');
-  await sleep(800); await shot('15-notebook-tab');
-  await key('Escape'); await sleep(800);
+  await notebook('mid');
   const third = await ev(() => __hb.content.PLACES.filter((p) => p.core !== false)[2].id);
   await ev((id) => __hb.story.window(id), third);
   await cap('light comes|accende'); await sleep(1200); await shot('16-window-lights');
@@ -129,35 +138,38 @@ async function run(phone) {
   await sleep(800);
   await ev(() => { document.querySelector('.dl-b.go')?.click(); return 1; });
 
-  // ---- 7. the turn, the lamp, the ending card
-  await cap('hood|cappuccio'); await sleep(1500); await shot('20-turn-hood');
-  await cap('face|volto'); await sleep(1500); await shot('21-turn-face');
-  await cap('card|biglietto'); await sleep(1500); await shot('22-turn-card');
-  await cap('lamp|lampada'); await sleep(3500); await shot('23-lamp-lit');
-  await cap('horn|sirena'); await sleep(2500); await shot('24-ship-horn');
-  await ev(() => { document.querySelector('.cn-skip')?.click(); return 1; });
-  await until(() => document.querySelector('.qe'), 'the ending card', 120000);
-  await sleep(1000); await shot('25-ending-card');
-  await ev(() => { document.querySelector('.qe-back')?.click(); return 1; });
-  await until(() => __game.scene.getScene('UI').choice, 'the last choice');
-  await sleep(600); await shot('26-leave-notebook');
-  await key('Space');
-  await cap('next|dopo'); await sleep(1500); await shot('27-notebook-left');
+  // ---- 7. the lamp and the register; the walk back; the pages, the cover, the purser, the loop
+  await cap('never here|mai stato'); await sleep(2500); await shot('20-lamp-keeper');
+  await cap('register|registro'); await sleep(3000); await shot('21-register');
+  await cap('signature|firma'); await sleep(1200); await shot('22-signature');
   await noCinema();
   await ev(() => { __hb.story.where('lighthouse'); return 1; });
-  await sleep(2500); await shot('28-town-after');
+  await sleep(2500); await shot('23-town-lit');
+  await ev(() => { __hb.story.where('quay'); return 1; });
+  await sleep(1500); await shot('24-quay-ship-waits');
+  await ev(() => __hb.story.ending());
+  await cap('scatters|sparpaglia'); await sleep(2500); await shot('25-pages-on-quay');
+  await cap('cover|copertina'); await sleep(1500); await shot('26-cover-tally');
+  await cap('another round|altro giro'); await sleep(1500); await shot('27-purser');
+  await cap('aboard|bordo'); await sleep(5500); await shot('28-lights-out');
+  await cap('black|nero'); await sleep(2500); await shot('29-loop-first-shot');
+  await until(() => document.querySelector('.qe'), 'the ending card', 120000);
+  await sleep(1000); await shot('30-ending-card');
+  await ev(() => { document.querySelector('.qe-back')?.click(); return 1; });
+  await noCinema(); await sleep(1500);
+  await notebook('after');
   // ---- 8. after the ending: the fog returns to a house (its windows dim, the notebook marks it, its owner forgets)
   await ev(() => __hb.story.follow());
   await ev((id) => __hb.story.fog(id), first);
   await ev(() => { __game.scene.getScene('UI').showAtlas('journey'); return 1; });
-  await until(() => document.querySelector('.nb .fog'), 'the fog mark');
-  await sleep(800); await shot('29-notebook-fog');
+  await until(() => document.querySelector('.nbk .fog'), 'the fog mark');
+  await sleep(800); await shot('31-notebook-fog');
   await key('Escape'); await sleep(800);
   await ev((id) => { __game.scene.getScene('Town').scene.start('Interior', { id }); return 1; }, first);
   await sleep(3000);
   await ev(() => { __game.scene.getScene('Interior').storyRoom.talk(); return 1; });
   await until(() => __game.scene.getScene('UI').choice, 'the owner in the fog');
-  await sleep(800); await shot('30-fog-owner');
+  await sleep(800); await shot('32-fog-owner');
   await browser.close();
 }
 

@@ -3,7 +3,8 @@
 //              that the town keeps more to itself; after the ending, the ending card again
 //   Map        the town as explored so far (townmap.js), and the mind map of the course one tap away
 //   Mysteries  the discoveries page (secrets/journal.js), keys and tools carried, coins
-// Footer: settings as plain toggles, and the keys. Tab or Esc closes; 1 2 3 or the arrows switch tabs.
+// Footer: settings as plain toggles, and the keys. In the story the whole menu is the notebook found
+// on the quay (story/notebook.js), with the same tabs and keys. Tab or Esc closes; 1 2 3 or the arrows switch tabs.
 //
 // openMenu({ tab, settings, touch }) resolves with 'ending' (the player asked to see the ending card
 // again) or undefined. settings: [{ label, value: () => string, on: () => bool, toggle: () => void }].
@@ -21,7 +22,7 @@ import { Q_WORDS, tr, fill, trackerLine } from './strings.js';
 import { townMapView, MAP_CSS } from './townmap.js';
 import { floorsOf } from '../floors/plan.js';
 import { STORY } from '../story/config.js';
-import { notebookView, mementoSection, NB_CSS } from '../story/notebook.js';
+import { openNotebook } from '../story/notebook.js';
 
 const TABS = ['journey', 'map', 'mysteries'];
 const W = Q_WORDS;
@@ -71,7 +72,6 @@ const CSS = `
 .qm-keys kbd{font:inherit;color:var(--text);white-space:nowrap}
 .qm-jr .jr-in{max-width:none}
 ${MAP_CSS}
-${NB_CSS}
 `;
 let styled = false;
 
@@ -114,7 +114,6 @@ function mysteries(busy) {
   for (const [t, has] of Object.entries(state.tools || {})) if (has && TOOLS[t]) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '⚒'), tr(TOOLS[t])));
   const kids = [
     h('div', { class: 'qm-coins' }, h('b', {}, String(state.insight || 0)), tr(W.mysteries.coins)),
-    ...(STORY.on ? [mementoSection()] : []), // the story: the things found upstairs that were never theirs
     h('div', { class: 'qm-h' }, tr(W.mysteries.carry)),
     items.length ? h('div', { class: 'qm-carry' }, items) : h('p', { class: 'qm-more', style: 'text-align:left' }, tr(W.mysteries.nothing)),
   ];
@@ -124,6 +123,7 @@ function mysteries(busy) {
 }
 
 export function openMenu({ tab = null, settings = [], touch = false } = {}) {
+  if (STORY.on) return openNotebook({ tab, settings, touch }); // the story: the menu is the notebook (story/notebook.js)
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
   const { root, tabs, close } = overlay(COURSE.title, '');
   root.classList.add('qm');
@@ -154,7 +154,7 @@ export function openMenu({ tab = null, settings = [], touch = false } = {}) {
   function show(t) {
     cur = t;
     btns.forEach((b, i) => b.setAttribute('aria-selected', String(TABS[i] === t)));
-    body.replaceChildren(t === 'journey' ? (STORY.on ? notebookView(() => done('ending')) : journey(() => done('ending'))) : t === 'map' ? mapTab() : mysteries((v) => { busy = v; }));
+    body.replaceChildren(t === 'journey' ? journey(() => done('ending')) : t === 'map' ? mapTab() : mysteries((v) => { busy = v; }));
     body.scrollTop = 0;
     root.dataset.tab = t;
   }
