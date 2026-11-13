@@ -1,4 +1,4 @@
-// Hue Tower: hue, saturation, lightness.
+// Painter's House: hue, saturation, lightness.
 import { slider } from '../../../engine/src/lab/shell.js';
 import { canvasPane, hslToRgb, rgbCss } from '../../../engine/src/lab/kit.js';
 

@@ -62,6 +62,15 @@ export const LOOKS = {
   tech: { pal: { skin: 'tan', hair: '#23202f', hairHi: '#3e3a52', top: '#2c4580', topShade: '#1f325d', pants: '#2c4580', pantsShade: '#1f325d', accent: '#4fd1c5' }, style: [] },
   keeper: { pal: { hair: '#c9c4bb', top: '#2c4580', topShade: '#1f325d', pants: '#38405c', accent: '#ffcf5a', shoes: '#3d434b' }, q: ['#f3f2ec', '#cfc9bb'], z: '#d8d4cc', style: ['cap', 'beard'] },
   tess: { pal: { hair: '#c4622a', hairHi: '#e0813f', top: '#d9822f', topShade: '#a95f1f', pants: '#38405c', accent: '#f3f2ec' }, style: ['long', 'glasses'] },
+  // the experts who live in homes (trades in src/gen/interior/trades.js)
+  dyer: { pal: { skin: 'tan', hair: '#2b1d16', hairHi: '#4a3326', top: '#3c5ea6', topShade: '#2c4580', pants: '#5a3a20', pantsShade: '#3f2916', accent: '#9a6ad1' }, style: ['bun'] },
+  cook: { pal: { hair: '#7a4a2a', hairHi: '#9a6440', top: '#f3f2ec', topShade: '#cfc9bb', pants: '#38405c', accent: '#e0574f' }, q: ['#f3f2ec', '#cfc9bb'], style: ['cap'] },
+  musician: { pal: { skin: 'deep', hair: '#1b1a2b', hairHi: '#3a3550', top: '#7a3b3b', topShade: '#5a2a2a', pants: '#2a3047', accent: '#ffcf5a' }, style: ['long'] },
+  gardener: { pal: { hair: '#c9a06a', hairHi: '#e0bd88', top: '#5f8b3d', topShade: '#46692c', pants: '#6b4a30', pantsShade: '#4f3522', shoes: '#3d434b', accent: '#f2c94c' }, q: ['#d9c27a', '#b39a55'], style: ['cap'] },
+  maker: { pal: { skin: 'tan', hair: '#9a948a', hairHi: '#bdb7ad', top: '#7d5737', topShade: '#5c3f27', pants: '#3d434b', accent: '#c9a440' }, z: '#c9c4bb', style: ['glasses', 'beard'] },
+  doctor: { pal: { hair: '#4a3326', hairHi: '#6a4a36', top: '#f3f2ec', topShade: '#cfc9bb', pants: '#2c4580', pantsShade: '#1f325d', accent: '#59b8b0' }, style: ['glasses'] },
+  painter: { pal: { hair: '#c4622a', hairHi: '#e0813f', top: '#e9e2c9', topShade: '#cbbf9c', pants: '#2f5d50', pantsShade: '#21443a', accent: '#e0574f' }, q: ['#b9463b', '#8c3129'], style: ['cap'] },
+  weaver: { pal: { skin: 'deep', hair: '#3b2a20', hairHi: '#5a4030', top: '#b9463b', topShade: '#8c3129', pants: '#5a3a20', accent: '#f2c94c' }, style: ['bun'] },
 };
 
 export function makeCharacter(scene, key, look) {

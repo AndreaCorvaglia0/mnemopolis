@@ -6,6 +6,7 @@
 |---|---|
 | `npm install` | Once. Needs Node 18 or later. |
 | `npm run course <slug>` | Points the engine at `courses/<slug>/` (default `chroma`, or `COURSE=`). Run by the commands below. |
+| `npm test` | Node tests, a few seconds: hundreds of composed rooms against their rules, every zone and trade, home fronts, the `expert` field of the course format. |
 | `npm run check` | Validates the knowledge base, and that every designed station has code. |
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
 | `npm run shots:phone` | The same tour on a phone held upright (390 x 844, touch mode), into `shots/phone/`. |

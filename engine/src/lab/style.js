@@ -212,7 +212,8 @@ export const CSS = `
 .lx.stack .lx-phead{padding:0 4px 2px 18px;min-height:48px;gap:4px;touch-action:none;border-bottom:0}
 .lx.stack .lx-status{font-size:18px;font-weight:700;color:var(--text);line-height:1.25}
 .lx.stack .lx-tog,.lx.stack .lx-pips{display:none}
-.lx.stack .lx-phead .lx-fs .t{display:none}
+.lx.stack .lx-phead .lx-fs .t,.lx.stack .lx-phead .lx-say .t{display:none}
+.lx.stack .lx-phead .lx-say{padding:0;width:44px;justify-content:center}
 .lx.stack .lx-phead .lx-fs{padding:0;width:44px;justify-content:center}
 .lx.stack.collapsed .lx-phead{display:none}
 .lx.stack.collapsed .lx-strip{display:flex;align-items:flex-start;gap:4px;padding:2px 6px 10px 12px}

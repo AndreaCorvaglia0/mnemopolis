@@ -75,6 +75,7 @@ rigour does not. Every fact that reaches the learner is verified at every level.
 |---|---|---|---|
 | Research | focused on the basic concepts; 1 or 2 reference outlines | as in `references/1-sources.md` | more sources and cross-checks |
 | Labs | simplest pattern that passes the four tests; no hunt for extra examples or real material | as in `references/5-labs.md` | real open material sought; refined after a first play |
+| Experts' homes | none; or `"homes": "auto"` in `world.json` and the engine chooses | a few concepts get an `expert` (trade, name) | experts chosen with care, each with a `line` in their own voice (`references/3-path.md`) |
 | Graphics, testing | see `skills/game-build/SKILL.md` | see `skills/game-build/SKILL.md` | see `skills/game-build/SKILL.md` |
 
 ### The checkpoint
