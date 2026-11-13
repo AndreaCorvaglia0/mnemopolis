@@ -1,8 +1,9 @@
 # The story
 
 The fiction that carries the main path. It belongs to the engine, not to a course: the same story
-frames any subject. Status: agreed design, not built. It refines `DESIGN.md` (which keeps the
-rules); where the two differ, this file is the newer intent.
+frames any subject. Status: agreed design, first version built (how, in `engine/docs/ENGINE.md`,
+"The story"); on by default, `"story": false` in `world.json` gives the plain town. It refines
+`DESIGN.md` (which keeps the rules); where the two differ, this file is the newer intent.
 
 ## In one paragraph
 
@@ -25,13 +26,13 @@ offended to have been helped). Never grim, never mocking the learner.
 
 | # | Beat | What the player sees | What it is for |
 |---|---|---|---|
-| 1 | Arrival | A short scene: rain, the ship docking, its lights going out. It stays at the quay. A purser asks your name for the register | The name is used later. The ship in view is the way out |
+| 1 | Arrival | A short scene: rain, the ship docking, its lights going out. It stays at the quay, at the end of the road out of town, in every town. A purser asks your name for the register (optional, kept on the device) | The name is used later. The ship in view is the way out |
 | 2 | The cold town | People answer briefly and do not help. Windows are dark | A gap to close: what happened here? |
-| 3 | The notebook | Found on the quay. One legible line points to house 1. It becomes the Journey tab | The guide, in fiction |
+| 3 | The notebook | Found on the quay. One legible line points to house 1. It becomes the Journey tab; the tracker reads as its last line | The guide, in fiction |
 | 4 | Remembering | In a house: the lab sets their instruments working again; then you help the owner remember | Replaces the duel (see below) |
 | 5 | Mementos | Upstairs in each core house, one object of yours: never explained, each a little more personal | The mystery turns from "what happened to them" to "who was here" |
 | 6 | The town warms | With each house: a window lit, the rain a little thinner, people a little kinder, the music a little fuller | Progress you can see and hear |
-| 7 | The lighthouse | Unmarked, in plain sight from the start, dark. The pages together say where to go and what to say at its door | The League, hidden in plain sight |
+| 7 | The lighthouse | Unmarked, in plain sight from the start, dark: it stands where the League hall stood, on the square. The pages together say where to go and what to say at its door | The League, hidden in plain sight |
 | 8 | The keeper | At the top, the one who keeps the forgetting. The final test, on everything | The exam |
 | 9 | The turn | The keeper has your face. The handwriting is yours. The card bears the name you gave the purser. You were the traveller before you | Change of frame: the town is a memory palace, yours |
 | 10 | Leaving | The lamp is lit, the rain stops, the ship sounds its horn. You may leave the notebook on the quay for whoever arrives next | Ending card; the loop closes |
@@ -53,7 +54,10 @@ seconds, can be skipped with a tap, and returns control at once.
 | Leaving | The lamp, the rain stopping, the horn |
 
 The theme is one melody of the course's key, the only tune in the game, built on the motif that
-already marks discoveries; it is heard in fragments at the mementos and whole only at the turn.
+already marks discoveries; it is heard in fragments at the mementos and the windows, a longer phrase
+at the arrival and the notebook, and whole only at the turn and the leaving, where it comes home.
+A tap, Space or Enter goes to the next line; Esc or "Skip" ends the moment (what it changes in the
+game is changed all the same); with reduced motion the camera cuts instead of moving.
 
 ## Remembering (in place of the duel)
 
@@ -69,7 +73,11 @@ meaning:
 - When the memory is back the owner changes, by temper, and gives the key to the upstairs.
 - No tone and no "how sure are you?": the learner just answers. One right answer brings back one
   piece, one wrong answer costs one step of clarity. The same holds for the questions in the tall
-  grass. (The bet on confidence is removed from the game; `DESIGN.md` is to be updated with it.)
+  grass (coins by the question's level, nothing lost on a wrong one). With six questions an owner
+  remembers after four right answers, and the fog wins at three wrong ones: a learner right 70% of
+  the time usually succeeds (three times in four), one right 40% of the time usually does not.
+- The host's line is "Help <name> remember"; after success, "Remember together again" (harder
+  questions, nothing at stake). A window of the house lights up when the player steps outside.
 
 ## Mementos
 
@@ -87,19 +95,25 @@ shown in a first-person close-up like the locks:
 
 Each memento restores one page of the notebook. The page's text comes from the course: the
 concept's idea in one line, as if you had once written it down. A course with fewer houses uses
-the first, the photograph and the card.
+the first, the photograph and the card (then, as houses allow, the ticket, the watch, the letter,
+the drawing, the flower); the order always ends on the card. The upstairs exists for this in every
+core house; a workshop or a museum has none, and its owner hands the memento over on remembering.
+The character's thought escalates: "This is my handwriting" comes late, with the letter.
 
 ## The pages and the lighthouse
 
 The restored pages, in order, read as the big idea of the course. Their last line names the
-lighthouse and gives the word for its door. Nothing in town labels the lighthouse; before the last
-page its door only says that it is locked from the inside.
+lighthouse and gives the word for its door (a key word of the big idea, or one the course chooses
+in `world.json`). Nothing in town labels the lighthouse; before the last page its door only says
+that it is locked from the inside. At the door the word is typed freely, as at any lock; after two
+misses the character remembers it, so nobody is stuck there.
 
 ## After the ending
 
-- **The fog returns.** A house not revisited for some days dims, and its owner starts to confuse
-  things again. Answering a few questions there brings it back. This is spaced retrieval in
-  costume: the intervals grow each time (about 1, 3, 7, 16 days).
+- **The fog returns.** Some days after it was last remembered, a house dims, and its owner starts
+  to confuse things again. Two right answers there bring it back. This is spaced retrieval in
+  costume: the intervals grow each time (1, 3, 7, 16 days, then 16). The tracker does not nag; the
+  notebook marks the house.
 - **Deeper rooms.** Locks, hidden buildings and the lantern cat hold memories you did not know you
   had. The cat is the only one in town who never forgot.
 - The ending can be seen again; the notebook stays readable.

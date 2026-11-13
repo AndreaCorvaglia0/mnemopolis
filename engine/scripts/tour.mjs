@@ -50,7 +50,7 @@ places.forEach((p, i) => {
   else steps.push(`eval:${enc(`(__game.scene.getScene('UI').plaque(__hb.content.PLACE['${p.id}'].timeline,0,__hb.content.PLACE['${p.id}'].kinds),1)`)}`, 'wait:1000', `shot:${n}-${p.id}-plaque`, 'key:Escape', 'wait:500');
 });
 steps.push(`eval:${enc("(__game.scene.getScene('UI').showAtlas(),1)")}`, 'wait:1200', 'shot:98-map', 'key:Escape', 'wait:500', ...(PHONE ? [] : ['resize:1600:1300']), `eval:${enc('__hb.gallery()')}`, 'wait:800', 'shot:99-gallery');
-const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch' : '?lite&test' } });
+const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch&arrived' : '?lite&test&arrived' } });
 console.log(`Pictures are in ${out}. Open them.`);
 // the duels (src/mechanics/duel/): their own pictures, into shots/duel (shots/duel-phone), copied to
 // OUT2 (default /tmp) as duel-*.png (duel-phone-*.png)

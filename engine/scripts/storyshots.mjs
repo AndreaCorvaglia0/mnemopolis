@@ -30,7 +30,7 @@ async function run(phone) {
   const until = async (fn, what, ms = 60000, ...a) => { const t0 = Date.now(); for (;;) { let v; try { v = await page.evaluate(fn, ...a); } catch (e) { v = null; } if (v) return v; if (Date.now() - t0 > ms) { problems.push(`${phone ? 'phone' : 'desk'}: timed out waiting for ${what}`); return null; } await sleep(250); } };
   const cap = (re) => until((src) => { const p = document.querySelector('.cn-cap p.on'); return p && new RegExp(src, 'i').test(p.textContent) && p.textContent; }, `the caption /${re}/`, 90000, re);
   const tapOn = () => ev(() => { const r = document.querySelector('.cn'); r?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })); return 1; });
-  const noCinema = () => until(() => !document.querySelector('.cn') && !__game.scene.getScene('UI').busy, 'the end of a cinematic moment', 120000);
+  const noCinema = () => until(() => !document.querySelector('.cn'), 'the end of a cinematic moment', 120000);
   const key = async (k) => { await page.keyboard.press(k); await sleep(150); };
   const fresh = async (setup) => {
     const url = `file://${html}?test&lite${phone ? '&touch' : ''}`;

@@ -15,7 +15,7 @@ import { Q } from '../quest/active.js';
 import { Q_WORDS, answerLine } from '../quest/strings.js';
 import { say } from '../life.js';
 import { Deck } from '../musings/think.js';
-import { STORY, tr, fill } from './config.js';
+import { STORY, SKIP_ARRIVAL, tr, fill } from './config.js';
 import { S_WORDS } from './words.js';
 import { storyTextures, SHIP_W, FUNNELS } from './art.js';
 import { cinema } from './cinema.js';
@@ -116,6 +116,7 @@ class StoryTown {
   // ---------------------------------------------------------------- the arrival
   async begin() {
     const st = (state.story ||= {});
+    if (SKIP_ARRIVAL && !st.arrived) { Object.assign(st, { arrived: true, arrivedAt: Date.now(), notebook: true, name: st.name || tr(S_WORDS.defaultName) }); state.seenIntro = true; save(); this.notebook?.destroy(); this.notebook = null; }
     if (!st.arrived) await playOpening(this.ui);
     if (!st.notebook) await this.findNotebook();
     if (!state.seenIntro) await this.masterIntro();

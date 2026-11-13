@@ -16,19 +16,23 @@ So: a fiction, yes; rewards that are access to more learning, yes; points for th
 Learning a subject asks three different things of a person. Each gets its own dynamic, so that
 none pretends to be another.
 
-### 1. Prove: the duels and the League
+### 1. Prove: helping them remember, and the lighthouse
 
 *Need: to check that the idea is understood.*
-Every expert in town can be challenged to a duel of eloquence: a right answer is an argument
-that lowers their conviction; a wrong one costs some composure and earns a rebuttal that explains
-the mistake. The League is the final duel; its champion blocks the road to the next town.
-There is tolerance for errors, and losing costs nothing: an exam you may retake at once, with
-other questions, after being told what to look at again.
+The people of the town have forgotten what they know (the story: `docs/STORY.md`). Every owner
+can be helped to remember: a right answer brings a piece of their memory back; a wrong one costs
+some of your clarity, and the owner clings to a false memory, the very trap of the option you
+chose, which you are then shown how to correct. You just answer: no tone to pick, no bet on how
+sure you are, one tap per question. The final remembering is with the keeper, at the top of the
+lighthouse. There is tolerance for errors, and failing costs nothing: you may try again at once,
+with other questions, after being told what to look at again. (Without the story, the same rules
+are a duel of eloquence and a League.)
 
 ### 2. Explore: secrets, keys, upper floors
 
 *Need: to go further than the basics, driven by curiosity.*
-Beating an owner earns the key to their upper floor, where the advanced side of the idea lives.
+Helping an owner remember earns the key to their upper floor, where the advanced side of the idea
+lives, and, in the story, something of yours that should not be there.
 Tools from the shop open the boulder, the thicket, the locked gate. Some buildings are hidden.
 
 The heart of exploring is the **lock**: a safe, a computer that wants its password, a door that
@@ -59,7 +63,7 @@ access to exploration, not trophies.
 ```
 practise -> coins -> tools -> places opened            (Explore)
 prove    -> key   -> upper floor -> advanced material  (Explore)
-explore  -> harder ideas -> harder duels winnable       (Prove)
+explore  -> harder ideas -> harder rememberings won    (Prove)
 ```
 
 ## What we leave out, and why
@@ -73,6 +77,6 @@ explore  -> harder ideas -> harder duels winnable       (Prove)
 
 ## Tone
 
-A duel of eloquence between a student and a dyer over the nature of colour should not take
-itself seriously. The owners lose in character: one is smitten, one sulks that they never liked
-the house anyway, one admires your mind, one insists they let you win.
+The rain and the music carry the melancholy; the owners carry the comedy. They remember in
+character: one is smitten, one is offended to have been helped, one admires your mind, one insists
+they never forgot anything.

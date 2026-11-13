@@ -61,7 +61,7 @@ if (cl) steps.push(`eval:${enc(`(()=>{const s=__game.scene.getScene('Interior');
 if (paint) steps.push('wait:2500', `eval:${enc(`(()=>{const s=__game.scene.getScene('Interior');s.scene.start('Interior',{id:'${paint.place}'});return 1})()`)}`, 'wait:2500', `eval:${enc(`(()=>{const s=__game.scene.getScene('Interior');s.life.look(s.life.paintings[0]);return 1})()`)}`, 'wait:1200', 'shot:10-painting', 'key:Escape', 'wait:800');
 // 8. the discoveries page
 steps.push(`eval:${enc("(__game.scene.getScene('UI').page(()=>__hb.journal()),1)")}`, 'wait:1000', 'shot:11-discoveries', 'key:Escape', 'wait:500');
-const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: PHONE ? '390x844x2' : '1440x800x1', Q: PHONE ? '?lite&test&touch' : '?lite&test' } });
+const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: PHONE ? '390x844x2' : '1440x800x1', Q: PHONE ? '?lite&test&touch&arrived' : '?lite&test&arrived' } });
 if (process.env.OUT2) for (const f of readdirSync(out)) if (f.endsWith('.png')) copyFileSync(path.join(out, f), path.join(process.env.OUT2, `${PHONE ? 'life-phone' : 'life'}-${f}`));
 console.log(`Pictures are in ${out}. Open them.`);
 process.exit(r.status || 0);

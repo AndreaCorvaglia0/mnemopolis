@@ -31,6 +31,10 @@ if (!CHROME) { console.log('No Chrome or Chromium found (set CHROME=/path): the 
 if (!existsSync(html)) { console.log('No build yet: run the build first.'); process.exit(1); }
 mkdirSync(OUT, { recursive: true });
 
+// The bot plays the plain town (world.json "story": false): the story has its own pictures
+// (npm run shots:story); STORY=1 in the environment would leave the story on, which the bot does
+// not know how to play yet.
+if (process.env.STORY !== '1') process.env.STORY = '0';
 const { Q } = await import('../src/mechanics/quest/active.js');
 const { trackerLine } = await import('../src/mechanics/quest/strings.js');
 const { PLACE, QUESTIONS } = await import('../src/data/content.js');
@@ -55,7 +59,7 @@ const page = await browser.newPage();
 await page.setViewport(PHONE ? { width: 390, height: 844, deviceScaleFactor: 2, hasTouch: true, isMobile: true } : { width: 1280, height: 760, deviceScaleFactor: 1 });
 page.on('pageerror', (e) => fail(`page error: ${(e.stack || e.message).slice(0, 400)}`));
 page.on('console', (m) => { if (m.type() === 'error') fail(`console error: ${m.text().slice(0, 300)}`); else if (m.text().startsWith('walker:')) log(`!! NOTE ${m.text()}`); });
-const q = `?lite&test${PHONE ? '&touch' : ''}${process.env.Q || ''}`;
+const q = `?lite&test${PHONE ? '&touch' : ''}${process.env.STORY === '0' ? '&story=0' : ''}${process.env.Q || ''}`;
 await page.goto(`file://${html}${q}`);
 log(`${TAG}: ${DATA.title} (${DATA.language}), ${PHONE ? 'phone 390x844, taps' : 'desktop 1280x760, mouse and keys'}${FAST ? ', FAST: carried to doors' : ''}, address ${q}`);
 

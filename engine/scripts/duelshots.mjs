@@ -54,7 +54,7 @@ const steps = ['wait:9000', `eval:${enc('__hb.state.seenIntro=true')}`, 'key:Spa
   `eval:${enc("(()=>'passedLeague: '+__hb.state.passedLeague)()")}`, 'key:Escape', 'wait:1500', 'key:Space', 'wait:600',
   `eval:${enc("(()=>'after the League: ui busy '+__hb.probe().busy+', phase '+__hb.probe().phase)()")}`,
 ];
-const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch' : '?lite&test' } });
+const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch&arrived' : '?lite&test&arrived' } });
 const o2 = process.env.OUT2;
 if (o2) for (const f of readdirSync(out).filter((f) => f.endsWith('.png'))) copyFileSync(path.join(out, f), path.join(o2, `duel-${PHONE ? 'phone-' : ''}${f}`));
 console.log(`Duel pictures are in ${out}${o2 ? ` (and ${o2}/duel-${PHONE ? 'phone-' : ''}*.png)` : ''}.`);

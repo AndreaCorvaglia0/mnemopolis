@@ -78,6 +78,13 @@
   the author's prosa-didattica skill, with its carve-outs for analogies, tasks and the game's
   voices) and a prose checker in the validator, as warnings.
 
+- The story, first version (`docs/STORY.md`, `engine/docs/ENGINE.md` "The story", on by default):
+  arrival by steamship in the rain with a purser's register, a harbour at the end of the road in
+  every town, cinematic moments, the notebook as the Journey tab, remembering in place of the duel
+  (and no confidence bet anywhere), mementos upstairs, rain and dark windows that answer progress,
+  people by stage, the lighthouse as the hidden League with a word at its door, the keeper, the
+  turn, the leaving, the theme, the returning fog's schedule.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
@@ -86,9 +93,10 @@
    League as a duel, locks and upper floors and the road out of town are done; next coins and the
    shop. About one town in five has no way from the square to the edge for the road (its ending
    plays at the League hall): a road that may bend would reach them too.
-3. The story (`docs/STORY.md`): arrival by steamship in the rain, a town that has forgotten,
-   remembering in place of duels, mementos upstairs, the lighthouse as the hidden League, the
-   turn at the end, the returning fog.
+3. The story (`docs/STORY.md`), after its first version: play-testing the idea; the lighthouse's
+   inside as a room (today the keeper's remembering is staged over the town); the play-through bot
+   taught to play the story; per-course art for the mementos; deeper rooms behind locks and the cat
+   as "memories you did not know you had"; the theme heard on real speakers.
 3b. Pocket mode (`docs/POCKET.md`): one question about budget at the start, ready-made parametric
    labs, a prebuilt player that packs a course without a build, a one-page skill, a small fixed
    shape of game.

@@ -26,8 +26,8 @@ export const S_WORDS = {
 
   // ---- the notebook, on the quay
   notebook: {
-    en: ['Something lies on the boards, soaked through.', 'A notebook. Most of its pages are gone.', 'One line can still be read.'],
-    it: ['Sulle assi c\'è qualcosa, fradicio.', 'Un taccuino. Mancano quasi tutte le pagine.', 'Si legge ancora una riga.'],
+    en: ['Something lies on the boards, soaked through.', 'A notebook, most of its pages torn out.', 'One line can still be read.'],
+    it: ['Sulle assi c\'è qualcosa, fradicio.', 'Un taccuino, quasi tutte le pagine strappate.', 'Si legge ancora una riga.'],
   },
   firstLine: { en: 'House 1: {place}.', it: 'Casa 1: {place}.' },
   notebookPrompt: { en: 'The notebook', it: 'Il taccuino' },
