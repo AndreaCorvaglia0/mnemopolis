@@ -86,6 +86,10 @@ asks only about core concepts.
 - Time: the validator estimates the core path (6.5 minutes per station, 3 per concept, 1.5 per
   duel, about 20 seconds per final-check question) and warns above 60 minutes. Cut the core, not
   the stations: a concept moved out of the core keeps all its material.
+- The big idea and the goals are what the ending card claims the player can now do. Keep the big
+  idea within the core. A goal that only an extra concept teaches names it:
+  `{ "text": "Predict the result of mixing inks.", "concepts": ["print"] }`; the card lists it only
+  for a player who finished that concept.
 - Write the choice and the reason in one or two lines of `brief.md` ("Core").
 
 ## G. Write it down

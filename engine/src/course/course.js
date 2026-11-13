@@ -10,6 +10,7 @@
 import { DATA, WORLD } from './_data.js';
 import { seeded } from '../gen/core.js';
 import { TRADES, TRADE_NAMES, EXPERT_NAMES, tradeOf } from '../gen/interior/trades.js';
+import { w } from '../data/words.js';
 
 // the kind of building follows from the kind of knowledge
 export const KIND_OF = { mechanism: 'lab', process: 'workshop', view: 'observatory', parts: 'archive', choice: 'hall', cases: 'studio', story: 'museum', deep: 'cave' };
@@ -62,12 +63,9 @@ const place = (p) => {
 export const COURSE = {
   id: DATA.id, title: DATA.title, subject: DATA.subject, bigIdea: DATA.bigIdea, credit: DATA.credit || '',
   hub: {
-    name: W.hub?.name || 'Central Square', monument: hubMonument,
-    guide: { name: 'Iris', look: 'mentor', hi: `Welcome to ${DATA.title}. Every house holds one idea, and a lab to try it.`,
-      options: [
-        ['What is in a house?', 'A lab behind the glowing door, a reading wall, and someone who knows the place and will argue about it.'],
-        ['What are the meadows for?', 'Tall grass hides quick questions about houses you have already visited. Say "not now" whenever you like.'],
-      ], ...W.hub?.guide },
+    name: W.hub?.name || w('town.square'), monument: hubMonument,
+    guide: { name: 'Iris', look: 'mentor', hi: w('guide.hi', { title: DATA.title }),
+      options: [[w('guide.q1'), w('guide.a1')], [w('guide.q2'), w('guide.a2')]], ...W.hub?.guide },
   },
   districts: DATA.themes.map((t) => ({
     id: t.id, name: t.name, idea: t.idea,
@@ -75,5 +73,5 @@ export const COURSE = {
     landmark: W.themes?.[t.id]?.landmark || t.cue?.landmark || next(MONUMENTS, usedMon),
     places: DATA.concepts.filter((p) => p.theme === t.id).map(place),
   })),
-  league: { name: DATA.finalCheck.name, size: DATA.finalCheck.size, pass: DATA.finalCheck.pass, host: { name: 'Judge Ada', look: 'nurse', ...W.finalCheckHost } },
+  league: { name: DATA.finalCheck.name, size: DATA.finalCheck.size, pass: DATA.finalCheck.pass, host: { name: w('town.judge'), look: 'nurse', ...W.finalCheckHost } },
 };

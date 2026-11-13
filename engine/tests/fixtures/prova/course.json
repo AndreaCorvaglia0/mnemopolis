@@ -1,0 +1,600 @@
+{
+  "$schema": "../../../../skills/knowledge-base/schema/course.schema.json",
+  "version": 1,
+  "id": "prova",
+  "language": "it",
+  "title": "Officina Prova",
+  "subject": "Le macchine semplici",
+  "bigIdea": "Le macchine semplici scambiano forza con distanza, perché fanno spingere meno su una strada più lunga.",
+  "learner": "Un adulto curioso, senza studi di fisica.",
+  "goals": [
+    "Prevedere dove spingere su una leva per fare meno forza.",
+    "Calcolare la forza su una rampa senza attrito.",
+    "Distinguere la carrucola fissa da quella mobile."
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Fisica di base: leve, piano inclinato, carrucole (conoscenze di riferimento di un testo introduttivo)",
+      "tier": "B",
+      "note": "Corso di prova del motore (fixture di test, non un esempio pubblicato). Macchine ideali: senza attrito."
+    }
+  ],
+  "themes": [
+    {
+      "id": "officina",
+      "name": "Quartiere dell'Officina",
+      "idea": "Meno forza, più strada.",
+      "cue": {
+        "landscape": "meadow",
+        "landmark": "statue"
+      }
+    }
+  ],
+  "concepts": [
+    {
+      "id": "leva",
+      "theme": "officina",
+      "type": "mechanism",
+      "name": "La leva",
+      "place": "Casa della Leva",
+      "sign": "LEVA",
+      "emblem": "scale",
+      "objective": "Prevedere dove spingere su una leva per sollevare un peso con meno forza.",
+      "idea": "Una leva scambia forza con distanza: più lontano dal fulcro spingi, meno forza ti serve.",
+      "wrongBelief": "Per sollevare un peso serve sempre una forza grande quanto il peso.",
+      "anchor": {
+        "type": "example",
+        "text": "Su un'altalena un bambino leggero seduto lontano dal centro equilibra un adulto seduto vicino al centro."
+      },
+      "application": "Il piede di porco, lo schiaccianoci, le forbici e la carriola sono leve, e in ognuno il braccio lungo è quello su cui agisce la mano.",
+      "remember": [
+        "Il fulcro è il punto su cui la leva ruota.",
+        "In equilibrio, forza × braccio è uguale dai due lati.",
+        "Un braccio più lungo chiede meno forza."
+      ],
+      "explain": {
+        "q": "Perché è più facile aprire una porta spingendo vicino alla maniglia che vicino ai cardini?",
+        "a": "I cardini sono il fulcro: vicino alla maniglia il braccio è lungo, quindi basta meno forza per far ruotare la porta."
+      },
+      "lab": {
+        "title": "L'altalena",
+        "stations": [
+          {
+            "id": "altalena",
+            "tab": "L'altalena",
+            "goal": "Un peso leggero lontano dal fulcro equilibra un peso grande vicino al fulcro.",
+            "beat": "ground",
+            "pattern": "handle",
+            "object": "Un'altalena con un adulto e un bambino.",
+            "action": "Sposta il bambino lungo l'asse finché l'altalena sta in equilibrio.",
+            "surprise": "Il bambino, che pesa la metà, equilibra l'adulto se siede al doppio della distanza.",
+            "predict": {
+              "q": "L'adulto pesa 40 kg e siede a 1,5 m dal fulcro. Il bambino pesa 20 kg. Dove deve sedersi per l'equilibrio?",
+              "options": [
+                "A 1,5 m, alla stessa distanza",
+                "A 3 m, al doppio della distanza",
+                "A 0,75 m, alla metà della distanza"
+              ],
+              "answer": 1,
+              "why": "Metà del peso, doppio del braccio: 20 × 3 = 40 × 1,5."
+            },
+            "controls": [
+              "La distanza del bambino dal fulcro"
+            ],
+            "tries": [
+              "Sposta il bambino finché l'altalena è in equilibrio."
+            ],
+            "takeaway": "In equilibrio il prodotto <b>peso × distanza</b> è uguale dai due lati, e infatti 20 kg × 3 m dà lo stesso valore di 40 kg × 1,5 m.",
+            "source": "Calcolato dal vivo: il momento di ciascun peso è peso × distanza dal fulcro."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Forza e distanza",
+          "text": "Una leva è un'asta rigida che ruota attorno a un punto fisso, il fulcro. Chi spinge lontano dal fulcro ha un braccio lungo e può sollevare con poca forza un peso posto vicino al fulcro, perché la leva è in equilibrio quando forza per braccio è uguale dai due lati. La leva non elimina la fatica: per sollevare il peso con metà della forza, la mano deve percorrere il doppio della strada."
+        },
+        {
+          "title": "L'altalena come esempio",
+          "text": "Su un'altalena l'asse è la leva e il sostegno al centro è il fulcro. Un adulto di 40 kg seduto a 1,5 m dal centro è equilibrato da un bambino di 20 kg seduto a 3 m, perché 40 per 1,5 e 20 per 3 danno lo stesso prodotto, 60. Nel laboratorio si sposta il bambino lungo l'asse finché i due prodotti coincidono."
+        }
+      ],
+      "sources": [
+        "S1"
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Come si chiama il punto su cui ruota una leva?",
+          "options": [
+            "Il fulcro",
+            "Il braccio",
+            "Il carico"
+          ],
+          "answer": 0,
+          "why": "Il fulcro è il perno: tutto il resto della leva gli gira intorno.",
+          "traps": [
+            null,
+            "Il braccio è la distanza dal fulcro, non il punto su cui la leva gira.",
+            "Il carico è il peso da sollevare: sta su un lato, la leva non ruota intorno a lui."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Una leva è in equilibrio quando, dai due lati...",
+          "options": [
+            "le forze sono uguali",
+            "forza × braccio è uguale",
+            "i bracci sono uguali"
+          ],
+          "answer": 1,
+          "why": "Conta il prodotto: una forza piccola con un braccio lungo vale quanto una grande con un braccio corto.",
+          "traps": [
+            "Sembra giusto pensare che debbano pesare uguale, ma un peso piccolo lontano dal fulcro equilibra un peso grande vicino.",
+            null,
+            "Bracci uguali bastano solo se anche le forze sono uguali; in generale conta forza × braccio."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Per sollevare un peso con meno forza, conviene spingere...",
+          "options": [
+            "sul fulcro",
+            "vicino al fulcro",
+            "lontano dal fulcro"
+          ],
+          "answer": 2,
+          "why": "Più è lungo il braccio, meno forza serve per lo stesso effetto.",
+          "traps": [
+            "Spingere sul fulcro non fa ruotare niente: lì il braccio è zero.",
+            "Vicino al fulcro sembra di avere più controllo, ma il braccio è corto e serve più forza.",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Un bambino di 30 kg siede a 1 m dal fulcro. A che distanza deve sedersi un bambino di 15 kg per l'equilibrio?",
+          "options": [
+            "0,5 m",
+            "1 m",
+            "2 m",
+            "3 m"
+          ],
+          "answer": 2,
+          "why": "Metà del peso, doppio del braccio: 15 × 2 = 30 × 1.",
+          "traps": [
+            "Avvicinarsi sembra logico per chi pesa meno, ma così il suo braccio si accorcia e l'altalena scende ancora di più dall'altro lato.",
+            "Alla stessa distanza vincerebbe il più pesante: i pesi sono diversi, quindi anche i bracci devono esserlo.",
+            null,
+            "3 m è troppo: 15 × 3 = 45, più di 30 × 1, e l'altalena scenderebbe dal lato del più leggero."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Un piede di porco lungo, rispetto a uno corto, serve soprattutto a...",
+          "options": [
+            "fare meno forza",
+            "fare il lavoro più in fretta",
+            "sollevare il chiodo più in alto"
+          ],
+          "answer": 0,
+          "why": "Il braccio lungo riduce la forza; in cambio la mano percorre più strada.",
+          "traps": [
+            null,
+            "Una leva non accelera il lavoro: con meno forza la mano deve fare più strada.",
+            "Il chiodo non sale più in alto per merito della leva: è la mano che percorre più strada, non il carico."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "Le cesoie da potatura hanno lame corte e manici lunghi. Perché?",
+          "options": [
+            "Le lame corte tagliano più in fretta",
+            "I manici lunghi pesano di più e aiutano a tagliare",
+            "I manici lunghi danno un braccio lungo: serve meno forza"
+          ],
+          "answer": 2,
+          "why": "Le cesoie sono due leve: il fulcro è il perno, i manici lunghi sono il braccio della mano, il ramo sta vicino al perno.",
+          "traps": [
+            "La velocità non è il punto: le lame corte tengono il ramo vicino al fulcro, dove la forza è più grande.",
+            "Il peso dei manici conta poco; quello che conta è la loro lunghezza, cioè il braccio.",
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "id": "piano",
+      "theme": "officina",
+      "type": "process",
+      "name": "Il piano inclinato",
+      "place": "Bottega delle Rampe",
+      "sign": "RAMPE",
+      "emblem": "gear",
+      "objective": "Prevedere quanta forza serve per spingere un carico su una rampa, al variare della sua lunghezza.",
+      "idea": "Una rampa più lunga chiede meno forza per arrivare alla stessa altezza.",
+      "wrongBelief": "Una rampa fa fare meno fatica in tutto, anche nel lavoro totale.",
+      "anchor": {
+        "type": "example",
+        "text": "Le strade di montagna salgono a tornanti: percorrono più strada, ma la salita è più dolce."
+      },
+      "application": "Le rampe per le carrozzine, gli scivoli di carico dei camion e le strade a tornanti usano lo stesso principio.",
+      "remember": [
+        "A parità di altezza, una rampa più lunga chiede meno forza.",
+        "Il lavoro per salire resta lo stesso: meno forza, più strada.",
+        "Senza attrito, forza = peso × altezza ÷ lunghezza."
+      ],
+      "explain": {
+        "q": "Perché una rampa lunga non fa risparmiare lavoro, anche se chiede meno forza?",
+        "a": "Perché la strada da percorrere si allunga nella stessa proporzione in cui la forza diminuisce: forza × strada resta uguale."
+      },
+      "callbacks": [
+        {
+          "to": "leva",
+          "how": "Come la leva, la rampa scambia forza con distanza."
+        }
+      ],
+      "lab": {
+        "title": "La rampa",
+        "stations": [
+          {
+            "id": "rampa",
+            "tab": "La rampa",
+            "goal": "A parità di altezza, una rampa più lunga chiede meno forza.",
+            "beat": "ground",
+            "pattern": "handle",
+            "object": "Una cassa da 100 N da portare su un gradino alto 1 m.",
+            "action": "Allunga la rampa e legge la forza che serve.",
+            "surprise": "Con una rampa lunga 4 m basta un quarto della forza.",
+            "predict": {
+              "q": "Allunghi la rampa, ma il gradino resta alto uguale. La forza per spingere la cassa...",
+              "options": [
+                "aumenta",
+                "diminuisce",
+                "resta uguale"
+              ],
+              "answer": 1,
+              "why": "Senza attrito la forza è peso × altezza ÷ lunghezza: più lunghezza, meno forza."
+            },
+            "controls": [
+              "La lunghezza della rampa"
+            ],
+            "tries": [
+              "Allunga la rampa finché basta una forza di 25 N."
+            ],
+            "takeaway": "Senza attrito la forza è <b>peso × altezza ÷ lunghezza</b>, quindi con 4 m di rampa per 1 m di altezza basta un quarto del peso, a prezzo di una strada quattro volte più lunga.",
+            "source": "Calcolato dal vivo, senza attrito."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Più strada, meno forza",
+          "text": "Per portare una cassa da 100 N su un gradino alto 1 m serve sempre lo stesso lavoro, cioè la forza per la strada percorsa. Una rampa divide questo lavoro in una spinta più leggera su una strada più lunga, e senza attrito la forza necessaria è il peso moltiplicato per l'altezza e diviso per la lunghezza della rampa. Con una rampa lunga 4 m basta quindi una spinta di 25 N, un quarto del peso."
+        }
+      ],
+      "sources": [
+        "S1"
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "A parità di altezza, una rampa più lunga chiede...",
+          "options": [
+            "più forza",
+            "la stessa forza",
+            "meno forza"
+          ],
+          "answer": 2,
+          "why": "La salita è più dolce: la forza è peso × altezza ÷ lunghezza.",
+          "traps": [
+            "Una rampa più lunga sembra più faticosa perché è più strada, ma ogni passo chiede meno forza.",
+            "La forza dipende dalla pendenza: allungando la rampa la pendenza cala, e con lei la forza.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Con una rampa più lunga, che cosa aumenta?",
+          "options": [
+            "La strada da percorrere",
+            "Il peso del carico",
+            "L'altezza da raggiungere"
+          ],
+          "answer": 0,
+          "why": "Meno forza, più strada: il lavoro resta lo stesso.",
+          "traps": [
+            null,
+            "Il carico pesa sempre uguale: la rampa cambia la forza della spinta, non il peso.",
+            "L'altezza è quella del gradino: la rampa non la cambia."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Senza attrito, la forza per spingere un carico su una rampa è...",
+          "options": [
+            "peso × lunghezza ÷ altezza",
+            "peso × altezza ÷ lunghezza",
+            "sempre uguale al peso"
+          ],
+          "answer": 1,
+          "why": "Altezza ÷ lunghezza misura quanto è ripida la rampa: più è ripida, più forza.",
+          "traps": [
+            "Invertire altezza e lunghezza darebbe una forza più grande del peso, mentre la rampa serve proprio a spingere meno.",
+            null,
+            "Uguale al peso è la forza per sollevare il carico in verticale; la rampa la riduce."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Un carico di 200 N va portato su di 1 m con una rampa lunga 4 m, senza attrito. Che forza serve?",
+          "options": [
+            "50 N",
+            "100 N",
+            "200 N",
+            "800 N"
+          ],
+          "answer": 0,
+          "why": "200 × 1 ÷ 4 = 50 N.",
+          "traps": [
+            null,
+            "100 N sarebbe con una rampa lunga 2 m: qui la rampa è lunga 4 m.",
+            "200 N è il peso: servirebbe sollevando il carico in verticale, senza rampa.",
+            "800 N viene moltiplicando per la lunghezza invece di dividere: la rampa riduce la forza, non la aumenta."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Due rampe portano allo stesso gradino: una è lunga 2 m, l'altra 6 m. Con quale si spinge con meno forza?",
+          "options": [
+            "Con quella di 2 m",
+            "Con quella di 6 m",
+            "Con tutte e due uguale"
+          ],
+          "answer": 1,
+          "why": "Stessa altezza, rampa tre volte più lunga: un terzo della forza.",
+          "traps": [
+            "La rampa corta fa arrivare prima, ma è più ripida e chiede più forza.",
+            null,
+            "L'altezza è la stessa, ma la pendenza no: e la forza dipende dalla pendenza."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "Perché le strade di montagna salgono a tornanti invece che dritte?",
+          "options": [
+            "Per accorciare il viaggio",
+            "Per allungare la strada e rendere la salita meno ripida",
+            "Per ridurre l'altezza da salire"
+          ],
+          "answer": 1,
+          "why": "I tornanti sono una rampa lunga: più strada, meno forza a ogni metro.",
+          "traps": [
+            "I tornanti allungano il viaggio, non lo accorciano: in cambio la salita è più dolce.",
+            null,
+            "La cima resta alla stessa altezza: i tornanti cambiano la pendenza, non il dislivello."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "carrucola",
+      "theme": "officina",
+      "type": "mechanism",
+      "name": "La carrucola",
+      "place": "Casa di Gino",
+      "sign": "CARRUCOLE",
+      "emblem": "gear",
+      "expert": {
+        "name": "Gino",
+        "trade": "clockmaker",
+        "line": "Le carrucole le conosco come le mie tasche. Mettimi alla prova, se hai coraggio.",
+        "temper": "theatrical"
+      },
+      "objective": "Prevedere la forza e la corda che servono con una carrucola fissa e con una mobile.",
+      "idea": "La carrucola fissa cambia la direzione della forza; quella mobile la dimezza, ma si tira il doppio della corda.",
+      "wrongBelief": "Qualsiasi carrucola riduce la forza.",
+      "anchor": {
+        "type": "example",
+        "text": "Il secchio del pozzo, che sale quando si tira la corda verso il basso, usa una carrucola fissa: la forza è la stessa, ma la direzione è più comoda."
+      },
+      "application": "I pozzi, le gru da cantiere e i paranchi delle barche a vela combinano carrucole fisse e mobili.",
+      "remember": [
+        "Una carrucola fissa cambia la direzione della forza, non la sua grandezza.",
+        "Una carrucola mobile dimezza la forza.",
+        "Con la carrucola mobile si tira il doppio della corda."
+      ],
+      "explain": {
+        "q": "Perché con la carrucola mobile si tira il doppio della corda?",
+        "a": "Il carico è appeso a due tratti di corda: per farlo salire di 1 m, tutti e due devono accorciarsi di 1 m, quindi tiri 2 m."
+      },
+      "callbacks": [
+        {
+          "to": "leva",
+          "how": "Come la leva e la rampa, la carrucola mobile scambia forza con distanza."
+        }
+      ],
+      "lab": {
+        "title": "Il paranco",
+        "stations": [
+          {
+            "id": "paranco",
+            "tab": "Il paranco",
+            "goal": "La carrucola mobile dimezza la forza, ma si tira il doppio della corda.",
+            "beat": "ground",
+            "pattern": "contrast",
+            "object": "Un carico da 100 N appeso a una carrucola.",
+            "action": "Prova la carrucola fissa e poi quella mobile, e confronta forza e corda.",
+            "surprise": "La carrucola fissa non toglie forza: la mobile sì, a metà.",
+            "predict": {
+              "q": "Con una carrucola fissa sollevi un carico da 100 N. Che forza serve?",
+              "options": [
+                "50 N",
+                "100 N",
+                "200 N"
+              ],
+              "answer": 1,
+              "why": "La carrucola fissa gira e basta: cambia la direzione della forza, non la sua grandezza."
+            },
+            "controls": [
+              "Carrucola fissa o mobile"
+            ],
+            "tries": [
+              "Prova la carrucola fissa.",
+              "Prova la carrucola mobile e confronta la forza."
+            ],
+            "takeaway": "La carrucola fissa lascia <b>la stessa forza</b> e cambia solo la direzione in cui si tira. La carrucola mobile richiede <b>metà della forza</b>, ma per sollevare il carico di 1 m bisogna tirare 2 m di corda.",
+            "source": "Calcolato dal vivo, senza attrito e con una carrucola senza peso."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "La carrucola fissa e la carrucola mobile",
+          "text": "Una carrucola fissa è appesa a un sostegno e serve a cambiare la direzione della forza: si tira la corda verso il basso e il carico sale, ma la forza necessaria resta uguale al peso. Una carrucola mobile sale invece insieme al carico, che resta appeso a due tratti di corda, e ciascun tratto ne regge metà. Per questo la forza si dimezza, mentre la corda da tirare raddoppia."
+        }
+      ],
+      "sources": [
+        "S1"
+      ],
+      "riddles": [
+        {
+          "id": "gino-cassaforte",
+          "kind": "safe",
+          "where": "room",
+          "clue": "Combinazione: i newton che servono per sollevare 100 N con la carrucola mobile. G.",
+          "answer": 50,
+          "type": "number",
+          "unit": "N",
+          "from": {
+            "station": "paranco"
+          },
+          "inside": {
+            "note": "Appunti di Gino. Con due carrucole mobili la forza si dimezza due volte e diventa un quarto del carico, mentre la corda da tirare diventa quattro volte più lunga.",
+            "coins": 10
+          }
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Una carrucola fissa...",
+          "options": [
+            "cambia la direzione della forza",
+            "dimezza la forza",
+            "raddoppia la forza"
+          ],
+          "answer": 0,
+          "why": "Tiri giù e il carico sale: la forza è la stessa, la direzione cambia.",
+          "traps": [
+            null,
+            "Dimezzare la forza è il lavoro della carrucola mobile; quella fissa gira e basta.",
+            "Nessuna carrucola raddoppia la forza che serve: al massimo la lascia uguale."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Con una carrucola mobile, la forza per sollevare un carico...",
+          "options": [
+            "raddoppia",
+            "resta uguale",
+            "si dimezza"
+          ],
+          "answer": 2,
+          "why": "Il carico è appeso a due tratti di corda: ognuno ne regge metà.",
+          "traps": [
+            "Due tratti di corda sembrano più fatica, ma si dividono il peso.",
+            "Resta uguale con la carrucola fissa; quella mobile divide il peso su due tratti.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Con una carrucola mobile, per sollevare il carico di 1 m tiri...",
+          "options": [
+            "0,5 m di corda",
+            "1 m di corda",
+            "2 m di corda"
+          ],
+          "answer": 2,
+          "why": "Metà forza, doppia corda: il lavoro resta lo stesso.",
+          "traps": [
+            "Mezza corda e mezza forza insieme sarebbero un regalo: la carrucola scambia forza con corda, non le riduce entrambe.",
+            "1 m basta con la carrucola fissa; con la mobile si accorciano due tratti di corda.",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Con una carrucola fissa sollevi un secchio da 80 N, senza attrito. Che forza serve?",
+          "options": [
+            "40 N",
+            "80 N",
+            "160 N"
+          ],
+          "answer": 1,
+          "why": "La carrucola fissa non riduce la forza: serve tutto il peso del secchio.",
+          "traps": [
+            "40 N sarebbe con una carrucola mobile; quella fissa cambia solo la direzione.",
+            null,
+            "Nessuna carrucola raddoppia la forza che serve: il secchio pesa 80 N."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Una carrucola mobile solleva un carico da 300 N, senza attrito. Che forza serve?",
+          "options": [
+            "100 N",
+            "150 N",
+            "300 N",
+            "600 N"
+          ],
+          "answer": 1,
+          "why": "Metà del carico: 300 ÷ 2 = 150 N.",
+          "traps": [
+            "Un terzo sarebbe con tre tratti di corda; una carrucola mobile ne ha due.",
+            null,
+            "300 N servirebbero con la carrucola fissa, che non divide il peso.",
+            "Raddoppiare è l'errore opposto: si raddoppia la corda, non la forza."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "La carrucola mobile dimezza la forza. Allora perché il lavoro non diventa la metà?",
+          "options": [
+            "Perché la corda da tirare è il doppio",
+            "Perché l'attrito raddoppia sempre",
+            "Perché il lavoro si dimezza davvero"
+          ],
+          "answer": 0,
+          "why": "Lavoro = forza × strada: metà forza per il doppio della strada fa lo stesso lavoro.",
+          "traps": [
+            null,
+            "L'attrito esiste, ma anche senza attrito il lavoro resta lo stesso: è la corda a raddoppiare.",
+            "Sembra un affare, ma la strada della corda raddoppia: il lavoro totale non cambia."
+          ]
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "piano",
+      "to": "leva",
+      "type": "same-structure",
+      "note": "Tutte e due scambiano forza con distanza."
+    },
+    {
+      "from": "carrucola",
+      "to": "leva",
+      "type": "same-structure",
+      "note": "La carrucola mobile scambia forza con corda, come la leva con il braccio."
+    }
+  ],
+  "finalCheck": {
+    "name": "Gara delle Macchine",
+    "size": 8,
+    "pass": 0.7
+  }
+}

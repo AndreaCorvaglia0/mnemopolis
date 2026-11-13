@@ -334,8 +334,8 @@ export const NUDGES = {
     it: ['Tutti gli esperti battuti. Credo di essere pronto per {final}.', 'È solo {n}... e {final} mi aspetta ancora.'],
   },
   ending: {
-    en: ['The champion is still waiting by the League hall.', 'Nice, {n}. But the road out of town is open now.'],
-    it: ['Il campione aspetta ancora davanti alla sala della Lega.', 'Bello, {n}. Ma ora la strada fuori città è aperta.'],
+    en: ['The road out of town is open. Time to walk it.', 'Nice, {n}. But the road out of town is open now.'],
+    it: ['La strada fuori città è aperta. È ora di percorrerla.', 'Bello, {n}. Ma ora la strada fuori città è aperta.'],
   },
   free: {
     en: ['The main road is done. This town still hides a thing or two.', 'Now I can just enjoy {n}. And look around properly.', 'Not every door in town has a number on it, I bet.'],

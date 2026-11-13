@@ -2,7 +2,9 @@
 
 ## Big idea
 
-> Colour is three numbers: three lights on a screen, three inks on paper, three signals in the eye.
+> Colour is three numbers: three lights on a screen, three signals in the eye.
+
+(Until Nov 2026 it also said "three inks on paper"; inks are the extra Print Works, see `brief.md`.)
 
 ## Concepts kept
 

@@ -8,6 +8,7 @@
 // line below reads the course folder and the engine's registries and passes them in; the /play/
 // page (engine/player/) calls the same function in the browser.
 import { checkProgression } from './riddles.mjs';
+import { checkCourseProse } from './prose.mjs';
 
 // env: { EMBLEMS, TRADES, TEMPERS, match, tools: names from the engine (null = not checked),
 //        brief: the text of knowledge/brief.md, has(file): whether the course folder holds it,
@@ -33,6 +34,8 @@ if (c.version !== 1) err('course: "version" must be 1');
 if (c.id && !/^[a-z][a-z0-9-]*$/.test(c.id)) err('course: "id" must be a lowercase slug');
 max(c.bigIdea, 28, 'bigIdea');
 if (!c.goals?.length) warn('course: no "goals" (what the learner can do at the end)');
+const goalText = (g) => (typeof g === 'string' ? g : g?.text);
+(c.goals || []).forEach((g, k) => { if (!goalText(g)) err(`goal ${k + 1}: a goal is a string or { "text", "concepts" }`); });
 if (!c.learner) warn('course: no "learner" (who it is for, what they know)');
 if (!c.sources?.length) warn('course: no "sources". Every claim should rest on one.');
 const sourceIds = new Set((c.sources || []).map((s) => s.id));
@@ -156,7 +159,13 @@ concepts.forEach((p, i) => {
     if (/\b(NOT|EXCEPT)\b|\bnot\b.*\?$/.test(q.q || '') && /which/i.test(q.q)) warn(`${Q}: negative stem. Ask what is true instead.`);
     if (!q.traps) warn(`${Q}: no traps (the mistake each wrong option catches)`);
     else if (q.traps.length !== n) err(`${Q}: traps must have one entry per option`);
-    else { if (q.traps[q.answer] !== null) err(`${Q}: the trap of the right option must be null`); q.traps.forEach((t, j) => { if (j !== q.answer && !t) err(`${Q}: option ${j + 1} has no trap. If you cannot name the mistake, it is filler.`); }); }
+    else {
+      if (q.traps[q.answer] !== null) err(`${Q}: the trap of the right option must be null`);
+      q.traps.forEach((t, j) => { if (j !== q.answer && !t) err(`${Q}: option ${j + 1} has no trap. If you cannot name the mistake, it is filler.`); });
+      // the duel shows a trap to the learner after a wrong answer ("Why “X” tempts: <trap>"): a sentence, not a label
+      const terse = q.traps.filter((t, j) => j !== q.answer && t && words(t) < 8);
+      if (terse.length) warn(`${Q}: ${terse.length === 1 ? 'a trap is' : `${terse.length} traps are`} a label ("${terse[0]}"). The learner reads it after a wrong answer: write a short sentence that says why the option tempts and why it fails`);
+    }
     if (n && Number.isInteger(q.answer)) { const L = q.options.map((o) => o.length), right = L[q.answer], others = L.filter((_, j) => j !== q.answer); if (right > 1.8 * Math.max(...others) && right > 30) warn(`${Q}: the right option is much longer than the others`); }
   });
 });
@@ -183,8 +192,7 @@ if (themes.length > 1) themes.forEach((t) => { const inside = new Set(concepts.f
 // ---- final check ----
 const f = c.finalCheck || {};
 if (!(f.size >= 4) || !(f.pass > 0 && f.pass <= 1)) err('finalCheck needs "size" (4 or more) and "pass" (0 to 1)');
-const pool = concepts.reduce((s, p) => s + (p.questions || []).filter((q) => q.level >= 2).length, 0);
-if (f.size > pool) err(`finalCheck asks for ${f.size} questions but only ${pool} of level 2 or 3 exist`);
+
 
 // ---- core and extra: the main story of the game (references/3-path.md, "Core and extra") ----
 // Core concepts are the minimum set to take home in about an hour; only they gate the final check.
@@ -192,8 +200,21 @@ const core = concepts.filter((p) => p.core !== false), extra = concepts.filter((
 if (concepts.length && core.length < Math.min(3, concepts.length)) err(`${core.length} core concepts: the main story needs at least ${Math.min(3, concepts.length)}. Mark fewer concepts "core": false.`);
 if (concepts.length && concepts[0].core === false) err(`concept "${concepts[0].id}": the first concept of the path is where everyone starts; it must be core`);
 const isExtra = new Set(extra.map((p) => p.id));
+(c.goals || []).forEach((g, k) => (g?.concepts || []).forEach((id) => { if (!ids.has(id)) err(`goal ${k + 1}: unknown concept "${id}"`); }));
 rel.forEach((r) => { if (r.type === 'requires' && !isExtra.has(r.from) && isExtra.has(r.to)) err(`core concept "${r.from}" requires "${r.to}", which is extra: the main story would need something it never asks for. Make "${r.to}" core or drop the requirement.`); });
 if (core.length > 6) warn(`${core.length} core concepts: a core of about 4 to 6 fits an hour of play. Mark the least essential ones "core": false.`);
+// A core concept's questions are its house duel (at most six turns). Simulated learners
+// (engine/tests/duel.test.mjs) show that six questions separate a learner right 70% of the time from
+// one right 40% of the time, and four do not: references/6-questions.md, "Questions in duels".
+core.forEach((p) => {
+  const n = (p.questions || []).length;
+  if (n < 3) err(`concept "${p.id}": ${n} questions. A core concept is proven in a duel with its expert: give it at least 3 (6 make a fair duel)`);
+  else if (n < 6) warn(`concept "${p.id}": ${n} questions. Its duel can ask at most ${n}; with fewer than 6 a learner who knows 40% wins too often and one who knows 70% loses too often. Write ${6 - n} more (levels 1 to 3)`);
+});
+
+// the final check asks only about core concepts (the League of the game)
+const pool = core.reduce((s, p) => s + (p.questions || []).filter((q) => q.level >= 2).length, 0);
+if (f.size > pool) err(`finalCheck asks for ${f.size} questions but the core concepts have only ${pool} of level 2 or 3`);
 
 // ---- locks, advanced stations, progression (riddles.mjs; references/7-progression.md) ----
 {
@@ -201,6 +222,9 @@ if (core.length > 6) warn(`${core.length} core concepts: a core of about 4 to 6 
   const r = checkProgression(c, { match, tools, care });
   r.errors.forEach(err); r.warns.forEach(warn);
 }
+
+// ---- the register of expository text (references/9-prose.md): warnings, never errors ----
+checkCourseProse(c).forEach((w) => warn(`prose: ${w}`));
 
 // ---- working documents ----
 ['knowledge/brief.md', 'knowledge/sources.md', 'knowledge/map.md'].forEach((k) => { if (!has(k)) warn(`${k} is missing`); });

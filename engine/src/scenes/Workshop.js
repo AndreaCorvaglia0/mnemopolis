@@ -1,3 +1,4 @@
+import { w } from '../data/words.js';
 import Phaser from 'phaser';
 import { sfx, setMusic, setFire, setSea } from '../systems/audio.js';
 import { Walker } from '../systems/walker.js';
@@ -49,7 +50,7 @@ function paint(lab, spots) {
   for (let y = 32; y < 176; y++) for (let x = 0; x < W * T; x++) px(ctx, x, y, x % 16 === 0 || y % 16 === 0 ? '#565c69' : hash(x >> 4, y >> 4, 5) > 0.5 ? '#6f7684' : '#687080');
   for (let k = 0; k < 5; k++) { ctx.fillStyle = `rgba(10,12,20,${0.25 - k * 0.05})`; ctx.fillRect(0, 32 + k, W * T, 1); }
   for (let i = 0; i < PATH.length - 1; i++) belt(ctx, ...PATH[i], ...PATH[i + 1]);
-  drawText(ctx, 'IN', 3, TOP * T - 8, '#e6e8ee'); drawText(ctx, 'OUT', 3, BOT * T - 8, '#e6e8ee');
+  drawText(ctx, w('room.beltIn'), 3, TOP * T - 8, '#e6e8ee'); drawText(ctx, w('room.beltOut'), 3, BOT * T - 8, '#e6e8ee');
   rect(ctx, 0, 176, W * T, 16, '#23262e'); rect(ctx, 0, 176, W * T, 2, '#17151c');
   rect(ctx, 19 * T, 177, 16, 15, '#3a3f6b'); rect(ctx, 19 * T + 1, 178, 14, 13, '#c9563f'); for (let y = 180; y < 190; y += 3) rect(ctx, 19 * T + 3, y, 10, 1, '#e7a34f');
   const zones = [...new Set(lab.stations.map((s) => s.zone || ''))];
@@ -118,7 +119,7 @@ export class Workshop extends Phaser.Scene {
       return;
     }
     const [fx, fy] = this.player.facing(), m = this.at.get(`${fx},${fy}`), guide = this.guide.tx === fx && this.guide.ty === fy;
-    this.ui.setPrompt(guide ? `Space  Talk to ${MASTERS[this.id].name}` : m !== undefined ? `Space  ${m + 1}. ${this.lab.stations[m].tab}` : null);
+    this.ui.setPrompt(guide ? `Space  ${w('town.talkTo', { name: MASTERS[this.id].name })}` : m !== undefined ? `Space  ${m + 1}. ${this.lab.stations[m].tab}` : null);
     if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) {
       if (guide) return this.talk();
       if (m !== undefined) return this.ui.lab(this.id, m);
@@ -141,11 +142,11 @@ export class Workshop extends Phaser.Scene {
     this.guide.faceToward(this.player.tx, this.player.ty);
     sfx.select();
     await ui.converse(m.name, { root: { say: m.hi, options: [
-      { label: 'Take me to machine 1', do: async () => { await ui.lab(this.id, 0); return 'end'; } },
-      { label: 'Show me the reading page', do: async () => { await ui.reading(this.id); return 'end'; } },
+      { label: w('room.machine1'), do: async () => { await ui.lab(this.id, 0); return 'end'; } },
+      { label: w('room.showPage'), do: async () => { await ui.reading(this.id); return 'end'; } },
       // the host can be challenged as in any house (src/mechanics/duel/)
       { label: challengeLabel(this.id), if: () => houseQuestions(this.id).length >= 2, do: async () => { await houseDuel(ui, this.id); return 'end'; } },
-      { label: 'Thanks' },
+      { label: w('town.thanks') },
     ] } });
     this.guide.face('down');
   }

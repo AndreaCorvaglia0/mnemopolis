@@ -13,11 +13,13 @@ import { COURSE, PLACE } from '../../data/content.js';
 import { state } from '../../systems/state.js';
 import { LIFE } from '../config.js';
 import { lifePlan } from '../active.js';
-import { journalBody } from '../secrets/journal.js';
+import { journalBody, journalStyle } from '../secrets/journal.js';
+import { lockSection } from '../riddles/journal.js';
 import { TOOLS } from '../obstacles/kinds.js';
 import { Q } from './active.js';
 import { Q_WORDS, tr, fill, trackerLine } from './strings.js';
 import { townMapView, MAP_CSS } from './townmap.js';
+import { floorsOf } from '../floors/plan.js';
 
 const TABS = ['journey', 'map', 'mysteries'];
 const W = Q_WORDS;
@@ -104,7 +106,8 @@ function mapTab() {
 
 function mysteries(busy) {
   const items = [];
-  for (const [id, has] of Object.entries(state.keys || {})) if (has && PLACE[id]) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '🗝'), fill(tr(W.mysteries.key), { place: PLACE[id].name })));
+  // a key matters only where there is an upstairs to open (a house without one gets none to show)
+  for (const [id, has] of Object.entries(state.keys || {})) if (has && PLACE[id] && floorsOf(PLACE[id]).up) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '🗝'), fill(tr(W.mysteries.key), { place: PLACE[id].name })));
   for (const [t, has] of Object.entries(state.tools || {})) if (has && TOOLS[t]) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '⚒'), tr(TOOLS[t])));
   const kids = [
     h('div', { class: 'qm-coins' }, h('b', {}, String(state.insight || 0)), tr(W.mysteries.coins)),
@@ -112,6 +115,7 @@ function mysteries(busy) {
     items.length ? h('div', { class: 'qm-carry' }, items) : h('p', { class: 'qm-more', style: 'text-align:left' }, tr(W.mysteries.nothing)),
   ];
   if (LIFE.secrets) kids.push(h('div', { class: 'qm-jr' }, journalBody(lifePlan(), busy)));
+  else { const locks = lockSection(); if (locks) { journalStyle(); kids.push(h('div', { class: 'qm-jr' }, locks)); } } // opened locks belong to the game, not to ambient life
   return h('div', { class: 'qm-in' }, kids);
 }
 

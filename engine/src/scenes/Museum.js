@@ -1,3 +1,4 @@
+import { w } from '../data/words.js';
 import Phaser from 'phaser';
 import { sfx, setMusic, setFire, setSea } from '../systems/audio.js';
 import { Walker } from '../systems/walker.js';
@@ -112,7 +113,7 @@ export class Museum extends Phaser.Scene {
       return;
     }
     const [fx, fy] = this.player.facing(), m = fy === 2 ? this.slots.get(fx) : null, guide = this.guide.tx === fx && this.guide.ty === fy;
-    this.ui.setPrompt(guide ? `Space  Talk to ${MASTERS[this.id].name}` : m ? `Space  ${m.year}: ${m.title}` : null);
+    this.ui.setPrompt(guide ? `Space  ${w('town.talkTo', { name: MASTERS[this.id].name })}` : m ? `Space  ${m.year}: ${m.title}` : null);
     if (Phaser.Input.Keyboard.JustDown(k.SPACE) || Phaser.Input.Keyboard.JustDown(k.ENTER) || Phaser.Input.Keyboard.JustDown(k.E) || this.nav.act()) {
       if (guide) return this.talk();
       if (m) return this.ui.plaque(this.list, this.list.indexOf(m), this.place.kinds);
@@ -136,10 +137,10 @@ export class Museum extends Phaser.Scene {
     const m = MASTERS[this.id], ui = this.ui, kinds = Object.values(this.place.kinds || {});
     this.guide.faceToward(this.player.tx, this.player.ty);
     sfx.select();
-    const bye = { label: 'Thanks' };
+    const bye = { label: w('town.thanks') };
     await ui.converse(m.name, {
-      root: { say: m.hi, options: [kinds.length ? { label: 'What do the colours mean?', to: 'col' } : null, { label: 'Start from the first plaque', do: async () => { await ui.plaque(this.list, 0, this.place.kinds); return 'end'; } }, houseQuestions(this.id).length >= 2 ? { label: challengeLabel(this.id), do: async () => { await houseDuel(ui, this.id); return 'end'; } } : null, bye].filter(Boolean) },
-      col: { say: `The colour of a plaque is its thread: ${kinds.map((k) => k[0]).join(', ')}.`, options: [bye] },
+      root: { say: m.hi, options: [kinds.length ? { label: w('room.colours'), to: 'col' } : null, { label: w('room.firstPlaque'), do: async () => { await ui.plaque(this.list, 0, this.place.kinds); return 'end'; } }, houseQuestions(this.id).length >= 2 ? { label: challengeLabel(this.id), do: async () => { await houseDuel(ui, this.id); return 'end'; } } : null, bye].filter(Boolean) },
+      col: { say: w('room.coloursAre', { list: kinds.map((k) => k[0]).join(', ') }), options: [bye] },
     });
     this.guide.face('down');
   }

@@ -17,7 +17,8 @@
 | Cyan absorbs red, magenta green, yellow blue | print | S1 | simplified: ideal inks. Declared on the station |
 | Tone in print comes from dot size | print | S1 | verified |
 | HSL is an exact re-description of RGB | wheel | S1 | verified (computed live) |
-| A patch looks lighter on a dark surround, and tinted toward the opposite of a coloured one | context | S1 | verified (the learner checks it) |
+| A patch looks lighter on a dark surround and darker on a light one, and tinted toward the opposite of a coloured one (a grey on red looks blue-green) | context | S1 | verified (the learner checks it on the dark-to-light wall and the coloured walls) |
+| In HSL, saturation 0 gives a grey (three equal RGB numbers); lightness 100% gives white | wheel | S1 | verified (computed live in the lab) |
 | The eye keeps three signals; lights with the same signals look the same | cones | S1, S3 | simplified: cone curves are bell shapes. Declared on the station |
 | Newton reported in 1672 that white light is a mixture | history | S2 | verified |
 | Young proposed three kinds of receptor (lecture 1801, published 1802) | history | S2, S3 | verified |

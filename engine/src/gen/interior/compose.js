@@ -13,6 +13,7 @@
 //   8. the concept's name centred above the focal point, the house number.
 // Every step keeps the room walkable (rules.js); the finished room must pass every rule, otherwise
 // it is composed again with the next seed (still deterministic).
+import { w as word } from '../../data/words.js';
 import { seeded, THEME } from '../core.js';
 import { EMBLEMS } from '../emblems.js';
 import { mix } from '../../art/px.js';
@@ -129,7 +130,8 @@ function composeOnce(place, attempt, o) {
   }
 
   // the concept's name, centred above the focal point; it keeps room for the learning wall on one side
-  const label = (place.concept || place.name || '').toUpperCase().replace(/[^A-Z0-9 .\-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 34);
+  // upstairs the label begins with UPSTAIRS (DI SOPRA): the room must not pass for the ground floor
+  const label = `${upper ? `${word('room.upstairsTag')} - ` : ''}${place.concept || place.name || ''}`.toUpperCase().replace(/[^A-Z0-9 .\-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 34);
   L.label = placeLabel(L, label, mark, leavesRoom, true); // null: too long to stand over the focal point, placed later
 
   // 3. the learning wall: lab door and reading wall side by side, on one side of the focal point

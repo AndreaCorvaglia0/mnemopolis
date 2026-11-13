@@ -2,6 +2,7 @@
 // structure as the town, so that looking at one recalls the other: big idea in the middle, one branch
 // per district, one leaf per house. The "next" tag is the house of the main path's next step; an
 // extra house the player has not been inside shows as "?" (extras are hinted, never listed).
+import { w } from '../data/words.js';
 import { overlay, h } from './shell.js';
 import { COURSE, DISTRICTS, PLACES, QUESTIONS } from '../data/content.js';
 import { LABS } from '../course/labs.js';
@@ -9,7 +10,7 @@ import { state } from '../systems/state.js';
 import { Q, isCorePlace } from '../mechanics/quest/active.js';
 
 const COL = ['#6f93e0', '#ef7a6d', '#4fd1c5', '#f0a45a'];
-const NATURE = { river: 'across the river', shore: 'on the shore', forest: 'in the forest', meadow: 'in the meadow', hill: 'on the hill' };
+const NATURE = w('mind.nature'), LANDMARKS = w('mind.landmarks');
 const CSS = `
 .mm{padding:22px 4px 20px}
 .mm-page .mm{padding:22px 20px 60px}
@@ -41,25 +42,25 @@ export function mindMap() {
     if (!isCorePlace(p.id) && !state.visited[p.id]) return h('div', { class: 'mm-p unk' }, h('div', {}, h('span', { class: 'n' }, String(p.order)), h('b', {}, '?')));
     const lab = LABS[p.id], n = lab ? lab.stations.length : 0, done = lab ? lab.stations.filter((_, i) => state.done[`${p.id}:${i}`]).length : 0;
     const facts = QUESTIONS.filter((q) => q.topic === p.id && q.stars === 1), known = facts.filter((q) => state.q[q.id]?.right).length;
-    return h('div', { class: `mm-p${next === p.id ? ' next' : ''}` }, next === p.id ? h('span', { class: 'mm-tag' }, 'next') : null,
+    return h('div', { class: `mm-p${next === p.id ? ' next' : ''}` }, next === p.id ? h('span', { class: 'mm-tag' }, w('mind.next')) : null,
       h('div', {}, h('span', { class: 'n' }, String(p.order)), h('b', {}, p.name)), h('div', { class: 'c' }, p.concept), h('div', { class: 'i' }, p.idea),
       h('div', { class: 'mm-chips' },
-        h('span', { class: `mm-chip${state.visited[p.id] ? ' on' : ''}` }, state.visited[p.id] ? 'visited' : 'not visited'),
-        n ? h('span', { class: `mm-chip${done === n ? ' on' : ''}` }, `lab ${done}/${n}`) : null,
-        facts.length ? h('span', { class: `mm-chip${known === facts.length ? ' on' : ''}` }, `facts ${known}/${facts.length}`) : null,
-        state.stamps[p.id] ? h('span', { class: 'mm-chip gold' }, 'badge') : null));
+        h('span', { class: `mm-chip${state.visited[p.id] ? ' on' : ''}` }, w(state.visited[p.id] ? 'mind.visited' : 'mind.notVisited')),
+        n ? h('span', { class: `mm-chip${done === n ? ' on' : ''}` }, w('mind.lab', { n: done, m: n })) : null,
+        facts.length ? h('span', { class: `mm-chip${known === facts.length ? ' on' : ''}` }, w('mind.facts', { n: known, m: facts.length })) : null,
+        state.stamps[p.id] ? h('span', { class: 'mm-chip gold' }, w('mind.badge')) : null));
   };
   return h('div', { class: 'mm' },
     h('div', { class: 'mm-root' }, h('h2', {}, COURSE.hub.name), h('p', {}, COURSE.bigIdea)), h('div', { class: 'mm-trunk' }),
     h('div', { class: 'mm-cols' }, DISTRICTS.map((d, i) => h('div', { class: 'mm-d', style: `--c:${COL[i % COL.length]}` },
-      h('div', { class: 'where' }, `${NATURE[d.nature] || ''} · landmark: ${d.landmark || 'obelisk'}`), h('h3', {}, d.name), h('div', { class: 'idea' }, d.idea),
+      h('div', { class: 'where' }, [NATURE[d.nature], w('mind.landmark', { name: LANDMARKS[d.landmark || 'obelisk'] || d.landmark })].filter(Boolean).join(' · ')), h('h3', {}, d.name), h('div', { class: 'idea' }, d.idea),
       PLACES.filter((p) => p.district === d).map(leaf)))),
-    h('div', { class: 'mm-foot' }, h('span', {}, 'Houses are numbered in the order of the learning path.')));
+    h('div', { class: 'mm-foot' }, h('span', {}, w('mind.foot'))));
 }
 
 // The mind map alone, as a page (kept for scripts and the console).
 export function openMap() {
-  const { root, close } = overlay(COURSE.title, 'Map');
+  const { root, close } = overlay(COURSE.title, w('mind.map'));
   const body = h('div', { class: 'mm-page', tabindex: '0' }, mindMap());
   root.append(body);
   body.focus();

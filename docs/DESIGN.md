@@ -21,6 +21,9 @@ eloquence, and stay as long as you like for what the town still hides.
 5. **Reuse before adding.** Every new dynamic must hang on something that already exists.
 6. **Everything optional is switchable** in `world.json`, and the course format stays about
    knowledge, not about the game.
+7. **Two languages, chosen by the course.** Every word a player reads comes in English and
+   Italian, picked by `language` in `course.json` (English for anything else); the engine's tables
+   are checked by `npm test`.
 
 ## The three axes
 
@@ -57,15 +60,25 @@ afterwards: the town stays open for exploring and practising, without limit
   room's host offers the duel (the workshop's and the museum's too) when the house has at least two
   questions; a house with fewer counts as done when visited with every lab station finished.
 - **League.** `state.passedLeague` (exists). Opens when every core house is done. Until then the
-  champion says in one line what is missing ("Two experts still think they know better than you:
-  houses 4 and 6.").
-- **Ending.** The League's champion stands before the League hall, on the square (a gate on the
-  town's edge is left for later: the town generator stays untouched). Beaten, the champion steps aside with
-  a line in character, and a short ending card opens: the course title, the big idea, what the
-  player can now do (the course goals), questions answered, accuracy, how often "certain" was right,
+  champion, at the town gate, says in one line what is missing ("Two experts still think they know
+  better than you: houses 4 and 6."). The League hall on the square has a note on its door that
+  sends the player to the gate.
+- **Ending.** The road out of town is real: a straight lane, two tiles wide, runs from the square to
+  the edge of the map and ends in a **town gate**, with the League's champion standing before it.
+  The gate is shut until the League is won (walking into it, or talking to the champion, is the
+  League: the missing houses while it is closed, the duel once it is open). Beaten, the champion
+  steps aside with a line in character and the gate swings open; walking through it opens a short
+  ending card: the course title, the big idea, what the player can now do (the course goals that
+  the path taught: a goal may name the concepts that teach it, and is then listed only if each is
+  core or was done by the player), questions answered, accuracy, how often "certain" was right,
   time played, and how many things in town are still a question mark (unvisited houses and
   undiscovered secrets, as one count). Then back to the town; the Journey tab reopens the card.
-  `world.json` may name the next town (`"next": {"title", "url"}`): the card offers "On to <title>".
+  Walking through the gate again says that the road goes on and the next town is not built yet,
+  or, when `world.json` names it (`"next": {"title", "url"}`), offers "On to <title>" (the card
+  offers it too). The road is a dead end over open ground: every door keeps exactly its walking
+  distance (checked when the town is generated and over hundreds of towns); a town where no side
+  of the square has such a way out (about one in five) has no gate, and the champion waits before
+  the League hall on the square, where the card opens as soon as the League is won.
 
 ## The duel of eloquence
 
@@ -81,6 +94,7 @@ A skin over questions the course already has; no new content is required.
   most six turns (fewer if the concept has fewer questions); conviction 7, composure 5: with every
   answer stated, three right before three wrong. Winning gives the badge and the owner's key.
   Once won, the duel becomes a **friendly rematch** (levels 2 and 3 first, nothing new to win).
+  The key is shown and mentioned only where the house has an upstairs to open.
 - **League**: `finalCheck.size` turns of levels 2 and 3, one question from each house per round,
   shuffled; conviction `2 × ceil(size × pass)`, composure `2 × (size − need) + 1`, so that with
   every answer stated the duel is won exactly at the pass mark. The house of a question is named
@@ -91,6 +105,9 @@ A skin over questions the course already has; no new content is required.
   coins). The opponent says, in character, which idea to look at again: in a house the concept,
   the reading wall and the lab; in the League the houses of the missed questions, by number and
   name. Rematch draws other questions at once. Step back (Esc) leaves at any time.
+- **Six questions per core concept.** The validator warns below six and refuses fewer than three
+  (`skills/knowledge-base/references/6-questions.md`). Every wrong option's `trap` is a short
+  sentence the learner reads after a miss: why the option tempts, then why it fails.
 - **Calibration** is tested by simulation (`engine/tests/duel.test.mjs`, table in
   `engine/docs/ENGINE.md`): with six questions a learner right 70% of the time wins about three
   duels in four and one right 40% of the time loses more than four in five; at 90% one nearly
@@ -111,7 +128,11 @@ Exploring is how the game goes beyond the basics. Its central object is the **lo
   note on its edge, the eyes behind a sliding hatch). The clue is there to be read; the answer is
   **typed freely**, not chosen: a short term or a number that the learner must recall or work
   out. Free recall is harder than recognition, which is why locks belong to exploring and never
-  to the main path.
+  to the main path. Nothing covers the place where the answer shows (the safe's display, the
+  login line): the sticky note and the thought after a miss sit beside the keys, and a password
+  shows its letters (a game, not a bank: the learner must be able to check the spelling). A
+  number that is read off a lab's live value is accepted within one unit, and the lab must let
+  the learner land on it exactly (in the example, one-degree buttons beside the colour disc).
   - A wrong answer costs nothing. The character thinks aloud where to look ("Hm. I should go back
     to the Dyer's House."): the lock knows which concept, and which part of it, holds the answer.
     Repeated misses make the thought more specific (the first two name the house, or "downstairs"
@@ -132,7 +153,10 @@ Exploring is how the game goes beyond the basics. Its central object is the **lo
   labelled LAB II, unless a lock guards them), its locks, its `further` links on a shelf, and later
   a harder rematch. Nobody lives upstairs. A house gets a staircase only if its concept has
   something for upstairs, and only rooms have floors (not the workshop, not the museum). Advanced
-  stations never count in the main path's "lab n/m".
+  stations never count in the main path's "lab n/m". Upstairs must not pass for downstairs: it is
+  dimmer and warmer (a lamp hangs from the beam, a pool of light under it), and the plaque reads
+  "UPSTAIRS - <concept>" in gold on dark wood. A small locked closet (an obstacle for a later
+  tool) goes on a ground floor where a tidy wall is left, otherwise under the roof.
 - **Tools** come from the shop, for coins. A tool opens a kind of obstacle (exists:
   `mechanics/obstacles`, `canPass`, `state.tools`).
 - **Hidden buildings**: an extra concept may stand behind an obstacle (`world.json`).
@@ -178,8 +202,8 @@ then league, ending, and free roaming after the ending.
   / "The League is open" / after the ending a quiet "Free roaming". It lights up briefly when the
   step changes; a tap on it opens the Map. It replaces the column of key hints: one discreet
   "Tab  Menu" stays (a Menu button on touch);
-- a small gold chevron bobbing above the door of the house the tracker names (nothing for a house
-  off screen);
+- a small gold chevron bobbing above the door of the house the tracker names, or above the town
+  gate for the League and the ending (nothing for a place off screen);
 - the guide's first speech (the goal in three lines, then the first house and its landmark); every
   townsperson's answer to "What should I do now?", sometimes followed by a hint that the town holds
   more, never naming it; the character's thoughts (one in four or five); the "next" tag of the mind
@@ -192,7 +216,8 @@ then league, ending, and free roaming after the ending.
     colour, core houses not visited by number, extras "?" once seen, the League hall, the square,
     the player; a tap on a visited house recalls its idea; the next house ringed), with the mind map
     of the course one tap away;
-  - **Mysteries**: coins, keys and tools carried, and the discoveries (J opens this tab). Never a
+  - **Mysteries**: coins, keys (of houses with an upstairs) and tools carried, the discoveries
+    (J opens this tab) and the opened locks (listed even when ambient life is switched off). Never a
     list of what is missing beyond the silhouettes of the discoveries.
   Settings (music, voice, grass questions, time of day) sit in the menu's footer as plain toggles,
   with the keys (folded behind one button on a phone).

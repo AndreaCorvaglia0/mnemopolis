@@ -13,6 +13,8 @@ import { LOCK_WORDS as W } from '../riddles/kinds.js';
 import { floorsOf } from './plan.js';
 import { grantQueryKeys } from './keys.js';
 import { lockTextures } from '../riddles/art.js';
+import { upstairsLamp } from '../../gen/interior/paint.js';
+import Phaser from 'phaser';
 
 const T = 16;
 const REFUSE = {
@@ -43,7 +45,22 @@ class Floor {
     if (st && !this.up) { // a small key mark over the stairs while they are locked and the player is near
       this.mark = scene.add.image((st.x + st.fw / 2) * T, st.y * T - 30, 'lock-mark-key').setOrigin(0.5, 1).setDepth(6000).setAlpha(0);
     }
+    if (this.up) this.light();
     if (this.up && scene.registry.get('upFirst') !== this.id) { scene.registry.set('upFirst', this.id); scene.time.delayedCall(700, () => say(scene, tr(UP))); }
+  }
+
+  // upstairs is dimmer and warmer than downstairs: a dusk over the room, the lamp's pool of light,
+  // a soft light around the player (paint.js draws the lamp and the UPSTAIRS tag)
+  light() {
+    const sc = this.scene, W = this.room.w * T, H = this.room.h * T;
+    sc.add.rectangle(0, 0, W, H, 0x1a0f22, 0.42).setOrigin(0).setDepth(4000);
+    if (!sc.textures.exists('glow')) return;
+    const [lx, ly] = upstairsLamp(this.room.layout);
+    const pool = sc.add.image(lx, ly + 30, 'glow').setScale(2.4, 1.8).setTint(0xffb35c).setBlendMode(Phaser.BlendModes.ADD).setDepth(4001).setAlpha(0.5);
+    sc.tweens.add({ targets: pool, alpha: 0.42, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    sc.add.image(lx, ly, 'glow').setScale(0.6).setTint(0xffe2a8).setBlendMode(Phaser.BlendModes.ADD).setDepth(4002).setAlpha(0.9);
+    const me = sc.add.image(0, 0, 'glow').setScale(1.4).setTint(0xffd9a0).setBlendMode(Phaser.BlendModes.ADD).setDepth(4001).setAlpha(0.3);
+    sc.events.on('update', () => { const p = sc.player?.sprite; if (p) me.setPosition(p.x, p.y - 10); });
   }
 
   hasKey() { return !!state.keys?.[this.id]; }

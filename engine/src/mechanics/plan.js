@@ -13,7 +13,7 @@ import { solidMap, checkDoors } from '../world/doors.js';
 import { seeded } from '../gen/core.js';
 import { REWARDS } from './obstacles/kinds.js';
 
-export function planLife(town, L, theme, seed, { life = { on: true, musings: true, animals: true, secrets: true, obstacles: true, notes: [] }, places = 0, rooms = [] } = {}) {
+export function planLife(town, L, theme, seed, { life = { on: true, musings: true, animals: true, secrets: true, obstacles: true, notes: [] }, places = 0, rooms = [], uppers = [] } = {}) {
   const c = lifeContext(town, L), used = new Set();
   const obstacles = life.obstacles ? planObstacles(c, seed, { places: places || town.BUILDINGS.length - 2 }) : [];
   const solid = c.solid.slice();
@@ -31,7 +31,13 @@ export function planLife(town, L, theme, seed, { life = { on: true, musings: tru
     for (const { place, L: R } of order) {
       if (closets.length >= want) break;
       const o = roomObstacle(R, seed);
-      if (o) closets.push({ ...o, id: `cl${closets.length}`, place: place.id, prize: RW[Math.floor(rr() * RW.length)] });
+      if (o) closets.push({ ...o, id: `cl${closets.length}`, place: place.id, floor: 'ground', prize: RW[Math.floor(rr() * RW.length)] });
+    }
+    // no tidy wall downstairs (stairs and locks took it): an attic, if a house has one
+    for (const { place, L: R } of uppers) {
+      if (closets.length) break;
+      const o = roomObstacle(R, seed);
+      if (o) closets.push({ ...o, id: `cl${closets.length}`, place: place.id, floor: 'up', prize: RW[Math.floor(rr() * RW.length)] });
     }
   }
   const secrets = life.secrets ? planSecrets(c, seed, { used, solid, d, notes: life.notes || [], rooms, obstacles, closets }) : [];

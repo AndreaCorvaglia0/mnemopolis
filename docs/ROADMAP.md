@@ -64,13 +64,28 @@
   (mist, lantern, deep) chosen in the menu, `world.json` or `?mood=`; checked by measurement
   (`npm run sound`), not by ear.
 
+- Polish after the three large parts: a real play-through bot (`npm run play`, phone and CI
+  variants) that plays the game from the title to the ending through the real screens and checks
+  the tracker at every step; every word of the older interface in Italian and English
+  (`engine/src/data/words.js`, checked by a test) and a small Italian test course with its own
+  play-through in pictures (`npm run shots:it`); six questions per core concept, with traps written
+  as sentences, required by the validator; the example course's big idea and goals made to match
+  its core, with an optional goal-to-concept mapping for the ending card; locks that never cover the
+  typed answer, show the password, and want the lab's exact value; an upstairs that looks like one;
+  the road out of town with a gate at the edge of the map, where the champion waits and the ending
+  happens; a
+  reference on prose (`references/9-prose.md`: the handbook register for explanations, adapted from
+  the author's prosa-didattica skill, with its carve-outs for analogies, tasks and the game's
+  voices) and a prose checker in the validator, as warnings.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
    landscapes the first one does not.
 2. The game around the course, in the order of `docs/DESIGN.md`: duels of eloquence and the
-   League as a duel (the spine is done), then locks and upper floors, coins and shop; ambient
-   music; a gate on the town's edge for the ending (today the scene plays at the League hall).
+   League as a duel, locks and upper floors and the road out of town are done; next coins and the
+   shop. About one town in five has no way from the square to the edge for the road (its ending
+   plays at the League hall): a road that may bend would reach them too.
 3. The story (`docs/STORY.md`): arrival by steamship in the rain, a town that has forgotten,
    remembering in place of duels, mementos upstairs, the lighthouse as the hidden League, the
    turn at the end, the returning fog.

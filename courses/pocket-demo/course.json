@@ -266,7 +266,7 @@
       ],
       "explain": {
         "q": "Why do a high note and a low note played together reach you at the same moment?",
-        "a": "In a given medium sound travels at nearly the same speed whatever its frequency. The high note simply has more, shorter squeezes per second."
+        "a": "In a given medium sound travels at nearly the same speed whatever its frequency. The high note has more squeezes per second, and each of them is shorter."
       },
       "page": [
         {
@@ -865,7 +865,7 @@
                 }
               }
             ],
-            "takeaway": "Sound needs a <b>medium</b>: <b>no sound in a vacuum</b>. It is usually <b>faster in liquids and solids</b> than in air: water about <b>4×</b>, steel about <b>17×</b>.",
+            "takeaway": "Sound needs a <b>medium</b>, so there is <b>no sound in a vacuum</b>. It is usually <b>faster in liquids and solids</b> than in air: water about <b>4×</b>, steel about <b>17×</b>.",
             "source": "Speeds from OpenStax University Physics 1, table 17.1, and Wikipedia; the bell-in-a-jar from The Physics Classroom. Real speeds depend on temperature and, for solids, on the alloy.",
             "ready": {
               "kind": "sort",

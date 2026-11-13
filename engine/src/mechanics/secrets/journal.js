@@ -45,8 +45,11 @@ let styled = false;
 
 // The page's body: also the Mysteries tab of the menu (mechanics/quest/menu.js), so the discoveries
 // live in one place. busy(true/false) is told when a painting opens on top, so keys wait for it.
+// the page's look, also for the opened locks alone (the menu, when ambient life is off)
+export function journalStyle() { if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; } }
+
 export function journalBody(plan, busy = () => {}) {
-  if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
+  journalStyle();
   const found = state.life?.found || {}, list = plan.secrets.filter((s) => s.kind !== 'sealed'), sealed = plan.secrets.filter((s) => s.kind === 'sealed');
   const look = async (id, mark) => { busy(true); await openPainting(id, TOWN, mark); busy(false); };
   const card = (s) => {

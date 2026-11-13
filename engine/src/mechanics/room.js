@@ -30,7 +30,7 @@ class RoomLife {
     Object.assign(this, { scene, plan, ui: scene.ui, id: scene.id, L: scene.room.layout || null });
     const sc = scene, id = this.id;
     const ground = scene.floor !== 'up'; // closets and paintings belong to the ground floor (mechanics/floors/)
-    this.closets = LIFE.obstacles && ground ? plan.closets.filter((o) => o.place === id && this.L) : [];
+    this.closets = LIFE.obstacles ? plan.closets.filter((o) => o.place === id && (o.floor || 'ground') === (ground ? 'ground' : 'up') && this.L) : [];
     this.paintings = LIFE.secrets && ground ? plan.secrets.filter((s) => s.kind === 'painting' && s.place === id && this.L) : [];
     this.doors = this.closets.map((o) => {
       const open = !!state.opened[o.id];

@@ -29,6 +29,12 @@ The engine has no content of its own. `npm run course <slug>` (run automatically
 
 Character looks: `mentor`, `kid`, `nurse`, `fisher`, `archivist`, `surveyor`, `tech`, `keeper`, `tess`.
 
+## Goals on the ending card
+
+`goals` in `course.json` are strings, or `{ "text": "...", "concepts": ["print"] }` for a goal that
+an extra concept teaches: the ending card lists it only when each named concept is core or was
+finished by the player (lab done, or its badge). Plain strings are always listed.
+
 ## Locks and upper floors: `riddles`, `advanced`
 
 Both optional; the rules are in `skills/knowledge-base/references/7-progression.md`, the engine side
@@ -44,7 +50,7 @@ A riddle:
 ```json
 { "id": "marta-safe", "kind": "safe",
   "clue": "Combination: where my green sits on the wheel. In degrees. M.",
-  "answer": 120, "type": "number", "tolerance": 3, "unit": "°",
+  "answer": 120, "type": "number", "tolerance": 1, "unit": "°",
   "from": { "station": "dials" },
   "inside": { "note": "Marta's note. Lightness on my dials is not how light ...", "coins": 15 },
   "where": "upstairs" }
@@ -57,7 +63,7 @@ A riddle:
 | `clue` | the sticky note, or what the voice asks: a line or two |
 | `answer` | one accepted answer or a list; at most three words or one number |
 | `type` | `text` (default for strings), `number` (default for numbers), `code` (digits, exact) |
-| `tolerance`, `unit` | numbers only; default tolerance: exact for an integer |
+| `tolerance`, `unit` | numbers only; default tolerance: exact for an integer. A number read off a lab's live value: 1, and the lab must let the learner land on it exactly |
 | `from` | where the answer is taught: `{ "page": true }` or `{ "station": "<id>" }`, of this concept or of `"concept": "<id>"`. The thought after a miss points there |
 | `inside` | `note` (1 to 4 sentences), `station` (an advanced station of this concept), `link` (a `further` link: its index or url), `coins`, `tool` (key, pickaxe, saw, shears), `key` (a concept id: its upper floor) |
 | `where` | `upstairs` (default) or `room` (the ground floor). Any other text is a placement hint and counts as upstairs |

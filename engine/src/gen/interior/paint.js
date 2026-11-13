@@ -93,6 +93,19 @@ function paintAttic(ctx, L, C) {
   rect(ctx, 0, 6, W, 3, edge); rect(ctx, 0, 6, W, 2, beam); rect(ctx, 0, 6, W, 1, lighten(beam, 0.2));
   for (let x = 3 * T; x < W - 2 * T; x += 4 * T) { rect(ctx, x - 1, 8, 4, 38, edge); rect(ctx, x, 8, 2, 38, beam); }
 }
+// Upstairs must not look like downstairs: the plaque says UPSTAIRS (paintLabel), a lamp hangs from
+// the tie beam, and (in the scene, mechanics/floors/room.js) dimmer, warmer light.
+function paintUpstairs(ctx, L) {
+  // the lamp hanging from the beam
+  const [lx] = upstairsLamp(L);
+  rect(ctx, lx, 8, 1, 9, '#2a2018'); rect(ctx, lx - 3, 17, 7, 3, '#5a4a36'); rect(ctx, lx - 2, 20, 5, 2, '#ffd27a'); px(ctx, lx, 22, '#fff1b8');
+}
+// where the lamp of an upper floor hangs, in room pixels: beside the concept's label (the scene puts
+// its warm glow there)
+export function upstairsLamp(L) {
+  const lb = L.label, wmax = Math.max(...lb.lines.map(textWidth));
+  return [Math.round(lb.cx + wmax / 2 + 14 < L.w * T - 20 ? lb.cx + wmax / 2 + 14 : lb.cx - wmax / 2 - 14), 21];
+}
 function stairwell(ctx, mx, my) { // the way down: steps sinking into the floor, a rail on each side
   rect(ctx, mx - 1, my, 18, 16, ink); rect(ctx, mx, my + 1, 16, 15, '#0d0b14');
   for (let k = 0; k < 4; k++) { const y = my + 2 + k * 3; rect(ctx, mx + 1 + k, y, 14 - 2 * k, 2, mix(P.wood, '#0d0b14', 0.25 + k * 0.2)); }
@@ -132,8 +145,9 @@ function paintBoard(ctx, L, C, place) { // the reading wall: the same everywhere
 
 // The concept on the wall. In a dark room it is a light plaque with dark letters, so it can be read.
 function paintLabel(ctx, L, C) {
+  // upstairs the plaque is dark wood with gold letters and begins with UPSTAIRS (compose.js)
   const lb = L.label, cx = lb.cx, wmax = Math.max(...lb.lines.map(textWidth)), nl = lb.lines.length, hgt = nl * 7 + 4, y = lb.top * T + (nl > 1 ? 2 : 4);
-  const bg = L.dark ? '#e9dcb8' : C.band, fg = L.dark ? '#2b2018' : '#ffffff';
+  const bg = L.upper ? '#3a2a18' : L.dark ? '#e9dcb8' : C.band, fg = L.upper ? '#ffcf5a' : L.dark ? '#2b2018' : '#ffffff';
   rect(ctx, Math.round(cx - wmax / 2 - 4), y, wmax + 8, hgt, ink);
   rect(ctx, Math.round(cx - wmax / 2 - 3), y + 1, wmax + 6, hgt - 2, bg);
   if (L.dark) rect(ctx, Math.round(cx - wmax / 2 - 3), y + 1, wmax + 6, 1, '#fff6dc');
@@ -245,6 +259,7 @@ export function paintBackground(ctx, L, place) {
   if (L.lab) door(ctx, L.lab[0] * T + 1, L.top[L.lab[0]] * T + 22, L.upper ? 'LAB II' : 'LAB');
   if (L.board) (L.upper ? paintShelf : paintBoard)(ctx, L, C, place);
   paintLabel(ctx, L, C);
+  if (L.upper) paintUpstairs(ctx, L);
   if (L.number) { const num = String(place.order || ''), X = L.number.x * T + 1, Y = L.number.top * T + 8; rect(ctx, X, Y, 14, 13, ink); rect(ctx, X + 1, Y + 1, 12, 11, P.gold); drawText(ctx, num, X + 7 - textWidth(num) / 2, Y + 4, ink); }
   for (const d of L.wall) (DECOR[d.type] || DECOR.portrait)(ctx, d.x * T, d.top * T, d.n, C);
   for (const [x, y] of L.torches) { rect(ctx, x - 1, y + 3, 3, 6, '#2a2018'); rect(ctx, x - 2, y + 2, 5, 2, '#5a4a36'); rect(ctx, x, y + 9, 1, 3, '#2a2018'); }

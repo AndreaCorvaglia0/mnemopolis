@@ -43,7 +43,7 @@ const CSS = `
 .lk-screen .row{display:flex;align-items:center;gap:.4em;white-space:nowrap}
 .lk-screen input{flex:1;min-width:2em;background:rgba(79,209,197,.08);border:0;border-bottom:2px solid #4fd1c5;color:#c8fff6;caret-color:#c8fff6;font-family:inherit;font-size:inherit;padding:2px 4px;outline:none;text-shadow:inherit}
 .lk-screen .msg{min-height:1.2em;color:#ff8a80;text-shadow:0 0 6px #ff4f45}.lk-screen .msg.ok{color:#c8fff6}
-.lk-ctl{flex:none;display:flex;flex-direction:column;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:#0f0d16;border-top:1px solid #2a2436}
+.lk-ctl{flex:1 1 auto;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:#0f0d16;border-top:1px solid #2a2436}
 .lk-row{display:flex;gap:10px;align-items:center}
 .lk-row label{color:#c9c2d6;white-space:nowrap}
 .lk-in{flex:1;min-width:0;min-height:48px;padding:0 14px;border-radius:10px;border:2px solid #4fd1c5;background:#14111d;color:#fff;font-size:18px}
@@ -65,12 +65,14 @@ const CSS = `
 .lk-doc .acts button.main{background:#4fd1c5;color:#04201d;font-weight:700;border:0}
 .lk-gain{display:inline-block;color:#ffcf5a;font-weight:700;animation:lkpop .6s ease-out}
 @keyframes lkpop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.25)}100%{transform:scale(1);opacity:1}}
-@media (min-width:900px) and (min-height:520px){.lk-main{flex-direction:row}.lk-ctl{width:340px;border-top:0;border-left:1px solid #2a2436;justify-content:center}.lk-doc{max-height:none;width:420px;border-top:0;border-left:1px solid #2a2436;display:flex;flex-direction:column;justify-content:center}}
-.lk-ctl .lk-note,.lk-ctl .lk-bubble{position:relative;left:auto!important;top:auto!important;width:auto!important;max-width:none;transform:rotate(-1deg)!important;font-size:17px!important;padding:6px 10px 8px;margin:4px 0 2px}.lk-ctl .lk-bubble::before{display:none}
-.lk-ctl .lk-think{position:relative;bottom:auto;margin:0 auto 6px;font-size:17px;padding:8px 14px}
+@media (min-width:900px) and (min-height:520px){.lk-main{flex-direction:row}.lk-stage{flex:1 1 auto!important}.lk-ctl{flex:none;width:380px;border-top:0;border-left:1px solid #2a2436;padding:20px 22px}.lk-doc{max-height:none;width:420px;border-top:0;border-left:1px solid #2a2436;display:flex;flex-direction:column;justify-content:center}}
+.lk-ctl .lk-note,.lk-ctl .lk-bubble{position:relative;left:auto!important;top:auto!important;width:auto!important;max-width:none;transform:rotate(-1.2deg)!important;font-size:17px!important;padding:8px 12px 10px;margin:8px 2px 4px;flex:none}.lk-ctl .lk-bubble::before{display:none}
+.lk-ctl .lk-think{position:relative;bottom:auto;margin:0 auto 4px;font-size:17px;padding:8px 14px;flex:none}
+@media (min-width:900px) and (min-height:520px){.lk-ctl .lk-note{font-size:21px!important;padding:12px 16px 14px;margin:6px 4px 12px}.lk-ctl .lk-think{font-size:18px}}
 @media (max-height:560px){.lk-pad button{min-height:44px}.lk-ctl{gap:8px;padding-top:8px}}
 @media (prefers-reduced-motion:reduce){.lk-gain{animation:none}}`;
 let styled = false;
+const WIDE = typeof matchMedia !== 'undefined' ? matchMedia('(min-width:900px) and (min-height:520px)') : { matches: true };
 
 const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const tween = (ms, fn) => new Promise((res) => {
@@ -121,7 +123,7 @@ export function openCloseup(r, o = {}) {
     if (type === 'number' && [].concat(r.answer).some((a) => !Number.isInteger(+a))) pad.children[9].replaceWith(key(',', () => press(','), 'sm', 'comma'));
     ctl.append(h('div', { class: 'lk-row' }, h('label', {}, T(K.ask))), pad, h('div', { class: 'lk-row' }, h('span', { style: 'flex:1' }), tryBtn));
   } else {
-    input = h('input', { class: kind === 'computer' ? '' : 'lk-in', type: kind === 'computer' && type === 'text' ? 'password' : 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', enterkeyhint: 'go', inputmode: type === 'text' ? 'text' : 'decimal', 'aria-label': T(K.ask), placeholder: kind === 'computer' ? '' : T(W.typeHere), maxlength: '40' });
+    input = h('input', { class: kind === 'computer' ? '' : 'lk-in', type: 'text' /* a game: the learner sees what they type and can check the spelling */, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', enterkeyhint: 'go', inputmode: type === 'text' ? 'text' : 'decimal', 'aria-label': T(K.ask), placeholder: kind === 'computer' ? '' : T(W.typeHere), maxlength: '40' });
     input.addEventListener('input', () => { value = input.value; tryBtn.disabled = !value.trim(); });
     if (kind === 'computer') {
       msg = h('div', { class: 'msg', 'aria-live': 'polite' });
@@ -141,6 +143,20 @@ export function openCloseup(r, o = {}) {
   const layout = () => {
     const vv = window.visualViewport;
     if (vv) { root.style.height = `${vv.height}px`; root.style.top = `${vv.offsetTop}px`; } // the phone keyboard
+    // Where things go (nothing may cover the place where the answer shows: the safe's display, the
+    // computer's password line):
+    //   the sticky note: always in the controls, as a note taken off the lock (on a phone it covered
+    //   the display; on a wide screen it fills the side column, where the eye goes to type);
+    //   the voice behind a door: a bubble over the hatch, where nothing is typed (in the controls on
+    //   a short stage); the thought after a miss: in the controls, above the keys.
+    // On an upright screen the picture is as tall as it needs, no taller: no dark bands.
+    const wide = WIDE.matches, below = root.querySelector('.lk-ctl, .lk-doc');
+    if (!wide && below) {
+      const kids = [...below.children].filter((e) => !e.hidden), need = kids.reduce((n, e) => n + e.offsetHeight, 0) + 10 * Math.max(0, kids.length - 1) + 32;
+      const avail = root.clientHeight - root.firstChild.offsetHeight - (below === ctl ? Math.min(need, root.clientHeight * 0.66) : below.offsetHeight);
+      const want = Math.max(150, Math.min(Math.round(stage.clientWidth * AH / (AW * 0.8)), avail));
+      if (Math.abs(stage.offsetHeight - want) > 2) stage.style.flex = `0 0 ${want}px`;
+    } else if (stage.style.flex) stage.style.flex = '';
     const bw = stage.clientWidth, bh = stage.clientHeight;
     // an upright stage may crop up to a quarter of the picture's width: the lock is in the middle
     k = Math.max(0.5, Math.min(Math.max(bw / AW, Math.min(bw / (AW * 0.75), bh / AH)), bh / AH));
@@ -150,17 +166,10 @@ export function openCloseup(r, o = {}) {
     const fs = (n, cap = 28) => `${Math.max(16, Math.min(cap, Math.round(n * k)))}px`;
     // the clue stays readable: on the picture where it fits, otherwise in the controls (a very short
     // stage, as with a phone keyboard open)
-    const shortStage = bh < 300;
-    if (shortStage && clueEl.parentNode !== ctl) { ctl.prepend(clueEl); clueEl.classList.add('in-ctl'); }
-    if (!shortStage && clueEl.parentNode !== layer) { layer.append(clueEl); clueEl.classList.remove('in-ctl'); }
-    if (A.note && !shortStage) {
-      const [x, y, nw, rot] = A.note, fits = x0 + (x + nw + 8) * k <= bw - 4 && k >= 3.2;
-      clueEl.style.fontSize = fits ? fs(5.2) : '17px';
-      clueEl.style.transform = `rotate(${rot}deg)`;
-      if (!fits) { const nw2 = Math.min(bw * 0.62, 260); clueEl.style.left = `${bw - x0 - nw2 - 8}px`; clueEl.style.top = `${Math.max(4, y * k)}px`; clueEl.style.width = `${nw2}px`; }
-      else place(clueEl, x, y, nw + 8);
-    }
-    if (A.bubble && !shortStage) { clueEl.style.fontSize = fs(4.4, 24); const [, y] = A.bubble, bw2 = Math.min(bw - 16, 460); clueEl.style.left = `${w / 2 - bw2 / 2}px`; clueEl.style.top = `${y * k}px`; clueEl.style.width = `${bw2}px`; }
+    const onPicture = !!A.bubble && bh >= 300;
+    if (!onPicture && clueEl.parentNode !== ctl && ctl.isConnected) { ctl.prepend(clueEl); clueEl.classList.add('in-ctl'); }
+    if (onPicture && clueEl.parentNode !== layer) { layer.append(clueEl); clueEl.classList.remove('in-ctl'); }
+    if (onPicture) { clueEl.style.fontSize = fs(4.4, 24); const [, y] = A.bubble, bw2 = Math.min(bw - 16, 460); clueEl.style.left = `${w / 2 - bw2 / 2}px`; clueEl.style.top = `${y * k}px`; clueEl.style.width = `${bw2}px`; }
     if (disp) { const [x, y, dw, dh] = A.display; place(disp, x, y, dw, dh); disp.style.fontSize = fs(9, 64); }
     const scr = layer.querySelector('.lk-screen');
     if (scr) { const [x, y, sw, sh] = A.screen; place(scr, x, y, sw, sh); scr.style.fontSize = fs(5.6, 34); }
@@ -187,12 +196,12 @@ export function openCloseup(r, o = {}) {
   // ---- the thought after a miss
   const thinkLine = (text) => {
     think.hidden = false; think.replaceChildren(h('small', {}, T(W.thinking)), text);
-    const narrow = !matchMedia('(min-width:900px) and (min-height:520px)').matches;
-    if (narrow && think.parentNode !== ctl) ctl.prepend(think); else if (!narrow && think.parentNode !== stage) stage.append(think);
+    if (think.parentNode !== ctl) { if (clueEl.parentNode === ctl) clueEl.after(think); else ctl.prepend(think); }
+    layout();
   };
   let busy = false;
   const reaction = (text, ok = false) => {
-    if (disp) { disp.textContent = ok ? 'OPEN' : 'ERROR'; disp.classList.toggle('err', !ok); }
+    if (disp) { disp.textContent = T(ok ? W.dispOpen : W.dispError); disp.classList.toggle('err', !ok); }
     if (msg) { msg.textContent = text; msg.classList.toggle('ok', ok); }
     if (kind === 'door') clueEl.replaceChildren(h('small', {}, T(W.voice)), text);
   };

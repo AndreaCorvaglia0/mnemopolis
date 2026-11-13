@@ -203,4 +203,8 @@ window.__hb = {
     const ui = game.scene.getScene('UI');
     return { phase: ui?.phase || null, busy: !!ui?.busy, sel: ui?.quizState?.sel(), answer: ui?.quizState?.answer, insight: state.insight, stamps: { ...state.stamps } };
   },
+  // where a point of the interface (the 960 x 540 stage of the UI scene) or of the world of a scene
+  // is on the page, in CSS pixels: for scripts that click like a player (scripts/playthrough.mjs)
+  uiToPage: (x, y) => { const ui = game.scene.getScene('UI'), cam = ui.cameras.main, d = game.canvas.width / innerWidth; return [((x - cam.worldView.x) * cam.zoom + cam.x) / d, ((y - cam.worldView.y) * cam.zoom + cam.y) / d]; },
+  worldToPage: (key, x, y) => { const sc = game.scene.getScene(key), cam = sc.cameras.main, d = game.canvas.width / innerWidth; return [((x - cam.worldView.x) * cam.zoom + cam.x) / d, ((y - cam.worldView.y) * cam.zoom + cam.y) / d]; },
 };

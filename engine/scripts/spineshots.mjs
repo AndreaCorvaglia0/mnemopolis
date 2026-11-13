@@ -16,7 +16,7 @@ if (!chrome) { console.log('No Chrome: nothing checked on screen.'); process.exi
 for (const f of existsSync(out) ? readdirSync(out) : []) if (f.endsWith('.png')) rmSync(path.join(out, f));
 mkdirSync(out, { recursive: true });
 const { Q } = await import('../src/mechanics/quest/active.js');
-const { BUILDINGS } = await import('../src/world/townMap.js');
+const { BUILDINGS, GATE } = await import('../src/world/townMap.js');
 const enc = encodeURIComponent, T = "__game.scene.getScene('Town')", UI = "__game.scene.getScene('UI')";
 const core = Q.core, extra = Q.extra;
 const go = (x, y, dir = 'up') => `eval:${enc(`(()=>{const s=${T};s.player.tx=${x};s.player.ty=${y};s.player.place();s.player.face('${dir}');s.cameras.main.startFollow(s.player.sprite);s.showWhere(${x},${y});return 1})()`)}`;
@@ -44,7 +44,10 @@ const steps = [
   go(lg.doors[0][0], lg.doors[0][1] + 1), 'wait:1200', `eval:${enc(`(${T}.league(),1)`)}`, 'wait:2500', 'shot:08-league-refused', 'auto:8000',
   // the League won: the champion steps aside, the ending card
   setState(all, "S.passedLeague=true;S.q={a:{seen:5,right:4,last:1},b:{seen:4,right:3,last:1},c:{seen:3,right:3,last:1}};S.bets={1:[1,2],2:[4,5],3:[5,5]};S.played=2940;"),
-  `eval:${enc(`(${T}.league(),1)`)}`, 'wait:3000', 'shot:09-champion', 'auto:9000', `walk:Shift:${enc(`__hb.state.ended&&!!document.querySelector('.qe')`)}`, 'wait:1000', 'shot:10-ending-card',
+  // with a town gate: before it, the champion steps aside, the gate opens, walking through it is the card
+  ...(GATE ? [go(GATE.stand[0] - GATE.dir[0] * 2, GATE.stand[1] - GATE.dir[1] * 2, { '0,1': 'down', '0,-1': 'up', '1,0': 'right', '-1,0': 'left' }[GATE.dir.join()]), 'wait:1200', `eval:${enc(`(${T}.ending(),1)`)}`, 'wait:3000', 'shot:09-champion', 'auto:9000', 'wait:800', 'shot:09b-gate-open', `eval:${enc(`(${T}.useGate(),1)`)}`]
+    : [`eval:${enc(`(${T}.league(),1)`)}`, 'wait:3000', 'shot:09-champion', 'auto:9000']),
+  `walk:Shift:${enc(`__hb.state.ended&&!!document.querySelector('.qe')`)}`, 'wait:1000', 'shot:10-ending-card',
   'key:Escape', 'wait:1200', `eval:${enc(`'after the ending: '+${UI}.trackFull+' ended='+__hb.state.ended`)}`, 'shot:11-free-roaming',
   `eval:${enc(`(${UI}.showAtlas('journey'),1)`)}`, 'wait:900', 'shot:12-journey-after', 'key:Escape', 'wait:500',
 ];

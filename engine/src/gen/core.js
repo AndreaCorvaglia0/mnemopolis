@@ -6,7 +6,8 @@ import { DATA, WORLD } from '../course/_data.js';
 // Which generators are on. Switch one off at build time in courses/<slug>/world.json:
 //   { "gen": { "facade": false, "interior": false, "dressing": false }, "theme": "nordic" }
 // A generator that is off must leave the game exactly as it was without it.
-export const GEN = { facade: true, interior: true, dressing: true, ...(WORLD?.gen || {}) };
+//   { "gen": false } switches all three off (it used to be ignored: a spread of false is nothing).
+export const GEN = WORLD?.gen === false ? { facade: false, interior: false, dressing: false } : { facade: true, interior: true, dressing: true, ...(WORLD?.gen || {}) };
 
 function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 

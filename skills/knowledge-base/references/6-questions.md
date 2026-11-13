@@ -15,6 +15,9 @@ low-stakes: it can be skipped, and a wrong answer costs nothing but shows the re
 Per concept: **1 to 3 at level 1** (one per `remember` line), **at least one at level 2**, and a
 level 3 for at least half the concepts. A `story` concept needs only levels 1 and 2.
 
+**A core concept needs six questions** (levels 1 to 3), because its questions are its duel (see
+"Questions in duels" below). The validator warns below six and refuses fewer than three.
+
 Levels 2 and 3 must **not** be answerable by remembering the lab screen. Change the numbers,
 the object, the context: the learner should have to recognise the idea underneath.
 
@@ -25,7 +28,7 @@ the object, the context: the learner should have to recognise the idea underneat
 | Stem (`q`) | One clear question about one important idea. Short. No negatives ("which is NOT"). No trick, no opinion, no trivia. Everything needed is in the stem. |
 | Options | **Three or four**, one of them right beyond dispute. Three good options beat four with a filler. Similar in length and form. In a natural order where there is one. No "all of the above", no "none of the above". |
 | Wrong options | Each is **plausible** and comes from a real mistake: the wrong belief of the concept, a confusion with a neighbouring concept, a typical slip. Never absurd. |
-| `traps` | For each option, the mistake it catches (and `null` for the right one). If you cannot name the mistake, the option is filler: replace it. |
+| `traps` | For each option, the mistake it catches (and `null` for the right one), as **one short sentence the learner will read**: why the option tempts, then why it fails. If you cannot name the mistake, the option is filler: replace it. |
 | `answer` | The index of the right option. Vary its position across questions. |
 | `why` | One or two sentences that give the **reason**, not a restatement. It should also tell someone who chose the commonest wrong option what they missed. |
 
@@ -39,7 +42,10 @@ Level 1, from the line "Red + green light = yellow":
 
 > Red light plus green light gives...
 > Brown · **Yellow** · Purple · White
-> traps: paint-mixing intuition · — · confusion with red + blue · confusion with all three
+> traps (Brown): "Mixing paints gives a muddy brown, so it feels natural for lights too; but
+> lights add up, and red plus green light makes the eye see yellow."
+> traps (Purple): "Purple is what red and blue make together; green is the other light here, and
+> red plus green gives yellow."
 > why: Lights add. Red and green together stimulate the eye like yellow does.
 
 Level 3, transfer of "colour depends on its surround" to a design decision:
@@ -59,17 +65,37 @@ course and are as important:
 
 The game asks the questions in **duels**: the host of each house challenges the learner on that
 concept's questions (levels 1 and 2 first, at most six turns), and the final check is a duel with
-a champion. A wrong answer is answered by a rebuttal built from the `trap` of the chosen option
-("Why “Brown” tempts: paint-mixing intuition"), then the right answer with `why`. So:
+a champion. A wrong answer is answered by a rebuttal built from the `trap` of the chosen option,
+then the right answer with `why`:
 
-- every wrong option needs a trap that names the mistake in a few words, readable after
-  "Why … tempts:" (a noun phrase or a short clause: "paint-mixing intuition", "reads only the
-  first number");
+> ✗ Why “Brown” tempts: Mixing paints gives a muddy brown, so it feels natural for lights too; but
+> lights add up, and red plus green light makes the eye see yellow.
+> Right answer: Yellow. Lights add. Red and green together stimulate the eye like yellow does.
+
+So:
+
+- every wrong option needs a trap written as **a full short sentence** (about 12 to 30 words) that
+  reads well after "Why “…” tempts:": first what makes the option attractive (the intuition, the
+  neighbouring idea, the half-truth), then why it fails here. Not a label: "paint-mixing
+  intuition" tells a learner who just chose Brown nothing they can use. The validator warns about
+  traps under eight words;
+- the trap speaks about the idea, never about the learner ("it feels natural", not "you are
+  confused"); no answer to another question inside it;
 - `why` must say why the right answer holds; it is also shown after a right answer;
-- five or six questions per concept make a fairer duel than three or four.
+- **six questions per core concept.** The duel asks at most six. Simulated learners
+  (`engine/tests/duel.test.mjs`, table in `engine/docs/ENGINE.md`) show that with six questions a
+  learner right 70% of the time wins about three duels in four and one right 40% of the time loses
+  more than four in five; with four questions the two are barely told apart (65% against 17% for
+  learners who always state, 73% against 33% for calibrated ones). The validator warns below six
+  and refuses fewer than three for a core concept. Extra concepts may have fewer: nothing gates
+  on them.
 
 A concept's `expert` may name a `temper` for the duel (optional: smitten, sore, admirer, letwin,
 theatrical, absent, craftsman); without it the engine picks one.
+
+`why` and traps are expository text: write them in the handbook register of
+`references/9-prose.md` (complete, linked sentences; no punchlines). The validator's prose checks
+cover them.
 
 ## The final check
 
@@ -81,7 +107,8 @@ is deliberate: having to recognise *which* idea a question needs is part of usin
 
 - [ ] Every `remember` line has a level-1 question.
 - [ ] Every concept has a question that changes the surface of what the lab showed.
-- [ ] Every wrong option has a named trap.
+- [ ] Every wrong option has a trap written as a sentence: why it tempts, why it fails.
+- [ ] Every core concept has six questions.
 - [ ] Right answers are spread over positions and are not the longest option.
 - [ ] Every `why` gives a reason.
 - [ ] No question depends on another question.

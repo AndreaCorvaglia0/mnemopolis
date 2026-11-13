@@ -1,5 +1,5 @@
 // Painter's House: hue, saturation, lightness.
-import { slider } from '../../../engine/src/lab/shell.js';
+import { h, slider } from '../../../engine/src/lab/shell.js';
 import { canvasPane, hslToRgb, rgbCss } from '../../../engine/src/lab/kit.js';
 
 async function dials(ctx) {
@@ -27,10 +27,16 @@ async function dials(ctx) {
     if (v.s < 0.06) ctx.did(1);
   };
   pane.onResize(draw);
-  pane.drag((x, y) => { const { R, cx, cy } = L(), dx = x - cx, dy = y - cy; v.h = (Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360; v.s = Math.min(1, Math.hypot(dx, dy) / R); draw(); });
+  pane.drag((x, y) => { const { R, cx, cy } = L(), dx = x - cx, dy = y - cy; v.h = Math.round((Math.atan2(dy, dx) * 180 / Math.PI + 360) % 360) % 360; v.s = Math.min(1, Math.hypot(dx, dy) / R); draw(); });
   pane.cv.style.cursor = 'crosshair';
   const light = slider('Lightness', 5, 95, 50, (x) => { v.l = x / 100; draw(); }, { fmt: (x) => `${x}%` });
-  ctx.controls.append(light);
+  // one degree at a time: a finger on the disc moves the hue by a few degrees, these land it exactly
+  const turn = (d) => { v.h = (Math.round(v.h) + d + 360) % 360; draw(); };
+  const fine = h('div', { style: 'display:flex;gap:8px;align-items:center', role: 'group', 'aria-label': 'Turn the hue one degree' },
+    h('span', { class: 'lab-k', style: 'flex:1' }, 'Hue, one degree'),
+    h('button', { type: 'button', class: 'lab-btn', 'aria-label': 'Hue minus one degree', onclick: () => turn(-1) }, '− 1°'),
+    h('button', { type: 'button', class: 'lab-btn', 'aria-label': 'Hue plus one degree', onclick: () => turn(1) }, '+ 1°'));
+  ctx.controls.append(light, fine);
   // where to act: a vivid red on the disc and the lightness control; then the centre of the disc
   ctx.hint?.((k) => { const { R, cx, cy } = L(), a = (-12 * Math.PI) / 180; return k === 0 ? { el: light, at: [cx + Math.cos(a) * R * 0.75, cy + Math.sin(a) * R * 0.75] } : { at: [cx, cy] }; });
   draw();

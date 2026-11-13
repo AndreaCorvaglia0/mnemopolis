@@ -47,6 +47,8 @@ export const LOCK_WORDS = {
   try: { en: 'Space  Try the {thing}', it: 'Space  Prova {thing}' },
   look: { en: 'Space  Look again', it: 'Space  Guarda di nuovo' },
   tryBtn: { en: 'Try', it: 'Prova' },
+  dispOpen: { en: 'OPEN', it: 'APERTA' },
+  dispError: { en: 'ERROR', it: 'ERRORE' },
   back: { en: 'Step back', it: 'Fatti indietro' },
   clear: { en: 'Clear', it: 'Cancella' },
   del: { en: 'Delete', it: 'Cancella una cifra' },
