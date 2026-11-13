@@ -16,7 +16,7 @@ export const CSS = `
 .dl-scroll{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch}
 .dl-col{max-width:760px;margin:0 auto;padding:10px 14px 16px}
 /* the two fighters */
-.dl-arena{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:6px;padding:4px 2px 0}
+.dl-arena{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:6px;padding:28px 2px 0}
 .dl-f{display:flex;flex-direction:column;gap:4px;min-width:0;position:relative}
 .dl-f.me{align-items:flex-start}.dl-f.them{align-items:flex-end}
 .dl-body{display:flex;align-items:flex-end;gap:10px}
@@ -36,7 +36,7 @@ export const CSS = `
 .dl-num{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
 .dl-vs{align-self:center;display:flex;flex-direction:column;align-items:center;gap:0;padding:0 4px;color:var(--muted);font-size:15px;white-space:nowrap}
 .dl-vs b{font-size:18px;color:var(--text)}
-.dl-pop{position:absolute;top:0;font-weight:800;font-size:18px;color:var(--gold);text-shadow:0 2px 0 #000;pointer-events:none;animation:dlpop 1.1s ease-out forwards;white-space:nowrap}
+.dl-pop{position:absolute;top:-28px;z-index:2;padding:0 6px;border-radius:6px;background:#0d1016d9;font-weight:800;font-size:18px;color:var(--gold);text-shadow:0 2px 0 #000;pointer-events:none;animation:dlpop 1.1s ease-out forwards;white-space:nowrap}
 .dl-f.me .dl-pop{left:0}.dl-f.them .dl-pop{right:0}
 .dl-pop.bad{color:var(--bad)}
 @keyframes dlpop{0%{transform:translateY(8px) scale(.7);opacity:0}20%{transform:translateY(0) scale(1.1);opacity:1}80%{opacity:1}100%{transform:translateY(-16px);opacity:0}}
