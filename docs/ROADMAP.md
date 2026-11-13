@@ -71,7 +71,10 @@
 2. The game around the course, in the order of `docs/DESIGN.md`: duels of eloquence and the
    League as a duel (the spine is done), then locks and upper floors, coins and shop; ambient
    music; a gate on the town's edge for the ending (today the scene plays at the League hall).
-3. Pocket mode (`docs/POCKET.md`): one question about budget at the start, ready-made parametric
+3. The story (`docs/STORY.md`): arrival by steamship in the rain, a town that has forgotten,
+   remembering in place of duels, mementos upstairs, the lighthouse as the hidden League, the
+   turn at the end, the returning fog.
+3b. Pocket mode (`docs/POCKET.md`): one question about budget at the start, ready-made parametric
    labs, a prebuilt player that packs a course without a build, a one-page skill, a small fixed
    shape of game.
 4. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
