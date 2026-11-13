@@ -38,7 +38,7 @@ offended to have been helped). Never grim, never mocking the learner.
 
 ## Remembering (in place of the duel)
 
-Same rules as the duel in `DESIGN.md` (turns, tones, tolerance, no loss on failure), a different
+Same rules as the duel in `DESIGN.md` (turns, tolerance, no loss on failure), without the tones, a different
 meaning:
 
 - The owner's bar is their **memory**, which fills; yours is your **clarity**, which the fog eats.
@@ -48,7 +48,9 @@ meaning:
 - Owners resist. They defend what they misremember, sometimes with sarcasm. That is where the bite
   of the old duel survives.
 - When the memory is back the owner changes, by temper, and gives the key to the upstairs.
-- Tones become *suggest*, *say*, *insist*.
+- No tone and no "how sure are you?": the learner just answers. One right answer brings back one
+  piece, one wrong answer costs one step of clarity. The same holds for the questions in the tall
+  grass. (The bet on confidence is removed from the game; `DESIGN.md` is to be updated with it.)
 
 ## Mementos
 
