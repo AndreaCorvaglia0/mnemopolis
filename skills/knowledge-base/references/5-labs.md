@@ -46,11 +46,11 @@ idea. Its specification:
 | `object` | The concrete thing on the stage. A light on a wall, a file, a curve, a sentence, a cell. |
 | `action` | What the learner does to it, with their hands. A verb. |
 | `surprise` | The exact moment the wrong belief breaks. |
-| `predict` | Optional. A question to commit to before touching anything, with 3 or 4 options. |
+| `predict` | Optional. A question to commit to before touching anything, with 3 or 4 options, and `answer`: the index of the option the exploration proves right. The learner sees the picture while answering, so the question must be about it; words such as "left" and "right" can change place on a phone, so name things by what they are. |
 | `controls` | At most two, besides acting on the stage directly. |
-| `tries` | 1 to 3 small tasks, each with an end state a program can detect. They tick themselves. |
+| `tries` | 1 to 3 small tasks, each with an end state a program can detect. They tick themselves. If there is a `predict`, the first task leads to the state that answers it. |
 | `takeaway` | The rule, one or two sentences, key words in bold. Shown only after the tasks are done. |
-| `source` | One honest line: what is real data, what is computed live, what is recorded, what is simplified. |
+| `source` | One honest line: what is real data, what is computed live, what is recorded, what is simplified. Shown in the theory drawer: it must not give the answer away. |
 | `data` | Optional. What real material is needed (images, a file, a recording) and where it comes from. |
 
 ## Finding the interaction
@@ -123,6 +123,14 @@ work that way.
 - Use the real terms of the field, introduced once and then kept.
 - No exclamation marks, no praise, no "simply" or "just".
 
+## What the learner sees
+
+The station's picture fills the screen from the start. If there is a `predict`, the question
+comes first, over the frozen picture; then "You said X. Now check it"; then the tasks, one
+highlighted at a time; when all are done, the verdict on the prediction and the `takeaway`, with
+a button to the next station. Design for that order: the picture must make the question
+concrete, and the first task must lead to the moment that settles it.
+
 ## Checklist for every station
 
 - [ ] One idea, and it is the `goal`.
@@ -130,6 +138,7 @@ work that way.
 - [ ] Swap, hands, silence and mind tests pass.
 - [ ] Two controls at most; each visibly changes the stage.
 - [ ] Each task has a detectable end state.
+- [ ] If there is a `predict`, it has an `answer`, and the tasks lead to the state that shows it.
 - [ ] `source` says what is real and what is simplified.
 - [ ] Nothing moves or sounds unless it means something.
 - [ ] An expert would not wince.

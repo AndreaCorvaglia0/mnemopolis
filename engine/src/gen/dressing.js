@@ -20,13 +20,20 @@
 // Two layers, so that Node can check the layout without a browser (scripts/check.mjs):
 //   planDressing()       pure data: pieces, solid tiles, walkable tiles over water        (Node)
 //   addDressing(scene)   paints the pieces once and puts them into the Town scene         (browser)
-import { seeded, THEME } from './core.js';
+import { seeded as seededFor, THEME as THEME0 } from './core.js';
 import { wfc } from './wfc.js';
 import { hash, noise } from '../art/px.js';
 import { paintDressing } from './dressingArt.js';
-import { T, MAP_W, MAP_H, TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, QUARTERS, START, HUB } from '../world/townMap.js';
+import { DATA } from '../course/_data.js';
+import { T, TOWN } from '../world/townMap.js';
 
-const W = MAP_W, H = MAP_H, N4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+// The town being dressed. It is the real one unless planDressingFor() is given another (scripts/stress-town.mjs
+// dresses many synthetic towns in one Node process), so these are set by use().
+let W, H, TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, QUARTERS, START, HUB, THEME, SEED;
+const seeded = (key) => seededFor(key, SEED);
+function use(town, theme, seed) { ({ W, H, TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, QUARTERS, START, HUB } = town); THEME = theme; SEED = seed; }
+use(TOWN, THEME0, DATA.id);
+const N4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 const N8 = [...N4, [1, 1], [1, -1], [-1, 1], [-1, -1]];
 const ter = (x, y) => (x < 0 || y < 0 || x >= W || y >= H ? 'T' : TERRAIN[y][x]);
 const inMap = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
@@ -58,7 +65,9 @@ export function baseBlocked() {
 }
 
 let cache = null;
-export function planDressing() { return (cache ||= plan()); }
+export function planDressing() { use(TOWN, THEME0, DATA.id); return (cache ||= plan()); }
+// Dresses another town (a result of generate() in townMap.js); checkDressing() then judges that town.
+export function planDressingFor(town, theme, seed) { use(town, theme, seed); return plan(); }
 
 function plan() {
   const D = THEME.dressing, r = seeded('dressing:place');
@@ -384,6 +393,6 @@ export function addDressing(scene) {
     scene.add.image(s.x, s.y, s.key).setOrigin(0, 1).setDepth(s.depth);
   }
   for (const [x, y] of L.blocked) scene.block(x, y);
-  for (const [x, y] of L.walk) scene.blocked[y * MAP_W + x] = 0;
+  for (const [x, y] of L.walk) scene.blocked[y * W + x] = 0;
   for (const [x, y] of L.glows) { scene.lights.push({ x, y, r: 26 }); scene.addGlow(x, y, 'glow', 0.4, 'glow'); }
 }

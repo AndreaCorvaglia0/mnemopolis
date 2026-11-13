@@ -25,13 +25,21 @@ try {
   // the generated dressing (gardens, fences, jetty...): its solid tiles block, its jetty can be walked on,
   // and nothing may get farther or unreachable because of it
   const { GEN } = await import('../src/gen/core.js');
+  let L = null;
   if (GEN.dressing) {
-    const D = await import('../src/gen/dressing.js'), L = D.planDressing();
+    const D = await import('../src/gen/dressing.js');
+    L = D.planDressing();
     L.blocked.forEach(([x, y]) => blocked.add(`${x},${y}`)); L.walk.forEach(([x, y]) => blocked.delete(`${x},${y}`));
     const { problems } = D.checkDressing(L);
     problems.forEach((p) => { console.log(`ERROR    dressing: ${p}`); bad++; });
     console.log(`dressing: theme ${L.theme}, ${L.pieces.length} pieces, ${L.blocked.length} solid tiles, ${L.plots.length} plots; ${problems.length ? 'PROBLEMS' : 'no walk got longer'}`);
   } else console.log('dressing: generator off');
+  // door approach (WORLD.md, "Nothing stands in front of a door"): the same solidity as the game, base town plus dressing
+  const { solidMap, checkDoors } = await import('../src/world/doors.js');
+  const door = checkDoors(m.TOWN, solidMap(m.TOWN, L), L);
+  door.problems.forEach((p) => { console.log(`ERROR    door approach: ${p.text}`); bad++; });
+  door.crowded.forEach((t) => console.log(`warning  door approach: ${t} (houses too close)`));
+  console.log(`door approach: ${m.BUILDINGS.reduce((n, b) => n + b.doors.length, 0)} doors, ${door.problems.length ? 'PROBLEMS' : 'all clear and reachable'}`);
   const dist = new Map([[`${m.START.x},${m.START.y}`, 0]]), queue = [[m.START.x, m.START.y]];
   while (queue.length) { const [x, y] = queue.shift(), d = dist.get(`${x},${y}`); for (const [i, j] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const k = `${x + i},${y + j}`; if (x + i < 0 || y + j < 0 || x + i >= m.MAP_W || y + j >= m.MAP_H || blocked.has(k) || dist.has(k)) continue; dist.set(k, d + 1); queue.push([x + i, y + j]); } }
   let far = 0;

@@ -26,18 +26,26 @@ export const KINDS = {
 const LEAGUE = { paint: 'league', w: 8, h: 5, doors: [[3, 4], [4, 4]] };
 
 // Distances are kept short on purpose: a district's plaza is a few seconds' walk from the square.
-function generate() {
+export function generate(C = COURSE) {
   const GW = 160, GH = 140, cx = 80, cy = 70;
   const m = Array.from({ length: GH }, () => Array(GW).fill('g'));
   const at = (x, y) => m[y]?.[x];
-  const set = (x, y, ch) => { if (x >= 0 && y >= 0 && x < GW && y < GH) m[y][x] = ch; };
+  // Nothing stands in front of a door (WORLD.md): the tiles below every door and the front of every house are
+  // reserved before anything else is placed. No landscape puts water, cliff, tree, bush or fence on them,
+  // and lamps, signs and benches that land on them are moved (see `settle` below).
+  const reserved = new Set();
+  const reserveFront = ({ x, y, w, h, doors }) => {
+    for (const [dx, dy] of doors) for (let j = 1; j <= 3; j++) for (let i = -1; i <= 1; i++) reserved.add((dy + j) * GW + dx + i);
+    for (let j = 0; j < 2; j++) for (let i = 0; i < w; i++) reserved.add((y + h + j) * GW + x + i);
+  };
+  const set = (x, y, ch) => { if (x >= 0 && y >= 0 && x < GW && y < GH && !(reserved.has(y * GW + x) && '~ReTbF'.includes(ch))) m[y][x] = ch; };
   const fill = (x0, y0, x1, y1, ch) => { for (let y = Math.min(y0, y1); y <= Math.max(y0, y1); y++) for (let x = Math.min(x0, x1); x <= Math.max(x0, x1); x++) set(x, y, ch); };
   // a road never erases a plaza, and over water it becomes a bridge
   const road = (x0, y0, x1, y1) => { for (let y = Math.min(y0, y1); y <= Math.max(y0, y1); y++) for (let x = Math.min(x0, x1); x <= Math.max(x0, x1); x++) { const c = at(x, y); if (c !== 'c') set(x, y, c === '~' ? 'w' : 'p'); } };
   const buildings = [], lamps = [], signs = [], npcs = [], monuments = [], quarters = [], props = [], boxes = [];
-  const n = COURSE.districts.length;
+  const n = C.districts.length;
   if (n < 1 || n > 4) throw new Error('A course has 1 to 4 districts.');
-  const seed = [...COURSE.id].reduce((a, c) => a + c.charCodeAt(0), 0);
+  const seed = [...C.id].reduce((a, c) => a + c.charCodeAt(0), 0);
   const jit = (k) => Math.round((hashI(seed, k, 3) - 0.5) * 2);
   // a winding lane, two tiles wide, from a to b
   const trail = (ax, ay, bx, by, bend = 1.6) => {
@@ -50,25 +58,26 @@ function generate() {
   const hub = { x0: cx - 5, y0: cy - 3, x1: cx + 4, y1: cy + 2 };
   fill(hub.x0, hub.y0, hub.x1, hub.y1, 'c');
   [[hub.x0, hub.y1], [hub.x1, hub.y1]].forEach(([x, y]) => set(x, y, 'g')); // soften the lower corners
-  monuments.push({ x: cx - 1, y: cy - 1, kind: COURSE.hub.monument || 'fountain', title: COURSE.hub.name, lines: [COURSE.title, COURSE.bigIdea] });
-  const g = COURSE.hub.guide;
+  monuments.push({ x: cx - 1, y: cy - 1, kind: C.hub.monument || 'fountain', title: C.hub.name, lines: [C.title, C.bigIdea] });
+  const g = C.hub.guide;
   npcs.push({ id: 'guide', name: g.name, x: cx + 2, y: cy + 1, dir: 'down', look: g.look || 'mentor' });
-  const lg = { id: 'league', kind: 'league', name: COURSE.league.name, label: 'LEAGUE', paint: LEAGUE.paint, x: cx, y: hub.y0 - LEAGUE.h, w: LEAGUE.w, h: LEAGUE.h, open: false, league: true };
+  const lg = { id: 'league', kind: 'league', name: C.league.name, label: 'LEAGUE', paint: LEAGUE.paint, x: cx, y: hub.y0 - LEAGUE.h, w: LEAGUE.w, h: LEAGUE.h, open: false, league: true };
   lg.doors = LEAGUE.doors.map(([dx, dy]) => [lg.x + dx, lg.y + dy]);
   const home = { id: 'home', name: `${g.name}'s house`, paint: 'cottage', x: cx - 6, y: hub.y0 - 4, w: 4, h: 4, open: false, home: true };
   home.doors = [[home.x + 1, home.y + 3]];
   buildings.push(lg, home);
+  reserveFront(lg); reserveFront(home);
   boxes.push([cx - 8, hub.y0 - 7, cx + 9, hub.y1 + 1]);
   lamps.push([hub.x0, hub.y0], [hub.x1 + 1, hub.y1], [hub.x0 - 1, hub.y1]);
   props.push([hub.x0 + 2, hub.y1, 'bench'], [hub.x1 - 2, hub.y1, 'bench']);
-  signs.push({ x: cx + 2, y: hub.y0, lines: [COURSE.hub.name.toUpperCase(), COURSE.bigIdea, 'Tab opens the map.'] });
+  signs.push({ b: 'league', x: cx + 2, y: hub.y0, lines: [C.hub.name.toUpperCase(), C.bigIdea, 'Tab opens the map.'] });
 
   // ---- districts: a small plaza with its landmark, houses around it ----
   // local layout (plaza centre = 0,0): two houses above the plaza, two below at its sides
   const SLOT = { 1: ['N'], 2: ['W', 'E'], 3: ['W', 'N', 'E'], 4: ['W', 'N', 'E', 'S'] }[n];
   let order = 0;
-  const riverOf = COURSE.districts.find((x) => x.nature === 'river') || COURSE.districts[0];
-  COURSE.districts.forEach((d, i) => {
+  const riverOf = C.districts.find((x) => x.nature === 'river') || C.districts[0];
+  C.districts.forEach((d, i) => {
     if (d.places.length < 1 || d.places.length > 4) throw new Error(`District "${d.id}" needs 1 to 4 places.`);
     const ks = d.places.map((p) => { const k = KINDS[p.kind]; if (!k) throw new Error(`Place "${p.id}": kind must be one of ${Object.keys(KINDS).join(', ')}.`); return k; });
     // where each house stands, relative to the plaza
@@ -79,13 +88,14 @@ function generate() {
     const ax = slot === 'W' ? hub.x0 - 4 - gap - ext.r : slot === 'E' ? hub.x1 + 5 + gap - ext.l : cx + jit(i) * 2;
     const ay = slot === 'N' ? hub.y0 - 9 - gap - ext.b : slot === 'S' ? hub.y1 + 4 + gap - ext.t : cy + 1 + jit(i + 7) * 2;
     const L = (x, y) => [ax + x, ay + y];
+    ks.forEach((k, j) => { const bx = ax + spot[j].x, by = ay + spot[j].b - k.h + 1; reserveFront({ x: bx, y: by, w: k.w, h: k.h, doors: k.doors.map(([dx, dy]) => [bx + dx, by + dy]) }); });
     boxes.push([ax + ext.l - 1, ay + ext.t - 1, ax + ext.r + 1, ay + ext.b + 1]);
     d._a = { ax, ay, ext, slot, ks, spot, L };
   });
 
   // landscapes first, so that plazas, lanes and houses are drawn over them
   const inBox = (x, y, pad = 0) => boxes.some(([x0, y0, x1, y1]) => x >= x0 - pad && x <= x1 + pad && y >= y0 - pad && y <= y1 + pad);
-  for (const d of COURSE.districts) {
+  for (const d of C.districts) {
     const { ax, ay, ext } = d._a, mx = ax + (ext.l + ext.r) / 2, my = ay + (ext.t + ext.b) / 2, rx = (ext.r - ext.l) / 2 + 3, ry = (ext.b - ext.t) / 2 + 3;
     if (d.nature === 'hill') {
       blob(mx, my, rx, ry, (x, y, k) => { if (k < 1) set(x, y, 'r'); });
@@ -113,7 +123,7 @@ function generate() {
     }
   }
 
-  COURSE.districts.forEach((d, i) => {
+  C.districts.forEach((d, i) => {
     const { ax, ay, ext, slot, ks, spot, L } = d._a;
     fill(...L(-4, -1), ...L(3, 2), 'c');
     const first = order + 1;
@@ -128,7 +138,7 @@ function generate() {
       else if (j === 2) { road(...L(d0, row), ...L(-4, row)); road(...L(-4, 3), ...L(-4, row)); }
       else { road(...L(3, row), ...L(d1, row)); road(...L(3, 3), ...L(3, row)); }
       if (j === 0) road(...L(-2, -2), ...L(-2, -2));
-      signs.push({ x: ax + (j % 2 === 0 ? d0 - 1 : d1 + 1), y: ay + row, lines: [`${b.order}. ${p.name.toUpperCase()}`, p.concept, p.objective ? `Here you learn to: ${lower(p.objective)}` : null].filter(Boolean) });
+      signs.push({ b: b.id, x: ax + (j % 2 === 0 ? d0 - 1 : d1 + 1), y: ay + row, lines: [`${b.order}. ${p.name.toUpperCase()}`, p.concept, p.objective ? `Here you learn to: ${lower(p.objective)}` : null].filter(Boolean) });
     });
     monuments.push({ x: ax - 1, y: ay, kind: d.landmark || 'obelisk', title: d.name, lines: [d.name.toUpperCase(), d.idea, ...d.places.map((p, j) => `${first + j}. ${p.name}: ${p.concept}`)] });
     lamps.push(L(-5, 2), L(4, -1));
@@ -161,8 +171,29 @@ function generate() {
   const out = [];
   for (let y = 0; y < Hh; y++) out.push(m[y + y0].slice(x0, x0 + W));
   const free = (x, y) => out[y]?.[x] === 'g' && !taken.has(`${x},${y}`);
-  const LAMPS = lamps.map(sh).filter(([x, y]) => free(x, y) || out[y]?.[x] === 'c'), SIGNS = signs.map((s) => ({ ...s, x: s.x - x0, y: s.y - y0 }));
-  const NPCS = npcs.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), MONUMENTS = monuments.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), PROPS = props.map(sh);
+  // lamps, signs and benches never stand on a reserved tile: one that does moves to the nearest free tile
+  const res = new Set([...reserved].map((k) => `${(k % GW) - x0},${Math.floor(k / GW) - y0}`));
+  const settle = (list, chars, pos = (p) => p, move = (p, x, y) => [x, y, ...p.slice(2)]) => {
+    const key = (x, y) => `${x},${y}`;
+    list.forEach((p) => { const [x, y] = pos(p); if (!res.has(key(x, y))) taken.add(key(x, y)); });
+    return list.map((p) => {
+      const [x, y] = pos(p);
+      if (!res.has(key(x, y))) return p;
+      for (let d = 1; d <= 4; d++) for (let j = -d; j <= d; j++) for (let i = -d; i <= d; i++) {
+        const X = x + i, Y = y + j;
+        if (Math.max(Math.abs(i), Math.abs(j)) !== d || res.has(key(X, Y)) || taken.has(key(X, Y)) || !chars.includes(out[Y]?.[X] ?? '#')) continue;
+        taken.add(key(X, Y));
+        return move(p, X, Y);
+      }
+      return null;
+    }).filter(Boolean);
+  };
+  const LAMPS = settle(lamps.map(sh).filter(([x, y]) => free(x, y) || out[y]?.[x] === 'c'), 'gc');
+  const own = signs.filter((s) => s.b).map((s) => ({ ...s, x: s.x - x0, y: s.y - y0 })); // a house's own signpost stands by its door, where it belongs
+  own.forEach((o) => taken.add(`${o.x},${o.y}`));
+  const SIGNS = [...own, ...settle(signs.filter((s) => !s.b).map((s) => ({ ...s, x: s.x - x0, y: s.y - y0 })), 'g', (o) => [o.x, o.y], (o, x, y) => ({ ...o, x, y }))];
+  const NPCS = npcs.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), MONUMENTS = monuments.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), PROPS = settle(props.map(sh), 'gc');
+  res.forEach((k) => taken.add(k)); // no tree, bush or rock grows in front of a door
   [...LAMPS, ...SIGNS.map((s) => [s.x, s.y]), ...NPCS.map((p) => [p.x, p.y]), ...MONUMENTS.flatMap((p) => [[p.x, p.y], [p.x + 1, p.y]]), ...PROPS].forEach(([x, y]) => taken.add(`${x},${y}`));
   const near = (x, y, chars, r = 1) => { for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) { const c = out[y + j]?.[x + i]; if (c && chars.includes(c)) return true; } return false; };
   for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) {
@@ -190,6 +221,7 @@ function hashI(x, y, s) { let h = (Math.imul(x, 374761393) + Math.imul(y, 668265
 const lower = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 
 const G = generate();
+export const TOWN = G; // the same data as one object (scripts that build other towns call generate(course) themselves)
 export const MAP_W = G.W, MAP_H = G.H;
 export const { TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, QUARTERS, PROPS, START, HUB } = G;
 

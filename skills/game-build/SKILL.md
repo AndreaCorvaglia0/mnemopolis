@@ -37,13 +37,13 @@ The specification in `course.json` is the contract. Each field tells you somethi
 
 | Field | What you build |
 |---|---|
-| `object` | What is drawn on the stage, as large as possible |
+| `object` | What is drawn on the stage. The stage is most of the screen: fill it (see below) |
 | `action` | The interaction, on the stage itself whenever possible (`canvasPane`, `draggable`) |
 | `controls` | At most two controls in `ctx.controls` (`slider`, `seg`) |
 | `tries` | For each task, a condition on the state that calls `ctx.did(i)` when it becomes true |
 | `surprise` | The state the first task must lead to. Check that it is actually reachable and visible |
-| `predict` | Nothing: the frame asks it before your code runs |
-| `goal`, `takeaway`, `source` | Nothing: the frame shows them |
+| `predict` | Nothing: the frame asks it while your picture is shown, frozen, and gives the verdict at the end (from `predict.answer`). Draw the starting state so that it does not give the answer away |
+| `goal`, `takeaway`, `source` | Nothing: the frame shows them (`source` only in the theory drawer) |
 | `data` | Real material to embed: import it so the build inlines it; keep it small |
 
 Rules:
@@ -59,9 +59,18 @@ Rules:
 - **No network at run time.** No CDN, no remote fonts or images.
 - Texts shown by your code (captions, readouts) follow the course's language and tone: plain,
   no praise, no exclamation marks.
-- **It must work on a phone held upright.** The stage is then about 360 px wide: draw text in
-  canvases at 22 px or more for a 720-wide canvas, make things to drag at least 40 px across,
-  and make task thresholds forgiving for a finger. Check with `npm run shots:phone`.
+- **Draw for the whole stage.** Use `canvasPane(ctx.stage, w, hgt, caption, { portrait: [w2, h2] })`
+  with a wide box for screens and laptops (about 3:2) and a near-square box for a phone held
+  upright (about 480 x 520). Lay out from `pane.W` and `pane.H` (or `pane.upright`), and pass
+  your draw function to `pane.onResize`. Never leave a small drawing in a corner of a large box.
+- **Readable at any size.** Write every font as `pane.font(size, weight)` (never below 16 screen
+  pixels), lines 2 to 4 units wide, things to drag at least 40 px across on a phone, task
+  thresholds forgiving for a finger. Where a chart has values, offer them with `pane.tip(fn)`.
+- **No text that answers the question.** Captions and read-outs must not reveal the prediction
+  before the learner has found it on the stage.
+- **The flow is the frame's.** Do not draw your own instructions, ticks, "well done" or Next
+  buttons: call `ctx.did(i)` and the frame does the rest. Check with `npm run shots:lab` and
+  `npm run shots:phone`.
 - Aim for 40 to 80 lines per station. If it grows beyond that, the design is probably two
   stations: say so.
 
@@ -78,6 +87,7 @@ match a wrong design, and never change `course.json` silently.
 | `COURSE=<slug> npm run build` | The above, then `engine/dist/index.html` |
 | `npm run shots` | Pictures in `engine/shots/`: the town, a walk into a house and back, every room, station and page |
 | `npm run shots:phone` | The same on a phone held upright, with touch, in `engine/shots/phone/` |
+| `npm run shots:lab` | One station walked through every state of the frame, and the first state of every station, desktop and phone, in `engine/shots/lab/` |
 
 Pictures show the first state of each station, not the interaction. For each station also
 verify the logic of its tasks by reading your own conditions against the drawing code.

@@ -11,8 +11,8 @@ export const GEN = { facade: true, interior: true, dressing: true, ...(WORLD?.ge
 function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 
 // A random source tied to a name. seeded('lamps:facade') is the same sequence in every build.
-export function seeded(key) {
-  let a = hash(`${DATA.id}:${key}`) || 1;
+export function seeded(key, id = DATA.id) {
+  let a = hash(`${id}:${key}`) || 1;
   const next = () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   next.int = (lo, hi) => lo + Math.floor(next() * (hi - lo + 1));
   next.pick = (arr) => arr[Math.floor(next() * arr.length)];

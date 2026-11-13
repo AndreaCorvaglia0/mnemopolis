@@ -6,17 +6,17 @@ import { h } from './shell.js';
 import { sfx } from '../systems/audio.js';
 
 const CSS = `
-.cp{background:#0b0e14;border:1px solid #232a36;border-radius:8px;font:13px/1.75 ui-monospace,Menlo,Consolas,monospace;overflow:auto;padding:8px 0}
+.cp{background:#0b0e14;border:1px solid #232a36;border-radius:8px;font:14px/1.75 ui-monospace,Menlo,Consolas,monospace;overflow:auto;padding:8px 0}
 .cp-l{display:grid;grid-template-columns:26px 1fr;align-items:baseline;padding:0 10px 0 4px;white-space:pre;border-left:3px solid transparent}
 .cp-l:hover{background:#141a24}.cp-l.on{background:#2a2412;border-left-color:#ffcf5a}
 .cp-l.off .cp-t{opacity:.38;text-decoration:line-through;text-decoration-color:#6f7789}
-.cp-g{display:grid;place-items:center}.cp-g input{accent-color:#4fd1c5;margin:0;cursor:pointer}
+.cp-g{display:grid;place-items:center}.cp-g input{accent-color:#4fd1c5;margin:0;cursor:pointer;width:16px;height:16px}
 .cp-t .c{color:#6f7f96}.cp-t .s{color:#b5d99c}.cp-t .k{color:#c9a1f0}.cp-t .n{color:#f0b27a}
 .cp-k{font:inherit;color:#06211f;background:#4fd1c5;border:0;border-radius:4px;padding:0 3px;margin:0 1px;cursor:pointer;font-weight:600;appearance:none;-webkit-appearance:none;text-align:center}
 .cp-k:hover,.cp-k:focus{background:#ffcf5a;outline:none}
-.cp-note{min-height:58px;background:#151a23;border:1px solid #232a36;border-radius:8px;padding:8px 12px;font-size:14px;line-height:1.45;color:#c9cfdd}
+.cp-note{min-height:58px;background:#151a23;border:1px solid #232a36;border-radius:8px;padding:10px 12px;font-size:16px;line-height:1.45;color:#c9cfdd}
 .cp-note b{color:#ffcf5a}
-.cp-legend{font-size:12px;color:#8b93a7;display:flex;gap:14px;flex-wrap:wrap}
+.cp-legend{font-size:15px;color:#b0b8c9;display:flex;gap:14px;flex-wrap:wrap}
 .cp-legend i{display:inline-block;width:18px;height:11px;border-radius:3px;background:#4fd1c5;vertical-align:-1px;margin-right:4px}
 .pipe-err{background:#2a1215;border:1px solid #ff7a6b;border-radius:8px;padding:10px 12px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#ffb3a8;white-space:pre-wrap}
 `;

@@ -603,6 +603,11 @@
               "items": {
                 "type": "string"
               }
+            },
+            "answer": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Index of the option that the exploration shows to be right. The lab states the verdict after the tasks."
             }
           }
         },

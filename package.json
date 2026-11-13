@@ -7,6 +7,7 @@
     "validate": "node skills/knowledge-base/scripts/validate.mjs",
     "setup": "npm --prefix engine install",
     "check": "npm --prefix engine run check",
+    "stress": "npm --prefix engine run stress --",
     "build": "npm --prefix engine run build",
     "shots": "npm --prefix engine run shots",
     "shots:phone": "npm --prefix engine run shots:phone",
