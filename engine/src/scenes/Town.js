@@ -10,7 +10,13 @@ import { hash } from '../art/px.js';
 import { GEN } from '../gen/core.js';
 import { addDressing } from '../gen/dressing.js';
 import { attachTownLife } from '../mechanics/town.js';
+import { Q } from '../mechanics/quest/active.js';
+import { Q_WORDS, tr, fill, answerLine, gateLine } from '../mechanics/quest/strings.js';
+import { markSeen } from '../mechanics/quest/townmap.js';
+import { NEAR } from '../mechanics/musings/lines.js';
+import { Deck } from '../mechanics/musings/think.js';
 
+const talkDeck = new Deck(); // people's hints and congratulations cycle before repeating
 const TOD = {
   dusk: { dark: 0.44, tint: 0x2a1d55, lit: 0.95, glow: 0.85, beam: 0.6, fire: 0.75, sun: 0.55, spark: 0.9 },
   night: { dark: 0.7, tint: 0x0b1030, lit: 1, glow: 1, beam: 0.95, fire: 1, sun: 0, spark: 0.5 },
@@ -41,6 +47,7 @@ export class Town extends Phaser.Scene {
     this.makeProps();
     if (GEN.dressing) addDressing(this); // optional small things: gardens, fences, jetty... (gen/dressing.js)
     this.makeNPCs();
+    this.makeChampion();
 
     const p = data.from ? this.exitTile(data.from) : state.pos || START;
     this.player = new Walker(this, 'ch-player', p.x, p.y, p.dir || 'up');
@@ -48,6 +55,8 @@ export class Town extends Phaser.Scene {
 
     this.makeLighting();
     this.makeAtmosphere();
+    this.makeMark();
+    markSeen(this.player.tx, this.player.ty);
 
     const cam = this.cameras.main;
     cam.setBounds(0, 0, MAP_W * T, MAP_H * T);
@@ -356,6 +365,7 @@ export class Town extends Phaser.Scene {
     state.steps += 1;
     this.showWhere(x, y);
     this.life?.step(x, y);
+    markSeen(x, y);
     if (state.steps % 8 === 0) save();
     const g = this.grassIndex.get(`${x},${y}`);
     if (g) {
@@ -398,25 +408,115 @@ export class Town extends Phaser.Scene {
   }
 
   async talk(npc) {
+    if (npc.def.id === 'champion') return this.league();
     npc.faceToward(this.player.tx, this.player.ty);
     sfx.select();
-    // One line, then the player picks what to ask. Every answer is one line too.
-    const t = TALK[npc.def.id], bye = { label: 'Bye' };
-    const nodes = { root: { say: t.hi, options: [...t.options.map((o, i) => ({ label: o[0], to: `a${i}` })), bye] } };
-    t.options.forEach((o, i) => { nodes[`a${i}`] = { say: o[1], options: [...t.options.filter((_, j) => j !== i).map((x) => ({ label: x[0], to: `a${t.options.indexOf(x)}` })), { label: 'Thanks, bye' }] }; });
+    // after the ending, everyone congratulates once
+    if (state.ended && !state.cheered?.[npc.def.id]) {
+      (state.cheered ||= {})[npc.def.id] = true;
+      save();
+      await this.ui.say([talkDeck.draw('cheer', tr(Q_WORDS.congrats))], { name: npc.def.name });
+    }
+    // One line, then the player picks what to ask. Every answer is one line too. "What should I do
+    // now?" answers from the main path (the same step as the tracker), and sometimes hints at more.
+    const t = TALK[npc.def.id] || { hi: '...', options: [] }, bye = { label: 'Bye' };
+    const opts = [[tr(Q_WORDS.ask), () => this.whatNow()], ...t.options.map((o) => [o[0], () => o[1]])];
+    const nodes = { root: { say: t.hi, options: [...opts.map((o, i) => ({ label: o[0], to: `a${i}` })), bye] } };
+    opts.forEach((o, i) => { nodes[`a${i}`] = { get say() { return o[1](); }, options: [...opts.filter((_, j) => j !== i).map((x) => ({ label: x[0], to: `a${opts.indexOf(x)}` })), { label: 'Thanks, bye' }] }; });
     await this.ui.converse(npc.def.name, nodes);
     npc.face(npc.home);
   }
 
-  // The league hall: the final check. Optional, and Esc leaves at any point.
+  // One line from the next step; one time in three, a hint that the town holds more (never a name).
+  whatNow() {
+    const line = answerLine(Q.nextStep(state));
+    const hidden = Q.extra.filter((p) => !state.visited[p.id]);
+    if (!hidden.length || Math.random() > (state.ended ? 0.7 : 0.34)) return line;
+    const p = hidden[Math.floor(Math.random() * hidden.length)], near = NEAR[p.district?.landmark] || NEAR.here;
+    return `${line} ${fill(talkDeck.draw('hint', tr(Q_WORDS.hints)), { near: tr(near) })}`;
+  }
+
+  // ---------- the League hall and its champion (mechanics/quest: gating and the ending) ----------
+  // The champion stands in front of the hall's second door until the League is won, then steps aside.
+  // (docs/DESIGN.md asks for a gate on the town's edge; the generator is left alone and the scene
+  // plays at the League hall, which every town has on its square.)
+  makeChampion() {
+    const lg = BUILDINGS.find((b) => b.league);
+    if (!lg) return;
+    const d = lg.doors[lg.doors.length - 1], front = [d[0] + (lg.doors.length > 1 ? 0 : 1), d[1] + 1], aside = [front[0] + 2, front[1]];
+    const free = ([x, y]) => this.canEnter(x, y) === true && !SIGNS.some((s) => s.x === x && s.y === y);
+    const at = state.ended && free(aside) ? aside : free(front) ? front : free(aside) ? aside : null;
+    if (!at) return;
+    const h = LEAGUE.host || {}, key = this.textures.exists(`ch-${h.look}`) ? `ch-${h.look}` : 'ch-mentor';
+    const w = new Walker(this, key, at[0], at[1], 'down');
+    w.def = { id: 'champion', name: h.name || 'Judge', look: h.look };
+    w.home = 'down';
+    w.aside = free(aside) ? aside : null;
+    this.npcs.push(w);
+    this.champion = w;
+  }
+
+  // The League hall: closed until every house of the main path is done; then the League, as before.
   async league() {
-    const seen = Object.keys(state.visited).length;
-    await this.ui.converse(LEAGUE.host?.name || 'Judge', {
-      root: { say: state.passedLeague ? 'You already hold the league badge. Another round?' : seen ? `The ${LEAGUE.name}: ${LEAGUE.size} questions from every house. ${Math.round(LEAGUE.pass * 100)}% and you pass.` : 'Visit a few houses first. The league asks about all of them.', options: [
-        { label: 'Start the league', do: async () => { await this.ui.league(); return 'end'; } },
-        { label: 'Not now' },
+    const name = LEAGUE.host?.name || 'Judge', G = Q_WORDS.gate;
+    this.champion?.faceToward(this.player.tx, this.player.ty);
+    sfx.select();
+    if (state.passedLeague && !state.ended) return this.ending();
+    if (!Q.leagueOpen(state)) { await this.ui.say([gateLine(Q.missing(state))], { name }); this.champion?.face('down'); return; }
+    await this.ui.converse(name, {
+      root: { say: state.passedLeague ? tr(G.again) : fill(tr(G.open), { league: LEAGUE.name }), options: [
+        { label: tr(G.start), do: async () => { await this.ui.league(); return 'end'; } },
+        { label: tr(G.notNow) },
       ] },
     });
+    if (state.passedLeague && !state.ended) await this.ending();
+    else this.champion?.face('down');
+  }
+
+  // The League is won: the champion steps aside, says a line in character, the ending card opens.
+  async ending() {
+    this.locked = true;
+    const c = this.champion, name = LEAGUE.host?.name || 'Judge';
+    c?.faceToward(this.player.tx, this.player.ty);
+    await this.ui.say(tr(Q_WORDS.aside), { name });
+    if (c?.aside && !(c.tx === c.aside[0] && c.ty === c.aside[1])) {
+      for (let i = 0; i < 2 && !c.gone; i++) await new Promise((r) => { if (!c.step('right', () => true, 260, () => r())) r(); });
+      c.face('down');
+      await new Promise((r) => this.time.delayedCall(250, r));
+    }
+    state.ended = true;
+    save();
+    this.locked = false;
+    if (this.sys.isActive()) await this.ui.ending();
+  }
+
+  // ---------- the mark over the house of the next step ----------
+  // A small chevron bobbing above the door the tracker names (UI 'quest' event). It lives in the
+  // world, so a house off screen simply shows nothing: no arrows on the ground.
+  makeMark() {
+    if (!this.textures.exists('quest-chev')) {
+      const g = this.make.graphics({ add: false });
+      g.fillStyle(0x1b1a2b, 1).fillRect(0, 0, 11, 3).fillRect(1, 3, 9, 2).fillRect(3, 5, 5, 2).fillRect(4, 7, 3, 2);
+      g.fillStyle(0xffcf5a, 1).fillRect(1, 1, 9, 1).fillRect(2, 2, 7, 2).fillRect(4, 4, 3, 2).fillRect(5, 6, 1, 1);
+      g.generateTexture('quest-chev', 11, 9);
+      g.destroy();
+    }
+    this.mark = this.add.image(0, 0, 'quest-chev').setOrigin(0.5, 1).setDepth(9500).setVisible(false);
+    this.markTween = null;
+    const on = (st) => this.pointAt(st);
+    this.game.events.on('quest', on);
+    this.events.once('shutdown', () => this.game.events.off('quest', on));
+    if (this.ui.quest) this.pointAt(this.ui.quest);
+  }
+
+  pointAt(st) {
+    if (!this.mark?.scene) return;
+    const id = st.place?.id || (st.kind === 'league' || st.kind === 'ending' ? 'league' : null), b = id && BUILDINGS.find((o) => o.id === id);
+    this.markTween?.stop();
+    if (!b || st.kind === 'intro' || st.kind === 'free') { this.mark.setVisible(false); return; }
+    const [d0, d1] = [b.doors[0], b.doors[b.doors.length - 1]], x = ((d0[0] + d1[0]) / 2) * T + T / 2, y = d0[1] * T + 4;
+    this.mark.setPosition(x, y).setVisible(true).setAlpha(0.95);
+    this.markTween = this.tweens.add({ targets: this.mark, y: y - 4, duration: 650, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
   }
 
   async tryDoor(b) {

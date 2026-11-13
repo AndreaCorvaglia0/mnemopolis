@@ -6,12 +6,13 @@
 |---|---|
 | `npm install` | Once. Needs Node 18 or later. |
 | `npm run course <slug>` | Points the engine at `courses/<slug>/` (default `chroma`, or `COURSE=`). Run by the commands below. |
-| `npm test` | Node tests, about half a minute: hundreds of composed rooms against their rules, every zone and trade, home fronts, the `expert` field of the course format, and the ambient-life layer over 240 synthetic towns. |
+| `npm test` | Node tests, about half a minute: hundreds of composed rooms against their rules, every zone and trade, home fronts, the `expert` and `core` fields of the course format, the main path over whole simulated games, and the ambient-life layer over 240 synthetic towns. |
 | `npm run check` | Validates the knowledge base, and that every designed station has code. |
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
 | `npm run shots:phone` | The same tour on a phone held upright (390 x 844, touch mode), into `shots/phone/`. |
 | `npm run shots:lab` | The lab frame state by state (question, after it, one task done with the panel open, folded and full screen, done with the panel open and folded, theory, done in full screen), the first state of every station and a mid state of the slider stations, on a desktop window and a phone, into `shots/lab/` (`OUT2=/dir` copies them). It also reports text cut with an ellipsis. The tasks are done with real drags. `STATION=lamps:0` picks the station walked through. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`; then the duels (`scripts/duelshots.mjs`: a house duel at the start, after a hit, after a miss, won, a friendly rematch, lost; the League mid-way, lost and won) into `shots/duel/`, copied to `/tmp/duel-*.png`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
+| `npm run shots` (end) | Also runs `scripts/spineshots.mjs`: the main path in pictures (the guide's first speech, the tracker at the start, the mark over the next house, the three tabs of the menu in mid-game, a room's tracker, the League refused, the champion stepping aside, the ending card, free roaming), into `shots/spine*/`, copied to `/tmp/spine-*.png` (`OUT2=/dir` to change). |
 | `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
 | `npm run shots:locks` | Pictures of locks and upper floors: a room with stairs, the stairs refused without the key, the upper floor, each close-up before typing, misses with the thought, each lock opened, the discoveries page, the advanced station, the way back down; desktop then phone (with the phone keyboard open), into `shots/locks*/`, copied to `/tmp/locks-*.png`. |
 | `npm run dev` | Live server while editing, if a browser is available. |
@@ -31,12 +32,13 @@ engine/src/
   world/townMap.js generates the town from the course
   scenes/          Boot, Town, Interior (standard room), Workshop (belt), Museum (timeline), UI
   lab/             shell.js (station frame), style.js (its look), kit.js (canvas, drag, read-outs),
-                   code.js (code panel), reading.js (reading wall), map.js (the map), museum.js (plaques)
+                   code.js (code panel), reading.js (reading wall), map.js (the mind map), museum.js (plaques)
   art/             everything drawn in code: ground, buildings, sprites, palette
   systems/         state (save), audio (music and sounds), voice (read aloud), walker (movement)
-  mechanics/       optional ambient life: thoughts, animals, secrets, obstacles (see "Ambient life");
-                   duel/: the duel of eloquence (see "Duels");
-                   riddles/ (locks with free answers) and floors/ (upper floors) (see "Locks", "Upper floors")
+  mechanics/       game dynamics: the main path (quest/: tracker, menu, ending), duel/ (the duel of
+                   eloquence, see "Duels"), riddles/ and floors/ (locks and upper floors, see "Locks",
+                   "Upper floors") and the optional ambient life: thoughts, animals, secrets,
+                   obstacles (see the sections below)
   data/content.js  read-only views of the course for the scenes
 ```
 
@@ -47,14 +49,16 @@ Course work happens in `courses/<slug>/`, not here. See `WORLD.md` for what a cu
 - A house's `id` is the key everywhere: `LABS[id]`, `PAGES[id]`, the saved progress.
 - `state.visited[id]` is set when the learner opens a lab or a museum. Review questions come
   only from visited houses.
-- `state.done['id:k']` is set when station `k` shows its takeaway. The map shows `lab 2/3`. `k`
+- `state.done['id:k']` is set when station `k` shows its takeaway. The Journey shows `lab 2/3`. `k`
   counts the ground-floor stations only (`LABS[id].stations`); advanced stations are saved as
   `state.done['id+up:<stationId>']` (`UPPER_LABS`, see "Upper floors").
 - `state.stamps[id]` (badge) and `state.keys[id]` (key to the upper floor) are set when the duel
   with the host of that house is won; `state.passedLeague` when the League's duel is won (see
-  "Duels"). `state.insight` holds the points (certainty-based: sure and right earns more, sure and
-  wrong costs, except in duels, where a wrong answer costs composure and no points). Points are
-  stored for a later version; nothing spends them yet.
+  "Duels"); `state.ended` once the ending card was seen, `state.seen[id]` for houses walked near
+  (the town map), `state.played` for seconds played. `state.insight` holds the points, shown as
+  coins (certainty-based: sure and right earns more, sure and wrong costs, except in duels, where a
+  wrong answer costs composure and no points); nothing spends them yet.
+- Every hint of what to do next comes from one pure function, `nextStep` (next section).
 
 ## Pitfalls already paid for
 
@@ -196,6 +200,61 @@ network, nothing added to the page size. Everything is in `src/systems/voice.js`
   hide themselves. Headless Chrome cannot be heard, so checks record the calls to
   `speechSynthesis` instead (`__hb.voice.debug()` in the console shows the state).
 
+## The main path: quest, tracker, menu, ending
+
+The game's main story (`docs/DESIGN.md`): every **core** house in path order (enter, do its lab,
+beat its expert in a duel), then the League, then the ending; afterwards the town stays open.
+Everything that tells the player what comes next reads **one** pure function, so the tracker, the
+mark over a house, people, thoughts, the Journey and the mind map's "next" tag can never disagree.
+
+```
+src/mechanics/quest/
+  model.js     questOf({ places, guide, champion }) -> core, extra, progress(state), leagueOpen(state),
+               missing(state), nextStep(state, { inside }), stepKey: pure, tested on synthetic games
+  active.js    Q: the same for the active course
+  strings.js   every word of the main path, English and Italian (tracker, people, gate, ending, menu)
+  menu.js      the menu (Tab / Menu button): Journey, Map, Mysteries; settings and keys in the footer
+  townmap.js   the Map tab's drawn town; markSeen() (houses walked near), knownAs()
+  ending.js    the ending card and its numbers
+```
+
+- **Core**: a concept is core unless `course.json` says `"core": false`. Only core houses appear
+  in the Journey, gate the League and are named by the tracker. Extras show as "?" on the map once
+  seen and in the mind map until visited.
+- **Done**: a house with a duel is done with its badge (`state.stamps`). `hasDuel(p)`: the house
+  has at least two questions; every room's host offers the challenge then (Interior, Workshop and
+  Museum all call `houseDuel` from `mechanics/duel/`). A house without a duel is done when visited
+  with every lab station finished. A badge always counts. `tests/quest.test.mjs` checks that the
+  League is always reachable.
+- **Steps**: `intro` (the guide's first speech, `seenIntro`), then per core house `visit` ->
+  `lab` (n/m; `here` when the player stands in it: "Do the lab") -> `duel` (`person`: the host);
+  then `league` (`Q.leagueOpen`), `ending` (League won, card not seen), `free` (after
+  `state.ended`). `stepKey(step)` changes exactly when the tracker's line should.
+- **Tracker** (`UI.refreshQuest`, `layoutRight`): top right, under the place name; one line in a
+  pill, cut to stay on one line; recomputed every 400 ms from the state (so it follows labs, duels
+  and the League whoever changed them), lights up when the step changes, and emits `quest` on
+  `game.events`. A tap or click on it opens the Map tab. `Tab  Menu` under it on a keyboard, a Menu
+  button on touch: the key hints of old live in the menu's footer.
+- **Mark**: `Town.pointAt` puts a small gold chevron, bobbing, above the door of the house the step
+  names (or the League hall). It is a world sprite: off screen means not seen. No arrows anywhere.
+- **People**: the guide's first speech is `DIALOG.intro` (`introLines`: the goal in three lines,
+  then the first house and its landmark). Every townsperson answers "What should I do now?" from
+  `nextStep`, and about one time in three adds a hint that the town holds more (`Q_WORDS.hints`,
+  never a name). After the ending each congratulates once (`state.cheered`).
+- **Thoughts**: the nudge of `musings/think.js` is built from the step (`nudgeLine`); after the
+  ending it turns to curiosity (`NUDGES.free`).
+- **League hall**: the champion (`LEAGUE.host`) stands before the hall's second door. Talking to
+  the champion or using the door: while closed, one line naming what is missing (`gateLine`); open, the
+  League duel (`ui.league()`); won, `Town.ending()`: the champion steps aside, one line in character,
+  `state.ended`, the ending card (`ui.ending()`), which the Journey tab can reopen. `world.json`
+  `"next": { "title", "url" }` adds "On to <title>" to the card.
+
+**Adding a step kind**: return it from `nextStep` in `model.js` (with what it needs: `place`,
+`person`, `n`, `m`), give it a tracker line and a "what should I do" answer in `strings.js` (both
+languages; `npm test` checks), a nudge in `musings/lines.js` (`NUDGES`, mapped in
+`think.js:nudgeKind`), and if it names a building, `Town.pointAt` finds it by id. Then walk it in
+`tests/quest.test.mjs` (`act` says how a simulated player completes it).
+
 ## Ambient life
 
 An optional layer of atmosphere in `src/mechanics/` (the place for game dynamics: they are a
@@ -213,11 +272,11 @@ Each kind of thing has its own gesture and its own look, so the learning flow ne
 | Locks (a safe, a computer, a door with a hatch) and stairs: key objects | single tap or click, Space | a lock: its first-person close-up, with a padlock and a question mark above it while the player is near and it is shut; stairs: up, or without the key a short thought and a key mark |
 | Atmosphere: anything else | double tap or double click on a thing within 3 tiles, or T for what the player faces (across empty ground, the first thing up to 3 tiles ahead) | a thought bubble above the head: a pale cloud with small circles, no name, no arrow, gone by itself in 2 to 4 s, never stacked, clear of the HUD, no sound but a soft tick, not read aloud |
 | Animals and happenings | coming close | no interface at all: the cat runs and hides, birds take off, the apple falls |
-| Secrets | exploring: walking somewhere, thinking about something, standing still | the thought bubble, then a small toast "Discovery 3 of 9"; the discoveries page (J, or the button on the map) |
+| Secrets | exploring: walking somewhere, thinking about something, standing still | the thought bubble, then a small toast "Discovery 3 of 9"; the discoveries (J, or the menu's Mysteries tab) |
 
 Rules: the normal interaction always wins (T on a person only says "Maybe I should just say
 hello."; a double tap on a house, a door, a sign, a person or an obstacle is an ordinary tap).
-Nothing of this layer opens or reacts while a lab, a reading page, a dialogue, a quiz or the map is
+Nothing of this layer opens or reacts while a lab, a reading page, a dialogue, a quiz or the menu is
 open (`ui.busy`); it adds two keys, T and J, used nowhere else.
 
 **The touch gesture: double tap, with the walk cancelled.** A single tap acts at once, as before
@@ -261,7 +320,8 @@ src/mechanics/
   musings/   lines.js (the registry of lines by kind of thing, nudges), think.js (cycling, nudge: pure),
              things.js (what kind of thing is at a tile, from data the town and rooms already have)
   animals/   cast.js (who, when, where, how they react), place.js (spots, pure), art.js, live.js
-  secrets/   registry.js (kinds, texts, the rhyme), place.js (pure), art.js, paintings.js, journal.js
+  secrets/   registry.js (kinds, texts, the rhyme), place.js (pure), art.js, paintings.js,
+             journal.js (the discoveries: the menu's Mysteries tab, or a page of its own)
   obstacles/ kinds.js (registry, canPass), place.js (pure), art.js
 ```
 
@@ -273,10 +333,10 @@ secrets are checked when the player arrives on a tile.
 ### What there is
 
 - **Musings**: 89 kinds of thing outdoors, indoors and animals, 3 to 6 lines each (319 in each
-  language). About one musing in four or five is a **nudge** built from the game state by one pure
-  function (`nudgeTarget`, tested): the first house of the path not yet visited (the same one the
-  map marks "next"), with its landmark or "right around here"; inside that very house, its lab; then
-  the final check; then a done line. Nudges never name a visited place. Sometimes a nudge hints at an
+  language). About one musing in four or five is a **nudge** built from the next step of the main
+  path (`nextStep`, see above; `nudgeLine` in `think.js`, tested): the house to go to, with its
+  landmark or "right around here"; inside that very house, its lab; a duel; the League; after the
+  ending, curiosity about what the town still hides. Nudges never name an extra. Sometimes a nudge hints at an
   undiscovered secret nearby ("Did something just move over there?").
 - **Animals**: a cat (two in the citadel theme) that runs to cover and comes back elsewhere later;
   sparrows on the plazas by day; an owl in a tree at night that turns its head to follow you; a frog

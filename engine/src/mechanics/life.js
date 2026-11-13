@@ -3,7 +3,8 @@
 import { state, save } from '../systems/state.js';
 import { sfx } from '../systems/audio.js';
 import { touch } from '../systems/view.js';
-import { PLACES, LEAGUE } from '../data/content.js';
+import { LEAGUE } from '../data/content.js';
+import { Q } from './quest/active.js';
 import { LIFE, LANG, tr, fill, WORDS } from './config.js';
 import { Deck, musing } from './musings/think.js';
 import { lifePlan } from './active.js';
@@ -34,7 +35,7 @@ export function thought(ui) { return (ui.__thought ||= new Thought(ui)); }
 export function say(scene, text, o) { if (!scene.ui) return; sfx.tick(); thought(scene.ui).show(scene, text, o); }
 
 // the facts a nudge is built from (musings/think.js)
-export const gameFacts = (here = null, inside = null) => ({ places: PLACES, visited: state.visited, passedFinal: state.passedLeague, finalName: LEAGUE.name, here, inside });
+export const gameFacts = (here = null, inside = null) => ({ step: Q.nextStep({ ...state, seenIntro: true }, { inside }), finalName: LEAGUE.name, here });
 
 export function thinkAbout(scene, kind, { here = null, inside = null, hint = false, lines = null } = {}) {
   let text;

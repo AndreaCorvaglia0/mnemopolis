@@ -4,7 +4,8 @@
 //   { "hub": { "name", "monument", "guide": { "name", "look", "hi" } },
 //     "places": { "<conceptId>": { "kind", "host": { "name", "look", "hi" } } },
 //     "themes": { "<themeId>": { "nature", "landmark" } }, "finalCheckHost": { "name", "look" },
-//     "homes": "auto" }
+//     "homes": "auto", "next": { "title": "<next course>", "url": "https://..." } }
+// "next" names the town the ending card offers to go on to (mechanics/quest/ending.js).
 // "voice" (read aloud) is read by systems/voice.js, "gen" and "theme" by gen/core.js.
 import { DATA, WORLD } from './_data.js';
 import { seeded } from '../gen/core.js';
@@ -64,8 +65,7 @@ export const COURSE = {
     name: W.hub?.name || 'Central Square', monument: hubMonument,
     guide: { name: 'Iris', look: 'mentor', hi: `Welcome to ${DATA.title}. Every house holds one idea, and a lab to try it.`,
       options: [
-        ['Where do I start?', 'At house number 1. The numbers on the walls are the order. Tab shows the map.'],
-        ['What is in a house?', 'A lab behind the glowing door, a reading wall, and someone who knows the place.'],
+        ['What is in a house?', 'A lab behind the glowing door, a reading wall, and someone who knows the place and will argue about it.'],
         ['What are the meadows for?', 'Tall grass hides quick questions about houses you have already visited. Say "not now" whenever you like.'],
       ], ...W.hub?.guide },
   },

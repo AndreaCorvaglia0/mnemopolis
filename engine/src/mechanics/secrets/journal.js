@@ -43,12 +43,12 @@ const CSS = `.jr{flex:1;overflow:auto;padding:20px 18px 60px}.jr-in{max-width:88
 .jr-c .tag{display:inline-block;font-size:12px;border:1px solid #e0a93a;color:#e0a93a;border-radius:999px;padding:0 8px;margin-top:6px}`;
 let styled = false;
 
-export function openJournal(plan) {
+// The page's body: also the Mysteries tab of the menu (mechanics/quest/menu.js), so the discoveries
+// live in one place. busy(true/false) is told when a painting opens on top, so keys wait for it.
+export function journalBody(plan, busy = () => {}) {
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
-  const { root, close } = overlay(tr(WORDS.journal), '');
   const found = state.life?.found || {}, list = plan.secrets.filter((s) => s.kind !== 'sealed'), sealed = plan.secrets.filter((s) => s.kind === 'sealed');
-  let busy = false;
-  const look = async (id, mark) => { busy = true; await openPainting(id, TOWN, mark); busy = false; };
+  const look = async (id, mark) => { busy(true); await openPainting(id, TOWN, mark); busy(false); };
   const card = (s) => {
     const ok = !!found[s.id], k = SECRETS[s.kind];
     const kids = [h('h3', {}, ok ? tr(k.title) : '?  ?  ?')];
@@ -67,9 +67,15 @@ export function openJournal(plan) {
     return h('div', { class: `jr-c${ok ? '' : ' no'}` }, glyph(ok ? 'star' : 'lock', false), h('div', {}, h('h3', {}, ok ? tr(r.title) : tr(SECRETS.sealed.title)), h('p', {}, ok ? tr(r.text) : tr(WORDS.sealedNote)), ok ? null : h('span', { class: 'tag' }, tr(WORDS.sealed))));
   };
   const n = list.filter((s) => found[s.id]).length;
-  const body = h('div', { class: 'jr', tabindex: '0' }, h('div', { class: 'jr-in' },
+  return h('div', { class: 'jr-in' },
     h('div', { class: 'jr-head' }, h('span', {}, tr(WORDS.intro)), h('b', {}, fill(tr(WORDS.count), { n, m: list.length }))),
-    h('div', { class: 'jr-grid' }, list.map(card), sealed.map(sealedCard)), lockSection()));
+    h('div', { class: 'jr-grid' }, list.map(card), sealed.map(sealedCard)), lockSection());
+}
+
+export function openJournal(plan) {
+  const { root, close } = overlay(tr(WORDS.journal), '');
+  let busy = false;
+  const body = h('div', { class: 'jr', tabindex: '0' }, journalBody(plan, (b) => { busy = b; }));
   root.append(body);
   body.focus();
   root.dataset.ready = '1';

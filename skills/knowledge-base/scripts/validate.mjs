@@ -78,6 +78,7 @@ concepts.forEach((p, i) => {
   max(p.idea, 28, `${P} idea`);
   if (p.emblem !== undefined && EMBLEMS && !EMBLEMS.includes(p.emblem)) warn(`${P}: emblem "${p.emblem}" is not one of ${EMBLEMS.join(', ')}; the house will show none`);
   if (p.sign && p.sign.length > 9) err(`${P}: sign "${p.sign}" is longer than 9 characters`);
+  if (p.core !== undefined && typeof p.core !== 'boolean') err(`${P}: "core" must be true or false (leave it out for true)`);
   if (p.expert !== undefined) { // the person who lives in the concept's house
     const e = p.expert;
     if (!e || typeof e !== 'object' || Array.isArray(e)) err(`${P}: "expert" must be an object { name, trade, line }`);
@@ -189,6 +190,15 @@ if (!(f.size >= 4) || !(f.pass > 0 && f.pass <= 1)) err('finalCheck needs "size"
 const pool = concepts.reduce((s, p) => s + (p.questions || []).filter((q) => q.level >= 2).length, 0);
 if (f.size > pool) err(`finalCheck asks for ${f.size} questions but only ${pool} of level 2 or 3 exist`);
 
+// ---- core and extra: the main story of the game (references/3-path.md, "Core and extra") ----
+// Core concepts are the minimum set to take home in about an hour; only they gate the final check.
+const core = concepts.filter((p) => p.core !== false), extra = concepts.filter((p) => p.core === false);
+if (concepts.length && core.length < Math.min(3, concepts.length)) err(`${core.length} core concepts: the main story needs at least ${Math.min(3, concepts.length)}. Mark fewer concepts "core": false.`);
+if (concepts.length && concepts[0].core === false) err(`concept "${concepts[0].id}": the first concept of the path is where everyone starts; it must be core`);
+const isExtra = new Set(extra.map((p) => p.id));
+rel.forEach((r) => { if (r.type === 'requires' && !isExtra.has(r.from) && isExtra.has(r.to)) err(`core concept "${r.from}" requires "${r.to}", which is extra: the main story would need something it never asks for. Make "${r.to}" core or drop the requirement.`); });
+if (core.length > 6) warn(`${core.length} core concepts: a core of about 4 to 6 fits an hour of play. Mark the least essential ones "core": false.`);
+
 // ---- locks, advanced stations, progression (riddles.mjs; references/7-progression.md) ----
 {
   const eng = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'mechanics');
@@ -205,9 +215,22 @@ if (f.size > pool) err(`finalCheck asks for ${f.size} questions but only ${pool}
 // ---- working documents ----
 ['knowledge/brief.md', 'knowledge/sources.md', 'knowledge/map.md'].forEach((k) => { if (!existsSync(path.join(dir, k))) warn(`${k} is missing`); });
 
+// ---- play time ----
+// 6.5 minutes per lab station and 3 per concept (its reading wall), as in references/3-path.md, plus
+// the duel with each house's expert (3 to 6 questions of about 20 seconds: 1.5 minutes) and the final
+// check (about 20 seconds a question). Rounded to 5 minutes for printing.
+function playMinutes(list, round = false) {
+  const st = list.reduce((n, p) => n + (p.lab?.stations || []).filter((x) => !x.advanced).length, 0); // advanced stations live upstairs, off the main path
+  const m = st * 6.5 + list.length * 3 + list.length * 1.5 + (f.size || 0) / 3;
+  return round ? Math.round(m / 5) * 5 : m;
+}
+const coreMin = playMinutes(core);
+if (core.length && coreMin > 60) warn(`the core path is about ${Math.round(coreMin)} minutes of play, more than an hour: mark the least essential concepts "core": false (they stay in town as extras to explore)`);
+
 warns.forEach((w) => console.log(`warning  ${w}`));
 errors.forEach((e) => console.log(`ERROR    ${e}`));
 const stations = concepts.reduce((s, p) => s + (p.lab?.stations?.length || 0), 0);
-console.log(`\n${c.title || dir}: ${themes.length} themes, ${concepts.length} concepts, ${stations} lab stations, ${rememberTotal} lines to remember, about ${Math.round((stations * 6.5 + concepts.length * 3) / 5) * 5} minutes of play`);
+console.log(`\n${c.title || dir}: ${themes.length} themes, ${concepts.length} concepts${extra.length ? ` (${core.length} core, ${extra.length} extra)` : ''}, ${stations} lab stations, ${rememberTotal} lines to remember`);
+console.log(`core path about ${playMinutes(core, true)} min; everything about ${playMinutes(concepts, true)} min`);
 console.log(`${errors.length} errors, ${warns.length} warnings`);
 process.exit(errors.length ? 1 : 0);

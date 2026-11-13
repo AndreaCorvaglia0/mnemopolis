@@ -45,15 +45,27 @@ afterwards: the town stays open for exploring and practising, without limit
 ```
 
 - **Core and extra concepts.** A concept may carry `"core": false`. Core concepts are the minimum
-  set to take home; only they gate the League. If no concept is marked, all are core. The
-  validator estimates the time of the core path and warns above 60 minutes. Extra concepts keep
-  their houses; they are never listed in the Journey and show as "?" on the map until visited.
-- **Badge.** `state.stamps[id]` (exists): the duel with the host of that house is won.
-- **League.** `state.passedLeague` (exists). Opens when every core concept has its badge.
-- **Ending.** The League's champion blocks the road to the next town. Beaten, they step aside:
-  a short ending card (the big idea, what the player can now do, accuracy, time, what is still
-  hidden as a count of "?"), then back to the town. `world.json` may name the next town
-  (`"next": {"title", "url"}`).
+  set to take home (roughly 4 to 6, whatever the size of the course); only they gate the League,
+  and the League asks only about them. If no concept is marked, all are core. The validator
+  requires at least three core concepts, the first concept of the path among them, and no core
+  concept that `requires` an extra; it prints the time of the core path and of everything (6.5
+  minutes per station, 3 per concept, 1.5 per duel, about 20 seconds per League question) and warns
+  above 60 minutes. Extra concepts keep their houses and their numbers; they are never listed in
+  the Journey and show as "?" on the map once the player has walked near them, and in the mind map
+  until visited.
+- **Badge.** `state.stamps[id]` (exists): the duel with the host of that house is won. Every
+  room's host offers the duel (the workshop's and the museum's too) when the house has at least two
+  questions; a house with fewer counts as done when visited with every lab station finished.
+- **League.** `state.passedLeague` (exists). Opens when every core house is done. Until then the
+  champion says in one line what is missing ("Two experts still think they know better than you:
+  houses 4 and 6.").
+- **Ending.** The League's champion stands before the League hall, on the square (a gate on the
+  town's edge is left for later: the town generator stays untouched). Beaten, the champion steps aside with
+  a line in character, and a short ending card opens: the course title, the big idea, what the
+  player can now do (the course goals), questions answered, accuracy, how often "certain" was right,
+  time played, and how many things in town are still a question mark (unvisited houses and
+  undiscovered secrets, as one count). Then back to the town; the Journey tab reopens the card.
+  `world.json` may name the next town (`"next": {"title", "url"}`): the card offers "On to <title>".
 
 ## The duel of eloquence
 
@@ -157,18 +169,33 @@ The game never opens at the full depth of the subject. Depth is reached by climb
 
 ## Guidance
 
-One pure function, `nextStep(state, course)`, is the single source for every hint:
+One pure function, `nextStep(state, { inside })` (`engine/src/mechanics/quest/model.js`), is the
+single source for every hint. Its steps: intro, then for each core house visit, lab (n/m), duel;
+then league, ending, and free roaming after the ending.
 
-- the **tracker**, top right in the town: one line, e.g. "Next: house 3, the Painter's House" /
-  "Talk to Marta" / "Duel Bruno" / "The League is open";
-- the character's thoughts (one in four or five), what passers-by say, the "next" mark on the map;
-- the **menu**, one screen with three tabs:
-  - **Journey**: the goal in two lines, the main path as a checklist (house: visited, lab n/m,
-    duel won), the League, and one line that something else is out there;
-  - **Map**: the town as explored so far (visited houses numbered, unknown places "?"), with the
-    mind map of the course one tap away;
-  - **Mysteries**: discoveries, keys and tools carried. Never a list of what is missing.
-  Settings (music, voice, grass questions) sit in the menu's footer.
+- the **tracker**, top right in the town and in rooms, under the place name: one line, e.g.
+  "Next: house 3 · Painter's House" / "Do the lab (1/2)" (inside the house) / "House 4: duel Bruno"
+  / "The League is open" / after the ending a quiet "Free roaming". It lights up briefly when the
+  step changes; a tap on it opens the Map. It replaces the column of key hints: one discreet
+  "Tab  Menu" stays (a Menu button on touch);
+- a small gold chevron bobbing above the door of the house the tracker names (nothing for a house
+  off screen);
+- the guide's first speech (the goal in three lines, then the first house and its landmark); every
+  townsperson's answer to "What should I do now?", sometimes followed by a hint that the town holds
+  more, never naming it; the character's thoughts (one in four or five); the "next" tag of the mind
+  map;
+- the **menu** (Tab, the Menu button), one screen with three tabs (1 2 3 or the arrows):
+  - **Journey** (the default until the ending): the goal in two lines, the main path as a checklist
+    (one row per core house: visited, lab n/m, duel or badge; the current one with the tracker's
+    sentence), the League (locked, open, won), and one line that something else is out there;
+  - **Map**: the town drawn from its own data as explored so far (visited houses in their district's
+    colour, core houses not visited by number, extras "?" once seen, the League hall, the square,
+    the player; a tap on a visited house recalls its idea; the next house ringed), with the mind map
+    of the course one tap away;
+  - **Mysteries**: coins, keys and tools carried, and the discoveries (J opens this tab). Never a
+    list of what is missing beyond the silhouettes of the discoveries.
+  Settings (music, voice, grass questions, time of day) sit in the menu's footer as plain toggles,
+  with the keys (folded behind one button on a phone).
 
 ## State (the contract between modules)
 
@@ -182,6 +209,9 @@ One pure function, `nextStep(state, course)`, is the single source for every hin
 | `tools[name]`, `opened[id]` | tools carried, obstacles opened | exists |
 | `life.found`, `life.prints` | discoveries | exists |
 | `ended` | ending card seen | new |
+| `seen[id]` | house walked near (the map shows it) | new |
+| `played` | seconds played (the ending card) | new |
+| `cheered[id]` | townsperson who congratulated after the ending | new |
 | `locks[id]` | lock opened; `tries[id]` counts misses | exists |
 
 ## Where the code goes
@@ -189,7 +219,7 @@ One pure function, `nextStep(state, course)`, is the single source for every hin
 | Part | Place |
 |---|---|
 | Core/extra, `nextStep`, journey data | `engine/src/mechanics/quest/` |
-| Tracker, menu | `engine/src/mechanics/quest/` + hooks in `scenes/UI.js`, `lab/map.js` |
+| Tracker, menu, ending card | `engine/src/mechanics/quest/` (`menu.js`, `townmap.js`, `ending.js`, `strings.js`) + the HUD in `scenes/UI.js`, the mark, people and the League hall in `scenes/Town.js`, the mind map in `lab/map.js` |
 | Duel rules (pure), duel screen, tempers | `engine/src/mechanics/duel/` |
 | Locks (answer matching, close-ups), upper floors | `engine/src/mechanics/riddles/`, `engine/src/mechanics/floors/` |
 | Shop, coins | `engine/src/mechanics/shop/` |

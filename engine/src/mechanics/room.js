@@ -12,7 +12,6 @@ import { lifeTextures } from './textures.js';
 import { roomThingAt } from './musings/things.js';
 import { OBSTACLES, REWARDS, canPass } from './obstacles/kinds.js';
 import { paintingCanvas, openPainting } from './secrets/paintings.js';
-import { openJournal } from './secrets/journal.js';
 import { TOWN } from '../world/townMap.js';
 
 const T = 16, GROUND = new Set(['floor', 'rug']);
@@ -57,7 +56,7 @@ class RoomLife {
     }
     const kb = sc.input.keyboard;
     if (LIFE.musings) { kb.on('keydown-T', () => this.thinkAhead()); sc.nav.onDouble = (tx, ty) => this.doubleTap(tx, ty); }
-    if (LIFE.secrets) kb.on('keydown-J', () => { if (this.idle) this.ui.page(() => openJournal(plan)); });
+    if (LIFE.secrets) kb.on('keydown-J', () => { if (this.idle) this.ui.showAtlas('mysteries'); });
   }
 
   get idle() { return !this.ui.busy && !this.scene.leaving && this.scene.sys.isActive(); }

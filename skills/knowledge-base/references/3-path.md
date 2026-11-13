@@ -66,9 +66,29 @@ Forgetting is fought by meeting an idea again, later, in a different setting. Pl
 
 Estimate 5 to 8 minutes per lab station and 3 minutes per page. A standard course of 8 concepts
 and 14 stations is about two hours of play, best taken in several sittings. If the estimate is
-far above what the brief asked for, cut concepts, not stations.
+far above what the brief asked for, cut concepts, not stations. The main story should fit in
+about an hour whatever the size: that is what the core is for (F).
 
-## F. Write it down
+## F. Core and extra
+
+The game has a main story of about an hour: every **core** concept in path order (lab, then a
+duel with its expert), then the final check. The other concepts are **extras**: `"core": false`.
+Their houses stay in town, numbered in path order like the others, but nothing lists them: people
+hint at them, and the map shows them as "?" until the learner has been inside. The final check
+asks only about core concepts.
+
+- Choose the core as the smallest set that still tells the whole story of the big idea: read the
+  core ideas top-down and check that they make sense without the extras. Roughly 4 to 6 concepts,
+  whatever the size of the course.
+- The first concept is always core. A core concept never `requires` an extra one.
+- Good extras: `deep` dives, the history of the idea (`story`), a second example of a mechanism
+  already in the core, specialist cases.
+- Time: the validator estimates the core path (6.5 minutes per station, 3 per concept, 1.5 per
+  duel, about 20 seconds per final-check question) and warns above 60 minutes. Cut the core, not
+  the stations: a concept moved out of the core keeps all its material.
+- Write the choice and the reason in one or two lines of `brief.md` ("Core").
+
+## G. Write it down
 
 In `map.md`: the path as a numbered table (theme, number, concept, place, type, requires,
 call-back), and one paragraph that says why this order and not another. Then run the
@@ -80,4 +100,5 @@ checkpoint with the user (see `SKILL.md`).
 - [ ] The first concept needs no prior knowledge and shows the big idea.
 - [ ] Each theme idea follows from the big idea; each concept idea from its theme.
 - [ ] Every concept after the first has a call-back.
+- [ ] The core (4 to 6 concepts) tells the story alone and fits in about an hour; the brief says why.
 - [ ] The user has seen the map, the path and the left-out list.

@@ -233,6 +233,11 @@
       ],
       "additionalProperties": false,
       "properties": {
+        "core": {
+          "type": "boolean",
+          "default": true,
+          "description": "Optional. false makes this an extra concept: its house stays in town for the curious, but the main story (about an hour) and the final check do not need it. Keep a core of roughly 4 to 6 concepts. See references/3-path.md (core and extra)."
+        },
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9]*$"

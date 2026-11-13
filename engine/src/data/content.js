@@ -1,5 +1,6 @@
 // Views of the course database that the scenes use. Do not write content here: edit src/course/course.js.
 import { COURSE } from '../course/course.js';
+import { introLines } from '../mechanics/quest/strings.js';
 
 export { COURSE };
 export const DISTRICTS = COURSE.districts;
@@ -18,7 +19,8 @@ const g = COURSE.hub.guide;
 export const TALK = { guide: { hi: g.hi, options: g.options || [] }, ...Object.fromEntries(DISTRICTS.filter((d) => d.resident).map((d) => [`res-${d.id}`, { hi: d.resident.hi, options: d.resident.options || [] }])) };
 
 export const DIALOG = {
-  intro: [`Welcome to ${COURSE.title}. ${COURSE.bigIdea}`, 'Every house holds one idea and a lab to try it. Tab opens the map.'],
+  // the guide's first speech: the goal of the game in three lines, then the first house of the main path
+  intro: introLines(PLACES.find((p) => p.core !== false) || PLACES[0], COURSE.title),
   closedHome: ['Nobody answers.'],
 };
 

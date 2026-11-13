@@ -12,7 +12,8 @@ Then stay, if you like. The town does not close.
 
 ## How you know what to do next
 
-- The **tracker** in the corner of the town always names the next step of the main path.
+- The **tracker** in the corner of the town always names the next step of the main path, and a
+  small gold chevron bobs above the door it means. Tap it to see the map.
 - The **houses are numbered** in the order of the learning path.
 - **People** in the square tell you where to go; your character **thinks aloud** about it.
 - The **menu** has three tabs: your Journey (the goal and what is left), the Map (what you have
@@ -20,8 +21,9 @@ Then stay, if you like. The town does not close.
 
 ## How you know you have won
 
-The champion of the League steps aside, the gate opens, and an ending card sums up the big idea,
-what you can now do, how you answered, and how many things in town are still a question mark.
+The champion of the League steps aside, the road out of town is open, and an ending card sums up
+the big idea, what you can now do, how you answered, and how many things in town are still a
+question mark.
 
 ## How to use your hands
 

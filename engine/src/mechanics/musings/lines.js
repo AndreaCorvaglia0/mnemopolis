@@ -304,10 +304,12 @@ export const NEAR = {
   here: { en: 'right around here', it: 'qui vicino' },
 };
 
-// Nudges: about one musing in four or five (think.js). {n} the thing, {place} the place, {near}
-// where it is, {order} its number, {final} the name of the final check.
+// Nudges: about one musing in four or five (think.js), from the next step of the main path
+// (mechanics/quest). {n} the thing, {place} the place, {near} where it is, {order} its number,
+// {final} the name of the final check, {person} who to duel. "free" comes after the ending: the main
+// road is done, so the nudge turns to curiosity (never naming what is hidden).
 export const NUDGES = {
-  next: {
+  visit: {
     en: ['It\'s just {n}... I should go and see {place}, {near}.', 'Fine, {n}. Meanwhile {place} is still waiting for me, {near}.', 'I could stare at {n} all night. Or I could find {place}, {near}.', 'Number {order} next: {place}, {near}.'],
     it: ['È solo {n}... dovrei andare a vedere {place}, {near}.', 'Va bene, {n}. Intanto {place} mi aspetta ancora, {near}.', 'Potrei fissare {n} tutta la sera. Oppure cercare {place}, {near}.', 'Il prossimo è il numero {order}: {place}, {near}.'],
   },
@@ -315,12 +317,28 @@ export const NUDGES = {
     en: ['That glowing door is the reason I came in.', 'I came for the lab, not for {n}.', 'Nice, {n}. But the lab is right there.'],
     it: ['Quella porta che brilla è il motivo per cui sono entrato.', 'Sono qui per il laboratorio, non per {n}.', 'Bello, {n}. Ma il laboratorio è proprio lì.'],
   },
-  final: {
-    en: ['Every house visited. I think I\'m ready for the {final}.', 'It\'s just {n}... and the {final} is still ahead of me.'],
-    it: ['Tutte le case visitate. Credo di essere pronto per {final}.', 'È solo {n}... e {final} mi aspetta ancora.'],
+  lab: {
+    en: ['I left the lab of {place} half done, {near}.', 'It\'s just {n}. The lab at {place} is still waiting for me.'],
+    it: ['Ho lasciato a metà il laboratorio di {place}, {near}.', 'È solo {n}. Il laboratorio di {place} mi aspetta ancora.'],
   },
-  done: {
-    en: ['All done. Now I can just enjoy {n}.', 'Nothing left to learn tonight. Well, nothing on the map.'],
-    it: ['Finito tutto. Ora posso godermi {n}.', 'Stasera non resta niente da imparare. Almeno, niente sulla mappa.'],
+  duelHere: {
+    en: ['{person} is right there. Time to argue my case.', 'Enough about {n}. {person} looks ready for a duel.'],
+    it: ['{person} è proprio lì. È ora di difendere le mie ragioni.', 'Basta con {n}. {person} sembra pronto a un duello.'],
+  },
+  duel: {
+    en: ['{person} at {place} still thinks they know better. Let\'s see.', 'It\'s just {n}... and {person} is waiting for a duel, {near}.'],
+    it: ['{person} a {place} pensa ancora di saperne di più. Vediamo.', 'È solo {n}... e {person} aspetta un duello, {near}.'],
+  },
+  league: {
+    en: ['Every expert beaten. I think I\'m ready for the {final}.', 'It\'s just {n}... and the {final} is still ahead of me.'],
+    it: ['Tutti gli esperti battuti. Credo di essere pronto per {final}.', 'È solo {n}... e {final} mi aspetta ancora.'],
+  },
+  ending: {
+    en: ['The champion is still waiting by the League hall.', 'Nice, {n}. But the road out of town is open now.'],
+    it: ['Il campione aspetta ancora davanti alla sala della Lega.', 'Bello, {n}. Ma ora la strada fuori città è aperta.'],
+  },
+  free: {
+    en: ['The main road is done. This town still hides a thing or two.', 'Now I can just enjoy {n}. And look around properly.', 'Not every door in town has a number on it, I bet.'],
+    it: ['La strada principale è finita. Questa città nasconde ancora qualcosa.', 'Ora posso godermi {n}. E guardarmi intorno per bene.', 'Scommetto che non tutte le porte del paese hanno un numero.'],
   },
 };
