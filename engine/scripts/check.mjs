@@ -11,9 +11,9 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..')
 const v = spawnSync('node', [path.join(root, 'skills', 'knowledge-base', 'scripts', 'validate.mjs'), path.join(root, 'courses', SLUG)], { stdio: 'inherit' });
 if (v.status) process.exit(v.status);
 
-const { LABS } = await import('../src/course/labs.js');
+const { LABS, UPPER_LABS } = await import('../src/course/labs.js');
 let bad = 0;
-for (const [id, lab] of Object.entries(LABS)) for (const s of lab.stations) if (!s.coded) { console.log(`ERROR    station "${id}.${s.id}" has no code: export it from courses/${SLUG}/labs/${id}.js`); bad++; }
+for (const [id, lab] of [...Object.entries(LABS), ...Object.entries(UPPER_LABS)]) for (const s of lab.stations) if (!s.coded) { console.log(`ERROR    station "${id}.${s.id}" has no code: export it from courses/${SLUG}/labs/${id}.js`); bad++; }
 // the town: it must generate, houses must stand on dry land without overlapping, and every door
 // must be reachable on foot from the square
 try {
@@ -55,6 +55,10 @@ try {
     const { planRoom, checkRoom } = await import('../src/gen/interior/index.js');
     const rooms = PLACES.filter((p) => p.kind !== 'workshop' && p.kind !== 'museum').map((p) => { const L = planRoom(p); checkRoom(L); return L; }); // throws if a room breaks a rule
     console.log(`rooms: ${rooms.map((L) => `${L.id} ${L.plan} ${L.w}x${L.h} (${L.zones.map((z) => z.name).join(', ')})`).join('; ')}`);
+    // upper floors (mechanics/floors/): the same rules, with the stairs down as the exit
+    const { floorsOf } = await import('../src/mechanics/floors/plan.js');
+    const ups = PLACES.filter((p) => p.kind !== 'workshop' && p.kind !== 'museum' && floorsOf(p).up).map((p) => { const L = planRoom(p, { floor: 'up' }); checkRoom(L); return L; });
+    console.log(`upper floors: ${ups.map((L) => `${L.id} ${L.plan} ${L.w}x${L.h} (${L.zones.map((z) => z.name).join(', ')})`).join('; ') || 'none'}`);
   } else console.log('rooms: generator off, standard room');
 } catch (e) { console.log(`ERROR    ${e.message}`); bad++; }
 // ambient life (src/mechanics/): obstacles never in the way of the course (with them closed, every

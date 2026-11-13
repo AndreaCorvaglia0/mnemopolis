@@ -24,6 +24,10 @@ const fresh = () => ({
   life: { found: {}, prints: {} },
   opened: {},
   tools: {},
+  keys: {}, // place id -> true once its owner has handed over the key of the upper floor
+  // locks (mechanics/riddles/): opened for good, and wrong answers so far (they cost nothing)
+  locks: {},
+  tries: {},
 });
 
 export const state = fresh();

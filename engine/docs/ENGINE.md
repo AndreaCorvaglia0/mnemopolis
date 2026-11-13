@@ -13,6 +13,7 @@
 | `npm run shots:lab` | The lab frame state by state (question, after it, one task done with the panel open, folded and full screen, done with the panel open and folded, theory, done in full screen), the first state of every station and a mid state of the slider stations, on a desktop window and a phone, into `shots/lab/` (`OUT2=/dir` copies them). It also reports text cut with an ellipsis. The tasks are done with real drags. `STATION=lamps:0` picks the station walked through. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
 | `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
+| `npm run shots:locks` | Pictures of locks and upper floors: a room with stairs, the stairs refused without the key, the upper floor, each close-up before typing, misses with the thought, each lock opened, the discoveries page, the advanced station, the way back down; desktop then phone (with the phone keyboard open), into `shots/locks*/`, copied to `/tmp/locks-*.png`. |
 | `npm run dev` | Live server while editing, if a browser is available. |
 
 Add `?lite` to the address for lighter graphics. The game also switches to them by itself on a
@@ -33,7 +34,8 @@ engine/src/
                    code.js (code panel), reading.js (reading wall), map.js (the map), museum.js (plaques)
   art/             everything drawn in code: ground, buildings, sprites, palette
   systems/         state (save), audio (music and sounds), voice (read aloud), walker (movement)
-  mechanics/       optional ambient life: thoughts, animals, secrets, obstacles (see "Ambient life")
+  mechanics/       optional ambient life: thoughts, animals, secrets, obstacles (see "Ambient life");
+                   riddles/ (locks with free answers) and floors/ (upper floors) (see "Locks", "Upper floors")
   data/content.js  read-only views of the course for the scenes
 ```
 
@@ -44,7 +46,9 @@ Course work happens in `courses/<slug>/`, not here. See `WORLD.md` for what a cu
 - A house's `id` is the key everywhere: `LABS[id]`, `PAGES[id]`, the saved progress.
 - `state.visited[id]` is set when the learner opens a lab or a museum. Review questions come
   only from visited houses.
-- `state.done['id:k']` is set when station `k` shows its takeaway. The map shows `lab 2/3`.
+- `state.done['id:k']` is set when station `k` shows its takeaway. The map shows `lab 2/3`. `k`
+  counts the ground-floor stations only (`LABS[id].stations`); advanced stations are saved as
+  `state.done['id+up:<stationId>']` (`UPPER_LABS`, see "Upper floors").
 - `state.stamps[id]` is set when the house quiz is passed (two of three). `state.passedLeague`
   for the league. `state.insight` holds the points (certainty-based: sure and right earns more,
   sure and wrong costs). Points are stored for a later version; nothing spends them yet.
@@ -203,6 +207,7 @@ Each kind of thing has its own gesture and its own look, so the learning flow ne
 | What | Gesture | What the learner sees |
 |---|---|---|
 | Things that matter for learning: people, doors, signs, landmarks, the lab door, the reading wall; and obstacles (key objects) | single tap or click, Space | the dialogue box at the bottom, a page, or for an obstacle a short thought ("Locked. I'd need a key.") and a padlock with the tool that will open it |
+| Locks (a safe, a computer, a door with a hatch) and stairs: key objects | single tap or click, Space | a lock: its first-person close-up, with a padlock and a question mark above it while the player is near and it is shut; stairs: up, or without the key a short thought and a key mark |
 | Atmosphere: anything else | double tap or double click on a thing within 3 tiles, or T for what the player faces (across empty ground, the first thing up to 3 tiles ahead) | a thought bubble above the head: a pale cloud with small circles, no name, no arrow, gone by itself in 2 to 4 s, never stacked, clear of the HUD, no sound but a soft tick, not read aloud |
 | Animals and happenings | coming close | no interface at all: the cat runs and hides, birds take off, the apple falls |
 | Secrets | exploring: walking somewhere, thinking about something, standing still | the thought bubble, then a small toast "Discovery 3 of 9"; the discoveries page (J, or the button on the map) |
@@ -317,3 +322,91 @@ secrets are checked when the player arrives on a tile.
 - **An obstacle**: an entry in `obstacles/kinds.js` (needs, where, name, say, opened, lines), its
   closed and open look in `obstacles/art.js`; a new kind of place for it in `obstacles/place.js`,
   where every candidate must pass `keepsDistances`.
+
+## Locks
+
+Locks are the central object of exploring (`docs/DESIGN.md`, "Explore"): a safe, a computer that
+asks for its password, a door that wants the word of the day. The course declares them as
+`riddles` on a concept (`SCHEMA.md`); `src/mechanics/riddles/` does the rest.
+
+```
+src/mechanics/riddles/
+  match.js     answer matching, pure (also read by the validator)
+  hints.js     the thought after a miss: where to look, never what to type (pure)
+  logic.js     attempt, open, rewards granted once, on any state object (pure)
+  kinds.js     the registry of lock kinds; the words of locks and floors, English and Italian
+  data.js      the riddles of the active course; openedLocks(state)
+  art.js       the close-ups drawn in code (160 x 120, shown large), and the marks in rooms
+  closeup.js   the first-person page: picture, clue, input, Try, Step back
+  room.js      locks in a room: mark, prompt, use
+  journal.js   the "Opened locks" section of the discoveries page (one call in secrets/journal.js)
+```
+
+**In a room.** The composer places a lock's piece (a fixture, `WORLD.md`) on the floor its `where`
+names. Near a shut lock a padlock with a question mark floats above it; Space or a single tap opens
+the close-up; a double tap gives a musing (`musings/lines.js`: `safe`, `terminal`, `hatchdoor`).
+
+**The close-up** is a page over the game (`ui.page`): the lock drawn large in the game's pixel
+style, in a dim room with dust in the lamp light, and real HTML on top where it must be read or
+typed: the sticky note (crooked, with its tape) or the voice's bubble, the safe's display and big
+digit keys (numbers and codes), the computer's login line, a text field, a clear Try button, Step
+back and Esc. Text is at least 16 px. On a short stage (a phone with its keyboard open: the page
+follows `visualViewport`) the clue and the thought move into the controls, so the clue, the field
+and Try stay in view. Motion (dust, shake, the opening) follows `prefers-reduced-motion`.
+
+**A miss** costs nothing: the lock reacts (a buzz, ACCESS DENIED, the eyes narrow), shakes, and the
+character thinks where to look. The first two misses name the house ("Hm. No. I should go back to
+the Dyer's House.", or "something I saw downstairs" when it is taught in this very house); from
+the third (`PRECISE_AFTER`) the spot: the reading wall there, or which experiment of the lab, by
+its name. Lines vary with the count. A line that would contain an accepted answer is replaced by a
+vaguer one. Misses are counted in `state.tries[id]`, only for that.
+
+**Opening** plays a small event: the safe's handle turns and its door swings open on a glowing
+paper; the screen unlocks to one file; the hatch slams, three bolts slide and the door opens. Then
+what is inside: the `note` as a document (kept, and listed in the discoveries under "Opened locks"),
+a button to open the advanced `station` (the upper lab, at that station), a `link`, and coins, a
+tool or a key granted once, with a flourish. `state.locks[id]` keeps it open; using it again shows
+the content again and grants nothing.
+
+**Matching** (`match.js`):
+
+| Type | Accepted |
+|---|---|
+| text | case, accents, punctuation, extra spaces ignored; a leading article (the, a, an; il, lo, la, i, gli, le, l', un, uno, una) dropped; the words typed without spaces; a final plural `s` on the last word (on a word of 4 letters or more before the `s`, not `ss`); one typo in total (an insertion, a deletion, a substitution or two letters swapped) in a word of 6 letters or more; any of the accepted answers |
+| number | comma or dot; a unit after it ignored (`120°`, `120 degrees`); within `tolerance` (default: exact for an integer, half a unit of the last decimal otherwise); anything with a second number refused |
+| code | the digits exactly, leading zeros included; spaces and dashes ignored |
+
+An empty answer never opens anything. `npm test` (`tests/riddles.test.mjs`) runs many accepted and
+refused cases in English and Italian.
+
+**Add a lock kind:** an entry in `kinds.js` (zone, piece, keypad, clue by note or voice, words in
+both languages), its close-up painter in `art.js` (`ART[kind] = { paint, note | bubble, display |
+screen }`, the spots in art pixels), a fixture zone in `gen/interior/zones.js` whose first piece is
+the lock, the piece in `pieces.js` and its painter in `furniture.js`, its musings in
+`musings/lines.js` (with `point: true`). `npm test` checks all of them.
+
+**Debug:** `__hb.riddles()` lists the course's riddles with their answers; `npm run shots:locks`.
+
+## Upper floors
+
+`src/mechanics/floors/`: `plan.js` (what a house keeps upstairs, pure: `floorsOf`, `fixturesOf`),
+`stations.js` (`groundStations(id)`, `advancedStations(id)`), `keys.js` (keys for testing),
+`room.js` (the scene side).
+
+- A house has an upper floor when its concept has an advanced station, a riddle upstairs or a
+  `further` link, and is drawn as a composed room (a workshop or a museum has none; the validator
+  warns). Its ground floor gets a staircase; houses with nothing upstairs have none.
+- **The key** is `state.keys[id]`, handed over by the owner when their duel is won
+  (`mechanics/duel/`). Without it the stairs say so in character ("Private. The owner keeps the
+  key." / "Marta keeps the key to the upstairs." / "... might hand over the key to someone who
+  shows they understood"), and a key mark floats over them.
+- **Upstairs** is `Interior` started with `{ id, floor: 'up' }` (`{ floor: 'ground', at: 'stairs' }`
+  on the way down, at the foot of the stairs). Nobody lives there. The advanced bench (LAB II)
+  opens the upper lab with the advanced stations no lock guards, and those of opened locks; the
+  shelf opens the reading list (`further`); the stairwell in the front wall goes down.
+- **Stations.** `LABS[id]` holds the ground-floor stations only: the lab downstairs, the tour and
+  the main path's count use it. `UPPER_LABS[id]` holds the advanced ones (`openLab(id, k, { upper:
+  [stationIds] })`), saved as `state.done['id+up:<stationId>']`.
+- **Keys for testing:** `?keys=all` or `?keys=wheel,context` in the address, `__hb.giveKey('wheel')`
+  (or `'all'`) in the console.
+

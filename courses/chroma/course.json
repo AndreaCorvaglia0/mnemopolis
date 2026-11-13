@@ -45,6 +45,13 @@
       "title": "The works themselves: Hering, Zur Lehre vom Lichtsinne (1878); Munsell, A Color Notation (1905); CIE 1931 standard observer; Stokes et al., A Standard Default Color Space for the Internet: sRGB (1996)",
       "tier": "A",
       "note": "Publication dates taken from the works; not re-read for this example."
+    },
+    {
+      "id": "S6",
+      "title": "W3C, Web Content Accessibility Guidelines (WCAG) 2.1, definition of relative luminance",
+      "url": "https://www.w3.org/TR/WCAG21/#dfn-relative-luminance",
+      "tier": "A",
+      "note": "The sRGB formula from a value 0 to 255 to linear light (threshold 0.04045, exponent 2.4) and the weights 0.2126 R + 0.7152 G + 0.0722 B. Used upstairs in Three Lamps House and in the Painter's safe."
     }
   ],
   "themes": [
@@ -156,6 +163,36 @@
             ],
             "takeaway": "Every colour on a screen is <code>(red, green, blue)</code>. Equal numbers give grey. The eye cannot resolve the three lamps, so it sees their sum.",
             "source": "On the left only pure red, green and blue stripes are drawn. Any other colour you see there is made by your eye."
+          },
+          {
+            "id": "gamma",
+            "tab": "Half the light",
+            "advanced": true,
+            "goal": "Screen numbers are not amounts of light: 128 sends out far less than half of what 255 does.",
+            "beat": "twist",
+            "pattern": "predict-test",
+            "object": "A patch of fine black and white lines beside a flat grey patch.",
+            "action": "Sets the grey value until the flat patch matches the lines, reading how much light it sends out.",
+            "surprise": "128 is much darker than the lines: the match is near 188.",
+            "predict": {
+              "q": "Fine lines, half black and half white, send out half the light of white. Which grey matches them?",
+              "options": [
+                "128, half of 255",
+                "About 64",
+                "About 188"
+              ],
+              "answer": 2,
+              "why": "Screen values sit on a curve: 188 sends out about half the light of 255, and 128 only about a fifth."
+            },
+            "controls": [
+              "Grey value, 0 to 255"
+            ],
+            "tries": [
+              "Set the grey to 128 and compare it with the lines.",
+              "Find the grey that sends out half the light: watch the read-out."
+            ],
+            "takeaway": "Screen numbers are <b>not amounts of light</b>. sRGB puts them on a curve: <b>128</b> sends out about <b>22%</b> of white's light, and half the light is near <b>188</b>.",
+            "source": "Light computed live with the sRGB formula in the WCAG 2.1 definition of relative luminance. The lines match the flat grey only on a screen close to sRGB, seen at 100% zoom: yours may be a few steps off."
           }
         ]
       },
@@ -265,7 +302,34 @@
         }
       ],
       "sources": [
-        "S1"
+        "S1",
+        "S6"
+      ],
+      "further": [
+        {
+          "title": "WCAG 2.1: relative luminance",
+          "url": "https://www.w3.org/TR/WCAG21/#dfn-relative-luminance",
+          "why": "The exact formula from the three numbers of a pixel to the light it sends out."
+        }
+      ],
+      "riddles": [
+        {
+          "id": "lamps-pc",
+          "kind": "computer",
+          "clue": "pw = red lamp + blue lamp. One word. Don't forget it AGAIN.",
+          "answer": [
+            "magenta",
+            "fuchsia"
+          ],
+          "type": "text",
+          "from": {
+            "station": "mix"
+          },
+          "inside": {
+            "note": "Notes for the next experiment. A screen's yellow is red light plus green light: there is no yellow light in it at all. A pure yellow light can look exactly the same, because the eye keeps only three signals (see the Cone Cave). Next question: if 255 is all the light, is 128 half of it?",
+            "station": "gamma"
+          }
+        }
       ]
     },
     {
@@ -628,7 +692,26 @@
         }
       ],
       "sources": [
-        "S1"
+        "S1",
+        "S6"
+      ],
+      "riddles": [
+        {
+          "id": "marta-safe",
+          "kind": "safe",
+          "clue": "Combination: where my green sits on the wheel. In degrees. M.",
+          "answer": 120,
+          "type": "number",
+          "tolerance": 3,
+          "unit": "°",
+          "from": {
+            "station": "dials"
+          },
+          "inside": {
+            "note": "Marta's note. Lightness on my dials is not how light a colour looks. At lightness 50%, pure yellow sends out about thirteen times as much light as pure blue: the eye weighs green most and blue least (0.2126 red + 0.7152 green + 0.0722 blue, in linear light). That is why my yellows never sit quietly next to my blues.",
+            "coins": 15
+          }
+        }
       ]
     },
     {
@@ -814,6 +897,26 @@
       ],
       "sources": [
         "S1"
+      ],
+      "riddles": [
+        {
+          "id": "bruno-door",
+          "kind": "door",
+          "where": "room",
+          "clue": "Password? Bruno's name for the trick the dark wall played on the grey square. Two words.",
+          "answer": [
+            "simultaneous contrast",
+            "contrast"
+          ],
+          "type": "text",
+          "from": {
+            "station": "grey"
+          },
+          "inside": {
+            "note": "From Bruno's notebook. The same comparing that fooled you with the grey squares keeps a white shirt looking white under orange lamplight and under blue daylight: the eye judges a surface against its neighbours, not the light itself. A camera cannot do that by itself. It needs a white balance.",
+            "coins": 10
+          }
+        }
       ]
     },
     {

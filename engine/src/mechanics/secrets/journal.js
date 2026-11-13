@@ -9,6 +9,7 @@ import { SECRETS, rhymeFor } from './registry.js';
 import { SECRET_ART } from './art.js';
 import { PAINTINGS, openPainting } from './paintings.js';
 import { REWARDS } from '../obstacles/kinds.js';
+import { lockSection } from '../riddles/journal.js';
 
 const INK = '#1b1a2b';
 const GLYPH = {
@@ -68,7 +69,7 @@ export function openJournal(plan) {
   const n = list.filter((s) => found[s.id]).length;
   const body = h('div', { class: 'jr', tabindex: '0' }, h('div', { class: 'jr-in' },
     h('div', { class: 'jr-head' }, h('span', {}, tr(WORDS.intro)), h('b', {}, fill(tr(WORDS.count), { n, m: list.length }))),
-    h('div', { class: 'jr-grid' }, list.map(card), sealed.map(sealedCard))));
+    h('div', { class: 'jr-grid' }, list.map(card), sealed.map(sealedCard)), lockSection()));
   root.append(body);
   body.focus();
   root.dataset.ready = '1';

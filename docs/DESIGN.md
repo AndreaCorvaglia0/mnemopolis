@@ -88,16 +88,25 @@ Exploring is how the game goes beyond the basics. Its central object is the **lo
   to the main path.
   - A wrong answer costs nothing. The character thinks aloud where to look ("Hm. I should go back
     to the Dyer's House."): the lock knows which concept, and which part of it, holds the answer.
-    Repeated misses make the thought more specific (the house, then the reading wall or the lab
-    station), never the answer itself.
+    Repeated misses make the thought more specific (the first two name the house, or "downstairs"
+    when it is taught in the same house; from the third, the reading wall or the lab station by its
+    name), never the answer itself.
+  - Locks stand upstairs (the default) or on the ground floor of their house (`"where": "room"`).
+    A lock is a key object: a padlock with a question mark shows above it while it is shut and the
+    player is near; once open it stays open and shows its content again.
   - Behind a lock is **secret knowledge**: an advanced lab station, a short document, a `further`
-    link, and sometimes a tool, coins or a key to a hidden place.
+    link, and sometimes a tool, coins or a key to an upper floor. Rewards are granted once. A
+    station behind a lock is reached only through it; the opened notes are listed in the
+    discoveries.
   - In the course a lock is a `riddle` on a concept: kind, clue, accepted answers (text
     normalised for case, accents, articles and one typo; numbers with a tolerance; codes exact),
     where the answer is taught, and what is inside. Answers are at most three words or one number.
 - **Keys** come from owners, by winning their duel. A key opens that house's **upper floor**: a
-  second room with the advanced side of the concept: stations marked `"advanced": true`, its
-  locks, its `further` links, a harder rematch.
+  second room with the advanced side of the concept: stations marked `"advanced": true` (at a bench
+  labelled LAB II, unless a lock guards them), its locks, its `further` links on a shelf, and later
+  a harder rematch. Nobody lives upstairs. A house gets a staircase only if its concept has
+  something for upstairs, and only rooms have floors (not the workshop, not the museum). Advanced
+  stations never count in the main path's "lab n/m".
 - **Tools** come from the shop, for coins. A tool opens a kind of obstacle (exists:
   `mechanics/obstacles`, `canPass`, `state.tools`).
 - **Hidden buildings**: an extra concept may stand behind an obstacle (`world.json`).
@@ -120,6 +129,8 @@ The game never opens at the full depth of the subject. Depth is reached by climb
   (default), *intermediate*, *advanced*. It caps how far the upper floors and the extras go. A
   hard subject at the introductory level still gets simple ground floors: the difficulty is moved
   upstairs, not removed from the picture.
+- How many locks: none at care *light*, about one per two houses at *standard*, up to one per
+  house at *curated*. The method is in `skills/knowledge-base/references/7-progression.md`.
 
 ## Practise
 
@@ -157,7 +168,7 @@ One pure function, `nextStep(state, course)`, is the single source for every hin
 | `tools[name]`, `opened[id]` | tools carried, obstacles opened | exists |
 | `life.found`, `life.prints` | discoveries | exists |
 | `ended` | ending card seen | new |
-| `locks[id]` | lock opened; `tries[id]` counts misses | new |
+| `locks[id]` | lock opened; `tries[id]` counts misses | exists |
 
 ## Where the code goes
 

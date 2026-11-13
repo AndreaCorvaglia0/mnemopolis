@@ -39,6 +39,13 @@ export const PLANS = {
 };
 export const PLAN_NAMES = Object.keys(PLANS);
 
+// Plans of an upper floor (mechanics/floors/): never chosen for a ground floor. The attic is a
+// smaller room under the roof: paint.js gives it beams, a sloping ceiling and a stairwell down
+// where the ground floor has its exit mat.
+export const UPPER_PLANS = {
+  attic(r) { return { ...box(r.pick([12, 13, 14]), r.int(9, 10)), attic: true }; },
+};
+
 export function cellAt(L, x, y) {
   if (x < 0 || y < 0 || x >= L.w || y >= L.h) return 'out';
   if (y < L.top[x]) return 'void';

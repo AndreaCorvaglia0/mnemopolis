@@ -22,6 +22,8 @@ Rules that hold everywhere:
 - The brief records two independent settings: size (how much content) and care (light, standard
   or curated: how much effort per unit). Care changes breadth and polish, never accuracy.
 - Few concepts, one objective per lab station, nothing decorative.
+- The brief also records a level (introductory by default): ground floors stay simple, depth goes
+  upstairs and behind locks (`skills/knowledge-base/references/7-progression.md`).
 - Step 1 never touches `engine/`. Steps 2 and 3 never change the content of `course.json`:
   if the build reveals a problem in the design, go back to step 1 and say so.
 - In a Claude chat, deliver the game by publishing `engine/dist/index.html` as an artifact, and

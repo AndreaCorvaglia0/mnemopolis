@@ -40,6 +40,10 @@ function paintWallColumn(ctx, L, C, x) {
   if (st === 'brick') for (let j = 4; j < 30; j += 5) { rect(ctx, X, Y + j, T, 1, darken(C.wall, 0.12)); for (let i = (j / 5) % 2 ? 2 : 6; i < T; i += 8) rect(ctx, X + i, Y + j, 1, 5, darken(C.wall, 0.12)); }
   if (st === 'blocks') for (let j = 3; j < 30; j += 9) { rect(ctx, X, Y + j, T, 1, darken(C.wall, 0.1)); rect(ctx, X + ((j / 9) % 2 ? 0 : 8), Y + j, 1, 9, darken(C.wall, 0.1)); }
   if (st === 'paper') for (let j = 6; j < 28; j += 7) for (let i = ((j / 7) % 2) * 4 + 2; i < T; i += 8) { px(ctx, X + i, Y + j, mix(C.wall, C.band, 0.35)); px(ctx, X + i, Y + j + 1, mix(C.wall, C.band, 0.2)); }
+  if (st === 'attic') { // vertical boards, a knot here and there
+    for (let i = 0; i < T; i += 4) { rect(ctx, X + i, Y + 3, 1, 27, darken(C.wall, 0.18)); rect(ctx, X + i + 1, Y + 3, 3, 27, mix(C.wall, C.wood, 0.25 + hash(x, i, 9) * 0.15)); }
+    if (hash(x, 7, 4) > 0.6) ellipse(ctx, X + 6, Y + 12 + Math.floor(hash(x, 2, 3) * 10), 1, 1, darken(C.wood, 0.3));
+  }
   if (st === 'plaster') for (let k = 0; k < 6; k++) px(ctx, X + Math.floor(hash(x, k, 3) * T), Y + 4 + Math.floor(hash(k, x, 5) * 24), darken(C.wall, 0.05));
   rect(ctx, X, Y, T, 3, C.band);
   if (st === 'panel' || st === 'paper') { rect(ctx, X, Y + 30, T, 16, C.wood); rect(ctx, X, Y + 30, T, 2, C.woodL); rect(ctx, X + 2, Y + 34, 12, 9, C.woodD); rect(ctx, X + 3, Y + 35, 10, 7, mix(C.wood, C.woodL, 0.4)); }
@@ -74,6 +78,36 @@ function paintCourtyard(ctx, L, C, x0, x1, y0, y1) {
   rect(ctx, cx - 1, cy, 3, r, ink); rect(ctx, cx, cy, 1, r, C.wood);
   ellipse(ctx, cx, cy - 2, r + 1, r, ink); ellipse(ctx, cx, cy - 2, r, r - 1, P.grassDark); ellipse(ctx, cx - 2, cy - 4, Math.max(2, r - 4), Math.max(2, r - 5), P.grassLight);
   for (const [dx, dy] of [[-3, -5], [3, -1], [0, -7]]) px(ctx, cx + dx, cy + dy, '#f2a03c');
+}
+
+// An upper floor under the roof: rafters sloping down at both ends of the back wall, a tie beam,
+// posts, and a dimmer light; the stairwell down where the ground floor has its exit mat.
+function paintAttic(ctx, L, C) {
+  const W = L.w * T, beam = darken(C.wood, 0.25), edge = ink;
+  ctx.fillStyle = 'rgba(16,12,24,0.35)'; ctx.fillRect(0, 0, W, 14);
+  for (const s of [0, 1]) for (let j = 0; j < 30; j++) { // the slope of the roof in the two upper corners
+    const n = 30 - j, x0 = s ? W - n : 0;
+    ctx.fillStyle = 'rgba(16,12,24,0.45)'; ctx.fillRect(x0, j, n, 1);
+    rect(ctx, s ? W - n - 2 : n, j, 2, 1, beam); px(ctx, s ? W - n - 3 : n + 2, j, edge);
+  }
+  rect(ctx, 0, 6, W, 3, edge); rect(ctx, 0, 6, W, 2, beam); rect(ctx, 0, 6, W, 1, lighten(beam, 0.2));
+  for (let x = 3 * T; x < W - 2 * T; x += 4 * T) { rect(ctx, x - 1, 8, 4, 38, edge); rect(ctx, x, 8, 2, 38, beam); }
+}
+function stairwell(ctx, mx, my) { // the way down: steps sinking into the floor, a rail on each side
+  rect(ctx, mx - 1, my, 18, 16, ink); rect(ctx, mx, my + 1, 16, 15, '#0d0b14');
+  for (let k = 0; k < 4; k++) { const y = my + 2 + k * 3; rect(ctx, mx + 1 + k, y, 14 - 2 * k, 2, mix(P.wood, '#0d0b14', 0.25 + k * 0.2)); }
+  rect(ctx, mx - 2, my - 6, 2, 22, P.woodDark); rect(ctx, mx + 16, my - 6, 2, 22, P.woodDark); rect(ctx, mx - 2, my - 7, 2, 1, P.gold); rect(ctx, mx + 16, my - 7, 2, 1, P.gold);
+}
+// upstairs the reading wall is a bookshelf: a short reading list (the concept's "further" links)
+function paintShelf(ctx, L, C) {
+  const { x0, n, top } = L.board, X = x0 * T + 1, Y = top * T + 6, W = n * T - 2;
+  rect(ctx, X, Y, W, 40, ink); rect(ctx, X + 1, Y + 1, W - 2, 39, C.woodD);
+  for (let r = 0; r < 3; r++) {
+    const sy = Y + 2 + r * 12;
+    for (let bx = X + 2, i = 0; bx < X + W - 4; i++) { const bw = 2 + Math.floor(hash(i, r, 5) * 3), bh = 7 + Math.floor(hash(r, i, 6) * 3); rect(ctx, bx, sy + 10 - bh, bw, bh, ['#b9463b', '#3c5ea6', '#2f5d50', '#d9a441', '#6b4fa0', '#e9e2c9'][Math.floor(hash(i, r, 7) * 6)]); bx += bw + (hash(i, r, 8) > 0.8 ? 2 : 0); }
+    rect(ctx, X + 1, sy + 10, W - 2, 2, C.wood);
+  }
+  rect(ctx, X + W - 9, Y + 3, 6, 7, '#fbf8ef'); rect(ctx, X + W - 8, Y + 5, 4, 1, '#8f877a'); // a slip of paper: the list
 }
 
 function door(ctx, x, y, label) { // the lab door: the same everywhere
@@ -201,11 +235,15 @@ export function paintBackground(ctx, L, place) {
     rect(ctx, x * T, L.top[x] * T, T, 1, ink);
   }
   const [ex, ey] = L.exit, mx = ex * T, my = ey * T;
-  rect(ctx, mx, my + 1, 16, 15, '#3a3f6b'); rect(ctx, mx + 1, my + 2, 14, 13, '#c9563f');
-  for (let y = my + 4; y < my + 14; y += 3) rect(ctx, mx + 3, y, 10, 1, '#e7a34f');
+  if (L.upper) stairwell(ctx, mx, my);
+  else {
+    rect(ctx, mx, my + 1, 16, 15, '#3a3f6b'); rect(ctx, mx + 1, my + 2, 14, 13, '#c9563f');
+    for (let y = my + 4; y < my + 14; y += 3) rect(ctx, mx + 3, y, 10, 1, '#e7a34f');
+  }
   // the back wall: lab door, reading wall, the concept, the number, decorations, torches
-  door(ctx, L.lab[0] * T + 1, L.top[L.lab[0]] * T + 22, 'LAB');
-  paintBoard(ctx, L, C, place);
+  if (L.attic) paintAttic(ctx, L, C);
+  if (L.lab) door(ctx, L.lab[0] * T + 1, L.top[L.lab[0]] * T + 22, L.upper ? 'LAB II' : 'LAB');
+  if (L.board) (L.upper ? paintShelf : paintBoard)(ctx, L, C, place);
   paintLabel(ctx, L, C);
   if (L.number) { const num = String(place.order || ''), X = L.number.x * T + 1, Y = L.number.top * T + 8; rect(ctx, X, Y, 14, 13, ink); rect(ctx, X + 1, Y + 1, 12, 11, P.gold); drawText(ctx, num, X + 7 - textWidth(num) / 2, Y + 4, ink); }
   for (const d of L.wall) (DECOR[d.type] || DECOR.portrait)(ctx, d.x * T, d.top * T, d.n, C);

@@ -115,7 +115,8 @@ concepts.forEach((p, i) => {
   } else {
     const st = p.lab?.stations || [], cap = p.type === 'process' ? 8 : 3;
     if (!p.lab) err(`${P}: no lab`);
-    else if (st.length < 1 || st.length > cap) err(`${P}: ${st.length} stations, a ${p.type} concept has 1 to ${cap}`);
+    const gn = st.filter((s) => !s.advanced).length; // advanced stations live upstairs (riddles.mjs)
+    if (p.lab && (gn < 1 || gn > cap)) err(`${P}: ${gn} ground-floor stations, a ${p.type} concept has 1 to ${cap}`);
     const sids = new Set();
     st.forEach((s, k) => {
       const S = `${P} station ${k + 1}`;
@@ -182,6 +183,19 @@ const f = c.finalCheck || {};
 if (!(f.size >= 4) || !(f.pass > 0 && f.pass <= 1)) err('finalCheck needs "size" (4 or more) and "pass" (0 to 1)');
 const pool = concepts.reduce((s, p) => s + (p.questions || []).filter((q) => q.level >= 2).length, 0);
 if (f.size > pool) err(`finalCheck asks for ${f.size} questions but only ${pool} of level 2 or 3 exist`);
+
+// ---- locks, advanced stations, progression (riddles.mjs; references/7-progression.md) ----
+{
+  const eng = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'mechanics');
+  let match = null, tools = null;
+  try { const f = path.join(eng, 'riddles', 'match.js'); if (existsSync(f)) match = await import(pathToFileURL(f).href); } catch { match = null; }
+  try { const f = path.join(eng, 'obstacles', 'kinds.js'); if (existsSync(f)) tools = Object.keys((await import(pathToFileURL(f).href)).TOOLS); } catch { tools = null; }
+  const brief = existsSync(path.join(dir, 'knowledge', 'brief.md')) ? readFileSync(path.join(dir, 'knowledge', 'brief.md'), 'utf8') : '';
+  const care = (brief.match(/\*\*Care:?\*\*:?\s*(light|standard|curated)/i) || [])[1]?.toLowerCase() || null;
+  const { checkProgression } = await import('./riddles.mjs');
+  const r = checkProgression(c, { match, tools, care });
+  r.errors.forEach(err); r.warns.forEach(warn);
+}
 
 // ---- working documents ----
 ['knowledge/brief.md', 'knowledge/sources.md', 'knowledge/map.md'].forEach((k) => { if (!existsSync(path.join(dir, k))) warn(`${k} is missing`); });

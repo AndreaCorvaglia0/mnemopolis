@@ -30,8 +30,9 @@ class RoomLife {
   constructor(scene, plan) {
     Object.assign(this, { scene, plan, ui: scene.ui, id: scene.id, L: scene.room.layout || null });
     const sc = scene, id = this.id;
-    this.closets = LIFE.obstacles ? plan.closets.filter((o) => o.place === id && this.L) : [];
-    this.paintings = LIFE.secrets ? plan.secrets.filter((s) => s.kind === 'painting' && s.place === id && this.L) : [];
+    const ground = scene.floor !== 'up'; // closets and paintings belong to the ground floor (mechanics/floors/)
+    this.closets = LIFE.obstacles && ground ? plan.closets.filter((o) => o.place === id && this.L) : [];
+    this.paintings = LIFE.secrets && ground ? plan.secrets.filter((s) => s.kind === 'painting' && s.place === id && this.L) : [];
     this.doors = this.closets.map((o) => {
       const open = !!state.opened[o.id];
       const img = sc.add.image(o.x * T + 1, o.top * T + 23, `life-ob-closet${open ? '-open' : ''}`).setOrigin(0).setDepth(1);
@@ -49,7 +50,7 @@ class RoomLife {
       sc.add.image(p.x * T + 1, p.top * T + 8, key).setOrigin(0).setDepth(1);
     }
     // a cat asleep on an armchair (homes only, one per town)
-    const cat = LIFE.animals && plan.animals.inside.find((a) => a.place === id);
+    const cat = LIFE.animals && ground && plan.animals.inside.find((a) => a.place === id);
     if (cat && this.L) {
       this.sleepcat = { x: cat.x, y: cat.y };
       sc.add.sprite(cat.x * T + 8, cat.y * T + 9, 'life-sleepcat', 0).setOrigin(0.5, 1).setDepth((cat.y + 1) * T + 1).play({ key: 'life-sleepcat-idle', frameRate: 0.8 });
@@ -60,7 +61,7 @@ class RoomLife {
   }
 
   get idle() { return !this.ui.busy && !this.scene.leaving && this.scene.sys.isActive(); }
-  extra() { const r = this.scene.room; return { master: [this.scene.master.tx, this.scene.master.ty], exit: r.exit, lab: r.lab, exhibit: r.exhibit, closets: this.closets, paintings: this.paintings }; }
+  extra() { const r = this.scene.room; return { master: this.scene.master ? [this.scene.master.tx, this.scene.master.ty] : null, exit: r.exit, lab: r.lab, exhibit: r.exhibit, closets: this.closets, paintings: this.paintings }; }
   thing(tx, ty) {
     if (this.sleepcat && this.sleepcat.x === tx && this.sleepcat.y === ty) return { kind: 'sleepcat' };
     return roomThingAt(this.L, tx, ty, this.extra());

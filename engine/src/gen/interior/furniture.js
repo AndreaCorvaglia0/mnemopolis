@@ -127,6 +127,43 @@ export const PAINT = {
     for (let i = 0; i < 12; i++) px(ctx, x + 8 + i, b - 21 - Math.round(Math.sin((i + it.v) * 0.9) * 2), '#4fd1c5');
     rect(ctx, x + 12, b - 15, 4, 2, ink); rect(ctx, x + 22, b - 16, 6, 2, '#cfd4d6');
   },
+  // ---- fixtures of floors and locks (mechanics/floors/, mechanics/riddles/)
+  stairs(ctx, x, b, w, it, C) { // a flight rising into the back wall, an opening at the top
+    const f = it.opt?.flip, top = b - 44;
+    rect(ctx, x + 2, top, w - 4, 16, ink); rect(ctx, x + 3, top + 1, w - 6, 14, '#120f1c'); // the opening upstairs
+    for (let k = 0; k < 4; k++) rect(ctx, x + 4 + k * 6, top + 2 + (k % 2), 3, 1, 'rgba(255,207,90,0.35)'); // a little light up there
+    for (let k = 0; k < 7; k++) { // treads from the top (far) to the bottom (near)
+      const y = top + 14 + k * 4, inset = Math.round((6 - k) * 0.6), x0 = x + 2 + (f ? 0 : inset), x1 = x + w - 2 - (f ? inset : 0);
+      rect(ctx, x0, y, x1 - x0, 4, ink); rect(ctx, x0 + 1, y + 1, x1 - x0 - 2, 2, k % 2 ? C.woodL : lighten(C.woodL, 0.12)); rect(ctx, x0 + 1, y + 3, x1 - x0 - 2, 1, C.woodD);
+    }
+    const px0 = f ? x + 2 : x + w - 4; // the banister on the open side
+    for (let k = 0; k < 4; k++) rect(ctx, px0 + (f ? 0 : 0), top + 16 + k * 7, 2, 7, C.woodD);
+    rect(ctx, px0 - 1, top + 14, 4, 2, ink); rect(ctx, px0, top + 14, 2, b - top - 15, C.wood); rect(ctx, px0 - 1, b - 3, 4, 3, ink);
+  },
+  safe(ctx, x, b, w, it, C) { // a squat steel safe with a dial and a note taped to it
+    rect(ctx, x + 2, b - 2, 3, 2, ink); rect(ctx, x + 11, b - 2, 3, 2, ink);
+    box(ctx, x + 1, b - 26, 14, 24, '#5d6672'); rect(ctx, x + 2, b - 25, 12, 1, '#8b96a3'); rect(ctx, x + 2, b - 25, 1, 22, '#7b8692');
+    rect(ctx, x + 3, b - 23, 10, 19, '#4a525d'); rect(ctx, x + 3, b - 23, 10, 1, '#6d7884');
+    ellipse(ctx, x + 7, b - 14, 3, 3, ink); ellipse(ctx, x + 7, b - 14, 2, 2, '#c9a24a'); px(ctx, x + 7, b - 16, ink);
+    rect(ctx, x + 11, b - 16, 1, 5, '#c9cfd8');
+    rect(ctx, x + 2, b - 25, 4, 3, '#ffe066'); px(ctx, x + 5, b - 22, '#e6c84a'); px(ctx, x + 3, b - 24, '#8f877a'); // the sticky note, crooked
+  },
+  pcdesk(ctx, x, b, w, it, C) { // a desk with an old monitor, glowing, and a sticky note on its edge
+    table(ctx, x, b, w, C.woodL, C.woodD);
+    box(ctx, x + 6, b - 30, 20, 16, '#3a4152'); rect(ctx, x + 8, b - 28, 16, 11, '#0c2a2a');
+    for (let j = 0; j < 3; j++) rect(ctx, x + 10, b - 26 + j * 3, 6 + ((j * 5 + it.v) % 6), 1, '#4fd1c5');
+    rect(ctx, x + 10 + 7, b - 20, 2, 2, '#bff8f2');
+    rect(ctx, x + 14, b - 14, 4, 1, ink); rect(ctx, x + 8, b - 15, 16, 2, ink); rect(ctx, x + 9, b - 15, 14, 1, '#cfd4d6');
+    rect(ctx, x + 23, b - 31, 4, 4, '#ffe066'); px(ctx, x + 26, b - 28, '#e6c84a'); px(ctx, x + 24, b - 30, '#8f877a');
+  },
+  hatchdoor(ctx, x, b, w, it, C) { // a narrow door with a sliding hatch at eye height, studded
+    rect(ctx, x, b - 40, 16, 40, ink); rect(ctx, x + 1, b - 39, 14, 38, C.stoneD);
+    rect(ctx, x + 2, b - 37, 12, 36, ink); rect(ctx, x + 3, b - 36, 10, 35, C.woodD);
+    for (let i = 0; i < 3; i++) rect(ctx, x + 3 + i * 4, b - 36, 3, 35, i % 2 ? C.wood : mix(C.wood, C.woodD, 0.4));
+    rect(ctx, x + 5, b - 31, 6, 4, ink); rect(ctx, x + 6, b - 30, 4, 2, '#0a0a12'); rect(ctx, x + 5, b - 33, 6, 1, '#9aa3ad');
+    for (const yy of [b - 23, b - 10]) { rect(ctx, x + 3, yy, 10, 1, '#3c3f46'); px(ctx, x + 4, yy, '#9aa3ad'); px(ctx, x + 11, yy, '#9aa3ad'); }
+    px(ctx, x + 11, b - 17, P.gold); rect(ctx, x - 1, b - 2, 18, 2, ink); rect(ctx, x, b - 2, 16, 1, C.stoneL);
+  },
   // ---- trades
   range(ctx, x, b, w, it, C) {
     rect(ctx, x + w / 2 - 4, b - 34, 8, 12, ink); rect(ctx, x + w / 2 - 3, b - 34, 6, 12, '#4a4652'); // flue
