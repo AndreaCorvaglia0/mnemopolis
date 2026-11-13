@@ -40,16 +40,35 @@ export default { mix };            // the key is the station id in course.json
 ```
 
 Goal, tasks, takeaway, source and the prediction question come from `course.json` and are shown
-by the lab frame. The code only draws and reacts.
+by the lab frame. The code only draws and reacts. Your `mount` runs as soon as the station opens:
+the picture is visible from the first moment, frozen while the prediction question is open.
 
 | | |
 |---|---|
-| `ctx.stage` | The large area on the left. Append a `canvasPane` or your own elements. |
-| `ctx.controls` | The column for controls and readouts. |
-| `ctx.did(i)` | Tick task `i` of the station's `tries`. When all are ticked, the takeaway appears. |
-| `ctx.reveal()` | Show the takeaway directly. |
+| `ctx.stage` | The picture area: most of the screen. Append a `canvasPane` or your own elements. |
+| `ctx.controls` | The panel beside the picture (below it on a phone): sliders, switches, read-outs. Hidden until the prediction is made. |
+| `ctx.did(i)` | Task `i` of the station's `tries` is done. When all are, the verdict and the takeaway appear. Calls made before the prediction are kept and shown after it. |
+| `ctx.reveal()` | Show the verdict and the takeaway now. |
 | `ctx.alive()` | `false` once the learner has left. Check it after every `await`. |
 | `ctx.onCleanup(fn)` | Stop timers, audio and animation frames here. |
+| `ctx.size()` | Optional. `{ w, h, upright }`: the stage in screen pixels; `upright` when the panel is a bottom sheet. |
+| `ctx.onResize(fn)` | Optional. `fn(ctx.size())` whenever the stage changes size. |
+| `ctx.phase()`, `ctx.said()` | Optional. `'ask'`, `'explore'` or `'done'`, and the index of the answer picked (or `null`). |
+
+`canvasPane(stage, w, hgt, caption, { portrait: [w2, h2] })` (in `lab/kit.js`) is the usual
+picture. You draw in your own units (`w` x `hgt`); the pane scales that box to the largest size
+the stage allows, at the screen's real resolution, and redraws nothing by itself:
+
+| | |
+|---|---|
+| `pane.g` | The 2D context, in your units. `getImageData` and `putImageData` also take your units. |
+| `pane.W`, `pane.H`, `pane.upright` | The box in use: `(w, hgt)`, or the `portrait` box when the stage is not wide (a phone held upright). |
+| `pane.onResize(draw)` | Call your draw after every resize (a resize clears the canvas). Without it the pane stretches the last picture. |
+| `pane.font(size, weight)` | A CSS font of `size` units that is never smaller than 16 screen pixels. Use it for all text. |
+| `pane.px(n)` | `n` screen pixels in your units (hairlines, hit areas). |
+| `pane.drag(fn)`, `pane.hover(fn)` | `fn(x, y, phase)` in your units; works with a finger. |
+| `pane.tip(fn)` | `fn(x, y)` returns HTML or `null`: a small read-out next to the pointer, or above the finger. Good for charts. |
+| `pane.caption(text)` | One line above the picture. |
 
 A code panel whose values are controls (see `lab/code.js`): export its specification as
 `<stationId>Code` next to the mount.

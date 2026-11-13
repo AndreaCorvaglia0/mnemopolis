@@ -24,37 +24,48 @@ function frame(p, body) {
   return `<div class="hb-num">${p.order} · ${esc(p.district.name)}</div><h2>${esc(p.concept)}</h2><p class="lead">${esc(p.idea)}</p>${anchor}${body || ''}${use}${explain}${remember}${more}`;
 }
 
+// The article of a place (or of a free page): used by the reading wall and by the lab's theory
+// drawer. `start(scroller)` runs the page's animations while they are visible; it returns `stop`.
+export function readingArticle(id) {
+  const p = PLACE[id], page = { html: p ? sections(p) : '' };
+  const art = h('article', { html: p ? frame(p, page.html) : page.html || '' });
+  const start = (scroller) => {
+    let alive = true;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // <canvas data-anim="name" width="720" height="400"> is drawn by ANIMS[name](g, seconds)
+    art.querySelectorAll('canvas[data-anim]').forEach((cv) => {
+      const draw = ANIMS[cv.dataset.anim], g = cv.getContext('2d');
+      if (!draw) return;
+      let visible = false, last = -1;
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { root: scroller }).observe(cv);
+      const tick = (ms) => {
+        if (!alive) return;
+        const t = still ? 2.2 : ms / 1000;
+        if ((visible || last < 0) && t - last > 0.05) { last = t; g.clearRect(0, 0, cv.width, cv.height); draw(g, t, cv); }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+    return () => { alive = false; };
+  };
+  return { p, art, start };
+}
+
 // Opens the page of a place (or a free page from pages.js by id). Resolves with 'lab' if the reader asks for the lab.
 export function openReading(id, anchor = null) {
-  const p = PLACE[id], page = { html: p ? sections(p) : '' };
-  const { root, close } = overlay(p ? p.name : page.title || '', p ? 'Reading wall' : page.sub || 'Deep dive');
+  const { p, art, start } = readingArticle(id);
+  const { root, close } = overlay(p ? p.name : '', p ? 'Reading wall' : 'Deep dive');
   const hasLab = p && p.kind !== 'museum';
   const go = h('button', { class: 'hb-go' }, !p ? 'Back →' : p.kind === 'workshop' ? 'Go to the machines →' : 'Try it in the lab →');
-  const art = h('article', { html: p ? frame(p, page.html) : page.html || '' });
   if (hasLab || !p) art.append(go);
   const scroller = h('div', { class: 'hb-page', tabindex: '0' }, art);
   root.append(scroller);
   scroller.focus();
   if (anchor) requestAnimationFrame(() => art.querySelector(`#sec-${anchor}`)?.scrollIntoView());
-  let alive = true;
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // <canvas data-anim="name" width="720" height="400"> is drawn by ANIMS[name](g, seconds)
-  art.querySelectorAll('canvas[data-anim]').forEach((cv) => {
-    const draw = ANIMS[cv.dataset.anim], g = cv.getContext('2d');
-    if (!draw) return;
-    let visible = false, last = -1;
-    new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { root: scroller }).observe(cv);
-    const tick = (ms) => {
-      if (!alive) return;
-      const t = still ? 2.2 : ms / 1000;
-      if ((visible || last < 0) && t - last > 0.05) { last = t; g.clearRect(0, 0, cv.width, cv.height); draw(g, t, cv); }
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  });
+  const stop = start(scroller);
   root.dataset.ready = '1';
   return new Promise((resolve) => {
-    const done = (v) => { alive = false; window.removeEventListener('keydown', key, true); root.remove(); resolve(v); };
+    const done = (v) => { stop(); window.removeEventListener('keydown', key, true); root.remove(); resolve(v); };
     const key = (e) => { if (e.key === 'Escape') { e.preventDefault(); done(); } };
     window.addEventListener('keydown', key, true);
     close.onclick = () => done();
