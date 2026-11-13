@@ -53,7 +53,7 @@ export async function playTurn(town) {
   state.passedLeague = true;
   await cinema(ui, async (c) => {
     const L = story.lamp;
-    if (L) { await c.zoom(0.75, 1000); await c.pan(L.x, L.y + 20, 1400); }
+    if (L) { await c.zoom(0.75, 1000); await c.pan(L.x, L.y + 70, 1400); }
     story.lightLamp(true);
     sfx.motif?.('lock');
     await c.say(tr(S_WORDS.leaving)[0]);

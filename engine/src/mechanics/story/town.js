@@ -171,7 +171,7 @@ class StoryTown {
       }
       if (understood && this.lamp) {
         await c.zoom(0.8, 800);
-        await c.pan(this.lamp.x, this.lamp.y + 30, 2200);
+        await c.pan(this.lamp.x, this.lamp.y + 70, 2200);
         await c.say(tr(S_WORDS.understood)[2]);
         await c.say(fill(tr(S_WORDS.lastLine), { word: theWord() }), { min: 3600 });
       }

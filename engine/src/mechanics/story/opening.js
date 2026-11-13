@@ -27,7 +27,7 @@ class Stage {
   }
   resize() {
     // the picture between the bars: wide screens see more sea around the ship, upright ones more sky
-    const bar = Math.max(innerHeight * 0.12, 86), midH = Math.max(120, innerHeight - 2 * bar), W = innerWidth > midH ? 360 : 200;
+    const bar = Math.max(innerHeight * 0.12, 86), midH = Math.max(120, innerHeight - 2 * bar), W = innerWidth > midH ? 320 : 200;
     const Hh = Math.max(130, Math.min(560, Math.round((W * midH) / Math.max(1, innerWidth))));
     this.cv.width = W; this.cv.height = Hh; this.W = W; this.H = Hh;
     this.g = this.cv.getContext('2d'); this.g.imageSmoothingEnabled = false;

@@ -117,6 +117,7 @@ import { lifeSheet } from './mechanics/sheet.js';
 import { giveKeyTo } from './mechanics/floors/keys.js';
 import { RIDDLES } from './mechanics/riddles/data.js';
 import { save as saveState } from './systems/state.js';
+import { storyDebug } from './mechanics/story/debug.js';
 document.title = content.COURSE.title;
 // A picture of every kind of building and every landmark: useful when working on the look.
 // With generated houses on (GEN.facade), every kind in each theme with two seeds, then the emblems.
@@ -197,6 +198,8 @@ window.__hb = {
   // the riddles of the course (answers included: for testing only)
   giveKey: (id) => { const r = giveKeyTo(state, id); saveState(); return r; },
   riddles: () => RIDDLES,
+  // the story: jump between its moments (mechanics/story/debug.js; npm run shots:story)
+  story: storyDebug(game),
   lifeSheet,
   // Used by the automated play-through check.
   probe: () => {

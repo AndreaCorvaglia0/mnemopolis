@@ -25,6 +25,8 @@ function style() {
 }
 
 const KEY_SVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="32" r="13" fill="none" stroke="#ffcf5a" stroke-width="7"/><path d="M32 32h26M50 32v10M42 32v7" stroke="#ffcf5a" stroke-width="7" stroke-linecap="round" fill="none"/></svg>';
+// the story's prize: a window, lit (story/words.js REMEMBER.badge "A window lights up")
+const WINDOW_SVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="8" width="40" height="48" rx="3" fill="#2a2433" stroke="#e9e2c9" stroke-width="4"/><rect x="17" y="13" width="30" height="38" fill="#ffd77a"/><path d="M32 13v38M17 32h30" stroke="#e9e2c9" stroke-width="4"/><circle cx="32" cy="32" r="26" fill="#ffd77a" opacity=".18"/></svg>';
 const BADGE_SVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" fill="#3c5ea6" stroke="#fff" stroke-width="4"/><circle cx="32" cy="32" r="20" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/><path d="M32 18l4 9 10 1-7.5 6.5 2.3 9.8L32 39l-8.8 5.3 2.3-9.8L18 28l10-1z" fill="#ffcf5a"/></svg>';
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 
@@ -155,7 +157,7 @@ export function openDuel(cfg) {
         h('p', { class: 'sub' }, fill(W.score, { r: d.right, n: d.turn }) + (d.how === 'time' ? ` · ${W.outOfTurns}` : ''))];
       if (d.won && (prize.badge || prize.key || prize.first)) {
         const row = h('div', { class: 'dl-prizes' });
-        if (prize.badge || prize.first) row.append(h('div', { class: 'dl-prize new', html: `${BADGE_SVG}<span>${W.badge}</span>` }));
+        if (prize.badge || prize.first) row.append(h('div', { class: 'dl-prize new', html: `${sk.fill && !league ? WINDOW_SVG : BADGE_SVG}<span>${W.badge}</span>` }));
         if (keyShown) row.append(h('div', { class: 'dl-prize new', html: `${KEY_SVG}<span>${W.key}</span>` }));
         parts.push(row);
         if (prize.key && sfx.motif) sfx.motif('key'); else sfx.reveal();

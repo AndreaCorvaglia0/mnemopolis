@@ -328,6 +328,7 @@ export class Town extends Phaser.Scene {
   }
 
   updateLighting(time) {
+    this.sizeDark(); // the view can grow when a cinematic moment zooms out (cheap when it did not)
     const c = this.cur;
     const v = this.cameras.main.worldView, ox = Math.floor(v.x) - 8, oy = Math.floor(v.y) - 8, dw = this.dark.width, dh = this.dark.height;
     this.dark.setPosition(ox, oy);
