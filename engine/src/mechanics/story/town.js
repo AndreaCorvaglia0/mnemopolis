@@ -24,6 +24,7 @@ import { Weather } from './weather.js';
 import { stageNow, greeting, curtLine, rememberedRow } from './stages.js';
 import { isFoggy } from './fog.js';
 import { lighthouseDoor, theWord } from './lighthouse.js';
+import { hasAttic, MEMENTO_OF } from './remember.js';
 
 const talkDeck = new Deck();
 
@@ -58,6 +59,9 @@ class StoryTown {
       const by = (lg.y + lg.h) * T;
       this.lamp = { x: lg.x * T + info.lamp[0], y: by - info.canvas.height + info.lamp[1] };
     }
+    // a house remembered before it kept a memento, with no upstairs to find it in (an old save): the
+    // memento counts as handed over, so the path never points at stairs that are not there
+    for (const r of Q.coreProgress(state)) if (r.won && r.memento && !r.found && !hasAttic(r.id)) ((state.story ||= {}).mementos ||= {})[r.id] = MEMENTO_OF[r.id];
     this.weather = new Weather(scene);
     if (state.ended) { this.lightLamp(false); this.shipLights(true, false); }
     if (H && (!state.story?.notebook || state.story?.left)) this.placeNotebook();

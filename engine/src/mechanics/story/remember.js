@@ -11,10 +11,15 @@ import { mementosFor, pageText } from './logic.js';
 import { S_WORDS } from './words.js';
 import { tr, fill } from './config.js';
 import { theWord } from './lighthouse.js';
+import { GEN } from '../../gen/core.js';
+import { floorsOf } from '../floors/plan.js';
 
 export const MEMENTO_OF = mementosFor(Q.core.map((p) => p.id));
 export const mementoKind = (id) => MEMENTO_OF[id] || null;
 export const hasMemento = (id) => !!MEMENTO_OF[id] && !state.story?.mementos?.[id];
+// an upstairs to find it in: a composed room with an attic (not the workshop, not the museum, not the
+// standard room of "gen": { "interior": false }); otherwise the owner hands it over on remembering
+export const hasAttic = (id) => !!GEN.interior && floorsOf(PLACE[id] || {}).up;
 
 const paperCss = 'padding:18px 22px;max-width:min(88vw,560px);background:#efe6cf;color:#1f2d5c;font:italic clamp(19px,3.2vw,26px)/1.45 Georgia,serif;box-shadow:0 10px 40px #000;transform:rotate(-1deg);background-image:repeating-linear-gradient(transparent 0 calc(1.45em - 1px),#cfd8e0 calc(1.45em - 1px) 1.45em)';
 const paperOf = (lines) => { const d = h('div', {}); d.style.cssText = paperCss; for (const l of [].concat(lines)) d.append(h('p', { style: 'margin:0 0 .3em' }, l)); return d; };

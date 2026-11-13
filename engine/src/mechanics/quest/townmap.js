@@ -2,6 +2,7 @@
 // plazas, footprints) at a few pixels per tile. Houses visited: number and name; core houses not
 // visited yet: number only; extras: "?" once the player has walked near them (state.seen), nothing
 // before. Tapping a visited house recalls its one-line idea. Drawn once when the tab opens.
+import { STORY } from '../story/config.js';
 import { h } from '../../lab/shell.js';
 import { TOWN } from '../../world/townMap.js';
 import { PLACE, DISTRICTS, COURSE } from '../../data/content.js';
@@ -57,15 +58,16 @@ export function townMapView() {
     const k = knownAs(b);
     if (k === 'hidden') continue;
     const p = PLACE[b.id], di = p ? DISTRICTS.indexOf(p.district) : -1;
-    const fill_ = k === 'visited' ? DCOL[di % DCOL.length] : k === 'core' ? '#d8d0b4' : k === 'league' ? '#c99a3e' : k === 'home' ? '#7d6a55' : '#5d6274';
+    const fill_ = k === 'visited' ? DCOL[di % DCOL.length] : k === 'core' ? '#d8d0b4' : k === 'league' ? (STORY.on && !state.ended ? '#4a4f60' : '#c99a3e') : k === 'home' ? '#7d6a55' : '#5d6274';
     const bx = b.x - x0, by = b.y - y0;
     ctx.fillStyle = '#0b0d14'; ctx.fillRect(bx * s - 1, by * s - 1, b.w * s + 2, b.h * s + 2);
     ctx.fillStyle = fill_; ctx.fillRect(bx * s, by * s, b.w * s, b.h * s);
     ctx.fillStyle = '#00000040'; ctx.fillRect(bx * s, (by + b.h) * s - Math.max(1, s >> 1), b.w * s, Math.max(1, s >> 1));
     if (k === 'home') continue;
     const cx = (bx + b.w / 2) * s, cy = (by + b.h / 2) * s;
-    const label = k === 'league' ? '★' : k === 'mystery' ? '?' : String(b.order);
-    const text = k === 'visited' ? `${b.order} · ${p.name}: ${p.idea}` : k === 'core' ? `${b.order} · ${p.name}. ${tr(Q_WORDS.map.unknown)}` : k === 'league' ? `${COURSE.league.name}` : tr(Q_WORDS.map.mystery);
+    // the story's lighthouse is unmarked: no star, no League (story/: docs/STORY.md)
+    const label = k === 'league' ? (STORY.on ? '' : '★') : k === 'mystery' ? '?' : String(b.order);
+    const text = k === 'visited' ? `${b.order} · ${p.name}: ${p.idea}` : k === 'core' ? `${b.order} · ${p.name}. ${tr(Q_WORDS.map.unknown)}` : k === 'league' ? (STORY.on ? tr(Q_WORDS.map.league) : `${COURSE.league.name}`) : tr(Q_WORDS.map.mystery);
     const col = k === 'visited' ? `;border-color:${DCOL[di % DCOL.length]}` : '';
     const m = h('button', { type: 'button', class: `qt-mk ${k}${b.id === nextId ? ' next' : ''}`, style: `left:${cx}px;top:${cy}px${col}`, 'aria-label': text, title: text }, h('b', {}, label));
     m.onclick = () => { for (const o of marks) o.classList.remove('on'); m.classList.add('on'); caption.textContent = text; };

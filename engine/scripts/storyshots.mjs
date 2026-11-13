@@ -35,7 +35,7 @@ async function run(phone) {
   const fresh = async (setup) => {
     const url = `file://${html}?test&lite${phone ? '&touch' : ''}`;
     await page.goto(url); await ev(() => localStorage.clear()); await page.goto(url); // a new game: no save
-    await until(() => window.__hb && __game.scene.getScene('UI')?.ready && __game.scene.getScene('Town')?.player, 'the game', 90000);
+    await until(() => !!(window.__hb && __game.scene.getScene('UI')?.ready && __game.scene.getScene('Town')?.player), 'the game', 90000);
     if (setup) await ev(setup);
     await sleep(1500);
     await key('Space'); // the title
@@ -86,8 +86,8 @@ async function run(phone) {
   for (const [n, kind] of [['12', 'page'], ['13', 'photo'], ['14', 'card']]) {
     const id = Object.keys(kinds).find((k) => kinds[k] === kind);
     if (!id) { problems.push(`no house keeps the ${kind}`); continue; }
-    await ev((x) => { __game.scene.getScene('Interior').scene.start('Interior', { id: x, floor: 'up' }); return 1; }, id);
-    await sleep(3500);
+    // upstairs where the house has one (a workshop or a museum hands the memento over instead)
+    if (await ev((x) => !['workshop', 'museum'].includes(__hb.content.PLACE[x].kind), id)) { await ev((x) => { const sc = __game.scene.getScenes(true).find((o) => ['Interior', 'Town'].includes(o.sys.settings.key)); sc.scene.start('Interior', { id: x, floor: 'up' }); return 1; }, id); await sleep(3500); }
     if (n === '12') await shot('12a-upstairs-memento');
     await ev((x) => __hb.story.memento(x), id);
     await until(() => document.querySelector('.cn .st-mm'), 'the close-up');
