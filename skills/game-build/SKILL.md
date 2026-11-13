@@ -105,10 +105,15 @@ correctness: every station must still work as specified.
 | Graphics | fully generated: default theme, no custom art, `world.json` only for switches, no emblems | generated, emblems chosen per concept | a theme chosen or tuned for the project; custom emblems or art pieces allowed |
 | Screenshots | one pass | `npm run shots` | `npm run shots` and `npm run shots:phone` |
 | Labs | build once | build once | refine after a first play |
+| Voice (read aloud) | `"voice": true` in `world.json` | `"voice": true` | `"voice": true`, plus a `say` map for acronyms and symbols the voice gets wrong |
 
 The generators can be switched off in `courses/<slug>/world.json`
 (`"gen": {"facade": false, "interior": false, "dressing": false}`) and a theme chosen
 (`"theme": "harbour"`, `"nordic"` or `"citadel"`); see `engine/src/gen/core.js`.
+
+Read-aloud costs nothing to build and nothing in size, so it is on at every level of care: it uses
+the browser's own voices and only speaks when the learner presses Listen. See "Voice" in
+`engine/docs/ENGINE.md`.
 
 ## Delivering
 

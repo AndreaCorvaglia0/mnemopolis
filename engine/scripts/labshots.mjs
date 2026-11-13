@@ -34,7 +34,7 @@ function steps(tag) {
     `eval:${enc("__drag('#ff0000','#00ff00')")}`, 'wait:1200', check, `shot:${tag}-3-one-try-done`,
     `eval:${enc("__drag('#0000ff','#00ff00',-30,40)")}`, 'wait:300', `eval:${enc("__drag('#ff0000','#00ff00',-50,0)")}`, 'wait:2000', check, `shot:${tag}-4-verdict-takeaway`,
     click('.lx-tog'), 'wait:900', check, `shot:${tag}-5-panel-collapsed`,
-    click('.lx-tog'), 'wait:900', click('.lx-top .lx-btn'), 'wait:1400', `shot:${tag}-6-theory`, 'key:Escape', 'wait:700',
+    click('.lx-tog'), 'wait:900', click('.lx-theory'), 'wait:1400', `shot:${tag}-6-theory`, 'key:Escape', 'wait:700',
     click('.lx-fs'), 'wait:900', `shot:${tag}-7-full-screen`, 'key:Escape', 'wait:500', 'key:Escape', 'wait:800'];
   ids.forEach((id) => LABS[id].stations.forEach((st, k) => {
     if (id === LAB && String(k) === ST) return;

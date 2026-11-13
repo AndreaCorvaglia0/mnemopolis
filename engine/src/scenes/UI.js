@@ -7,6 +7,7 @@ import { openMap } from '../lab/map.js';
 import { touch } from '../systems/view.js';
 import { openLab } from '../lab/shell.js';
 import { openReading } from '../lab/reading.js';
+import { available as voiceAvailable, isOn as voiceOn, isSpeaking, onChange as onVoice, listen, speak, stop as stopVoice, toggle as toggleVoice, VOICE } from '../systems/voice.js';
 
 // DotGothic16 for reading (clear C/O and 5/S at small sizes); Pixelify Sans for big display lines.
 const BODY = '"DotGothic16", monospace';
@@ -32,7 +33,12 @@ export class UI extends Phaser.Scene {
     this.keys = this.input.keyboard.addKeys('SPACE,ENTER,E,ESC,UP,DOWN,LEFT,RIGHT,W,S,A,D,ONE,TWO,THREE,TAB');
     this.input.keyboard.on('keydown', () => initAudio());
     this.input.keyboard.on('keydown-M', () => { state.musicOff = !state.musicOff; save(); setMusicOn(!state.musicOff); this.toast(state.musicOff ? 'Music off' : 'Music on'); });
-    this.input.keyboard.on('keydown-V', () => this.toast(toggleMute() ? 'All sound off' : 'Sound on'));
+    this.input.keyboard.on('keydown-V', () => { const off = toggleMute(); if (off) stopVoice(); this.toast(off ? 'All sound off' : 'Sound on'); });
+    // read-aloud on or off (only when the course has a voice); inside a dialogue L means Listen
+    this.input.keyboard.on('keydown-L', () => { if (voiceAvailable() && !this.modals) this.switchVoice(); });
+    // a browser that turns out unable to speak loses the voice controls
+    let could = voiceAvailable();
+    onVoice(() => { if (could && !voiceAvailable()) { could = false; if (this.where) this.setLocation(...this.where); } });
     this.layout();
     this.makeHUD();
     this.placeHUD();
@@ -187,10 +193,12 @@ export class UI extends Phaser.Scene {
     this.where = [name, where];
     if (!this.loc) return; // the HUD picks it up when it is built
     this.loc.setText(name);
-    this.hint.setText(this.touch ? '' : where === 'town' ? 'Tab  Map\nN  time of day\nG  grass questions\nM  music  ·  V  all sound' : 'Tab  Map\nM  music  ·  V  all sound');
+    const vk = voiceAvailable() ? '\nL  voice' : '';
+    this.hint.setText(this.touch ? '' : where === 'town' ? `Tab  Map\nN  time of day\nG  grass questions\nM  music  ·  V  all sound${vk}` : `Tab  Map\nM  music  ·  V  all sound${vk}`);
     this.btns.removeAll(true);
     if (!this.touch) return;
     const items = [['Map', () => this.showAtlas()], [state.musicOff ? 'Music off' : 'Music on', () => { state.musicOff = !state.musicOff; save(); setMusicOn(!state.musicOff); this.setLocation(...this.where); }]];
+    if (voiceAvailable()) items.push([voiceOn() ? 'Voice on' : 'Voice off', () => this.switchVoice()]);
     if (where === 'town') items.push([state.grassOff ? 'Grass off' : 'Grass on', () => { state.grassOff = !state.grassOff; save(); this.setLocation(...this.where); this.toast(state.grassOff ? 'Grass questions off' : 'Grass questions on'); }]);
     let x = 0;
     for (const [label, fn] of items.reverse()) {
@@ -203,6 +211,30 @@ export class UI extends Phaser.Scene {
       this.btns.add([g, t, z]);
       x -= 8;
     }
+  }
+
+  switchVoice() {
+    const on = toggleVoice();
+    if (this.where) this.setLocation(...this.where);
+    this.toast(on ? (this.touch ? 'Voice on: tap Listen on a page' : 'Voice on: L or Listen reads a page') : 'Voice off');
+  }
+
+  // A Listen / Stop control inside a dialogue box, at (x, y) with origin (1, 0.5). L does the same.
+  // Returns a function that removes it and stops the voice; null when there is no voice.
+  voiceButton(c, x, y, getText) {
+    if (!voiceOn()) return null;
+    const t = this.text(x, y, '', this.touch ? 17 : 14, C.muted).setOrigin(1, 0.5);
+    // the tap area is larger than the word, for a finger
+    const z = this.add.zone(x + 8, y, 120, 40).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+    const draw = () => { const on = isSpeaking(); t.setText(this.touch ? (on ? 'Stop' : 'Listen') : on ? 'L  Stop' : 'L  Listen').setColor(on ? '#4fd1c5' : C.muted); };
+    z.on('pointerdown', (p, lx, ly, ev) => { ev?.stopPropagation(); listen(getText); });
+    c.add(z);
+    const key = () => listen(getText);
+    this.input.keyboard.on('keydown-L', key);
+    const off = onVoice(draw);
+    draw();
+    c.add(t);
+    return () => { off(); this.input.keyboard.off('keydown-L', key); stopVoice(); };
   }
 
   toast(msg, color = C.text) {
@@ -259,7 +291,8 @@ export class UI extends Phaser.Scene {
     let th = 0;
     for (const l of lines) { probe.setText(l); th = Math.max(th, probe.height); }
     probe.destroy();
-    const ph = Math.max(140, Math.ceil(th) + 64);
+    const talk = !!name && voiceOn(); // people and signs can be read aloud
+    const ph = Math.max(140, Math.ceil(th) + 64 + (talk ? 14 : 0));
     const atTop = this.playerScreenY() > F.y + F.h * 0.6;
     const py = atTop ? F.y + F.top : F.b - 20 - ph;
     const c = this.add.container(0, 0).setDepth(60);
@@ -275,14 +308,20 @@ export class UI extends Phaser.Scene {
     const arrow = this.text(x0 + pw - 30, py + ph - 32, '▼', 18, '#ffcf5a').setOrigin(0.5);
     c.add([body, arrow]);
     this.tweens.add({ targets: arrow, y: arrow.y + 6, duration: 400, yoyo: true, repeat: -1 });
+    let current = '';
+    const unvoice = talk ? this.voiceButton(c, x0 + pw - 54, py + ph - 30, () => current) : null;
     for (const line of lines) {
       arrow.setVisible(false);
+      current = line;
+      stopVoice();
+      if (unvoice && VOICE.auto) speak(line);
       await this.typewrite(body, line);
       arrow.setVisible(true);
       const key = await this.waitKey(['SPACE', 'ENTER', 'E', 'ESC']);
       sfx.blip();
       if (key === 'ESC') break; // walk away at any point
     }
+    unvoice?.();
     c.destroy();
     this.close();
   }
@@ -382,6 +421,9 @@ export class UI extends Phaser.Scene {
     const H = (name ? 30 : 0) + q.height + 30 + hs.reduce((a, b) => a + b, 0) + 34, top = F.b - 16 - H;
     c.add(this.panel(x0, top, pw, H));
     if (name) c.add(this.text(x0 + 28, top + 14, name, 16, '#ffcf5a'));
+    // a person's line can be read aloud; the learner's own options are not read
+    const unvoice = name ? this.voiceButton(c, x0 + pw - 28, top + 24, () => question) : null;
+    if (unvoice && VOICE.auto) speak(question);
     q.setY(top + (name ? 42 : 18));
     c.add(q);
     let y = q.y + q.height + 16;
@@ -412,6 +454,7 @@ export class UI extends Phaser.Scene {
       leave.on('pointerdown', esc);
     });
     sfx.select();
+    unvoice?.();
     c.destroy();
     this.close();
     return choice;

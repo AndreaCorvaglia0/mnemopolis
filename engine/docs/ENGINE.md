@@ -30,7 +30,7 @@ engine/src/
   lab/             shell.js (station frame), style.js (its look), kit.js (canvas, drag, read-outs),
                    code.js (code panel), reading.js (reading wall), map.js (the map), museum.js (plaques)
   art/             everything drawn in code: ground, buildings, sprites, palette
-  systems/         state (save), audio (music and sounds), walker (movement)
+  systems/         state (save), audio (music and sounds), voice (read aloud), walker (movement)
   data/content.js  read-only views of the course for the scenes
 ```
 
@@ -83,7 +83,7 @@ over a new scene: the lab frame is where the learner already knows how to behave
 | Zoom of the town and the museum | The **short side** of the screen shows about 14 tiles, upright or sideways, phone or monitor; whole-number zoom so pixel art stays sharp. Try other values with `?tiles=N` in the address. | `src/systems/view.js` |
 | Rooms and the workshop | The whole room fits the screen, at the largest whole-number zoom. | each scene's `layout()` |
 | Interface (dialogues, quiz, prompts) | Sideways: a 960 x 540 stage scaled to fit. Upright: 600 virtual pixels across, as tall as the screen, so text keeps a readable size; boxes span the width and sit at the bottom; the quiz stacks its buttons. | `UI.frame()` in `src/scenes/UI.js` |
-| Touch | Tap where you want to go; tap a person, sign, plaque or machine to walk to it and use it; tap a building to go to its door. Buttons replace the key hints (Map, Music, Grass); the gold prompt can be tapped. Turns on by itself on touch screens; `?touch` forces it. | `src/systems/tapnav.js`, `UI.setLocation()` |
+| Touch | Tap where you want to go; tap a person, sign, plaque or machine to walk to it and use it; tap a building to go to its door. Buttons replace the key hints (Map, Music, Grass, and Voice when the course has one); the gold prompt can be tapped. Turns on by itself on touch screens; `?touch` forces it. | `src/systems/tapnav.js`, `UI.setLocation()` |
 | Labs | Below 760 px wide, or upright and below 1000 px: the picture on top, the panel as a bottom sheet (drag or tap its handle), the main button at the bottom within thumb reach. The header stays one line: other stations shrink to their number. | `src/lab/shell.js`, `style.js` |
 
 Lab code must work with a finger: see `skills/game-build/SKILL.md`.
@@ -116,7 +116,40 @@ The lab is the core learning screen. Its rules, each answering something learner
 - **Legible.** Text at least 16 px, contrast above 4.5:1, touch targets at least 44 px, the
   accent colour (teal) only for the primary action and the current position, gold for the
   learner's own answer. Motion is short and switched off with `prefers-reduced-motion`.
+- **Listen** (when the course has a voice) is a labelled icon button in the header, in the head
+  of the panel on an upright screen, and in the theory drawer for the page; L does the same.
+  It reads what the panel shows now: the question and its answers, the step to do, or the
+  verdict and the takeaway.
 - **All words in one place**: `TEXT` at the top of `shell.js`, for a course in another language.
 
 Station code keeps its old contract (`ctx.stage`, `ctx.controls`, `did`, `reveal`); what was
 added is optional and listed in `SCHEMA.md`.
+
+## Voice
+
+Optional read-aloud with the browser's own speech synthesis (Web Speech API). No audio files, no
+network, nothing added to the page size. Everything is in `src/systems/voice.js`.
+
+- **What it reads**, only when the learner presses Listen (or L): the reading wall (the page in
+  order, without the hidden answer of "explain it yourself" and without links); the lab station
+  (goal, the prediction question and its options while it is open, "try this", the takeaway once
+  shown); museum plaques; the lines of people and signs in dialogue boxes. Quiz questions are not
+  read. Pressing again stops. Speech stops on leaving a page, changing station or plaque, closing
+  a dialogue, hiding the tab, and with V (all sound off).
+- **Enable** in `courses/<slug>/world.json`: `"voice": true`, or an object
+  `{ "auto": false, "rate": 1, "say": { "RGB": "R G B" } }`. `auto` reads each page, station,
+  plaque and line as it opens (off by default). `?voice` in the address turns it on for testing.
+  Without it nothing changes on screen.
+- **The learner** switches it on and off with L or the Voice button (touch); the choice is saved
+  like the music setting. Off hides the Listen buttons.
+- **Language and voice**: `language` of `course.json`. The best installed voice for it is chosen
+  (same language, then same region, local before network voices).
+- **Text**: markup is stripped and a few symbols are said as words (`%`, `→`, `=`, `≈`, `×`, and
+  a dash between numbers) in English, Italian, Spanish, French and German; other languages get a
+  pause for `→` and leave the rest to the voice. `say` replaces whole words or symbols before
+  that, so it can also fix a symbol.
+- **Limits**: voice quality depends on the device and the voices installed; a language with no
+  installed voice may be read by a voice of another language. Inside some embedded viewers or
+  sandboxed frames speech is missing or silent: after two attempts that never start, the controls
+  hide themselves. Headless Chrome cannot be heard, so checks record the calls to
+  `speechSynthesis` instead (`__hb.voice.debug()` in the console shows the state).

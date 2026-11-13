@@ -15,6 +15,15 @@ export const CSS = `
 .hb-top h1{font-size:17px;margin:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
 .hb-top h1 span{color:var(--muted);font-weight:400}
 .hb-tabs{display:none}
+.hb-say{display:inline-flex;align-items:center;gap:8px;height:44px;background:none;border:1px solid var(--line);border-radius:10px;padding:0 14px;font-size:16px;cursor:pointer;white-space:nowrap;flex:none}
+.hb-say::before{content:'';width:0;height:0;border-left:9px solid var(--acc);border-top:6px solid transparent;border-bottom:6px solid transparent}
+.hb-say:hover{border-color:var(--acc)}
+.hb-say[aria-pressed=true]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc);font-weight:600}
+.hb-say[aria-pressed=true]::before{width:10px;height:10px;border:0;background:var(--acc-ink);border-radius:2px;animation:hbpulse 1s ease-in-out infinite alternate}
+@keyframes hbpulse{from{opacity:1}to{opacity:.35}}
+.lx-say[aria-pressed=true]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc);font-weight:600}
+.lx-phead .lx-say{height:40px;padding:0 12px;font-size:15px}
+.lx.collapsed .lx-phead .lx-say{display:none}
 .hb-close,.lx-x{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;height:44px;padding:0 12px;background:none;border:1px solid transparent;border-radius:10px;cursor:pointer;white-space:nowrap;flex:none}
 .hb-close:hover,.lx-x:hover{background:#1e2633;border-color:var(--line)}
 
@@ -168,7 +177,7 @@ export const CSS = `
 .lx.stack.theory .lx-drawer{transform:none}
 .lx.stack .lx-q{font-size:19px}
 
-@media (prefers-reduced-motion:reduce){.lx *,.lx *::before{animation:none !important;transition:none !important}}
+@media (prefers-reduced-motion:reduce){.hb-say[aria-pressed=true]::before{animation:none}.lx *,.lx *::before{animation:none !important;transition:none !important}}
 
 /* ---- controls that stations use ---- */
 .lab-box{flex:1;min-width:0;min-height:0;position:relative;background:var(--bg);border-radius:10px;overflow:auto}

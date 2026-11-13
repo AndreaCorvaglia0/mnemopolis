@@ -8,6 +8,8 @@
 import { LABS } from '../course/labs.js';
 import { state, save } from '../systems/state.js';
 import { sfx } from '../systems/audio.js';
+import { touch } from '../systems/view.js';
+import { available, isOn, isSpeaking, onChange, listen, stop as stopVoice, speak, script, VOICE } from '../systems/voice.js';
 import { codePanel } from './code.js';
 import { CSS } from './style.js';
 import { readingArticle } from './reading.js';
@@ -21,6 +23,7 @@ export const TEXT = {
   said: 'You said', check: 'Now check it on the picture.', selfTick: 'Each step ticks itself when you do it.',
   right: 'That is right.', answerIs: (a) => `The answer is: ${a}.`, compare: 'Compare it with what you saw.',
   done: 'Done', doneSum: 'Takeaway ready', allDone: 'All steps done.', takeaway: 'Takeaway', keep: 'The picture stays live: keep exploring.',
+  listen: 'Listen', stop: 'Stop', readAloud: 'Read aloud', stopReading: 'Stop reading aloud',
   next: (t) => `Next: ${t}`, back: 'Back to the room', more: 'More',
   about: 'About this picture', station: (i, n, t, d) => `Station ${i} of ${n}: ${t}${d ? ', done' : ''}`,
 };
@@ -33,6 +36,8 @@ const ICON = {
   chev: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
   down: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
   lock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>',
+  speaker: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>',
+  stopsq: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
   arrow: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
 };
 const icon = (k) => { const s = document.createElement('span'); s.style.display = 'contents'; s.innerHTML = ICON[k]; return s; };
@@ -80,14 +85,43 @@ export function predict(controls, question, options) {
 let styled = false;
 const style = () => { if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; } };
 
-// The frame of the reading wall and the map: a header with a title and a close button.
-export function overlay(title, sub) {
+// Read aloud (systems/voice.js): a Listen / Stop button for the text that getText() returns, or
+// null when the course has no voice or the browser cannot speak. Hidden while the learner has the
+// voice switched off. `listenKey(e)` is the key that does the same (L). With `cls` 'lx-btn' it
+// is the lab's icon button with a short label.
+export function listenButton(getText, cls = 'hb-say') {
+  if (!available()) return null;
+  style();
+  const lab = cls.includes('lx-btn');
+  const b = h('button', { class: cls, type: 'button', 'aria-pressed': 'false', onclick: () => listen(getText) });
+  const draw = () => {
+    if (!b.isConnected && b.dataset.on) { off(); return; }
+    const on = isSpeaking();
+    b.hidden = !isOn();
+    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute('aria-label', on ? TEXT.stopReading : TEXT.readAloud);
+    b.title = on ? TEXT.stopReading : TEXT.readAloud;
+    if (lab) b.replaceChildren(icon(on ? 'stopsq' : 'speaker'), h('span', { class: 't' }, on ? TEXT.stop : TEXT.listen));
+    else b.textContent = `${on ? TEXT.stop : TEXT.listen}${touch.on ? '' : '  (L)'}`;
+  };
+  const off = onChange(draw);
+  requestAnimationFrame(() => { b.dataset.on = '1'; });
+  draw();
+  return b;
+}
+export const listenKey = (e) => (e.key === 'l' || e.key === 'L') && !e.ctrlKey && !e.metaKey && !e.altKey && !/^(INPUT|SELECT|TEXTAREA)$/.test(e.target?.tagName || '') && !e.target?.isContentEditable && isOn();
+export { listen, stopVoice, speak, script, VOICE, isOn };
+
+// The frame of the reading wall and the map: a header with a title, Listen (if the course has a
+// voice) and a close button.
+export function overlay(title, sub, getText = null) {
   style();
   const close = h('button', { type: 'button', class: 'hb-close', 'aria-label': 'Close' }, icon('x'), 'Close');
   const tabs = h('div', { class: 'hb-tabs' });
-  const root = h('div', { class: 'hb-over', role: 'dialog', 'aria-label': title }, h('div', { class: 'hb-top' }, h('h1', { html: `${title}${sub ? ` <span>· ${sub}</span>` : ''}` }), tabs, close));
+  const say = getText ? listenButton(getText) : null;
+  const root = h('div', { class: 'hb-over', role: 'dialog', 'aria-label': title }, h('div', { class: `hb-top${say ? ' has-say' : ''}` }, h('h1', { html: `${title}${sub ? ` <span>· ${sub}</span>` : ''}` }), tabs, say, close));
   document.body.append(root);
-  return { root, tabs, close };
+  return { root, tabs, close, say };
 }
 
 // Opens the lab of one building. Resolves when the player goes back to town.
@@ -97,9 +131,12 @@ export function openLab(id, start = 0) {
 
   // ---- the frame, built once ----
   const steps = h('nav', { class: `lx-steps${N > 4 ? ' many' : ''}`, 'aria-label': TEXT.stations });
-  const theoryBtn = h('button', { type: 'button', class: 'lx-btn', 'aria-haspopup': 'dialog', title: TEXT.theory }, icon('book'), h('span', {}, TEXT.theory));
+  const theoryBtn = h('button', { type: 'button', class: 'lx-btn lx-theory', 'aria-haspopup': 'dialog', title: TEXT.theory }, icon('book'), h('span', {}, TEXT.theory));
   const close = h('button', { type: 'button', class: 'lx-x', 'aria-label': TEXT.close, title: TEXT.close }, icon('x'));
-  const tools = h('div', { class: 'lx-tools' }, theoryBtn, close);
+  // what Listen reads: set by each station for its current phase
+  let speech = () => '', drawerSpeech = () => '';
+  const say = listenButton(() => speech(), 'lx-btn lx-say');
+  const tools = h('div', { class: 'lx-tools' }, say, theoryBtn, close);
   const top = h('header', { class: 'lx-top' }, h('div', { class: 'lx-name' }, lab.title), steps, tools);
 
   const stage = h('div', { class: 'lab-stage' });
@@ -123,7 +160,8 @@ export function openLab(id, start = 0) {
 
   const dClose = h('button', { type: 'button', class: 'lx-x', 'aria-label': `${TEXT.close}: ${TEXT.theory}` }, icon('x'));
   const dBody = h('div', { class: 'hb-page lx-dbody', tabindex: '0' });
-  const drawer = h('div', { class: 'lx-drawer', role: 'dialog', 'aria-modal': 'true', 'aria-label': TEXT.theory, inert: '' }, h('div', { class: 'lx-dhead' }, h('h2', {}, TEXT.theory), dClose), dBody);
+  const dSay = listenButton(() => drawerSpeech(), 'lx-btn lx-say');
+  const drawer = h('div', { class: 'lx-drawer', role: 'dialog', 'aria-modal': 'true', 'aria-label': TEXT.theory, inert: '' }, h('div', { class: 'lx-dhead' }, h('h2', {}, TEXT.theory), dSay, dClose), dBody);
   const scrim = h('div', { class: 'lx-scrim' });
 
   const root = h('div', { class: 'hb-over lx', role: 'dialog', 'aria-label': lab.title }, top, main, scrim, drawer);
@@ -131,7 +169,13 @@ export function openLab(id, start = 0) {
 
   // upright screens and narrow windows: stage on top, panel as a bottom sheet
   const stackQ = () => innerWidth < 760 || (innerHeight > innerWidth && innerWidth < 1000);
-  const relayout = () => { root.classList.toggle('stack', stackQ()); cue(); };
+  const relayout = () => {
+    const st = stackQ();
+    root.classList.toggle('stack', st);
+    // Listen sits in the header on wide screens, in the panel head on upright ones (room for the station name)
+    if (say) { if (st && say.parentNode !== phead) phead.insertBefore(say, tog); else if (!st && say.parentNode !== tools) tools.insertBefore(say, theoryBtn); }
+    cue();
+  };
 
   // ---- panel: fold away, drag (bottom sheet), "more below" cue ----
   let collapsed = false;
@@ -189,6 +233,7 @@ export function openLab(id, start = 0) {
     top.inert = v; main.inert = v; // keep the keyboard inside the drawer while it is open
     if (v) { drawer.removeAttribute('inert'); lastFocus = document.activeElement; dClose.focus({ preventScroll: true }); }
     else { drawer.setAttribute('inert', ''); stopAnims?.(); stopAnims = null; lastFocus?.focus?.({ preventScroll: true }); }
+    stopVoice();
     theoryBtn.setAttribute('aria-expanded', String(v));
   };
   theoryBtn.onclick = () => {
@@ -196,13 +241,14 @@ export function openLab(id, start = 0) {
     dBody.replaceChildren();
     if (st.source) dBody.append(h('div', { style: 'max-width:760px;margin:0 auto;padding:20px 24px 0' }, h('p', { class: 'lx-about' }, h('b', {}, TEXT.about), st.source)));
     if (st.deep !== false) {
-      const { art, start: run } = readingArticle(target[0]);
+      const { art, start: run, spoken } = readingArticle(target[0]);
+      drawerSpeech = () => script([st.source && `${TEXT.about}: ${st.source}`, spoken()]);
       dBody.append(art);
       setTheory(true);
       stopAnims = run(dBody);
       if (target[1]) requestAnimationFrame(() => art.querySelector(`#sec-${target[1]}`)?.scrollIntoView());
       else dBody.scrollTop = 0;
-    } else setTheory(true);
+    } else { drawerSpeech = () => script([st.source]); setTheory(true); }
   };
   dClose.onclick = () => setTheory(false);
   scrim.onclick = () => setTheory(false);
@@ -223,6 +269,7 @@ export function openLab(id, start = 0) {
   const show = async (i) => {
     const my = ++token, st = lab.stations[i];
     current = i;
+    stopVoice();
     cleanup.forEach((f) => f()); cleanup = [];
     if (theory) setTheory(false);
     stage.replaceChildren(); guide.replaceChildren(); extra.replaceChildren(); act.replaceChildren();
@@ -289,10 +336,20 @@ export function openLab(id, start = 0) {
       requestAnimationFrame(cue);
     };
 
+    // Listen reads what is on the panel now: the question and its answers; the answer given and
+    // the step to do; or the verdict and the takeaway
+    speech = () => {
+      const nowK = tries.findIndex((_, j) => !ticked.has(j));
+      if (phase === 'ask') return script([st.predict.q, ...st.predict.options.map((o, k) => `${String.fromCharCode(65 + k)}: ${o}`)]);
+      if (phase === 'explore') return script([said != null ? `${TEXT.said}: ${st.predict.options[said]}. ${TEXT.check}` : st.why || st.goal, ...tries.slice(Math.max(0, nowK))]);
+      const right = said == null || answer == null ? null : said === answer;
+      return script([said != null && `${TEXT.said}: ${st.predict.options[said]}.`, right === true && TEXT.right, right === false && TEXT.answerIs(st.predict.options[answer]), st.takeaway]);
+    };
     const finish = () => {
       if (my !== token || phase === 'done') return;
       phase = 'done';
       state.done[`${id}:${i}`] = true; save(); sfx.reveal();
+      if (VOICE.auto && isOn()) speak(speech());
       renderSteps(); render();
       scroll.scrollTop = 0;
       if (!collapsed) act.querySelector('button')?.focus({ preventScroll: true });
@@ -333,6 +390,7 @@ export function openLab(id, start = 0) {
     root.dataset.station = `${id}:${i}`;
     root.dataset.ready = '0';
     render();
+    if (VOICE.auto && isOn()) speak(speech());
     if (phase === 'ask') guide.querySelector('.lx-q')?.focus({ preventScroll: true });
     // the station draws at once: its picture is visible (frozen) while the question is open
     await st.mount(ctx);
@@ -341,11 +399,12 @@ export function openLab(id, start = 0) {
   };
 
   return new Promise((resolve) => {
-    const done = () => { cleanup.forEach((f) => f()); stopAnims?.(); removeEventListener('keydown', key, true); removeEventListener('resize', relayout); root.remove(); resolve(); };
+    const done = () => { stopVoice(); cleanup.forEach((f) => f()); stopAnims?.(); removeEventListener('keydown', key, true); removeEventListener('resize', relayout); root.remove(); resolve(); };
     leave = done;
     const key = (e) => {
       const tag = e.target.tagName, typing = tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA';
       if (e.key === 'Escape') { e.preventDefault(); if (theory) setTheory(false); else if (full) setFull(false); else done(); return; }
+      if (listenKey(e)) { e.preventDefault(); listen(() => (theory ? drawerSpeech() : speech())); return; }
       if (theory || typing || e.altKey || e.ctrlKey || e.metaKey) return;
       if (/^[1-9]$/.test(e.key) && +e.key <= N) { e.preventDefault(); show(+e.key - 1); }
       else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = current + (e.key === 'ArrowRight' ? 1 : -1); if (n >= 0 && n < N) { e.preventDefault(); show(n); } }
