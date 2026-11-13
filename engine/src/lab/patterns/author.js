@@ -12,8 +12,12 @@ import { fmt } from './expr.js';
 // stage(ctx, { wide: [w, h], tall: [w, h], caption }, draw): a canvas for the whole stage.
 // draw(d, pane) is called now and after every resize; pane.upright says which box is in use.
 // Returns { pane, d, redraw }.
-export function stage(ctx, { wide = [760, 480], tall = [480, 600], caption = '' } = {}, draw = () => {}) {
-  const pane = canvasPane(ctx.stage, wide[0], wide[1], caption, { portrait: tall });
+// { fluid: true }: the box keeps the width of `wide` or `tall` and takes the height of the real stage
+// (within half and twice the given height), so that a short stage (a phone with the result sheet
+// open) is not letterboxed into tiny text. Lay out from pane.W and pane.H.
+export function stage(ctx, { wide = [760, 480], tall = [480, 600], caption = '', fluid = false } = {}, draw = () => {}) {
+  const box = fluid ? (bw, bh) => { const up = bh > bw * 0.8, [W, H] = up ? tall : wide; return [W, Math.round(Math.min(H * 2, Math.max(H * 0.5, (W * bh) / bw))), up]; } : null;
+  const pane = canvasPane(ctx.stage, wide[0], wide[1], caption, box ? { box } : { portrait: tall });
   const d = ink(pane);
   const redraw = () => { if (ctx.alive && !ctx.alive()) return; draw(d, pane); };
   pane.onResize(redraw);
@@ -76,7 +80,8 @@ export function animate(ctx, frame) {
   let id = 0, last = 0, t0 = 0;
   const loop = (now) => {
     if (ctx.alive && !ctx.alive()) { id = 0; return; }
-    const dt = last ? Math.min(0.05, (now - last) / 1000) : 0; last = now;
+    // easing is stable for any step, so a slow device stays on time
+    const dt = last ? Math.min(0.25, (now - last) / 1000) : 0; last = now;
     const more = frame(reduced() ? Infinity : dt, (now - t0) / 1000);
     id = more ? requestAnimationFrame(loop) : 0;
   };

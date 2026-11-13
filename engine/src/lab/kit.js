@@ -37,18 +37,19 @@ export function canvasPane(stage, w, hgt, caption = '', opts = {}) {
   const rw = () => DW.get.call(cv), rh = () => DH.get.call(cv);
   let dpr = 1, s = 1, ox = 0, oy = 0, cw = 0, chh = 0, resizers = [];
 
-  const shapeFor = (bw, bh) => (opts.portrait && bh > bw * 0.8 ? opts.portrait : [w, hgt]);
+  // opts.box(bw, bh) -> [w, h, upright]: a box chosen for the stage's real shape (lab/patterns/author.js, stage({ fluid }))
+  const shapeFor = (bw, bh) => (opts.box ? opts.box(bw, bh) : opts.portrait && bh > bw * 0.8 ? opts.portrait : [w, hgt]);
   const base = () => { raw.setTransform(s, 0, 0, s, ox, oy); raw.beginPath(); raw.rect(0, 0, pane.W, pane.H); raw.clip(); };
   // size the backing store to the element; returns true if anything changed
   const fit = (keep = true) => {
     const r = wrap.getBoundingClientRect();
     const bw = Math.max(1, Math.round(r.width || w)), bh = Math.max(1, Math.round(r.height || hgt)), d = Math.min(3, window.devicePixelRatio || 1);
-    const [W2, H2] = shapeFor(bw, bh);
+    const [W2, H2, up2] = shapeFor(bw, bh);
     if (keep && bw === cw && bh === chh && d === dpr && W2 === pane.W && H2 === pane.H && rw() > 1) return false;
     // keep the last picture for stations that do not redraw themselves
     let snap = null;
     if (keep && !resizers.length && rw() > 1) { snap = document.createElement('canvas'); snap.width = Math.max(1, Math.round(pane.W * s)); snap.height = Math.max(1, Math.round(pane.H * s)); snap.getContext('2d').drawImage(cv, ox, oy, snap.width, snap.height, 0, 0, snap.width, snap.height); }
-    cw = bw; chh = bh; dpr = d; pane.W = W2; pane.H = H2; pane.upright = W2 !== w || H2 !== hgt;
+    cw = bw; chh = bh; dpr = d; pane.W = W2; pane.H = H2; pane.upright = up2 ?? (W2 !== w || H2 !== hgt);
     DW.set.call(cv, Math.round(bw * d)); DH.set.call(cv, Math.round(bh * d));
     s = Math.min(rw() / W2, rh() / H2); ox = Math.round((rw() - W2 * s) / 2); oy = Math.round((rh() - H2 * s) / 2);
     pane.scale = s / d;
@@ -168,3 +169,4 @@ export function hslToRgb(hh, s, l) { // h in degrees, s and l in 0..1
 // functions: sliderReveal, compare, sort, order.
 export * from './patterns/index.js';
 export { h, seg, slider, readout } from './shell.js';
+export { sfx };

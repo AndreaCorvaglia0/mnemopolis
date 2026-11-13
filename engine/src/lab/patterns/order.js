@@ -4,7 +4,7 @@
 // place the run stops, the place flashes and the step says what goes wrong ("early").
 //   order(ctx, { steps: [{ id, label, emoji, result, early }], run: "Run it" })  -> { pane, d, t, run(), redraw, over(fn) }
 // The steps are listed in the right order in the data.
-import { C, alpha, lerp } from './draw.js';
+import { C, alpha } from './draw.js';
 import { stage, tasks, animate, spring, shuffle, hit, button } from './author.js';
 import { LANG } from '../shell.js';
 import { sfx } from '../../systems/audio.js';
@@ -24,7 +24,7 @@ export function order(ctx, data, whens = ctx.station?.when) {
   const layout = (pane) => {
     const up = pane.upright, n = slots.length, pad = 16;
     if (up) { const mh = 132, h = Math.min(86, (pane.H - pad * 2 - mh - (n - 1) * 12) / n); return { up, n, pad, w: pane.W - pad * 2 - 44, h, x0: pad + 44, y0: pad, gap: 12, msgY: pad + n * (h + 12) + 6 }; }
-    const gap = 26, w = (pane.W - pad * 2 - (n - 1) * gap) / n, h = Math.min(250, pane.H * 0.5);
+    const gap = 26, w = (pane.W - pad * 2 - (n - 1) * gap) / n, h = Math.min(220, pane.H * 0.46);
     return { up, n, pad, w, h, x0: pad, y0: pad + 40, gap, msgY: pad + 40 + h + 34 };
   };
   const posOf = (L, i) => (L.up ? [L.x0, L.y0 + i * (L.h + L.gap)] : [L.x0 + i * (L.w + L.gap), L.y0]);
@@ -44,7 +44,7 @@ export function order(ctx, data, whens = ctx.station?.when) {
   };
   const go = () => { if (run) return; broke = -1; lit = -1; msg = ''; run = { i: 0, t: 0.5 }; t.rec.runs++; t.check(); runBtn.textContent = T.again; anim.kick(); };
 
-  const view = stage(ctx, { wide: data.wide || [880, 500], tall: data.tall || [480, 760], caption: data.caption || '' }, (d, pane) => {
+  const view = stage(ctx, { wide: data.wide || [880, 500], tall: data.tall || [480, 760], caption: data.caption || '', fluid: true }, (d, pane) => {
     L = layout(pane); place(); if (first) { slots.forEach((s) => { s.x = s.tx; s.y = s.ty; }); first = false; }
     d.clear();
     // the track: arrows between places, the places' numbers
@@ -97,5 +97,5 @@ export function order(ctx, data, whens = ctx.station?.when) {
   });
   view.pane.cv.style.cursor = 'grab';
   ctx.hint?.((k) => { const w = t.whens[k]; if (w?.run === true || (w?.run === 'correct' && slots.every((s, i) => s.k === i))) return runBtn; const i = slots.findIndex((s, j) => s.k !== j); return i >= 0 && L ? [slots[i].x + L.w / 2, slots[i].y + L.h / 2] : runBtn; });
-  return { pane: view.pane, d: view.d, t, run: go, redraw: view.redraw, over: (f) => { extra.push(f); view.redraw(); } };
+  return (ctx.stage.__ready = { kind: 'order', pane: view.pane, d: view.d, t, slots, run: go, redraw: view.redraw, over: (f) => { extra.push(f); view.redraw(); } });
 }

@@ -66,8 +66,10 @@ function drawPlot(d, S, rect, s, glow) {
       const on = !!L.when(s), a = Math.min(X(L.from(s)), X(L.to(s))), b = Math.max(X(L.from(s)), X(L.to(s)));
       const k = glow.get(L) ?? 0;
       d.box(L.axis === 'x' ? a : x0, L.axis === 'x' ? y0 : Math.min(Y(L.from(s)), Y(L.to(s))), L.axis === 'x' ? b - a : w, L.axis === 'x' ? h : Math.abs(Y(L.to(s)) - Y(L.from(s))), { fill: alpha(L.col, on ? 0.16 + 0.22 * k : 0.05), r: 0 });
-      const lab = L.label(s);
-      if (lab) d.text(lab, L.axis === 'x' ? (a + b) / 2 : x0 + w / 2, y0 + d.lineH(16), { size: 16, weight: 600, color: on ? L.col : C.dim, align: 'center', max: Math.max(60, L.axis === 'x' ? b - a - 8 : w) });
+      const lab = L.label(s), rw = L.axis === 'x' ? b - a : w;
+      // the label inside the band (up to 3 lines); a narrow band puts it above the plot
+      if (lab && rw >= 90) d.wrap(lab, (L.axis === 'x' ? a : x0) + 4, y0 + 8, rw - 8, { size: 16, weight: 600, color: on ? L.col : C.dim, align: 'center', lines: 3 });
+      else if (lab) d.text(lab, clamp((a + b) / 2, x0 + 80, x0 + w), y0 - 10, { size: 16, weight: 600, color: on ? L.col : C.dim, align: 'right', max: w / 2 });
     }
   }
   for (const L of S.layers) {
@@ -93,7 +95,8 @@ function drawPlot(d, S, rect, s, glow) {
   }
   g.restore();
   // legend, top left inside the plot
-  legend.forEach(([t, c], i) => { const ly = y0 + 12 + i * d.lineH(16); d.line([[x0 + 12, ly + 8], [x0 + 34, ly + 8]], { color: c, width: 4 }); d.text(t, x0 + 42, ly + 14, { size: 16, color: C.text, max: w - 56 }); });
+  let ly = y0 + 10;
+  legend.forEach(([t, c]) => { d.line([[x0 + 12, ly + 10], [x0 + 34, ly + 10]], { color: c, width: 4 }); ly += d.wrap(t, x0 + 42, ly, w - 56, { size: 16, lines: 2 }) + 4; });
   return { X, Y };
 }
 
@@ -116,7 +119,7 @@ function areas(S, box, upright) {
   if (kinds.has('bars')) parts.push('bars');
   if (S.plot) parts.push('plot');
   const ro = S.layers.filter((L) => L.kind === 'readout').length;
-  const [x, y, w, h0] = box, h = h0 - ro * 34;
+  const [x, y, w, h0] = box, h = h0 - ro * (w < 520 ? 52 : 34);
   const out = { readout: [x, y + h + 4, w, ro * 34] };
   const stack = upright || w < 520 ? 'v' : 'h', k = parts.length || 1;
   parts.forEach((p, i) => {
@@ -134,7 +137,8 @@ function drawScene(d, S, box, s, upright, glow) {
   if (A.bars) for (const L of S.layers) if (L.kind === 'bars') drawBars(d, L, A.bars, s);
   if (A.plot) plotMap = drawPlot(d, S, A.plot, s, glow);
   const ro = S.layers.filter((L) => L.kind === 'readout');
-  ro.forEach((L, i) => d.text(L.text(s), A.readout[0] + A.readout[2] / 2, A.readout[1] + 24 + i * 34, { size: 21, weight: 700, color: C.gold, align: 'center', max: A.readout[2] }));
+  // a readout wraps to two lines rather than being cut
+  ro.forEach((L, i) => d.wrap(L.text(s), A.readout[0], A.readout[1] + 6 + i * 34, A.readout[2], { size: 20, weight: 700, color: C.gold, align: 'center', lines: 2 }));
   return { A, plotMap };
 }
 
@@ -158,7 +162,7 @@ export function sliderReveal(ctx, data, whens = ctx.station?.when) {
   const t = tasks(ctx, whens || [], ranges(data));
   const extra = [];
   let L = null, ctl = null;
-  const view = stage(ctx, { wide: data.wide || [780, 500], tall: data.tall || [480, 640], caption: data.caption || '' }, (d, pane) => {
+  const view = stage(ctx, { wide: data.wide || [780, 500], tall: data.tall || [480, 640], caption: data.caption || '', fluid: true }, (d, pane) => {
     const s = S.scope(ctl ? ctl.v : {});
     L?.update(s, () => view.redraw());
     d.clear();
@@ -177,7 +181,7 @@ export function sliderReveal(ctx, data, whens = ctx.station?.when) {
     return `${S.plot.x.label || 'x'}: <b>${fmt(xv)}</b><br>${S.plot.y.label || 'y'}: <b>${fmt(yv)}</b>`;
   });
   ctx.hint?.((k) => hintControl(t.whens[k], ctl));
-  return { pane: view.pane, d: view.d, v: ctl.v, t, redraw: view.redraw, over: (f) => { extra.push(f); view.redraw(); } };
+  return (ctx.stage.__ready = { kind: 'slider-reveal', pane: view.pane, d: view.d, v: ctl.v, el: ctl.el, t, redraw: view.redraw, over: (f) => { extra.push(f); view.redraw(); } });
 }
 const drawSceneAreas = (S, pane) => { const pad = pane.upright ? 14 : 20; return areas(S, [pad, pad, pane.W - pad * 2, pane.H - pad * 2], pane.upright); };
 
@@ -201,7 +205,7 @@ export function compare(ctx, data, whens = ctx.station?.when) {
     view.redraw(); return more;
   });
   const scopes = () => cases.map((c) => S.scope({ ...(ctl ? ctl.v : {}), ...c.vars }));
-  const view = stage(ctx, { wide: data.wide || [820, 500], tall: data.tall || [480, 700], caption: data.caption || '' }, (d, pane) => {
+  const view = stage(ctx, { wide: data.wide || [820, 500], tall: data.tall || [480, 700], caption: data.caption || '', fluid: true }, (d, pane) => {
     d.clear();
     const up = pane.upright, pad = up ? 12 : 18, dh = diff ? (up ? 120 : 112) : 0;
     const s = scopes(), W = pane.W - pad * 2, H = pane.H - pad * 2 - dh;
@@ -210,7 +214,11 @@ export function compare(ctx, data, whens = ctx.station?.when) {
       d.box(b[0], b[1], b[2], b[3], { fill: '#0f141d', stroke: C.line, r: 14 });
       d.text(template(cases[i].label, S.names)(s[i]), b[0] + 16, b[1] + d.lineH(19) * 0.95, { size: 19, weight: 700, color: i ? C.gold : C.acc, max: b[2] - 32 });
       const inner = [b[0] + 10, b[1] + d.lineH(19) * 1.4, b[2] - 20, b[3] - d.lineH(19) * 1.4 - 10];
-      return drawScene(d, S, inner, s[i], true, G[i]);
+      // each case stays inside its own panel
+      d.g.save(); d.path(b[0] + 2, b[1] + 2, b[2] - 4, b[3] - 4, 12); d.g.clip();
+      const r = drawScene(d, S, inner, s[i], true, G[i]);
+      d.g.restore();
+      return r;
     });
     if (diff) drawDiff(d, diff, s, shown, [pad, pane.H - pad - dh + 10, W, dh - 10], cases);
     extra.forEach((f) => f(d, s, res));
@@ -218,7 +226,7 @@ export function compare(ctx, data, whens = ctx.station?.when) {
   ctl = sliders(ctx, data.controls || [], (id, x) => { t.value(id, x).check(); anim.kick(); view.redraw(); });
   shown = scopes().map((sc) => (diff ? diff.f(sc) : 0));
   ctx.hint?.((k) => hintControl(t.whens[k], ctl));
-  return { pane: view.pane, d: view.d, v: ctl.v, t, redraw: view.redraw, over: (f) => { extra.push(f); view.redraw(); } };
+  return (ctx.stage.__ready = { kind: 'compare', pane: view.pane, d: view.d, v: ctl.v, el: ctl.el, t, redraw: view.redraw, over: (f) => { extra.push(f); view.redraw(); } });
 }
 
 // the measured difference: two bars on one scale, and the ratio between them, lit when large
@@ -239,6 +247,7 @@ function drawDiff(d, diff, s, shown, [x, y, w, h], cases) {
   if (rtxt) {
     d.box(x + w - rw - 14, y + 12, rw, h - 24, { fill: big ? alpha(C.gold, 0.16) : C.card, stroke: big ? C.gold : C.line, r: 12, glow: big ? alpha(C.gold, 0.7) : null });
     d.text(rtxt, x + w - 14 - rw / 2, y + h / 2 + 4, { size: 30, weight: 800, color: big ? C.gold : C.text, align: 'center', base: 'middle', max: rw - 10 });
-    d.text(`${cases[1].short || 'B'} ÷ ${cases[0].short || 'A'}`, x + w - 14 - rw / 2, y + h - 20, { size: 15, color: C.dim, align: 'center', max: rw - 10 });
+    const cap = `${cases[1].short || 'B'} ÷ ${cases[0].short || 'A'}`;
+    if (d.measure(cap, 16) <= rw - 10) d.text(cap, x + w - 14 - rw / 2, y + h - 20, { size: 16, color: C.muted, align: 'center' });
   }
 }

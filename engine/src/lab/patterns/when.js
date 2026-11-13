@@ -96,8 +96,8 @@ export function checkWhen(c, refs, where = 'when') {
   const [verb] = keys, a = c[verb];
   if (!VERB_HELP[verb]) { e(`unknown verb "${verb}". Verbs for this lab: ${refs.verbs.join(', ')}`); return out; }
   if (!['all', 'any'].includes(verb) && !refs.verbs.includes(verb)) { e(`"${verb}" does not apply to this lab. Verbs for this lab: ${refs.verbs.join(', ')}`); return out; }
-  const has = (set, id) => (set instanceof Set ? set.has(id) : (set || []).includes(id));
-  const list = (set) => [...(set || [])].map((x) => `"${x}"`).join(', ');
+  const has = (set, id) => (set instanceof Set ? set.has(id) : Array.isArray(set) ? set.includes(id) : !!set && Object.hasOwn(set, id));
+  const list = (set) => (set instanceof Set || Array.isArray(set) ? [...set] : Object.keys(set || {})).map((x) => `"${x}"`).join(', ');
   const ref = (kind, id, label = kind.replace(/s$/, '')) => { if (typeof id !== 'string' || !has(refs[kind], id)) e(`${verb}: unknown ${label} ${JSON.stringify(id)}. Known: ${list(refs[kind]) || 'none'}`); };
   const obj = () => { if (!a || typeof a !== 'object' || Array.isArray(a)) { e(`${verb} takes ${VERB_HELP[verb]}`); return false; } return true; };
   const num = (k, v = a[k]) => { if (typeof v !== 'number' || !Number.isFinite(v)) { e(`${verb}: "${k}" must be a number`); return false; } return true; };
