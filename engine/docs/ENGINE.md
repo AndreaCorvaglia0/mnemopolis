@@ -11,6 +11,11 @@
 | `npm run build` | Check, then build one self-contained page: `dist/index.html`. |
 | `npm run shots:phone` | The same tour on a phone held upright (390 x 844, touch mode), into `shots/phone/`. |
 | `npm run shots:lab` | The lab frame state by state (question, after it, one task done with the panel open, folded and full screen, done with the panel open and folded, theory, done in full screen), the first state of every station and a mid state of the slider stations, on a desktop window and a phone, into `shots/lab/` (`OUT2=/dir` copies them). It also reports text cut with an ellipsis. The tasks are done with real drags. `STATION=lamps:0` picks the station walked through. |
+| `npm run build:player` | The prebuilt player: the engine without a course, `dist/player.html` (about 2.2 MB, a little smaller than a course build). Courses are put into it later without a build (below, "The prebuilt player"). |
+| `npm run build:play` | The `/play/` page, `dist/play/index.html` (about 80 KB): course files in, a game out, in the browser. It fetches `player.html` from its own folder. |
+| `npm run shots:ready` | Every station of the pocket demo and of the pattern gallery (`tests/fixtures/patterns/`), before the prediction, after one task and done, desktop and phone, into `shots/ready/`, copied to `/tmp/ready-*.png`. Tasks are done with real pointer events by reading each task's `when`. `COURSES=<slug>,...` picks the courses. |
+| `node scripts/packcheck.mjs <bundled.html> <packed.html> <course>` | Opens both games and compares what they expose: places, questions, League, and for every station its code, controls and a fingerprint of its first picture. |
+| `node scripts/playcheck.mjs [course folder]` | The `/play/` page end to end over http: files in, no problem reported, the game starts in the page; a broken course and a foreign import are refused in plain words. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`; then the duels (`scripts/duelshots.mjs`: a house duel at the start, after a hit, after a miss, won, a friendly rematch, lost; the League mid-way, lost and won) into `shots/duel/`, copied to `/tmp/duel-*.png`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
 | `npm run shots` (end) | Also runs `scripts/spineshots.mjs`: the main path in pictures (the guide's first speech, the tracker at the start, the mark over the next house, the three tabs of the menu in mid-game, a room's tracker, the League refused, the champion stepping aside, the ending card, free roaming), into `shots/spine*/`, copied to `/tmp/spine-*.png` (`OUT2=/dir` to change). |
 | `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
@@ -19,6 +24,7 @@
 | `npm run play:phone` | The same on a phone held upright (390 x 844, taps): `/tmp/play-phone-*`. About 10 minutes. |
 | `npm run play:ci` | The same story, with the player carried in front of each door instead of walking the town (the one place where the bot writes state). `Q='&nolife'` adds to the address (also try `world.json` `"gen": false` or `"voice": false`). |
 | `npm run shots:it` | The Italian test course (`engine/tests/fixtures/prova`: three simple machines, a lab, a workshop, an expert's home with a temper and a safe; never published) played through on a desktop window and a phone: `/tmp/it-*.png`, `/tmp/it-phone-*.png`. Then the engine points back at the course it used. `COURSE=prova npm run build` builds that course alone. |
+| `npm run sound` | Renders the music offline in headless Chrome and measures it (levels, brightness, density, silences, ducking); writes `/tmp/music-*.wav` and `.png`. A few minutes. See "Sound". |
 | `npm run dev` | Live server while editing, if a browser is available. |
 
 Add `?lite` to the address for lighter graphics. The game also switches to them by itself on a
@@ -38,7 +44,8 @@ engine/src/
   lab/             shell.js (station frame), style.js (its look), kit.js (canvas, drag, read-outs),
                    code.js (code panel), reading.js (reading wall), map.js (the mind map), museum.js (plaques)
   art/             everything drawn in code: ground, buildings, sprites, palette
-  systems/         state (save), audio (music and sounds), voice (read aloud), walker (movement)
+  systems/         state (save), audio.js + sound/ (ambient music, place sounds, effects: see "Sound"),
+                   voice (read aloud), walker (movement)
   mechanics/       game dynamics: the main path (quest/: tracker, menu, ending), duel/ (the duel of
                    eloquence, see "Duels"), riddles/ and floors/ (locks and upper floors, see "Locks",
                    "Upper floors") and the optional ambient life: thoughts, animals, secrets,
@@ -649,3 +656,181 @@ are not read aloud.
 
 Keys: 1 to 4 answer; arrows up and down move between answers and Enter answers; Q, W, E (or
 arrows left and right) pick the tone; Enter or Space for Next; Esc steps back.
+
+## The lab kit and ready-made labs
+
+Files: `src/lab/patterns/` (all new, small modules):
+
+| File | |
+|---|---|
+| `expr.js` | The expression language of the data: a tokenizer and a recursive-descent parser that build closures. No `eval`, no `Function`; only listed functions and the variables the caller names. Pure. |
+| `when.js` | The tries vocabulary: the learner record, `test(condition, record)`, `tracker(whens, did)`, `checkWhen` (the validator's messages). Pure. |
+| `specs.js` | What each pattern accepts (`PATTERNS`: verbs, what the learner does, what it fits) and `checkReady(station)`, used by the validator, the `/play/` page and the tests. Pure. |
+| `draw.js` | `C` (the frame's colours), `ink(pane)` (boxes, circles, lines, arrows, text that keeps 16 screen pixels and shrinks or wraps, emoji), declarative `shapes` in a 0..100 box. |
+| `author.js` | `stage`, `sliders`, `button`, `tasks`, `animate`, `spring`, `shuffle`, `hit`: what a custom station needs. |
+| `scene.js`, `sort.js`, `order.js` | The patterns: `sliderReveal` and `compare` (one picture language: plot, bars, shapes, regions, markers, readouts), `sort`, `order`. Each is a function `(ctx, data, whens) -> handle` and sets `ctx.stage.__ready` to its handle (the shots drive it). |
+| `index.js` | Exports everything; `PATTERN_FNS` maps a `kind` to its function. `lab/kit.js` re-exports it all, so a lab file imports from one place. |
+| `mount.js` | `readyMount(station)`: mounts the pattern named by `station.ready.kind` with its data. |
+
+`course/labs.js` decides what a station runs: the course's own code for that station id if there is
+any, else the pattern of `"ready"`, else the notice "no code yet". Code is looked up when the
+station opens, not when the table is built (the packed player loads lab files a moment after
+start-up). A task written `{ text, when }` reaches the frame as its text, and the conditions as
+`station.when`; the frame passes the station to the code as `ctx.station`.
+
+**Adding a pattern.** Write `src/lab/patterns/<name>.js` exporting a function `(ctx, data, whens)`
+built on `stage` and `tasks` (lay out for `pane.upright`, fonts through `d.text`, `ctx.hint` for
+each task, one strong effect with `spring` or `animate`, `ctx.stage.__ready = handle`). Register it
+in `index.js` (`PATTERN_FNS`), describe it and check its data in `specs.js` (`PATTERNS`,
+`checkReady`: messages that say what to write), add its kind to the schema's `ready.kind` enum,
+a good and a bad example to `tests/patterns.test.mjs`, a complete example to
+`references/8-ready-labs.md` (the test validates it), and a station to the gallery fixture
+`tests/fixtures/patterns/` for `npm run shots:ready`. Then look at the pictures.
+
+Built: `slider-reveal`, `compare`, `sort`, `order`. Not built (the plan named them): `mix`,
+`threshold`, `match`, `label`, `what-if`, `predict-curve`. Their verbs (`combine`, `count`,
+`pair`, `label`, `nudge`, `sketch`, `reveal`, `gap`) exist in `when.js` for custom code; the
+demo's "Guess the curve" is a predict-curve written by hand with the kit.
+
+## The prebuilt player
+
+The same engine can bundle a course at build time (as always: `scripts/use-course.mjs` writes
+`_data.js` and `_active.js` with the course inside) or read it at run time:
+`use-course.mjs --player` writes versions of those two files that read
+`<script type="application/json" id="mnemo-course">` (`src/course/payload.js`), and
+`npm run build:player` builds that into `dist/player.html` with the placeholder empty.
+
+Packing (`src/course/packing.js`, pure, shared by `scripts/pack.mjs` and the `/play/` page):
+
+1. the course is validated (`validateCourse` of the knowledge-base skill: the same function as the
+   command line);
+2. each lab file (and `anims.js`) is kept as an ES module, its engine imports rewritten to read
+   `globalThis.__mnemoKit` (`src/lab/api.js`: `lab/shell.js`, `lab/kit.js`, `lab/patterns/index.js`,
+   `systems/audio.js`); any other import, a dynamic `import()` or an `export ... from` is refused
+   with the file and line;
+3. stations with neither code (the keys of `export default { ... }`, read without running the
+   file) nor `"ready"` are named and refused;
+4. `{ slug, course, world, labs, anims }` goes into the placeholder as JSON with `<` escaped; the
+   title and `lang` of the page follow the course.
+
+At start-up the player's `_active.js` loads each lab module from a Blob URL once every engine
+module has run (`LOADED`); stations wait for it. Seeds, saves and everything else are as in a
+bundled build: the save key and the town come from the course, not from the file. The player
+holds the whole kit, so a packed game is a few kilobytes larger than its course's data.
+
+`/play/` (`player/index.html`, `player/play.js`) takes files, a folder or pasted `course.json`,
+validates and packs in the browser, starts the game in an iframe from a Blob URL, and downloads it
+as one file. Nothing is uploaded; the page says so, and says that lab code runs in the page.
+CI (`.github/workflows/build.yml`) builds the player and the page, publishes them at `/play/`,
+packs `courses/pocket-demo` with `pack.mjs` and publishes it at `/pocket-demo/`, and runs
+`packcheck.mjs` (packed chroma and packed demo against their bundled builds) and `playcheck.mjs`.
+
+## Sound
+
+Everything is synthesised in the page with the Web Audio API: no audio files, no network, nothing
+added to the page size worth mentioning. The work is in `src/systems/sound/`; `src/systems/audio.js`
+only re-exports it under the names the scenes always used (`initAudio`, `setMusic`, `duckMusic`,
+`setMusicOn`, `toggleMute`, `setSea`, `setFire`, `sfx`).
+
+```
+systems/sound/theory.js  scales, moods, themes, the piece of a course, the planner of events (pure)
+systems/sound/mix.js     game state -> levels of the layers; tiles -> place sounds (pure)
+systems/sound/engine.js  the Web Audio graph; works on a live or an offline context
+systems/sound/sfx.js     the short sound effects (steps, clicks, answers, doors) and the fire
+systems/sound/index.js   the live context, the settings, the hooks of the game state
+```
+
+### The layers
+
+The music is ambient and never resolves: mystery is the game's word for curiosity, so the sound
+keeps a question open until the ending.
+
+- **The bed**: two or three sustained pads at once (a triangle or sine body and a quieter saw,
+  slightly detuned and drifting, attacks of 4 to 9 s, 16 to 40 s each) through a gentle low-pass.
+  The chord under them changes every 25 to 60 s: open fifths with a ninth, a third only with
+  "warmth" (day, the lantern mood). Harbour towns add a far foghorn every 2 to 5 minutes outdoors;
+  citadels a faint choir-like pad (saws through two formants).
+- **The sparse notes**: a distant bell, a kalimba-like pluck, a glass tone, in gestures of one to
+  three notes with 2.5 to 40 s of silence between them, on a random walk over a scale without a
+  leading tone (Lydian without the seventh, major pentatonic, Dorian, minor pentatonic with a
+  second, Aeolian). No grid, no rhythm section; over an hour no five-note phrase comes back more
+  than three times (tested).
+- **The reverb**: a generated impulse response (4.2 s, darker as it decays) for the town, and a
+  small two-delay room for indoors; the mix moves between them.
+- **The motif**: the only recognisable theme, four notes (root, fifth, ninth, sixth, snapped to
+  the course's scale: a question that does not close), heard only when something is found:
+  `sfx.motif('secret' | 'lock' | 'cat' | 'key' | 'ending')`, each a variation (three bell notes;
+  four quick plucks rising; glass with an echo; plucks over a low note; and at the ending the one
+  resolution of the game: the motif, then IV to I in major, warm and short). It is not ducked.
+  With music off the old chime says it instead.
+- **Place sounds**, under the music and quiet: water (low-passed noise breathing slowly) near the
+  river, the ponds and the sea; wind (band-passed noise, its band drifting) in the groves;
+  a fountain near a fountain monument; crickets at night in the grass; a few birds by day. Three
+  noise loops run all the time; crickets and birds are short sine figures.
+- **Sound effects** (steps, clicks, answers, doors) are the old ones on their own bus, outside
+  the music volume, through a low-pass at 5.2 kHz; the loudest were brought down 20 to 35 %.
+
+### How the game drives it
+
+`mix.js` maps where the player is to targets; `engine.js` glides there with time constants of
+2.5 s (about 7 s to settle) for places and times of day, 0.6 s into a page and 1.5 s out of it.
+
+| Where | What changes |
+|---|---|
+| town at night (default) | sparse, dark (pad low-pass about 690 Hz), long reverb, place sounds |
+| dusk, day | the low-pass opens (x1.3, x1.8), a few more notes, more thirds |
+| the square (7 tiles around the hub) | three pads instead of two, slightly fuller and denser |
+| a room (`building`) | quieter, closer and drier: the small room reverb, no place sounds |
+| a dark room, the museum (`castle`) | darker filter, fewer notes, more reverb |
+| upstairs (`upstairs`) | very quiet (-10 dB against a room), wood creaks about once a minute |
+| a lab, a reading page, a lock's close-up, the menu, a duel (`duckMusic`) | the bed ducks by 20 dB to a whisper, notes almost stop |
+| a duel's question (`sfx.tension`) | a very soft heartbeat on the root |
+| the ending card | the cadence above |
+
+The Town passes itself (`setMusic(name, this)`); once a second `index.js` reads the player's
+tile, the time of day and the distance to the square (`placeLevels` in `mix.js`, a 9 x 9 window of
+terrain letters), never per frame. One timer plans the music 1.5 s ahead every 0.3 s.
+
+### Moods and switches
+
+| Mood | Character |
+|---|---|
+| `mist` (default) | the calmest: about 4 notes a minute, bells and glass, open fifths |
+| `lantern` | warmer and brighter: about 6.5 notes a minute, mostly plucks, more thirds, a brighter scale |
+| `deep` | darker and more mysterious: everything a fourth lower, a darker scale, longer pads, mostly glass |
+
+- `courses/<slug>/world.json`: `"music": { "mood": "lantern", "volume": 0.6 }` (volume 0..1,
+  default 0.6) or `"music": false` (no music at all; place sounds and effects stay).
+- The address: `?mood=deep` (wins over everything, for listening tests).
+- The menu: a Mood button next to Music cycles the three; the choice is saved (`state.mood`).
+- M switches the music, V all sound. The context starts at the first key or click, suspends when
+  the tab is hidden and resumes with nothing owed from the pause; without Web Audio the game is
+  silent and nothing else changes. `__sound()` in the console shows what plays.
+- Per course, deterministic: `seeded('music')` from the course id picks the tonic and the scale
+  among the THEME's (harbour airy: Lydian, major pentatonic, Dorian; nordic cold and glassy:
+  minor pentatonic with a second, Dorian, slightly higher; citadel darker: Dorian, Aeolian,
+  slightly lower); the mood moves the scale along the list from bright to dark. Notes during play
+  come from `seeded('music:play')`, the noise and the reverb from `seeded('music:noise')`.
+
+### Measured, not heard
+
+`npm run sound` renders minutes of every mood offline in headless Chrome with the same
+`engine.js` and checks: peak below -6 dBFS (it is about -25), RMS in -48..-26 dBFS (about -41,
+that is -46 to -50 dB(A), 7.5 to 11 dB under the old chiptune at -38.5 dB(A)), under 2 % of the
+energy above 4 kHz (it is 0.0 to 0.1 %), 1.5 to 12 notes a minute, silences between notes, no NaN,
+no clipping, the same id giving the same samples, two ids giving different keys, the 20 dB duck,
+day brighter than night, a room quieter than the town. It writes `/tmp/music-<mood>.wav` (30 s),
+`/tmp/music-<mood>.png` (spectrogram and levels), `/tmp/music-motifs.wav` and
+`/tmp/music-journey.png`. LOOK at the pictures; listen to the files if you can. `npm test` covers
+the pure parts (`tests/sound.test.mjs`): scales and keys, an hour of every mood and theme, the
+state-to-mix table, the place levels, and the graph against a fake AudioContext.
+
+### How to add
+
+- **A mood**: one entry in `MOODS` (`theory.js`) and its name in `MOOD_ORDER`; its fields are
+  documented above the table. Then `npm test` and `npm run sound` (add it to the list of moods in
+  `scripts/soundcheck.mjs`).
+- **A place sound**: a level in `placeLevels` (`mix.js`) from the terrain letters, a source in
+  `engine.js` (a noise loop with a filter, or a figure in `chirps`) and a line in `LEVELS`.
+- **A cue**: one entry in `CUES` (`theory.js`), then `sfx.motif('<name>')` where it happens.
+- **Levels**: all in `LEVELS` (`engine.js`). Change them only with `npm run sound` afterwards.

@@ -551,6 +551,8 @@ export function openLab(id, start = 0, { upper = null } = {}) {
     };
     const ctx = {
       stage, controls, code,
+      // the station as course.json gives it (texts, "ready" data, the "when" of each task)
+      station: st,
       // show the takeaway now (used by stations whose tasks are not "tries")
       reveal: () => { if (my !== token) return; if (phase === 'ask') pendingReveal = true; else finish(); },
       // tick one of the "try this" lines; when all are ticked the verdict and the takeaway appear

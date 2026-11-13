@@ -173,7 +173,7 @@ export class Interior extends Phaser.Scene {
     const down = at === 'stairs' && room.stairs; // back from upstairs: at the foot of the stairs
     this.player = down ? new Walker(this, 'ch-player', room.stairs.x, room.stairs.y + 1, 'down') : new Walker(this, 'ch-player', room.start[0], room.start[1], 'up');
     this.fire = room.torches ? new FireLight(this, RW * T, RH * T, room.torches.map(([x, y]) => [x, y + 2]), this.player.sprite, { dark: 0.55, radius: 52 }) : null;
-    setMusic(room.dark ? 'castle' : 'building'); setFire(room.torches ? 0.8 : 0); setSea(0);
+    setMusic(this.floor === 'up' ? 'upstairs' : room.dark ? 'castle' : 'building'); setFire(room.torches ? 0.8 : 0); setSea(0);
 
     const cam = this.cameras.main;
     cam.setBackgroundColor('#0d0f1e');

@@ -93,7 +93,7 @@ export function openDuel(cfg) {
       if (!q) { d = settle(d, 0); return end(); }
       mode = 'q'; root.dataset.mode = 'q';
       root.querySelectorAll('.dl-pop').forEach((o) => o.remove());
-      tone = 2; // every turn starts at State: a bolder or a softer tone is a choice made for this question
+      tone = 2; sfx.tension?.(true); // every turn starts at State: a bolder or a softer tone is a choice made for this question
       const place = cfg.place?.(q.topic);
       const meta = h('div', { class: 'dl-meta' }, h('span', {}, fill(W.turn, { n: d.turn + 1, m: d.turns })), cfg.friendly ? h('span', { class: 'dl-chip' }, W.friendlyChip) : null);
       const tones = h('div', { class: 'dl-tones', role: 'radiogroup', 'aria-label': W.tone });
@@ -124,7 +124,7 @@ export function openDuel(cfg) {
 
     const commit = (choice) => {
       if (mode !== 'q') return;
-      mode = 'fb'; root.dataset.mode = 'fb';
+      mode = 'fb'; root.dataset.mode = 'fb'; sfx.tension?.(false);
       const fb = feedback(q, choice), t = tone;
       const delta = cfg.score(q, fb.right, t);
       asked.push(q); results.push(fb.right);
@@ -171,7 +171,7 @@ export function openDuel(cfg) {
         if (prize.badge || prize.first) row.append(h('div', { class: 'dl-prize new', html: `${BADGE_SVG}<span>${W.badge}</span>` }));
         if (keyShown) row.append(h('div', { class: 'dl-prize new', html: `${KEY_SVG}<span>${W.key}</span>` }));
         parts.push(row);
-        sfx.reveal();
+        if (prize.key && sfx.motif) sfx.motif('key'); else sfx.reveal();
       }
       if (!d.won) {
         const topics = missedTopics(asked, results);

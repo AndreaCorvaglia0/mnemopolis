@@ -654,9 +654,38 @@
           "type": "array",
           "minItems": 1,
           "maxItems": 3,
+          "description": "1 to 3 tasks. A task is a string, or { \"text\", \"when\" }: the condition that ticks it (references/8-ready-labs.md, \"The tries vocabulary\"); a \"ready\" station needs the object form.",
           "items": {
-            "type": "string"
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "required": ["text", "when"],
+                "additionalProperties": false,
+                "properties": {
+                  "text": { "type": "string" },
+                  "when": { "type": "object", "minProperties": 1, "maxProperties": 1, "description": "One verb: reach, cross, both, try, select, place, run, all, any (references/8-ready-labs.md)." }
+                }
+              }
+            ]
           }
+        },
+        "ready": {
+          "type": "object",
+          "required": ["kind"],
+          "description": "Optional. A ready-made lab drawn by the engine from this data, when the concept's lab file has no code for this station (custom code wins). The data of each kind is in references/8-ready-labs.md; the validator checks it (engine/src/lab/patterns/specs.js).",
+          "properties": {
+            "kind": { "enum": ["slider-reveal", "compare", "sort", "order"] },
+            "caption": { "type": "string" },
+            "wide": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+            "tall": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+          },
+          "oneOf": [
+            { "properties": { "kind": { "const": "slider-reveal" } }, "required": ["controls", "layers"] },
+            { "properties": { "kind": { "const": "compare" } }, "required": ["cases", "layers"] },
+            { "properties": { "kind": { "const": "sort" } }, "required": ["bins", "cards"] },
+            { "properties": { "kind": { "const": "order" } }, "required": ["steps"] }
+          ]
         },
         "takeaway": {
           "type": "string"

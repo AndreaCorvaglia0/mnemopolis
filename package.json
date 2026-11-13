@@ -11,6 +11,8 @@
     "build": "npm --prefix engine run build",
     "shots": "npm --prefix engine run shots",
     "shots:phone": "npm --prefix engine run shots:phone",
-    "test": "npm --prefix engine test"
+    "test": "npm --prefix engine test",
+    "pack": "node scripts/pack.mjs",
+    "build:player": "npm --prefix engine run build:player"
   }
 }

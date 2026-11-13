@@ -15,6 +15,10 @@ that does not exist.
 - The map has been shown to the user. Their approval is not required unless they asked for it.
 - Read `engine/docs/SCHEMA.md` (what a station's code receives) and one lab of the example,
   `courses/chroma/labs/lamps.js`, as the quality bar.
+- Read "The lab author's card" in `skills/knowledge-base/references/8-ready-labs.md`: a complete
+  station to start from, the kit (`stage`, `sliders`, `tasks`, `ink`...) that keeps a station to
+  30 to 60 lines, and the ready-made patterns a station may call or, when it fits, name in
+  `course.json` instead of code.
 
 ## Steps
 
@@ -122,7 +126,10 @@ the browser's own voices and only speaks when the learner presses Listen. See "V
 
 ## Delivering
 
-- The game: `engine/dist/index.html`, one self-contained page with no network access.
+- The game: `engine/dist/index.html`, one self-contained page with no network access. Without
+  installing anything, `node scripts/pack.mjs courses/<slug>` makes the same game from the
+  prebuilt player (`engine/dist/player.html`, or the one published at `/play/player.html`),
+  lab code included; the `/play/` page does it in a browser.
   **In a Claude chat, publish it as an artifact**: pass that file as it is to your artifact tool
   (it is a complete HTML page; do not rewrite or shorten it), give it the course title, and
   tell the user in one line what it is. On every later change, republish the **same** artifact

@@ -3,27 +3,21 @@
 //   node skills/knowledge-base/scripts/validate.mjs courses/<slug>
 // Checks structure, the limits that keep a course learnable, and the logic of the map and the path.
 // Errors must be fixed. Warnings are advice from the method (see ../references).
-import { readFileSync, existsSync } from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+//
+// The checks are one pure function, validateCourse(course, env), that reads no file: the command
+// line below reads the course folder and the engine's registries and passes them in; the /play/
+// page (engine/player/) calls the same function in the browser.
+import { checkProgression } from './riddles.mjs';
+import { checkCourseProse } from './prose.mjs';
 
-const dir = process.argv[2];
-if (!dir) { console.error('usage: validate.mjs courses/<slug>'); process.exit(2); }
-const file = path.join(dir, 'course.json');
-if (!existsSync(file)) { console.error(`not found: ${file}`); process.exit(2); }
-let c;
-try { c = JSON.parse(readFileSync(file, 'utf8')); } catch (e) { console.error(`course.json is not valid JSON: ${e.message}`); process.exit(1); }
-
+// env: { EMBLEMS, TRADES, TEMPERS, match, tools: names from the engine (null = not checked),
+//        brief: the text of knowledge/brief.md, has(file): whether the course folder holds it,
+//        checkReady(station, where): the checks of ready-made labs (engine/src/lab/patterns/specs.js) }
+// Returns { errors, warns, summary }.
+export function validateCourse(c, env = {}) {
+// (the body keeps the indentation of the script it was, so that its history stays readable)
+const { EMBLEMS = null, TRADES = null, TEMPERS = null, match = null, tools = null, brief = '', has = () => true, checkReady = null } = env;
 const errors = [], warns = [];
-// emblem names come from the engine (engine/src/gen/emblems.js has no imports, so Node can read it)
-let EMBLEMS = null;
-try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'gen', 'emblems.js'); if (existsSync(f)) EMBLEMS = (await import(pathToFileURL(f).href)).EMBLEMS; } catch { EMBLEMS = null; }
-// trade names too (engine/src/gen/interior/trades.js has no imports either)
-let TRADES = null;
-try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'gen', 'interior', 'trades.js'); if (existsSync(f)) TRADES = (await import(pathToFileURL(f).href)).TRADE_NAMES; } catch { TRADES = null; }
-// and the tempers of the duels (engine/src/mechanics/duel/tempers.js, no imports)
-let TEMPERS = null;
-try { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'mechanics', 'duel', 'tempers.js'); if (existsSync(f)) TEMPERS = (await import(pathToFileURL(f).href)).TEMPER_NAMES; } catch { TEMPERS = null; }
 const err = (m) => errors.push(m), warn = (m) => warns.push(m);
 const words = (s) => String(s || '').trim().split(/\s+/).filter(Boolean).length;
 const need = (o, keys, where) => keys.forEach((k) => { if (o[k] === undefined || o[k] === '' || o[k] === null) err(`${where}: "${k}" is missing`); });
@@ -139,6 +133,9 @@ concepts.forEach((p, i) => {
       if (s.predict && (s.predict.options?.length < 3 || s.predict.options?.length > 4)) err(`${S}: predict needs 3 or 4 options`);
       if (s.predict && s.predict.answer != null && !(Number.isInteger(s.predict.answer) && s.predict.answer >= 0 && s.predict.answer < (s.predict.options?.length || 0))) err(`${S}: predict.answer must be the index of one of the options (0 = the first)`);
       if (s.predict && s.predict.answer == null) warn(`${S}: predict has no answer. Without it the lab cannot tell the learner whether the prediction was right.`);
+      // tasks may carry the condition that ticks them ({ text, when }: references/8-ready-labs.md); a "ready" station draws a ready-made pattern
+      (Array.isArray(s.tries) ? s.tries : []).forEach((t, j) => { if (typeof t !== 'string' && !(t && typeof t === 'object' && typeof t.text === 'string' && t.text.trim())) err(`${S}: task ${j + 1} must be a string, or { "text": "...", "when": { ... } }`); });
+      if (s.ready !== undefined && checkReady) checkReady(s, `${S} ready`).forEach(err);
     });
     if (st.length && !st.some((s) => s.predict || ['predict-test', 'puzzle', 'match', 'sort-cases', 'role-play', 'break-it'].includes(s.pattern))) warn(`${P}: no station asks the learner to predict, decide or work something out. Watching an effect is not enough.`);
   }
@@ -221,25 +218,16 @@ if (f.size > pool) err(`finalCheck asks for ${f.size} questions but the core con
 
 // ---- locks, advanced stations, progression (riddles.mjs; references/7-progression.md) ----
 {
-  const eng = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'mechanics');
-  let match = null, tools = null;
-  try { const f = path.join(eng, 'riddles', 'match.js'); if (existsSync(f)) match = await import(pathToFileURL(f).href); } catch { match = null; }
-  try { const f = path.join(eng, 'obstacles', 'kinds.js'); if (existsSync(f)) tools = Object.keys((await import(pathToFileURL(f).href)).TOOLS); } catch { tools = null; }
-  const brief = existsSync(path.join(dir, 'knowledge', 'brief.md')) ? readFileSync(path.join(dir, 'knowledge', 'brief.md'), 'utf8') : '';
   const care = (brief.match(/\*\*Care:?\*\*:?\s*(light|standard|curated)/i) || [])[1]?.toLowerCase() || null;
-  const { checkProgression } = await import('./riddles.mjs');
   const r = checkProgression(c, { match, tools, care });
   r.errors.forEach(err); r.warns.forEach(warn);
 }
 
 // ---- the register of expository text (references/9-prose.md): warnings, never errors ----
-{
-  const { checkCourseProse } = await import('./prose.mjs');
-  checkCourseProse(c).forEach((w) => warn(`prose: ${w}`));
-}
+checkCourseProse(c).forEach((w) => warn(`prose: ${w}`));
 
 // ---- working documents ----
-['knowledge/brief.md', 'knowledge/sources.md', 'knowledge/map.md'].forEach((k) => { if (!existsSync(path.join(dir, k))) warn(`${k} is missing`); });
+['knowledge/brief.md', 'knowledge/sources.md', 'knowledge/map.md'].forEach((k) => { if (!has(k)) warn(`${k} is missing`); });
 
 // ---- play time ----
 // 6.5 minutes per lab station and 3 per concept (its reading wall), as in references/3-path.md, plus
@@ -253,10 +241,42 @@ function playMinutes(list, round = false) {
 const coreMin = playMinutes(core);
 if (core.length && coreMin > 60) warn(`the core path is about ${Math.round(coreMin)} minutes of play, more than an hour: mark the least essential concepts "core": false (they stay in town as extras to explore)`);
 
-warns.forEach((w) => console.log(`warning  ${w}`));
-errors.forEach((e) => console.log(`ERROR    ${e}`));
 const stations = concepts.reduce((s, p) => s + (p.lab?.stations?.length || 0), 0);
-console.log(`\n${c.title || dir}: ${themes.length} themes, ${concepts.length} concepts${extra.length ? ` (${core.length} core, ${extra.length} extra)` : ''}, ${stations} lab stations, ${rememberTotal} lines to remember`);
-console.log(`core path about ${playMinutes(core, true)} min; everything about ${playMinutes(concepts, true)} min`);
-console.log(`${errors.length} errors, ${warns.length} warnings`);
-process.exit(errors.length ? 1 : 0);
+const summary = [`${c.title || 'course'}: ${themes.length} themes, ${concepts.length} concepts${extra.length ? ` (${core.length} core, ${extra.length} extra)` : ''}, ${stations} lab stations, ${rememberTotal} lines to remember`,
+  `core path about ${playMinutes(core, true)} min; everything about ${playMinutes(concepts, true)} min`];
+return { errors, warns, summary };
+}
+
+// ---- the command line ----
+const nodeImport = (m) => import(/* @vite-ignore */ m);
+async function main() {
+  const { readFileSync, existsSync } = await nodeImport('node:fs');
+  const path = (await nodeImport('node:path')).default;
+  const { fileURLToPath, pathToFileURL } = await nodeImport('node:url');
+  const dir = process.argv[2];
+  if (!dir) { console.error('usage: validate.mjs courses/<slug>'); process.exit(2); }
+  const file = path.join(dir, 'course.json');
+  if (!existsSync(file)) { console.error(`not found: ${file}`); process.exit(2); }
+  let c;
+  try { c = JSON.parse(readFileSync(file, 'utf8')); } catch (e) { console.error(`course.json is not valid JSON: ${e.message}`); process.exit(1); }
+  // names from the engine, when it is there (these modules have no imports, so Node can read them)
+  const eng = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src');
+  const load = async (rel, pick) => { try { const f = path.join(eng, ...rel.split('/')); return existsSync(f) ? pick(await import(pathToFileURL(f).href)) : null; } catch { return null; } };
+  const env = {
+    EMBLEMS: await load('gen/emblems.js', (m) => m.EMBLEMS),
+    TRADES: await load('gen/interior/trades.js', (m) => m.TRADE_NAMES),
+    TEMPERS: await load('mechanics/duel/tempers.js', (m) => m.TEMPER_NAMES),
+    match: await load('mechanics/riddles/match.js', (m) => m),
+    tools: await load('mechanics/obstacles/kinds.js', (m) => Object.keys(m.TOOLS)),
+    checkReady: await load('lab/patterns/specs.js', (m) => m.checkReady),
+    brief: existsSync(path.join(dir, 'knowledge', 'brief.md')) ? readFileSync(path.join(dir, 'knowledge', 'brief.md'), 'utf8') : '',
+    has: (k) => existsSync(path.join(dir, k)),
+  };
+  const { errors, warns, summary } = validateCourse(c, env);
+  warns.forEach((w) => console.log(`warning  ${w}`));
+  errors.forEach((e) => console.log(`ERROR    ${e}`));
+  console.log(`\n${summary.join('\n')}`);
+  console.log(`${errors.length} errors, ${warns.length} warnings`);
+  process.exit(errors.length ? 1 : 0);
+}
+if (typeof process !== 'undefined' && /validate\.mjs$/.test(process.argv?.[1] || '')) main();

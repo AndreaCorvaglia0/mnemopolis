@@ -1,0 +1,1067 @@
+{
+  "$schema": "../../skills/knowledge-base/schema/course.schema.json",
+  "version": 1,
+  "id": "pocket-demo",
+  "language": "en",
+  "title": "How Sound Works",
+  "subject": "Sound: what travels, what sets the pitch, what loudness measures, and what sound needs to travel",
+  "bigIdea": "Sound is a squeeze passed from molecule to molecule: its rate is the pitch, its strength the loudness, and it needs matter to travel.",
+  "learner": "Curious adults and secondary-school students with no physics beyond everyday experience.",
+  "goals": [
+    "Explain why the air does not travel from a speaker to your ear.",
+    "Predict how the wavelength changes when the frequency changes.",
+    "Compare two sound levels in decibels as a ratio of intensities.",
+    "Predict whether, and how fast, sound crosses a material."
+  ],
+  "credit": "Facts checked against OpenStax physics textbooks, The Physics Classroom and Wikipedia.",
+  "sources": [
+    {
+      "id": "os171",
+      "title": "OpenStax, University Physics Volume 1, 17.1 Sound Waves",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/17-1-sound-waves"
+    },
+    {
+      "id": "os172",
+      "title": "OpenStax, University Physics Volume 1, 17.2 Speed of Sound",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/17-2-speed-of-sound"
+    },
+    {
+      "id": "oscp172",
+      "title": "OpenStax, College Physics 2e, 17.2 Speed of Sound, Frequency, and Wavelength",
+      "url": "https://openstax.org/books/college-physics-2e/pages/17-2-speed-of-sound-frequency-and-wavelength"
+    },
+    {
+      "id": "oscp173",
+      "title": "OpenStax, College Physics for AP Courses 2e, 17.3 Sound Intensity and Sound Level",
+      "url": "https://openstax.org/books/college-physics-ap-courses-2e/pages/17-3-sound-intensity-and-sound-level"
+    },
+    {
+      "id": "pcmech",
+      "title": "The Physics Classroom, Sound is a Mechanical Wave",
+      "url": "https://www.physicsclassroom.com/class/sound/Lesson-1/Sound-is-a-Mechanical-Wave"
+    },
+    {
+      "id": "pcspeed",
+      "title": "The Physics Classroom, The Speed of Sound",
+      "url": "https://www.physicsclassroom.com/class/sound/u11l2c"
+    },
+    {
+      "id": "wiki",
+      "title": "Wikipedia, Speed of sound",
+      "url": "https://en.wikipedia.org/wiki/Speed_of_sound"
+    }
+  ],
+  "themes": [
+    {
+      "id": "sound",
+      "name": "Sound",
+      "idea": "A squeeze that travels through matter."
+    }
+  ],
+  "concepts": [
+    {
+      "id": "wave",
+      "theme": "sound",
+      "type": "mechanism",
+      "name": "A travelling squeeze",
+      "place": "Squeeze House",
+      "objective": "Explain why the air near a speaker does not travel to the ear when the speaker sounds.",
+      "idea": "A speaker squeezes the air next to it; each molecule pushes its neighbour and returns. The squeeze travels, the air stays.",
+      "wrongBelief": "The air from the speaker flies to your ear, like a breeze.",
+      "anchor": {
+        "type": "analogy",
+        "text": "A stadium wave: each person stands up and sits down in place, and the wave runs around the stadium.",
+        "limits": "In a stadium people move up and down, across the direction of the wave; air molecules move back and forth along it."
+      },
+      "application": "Speakers, voices and musical instruments all push and pull the air next to them; your eardrum is pushed and pulled in turn.",
+      "remember": [
+        "Sound is a squeeze (compression) and stretch (rarefaction) passed from molecule to molecule.",
+        "Each molecule only moves back and forth around its place: the squeeze travels, the air does not."
+      ],
+      "explain": {
+        "q": "Why does a loud speaker not blow your hair back?",
+        "a": "Its cone only pushes and pulls the air next to it. The molecules pass the push along and return to their places, so there is no flow of air towards you, only a travelling squeeze."
+      },
+      "page": [
+        {
+          "title": "Push, pass, return",
+          "text": "When a speaker cone moves forward it crowds the air molecules next to it: a compression. Those molecules push their neighbours and spring back; when the cone moves back it leaves a region of thinner air, a rarefaction. Compressions and rarefactions travel outward as a pressure wave, while each molecule only oscillates about its own position, along the direction the wave travels."
+        },
+        {
+          "title": "What reaches your ear",
+          "text": "Your eardrum is pushed in by each compression and pulled out by each rarefaction: it moves at the same rate as the speaker cone. What travels is energy and pattern, not air."
+        }
+      ],
+      "sources": [
+        "os171",
+        "pcmech"
+      ],
+      "lab": {
+        "title": "The squeeze",
+        "stations": [
+          {
+            "id": "push",
+            "tab": "Push the air",
+            "goal": "A push on the air travels as a squeeze, but each molecule only moves a little and comes back.",
+            "beat": "ground",
+            "pattern": "handle",
+            "object": "A speaker cone, a field of air molecules with one gold molecule beside the cone, and an ear on the far side.",
+            "action": "Pushes the cone by hand and watches the squeeze cross the air while the gold molecule stays near its place.",
+            "surprise": "The squeeze reaches the ear, but the gold molecule never leaves the speaker: its whole trip is a few units.",
+            "predict": {
+              "q": "The speaker sends a sound to the ear. The gold molecule next to the speaker...",
+              "options": [
+                "travels across to the ear",
+                "jiggles back and forth near where it started",
+                "is pushed away and stays near the ear"
+              ],
+              "answer": 1,
+              "why": "Each molecule only nudges its neighbour and comes back: the squeeze travels, the air stays."
+            },
+            "controls": [],
+            "tries": [
+              {
+                "text": "Grab the speaker cone, push it and let go.",
+                "when": {
+                  "select": "push"
+                }
+              },
+              {
+                "text": "Send a squeeze all the way to the ear.",
+                "when": {
+                  "select": "heard"
+                }
+              },
+              {
+                "text": "Send three squeezes and watch how far the gold molecule goes.",
+                "when": {
+                  "try": {
+                    "count": 3
+                  }
+                }
+              }
+            ],
+            "takeaway": "Sound is a <b>squeeze passed along</b>: each molecule moves only a little, <b>back and forth</b>, and the <b>pattern</b> travels to the ear.",
+            "source": "Each molecule is drawn shifted by the cone's own shift a moment earlier, the time the squeeze needs to reach it: a travelling wave computed live. Slowed down about a thousand times and with the shifts enlarged, so that they can be seen."
+          }
+        ]
+      },
+      "questions": [
+        {
+          "level": 1,
+          "q": "When a sound travels from a speaker to your ear, what travels across the room?",
+          "options": [
+            "The air next to the speaker",
+            "Molecules thrown out by the cone",
+            "A squeeze passed from molecule to molecule"
+          ],
+          "answer": 2,
+          "why": "Each molecule pushes its neighbour and returns; only the squeeze, the pattern, crosses the room.",
+          "traps": [
+            "This is the breeze picture: the air near the cone would have to flow to you, and it does not.",
+            "Molecules are pushed only a tiny distance and then pulled back by the next rarefaction.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "What is a compression in a sound wave?",
+          "options": [
+            "A region where molecules are crowded together",
+            "A region with no molecules at all",
+            "A molecule that has stopped moving"
+          ],
+          "answer": 0,
+          "why": "A compression is a region of higher pressure where molecules are pushed closer together; a rarefaction is where they are spread out.",
+          "traps": [
+            null,
+            "That would be a vacuum, and sound cannot travel through a vacuum at all.",
+            "Molecules in a compression are still moving: they are crowded together for a moment, not still."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A candle flame sits in front of a speaker playing a low hum. What does the flame most likely do?",
+          "options": [
+            "It is blown steadily away from the speaker",
+            "It flickers back and forth",
+            "Nothing at all, sound has no effect on air"
+          ],
+          "answer": 1,
+          "why": "The air near the flame is pushed and pulled in turn, so the flame moves back and forth with the sound instead of being blown away.",
+          "traps": [
+            "A steady push away would need a flow of air, but the cone pushes and then pulls.",
+            null,
+            "Sound is made of air being pushed and pulled, so it does move the air near the flame."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Your eardrum moves when a sound arrives. How does it move?",
+          "options": [
+            "Back and forth at the same rate as the source",
+            "Pushed in once and left there",
+            "It spins around in circles"
+          ],
+          "answer": 0,
+          "why": "Each compression pushes it in and each rarefaction lets it out, at the rate the source vibrates.",
+          "traps": [
+            null,
+            "A single push would be one click, not a sound that lasts: the eardrum follows every squeeze and stretch.",
+            "The air pushes along the direction the sound travels, so the eardrum moves in and out, not in circles."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "In a stadium wave, people stand and sit in place while the wave runs around. Where does this picture of sound go wrong?",
+          "options": [
+            "People move across the direction of the wave; air molecules move along it",
+            "In a stadium wave nobody moves",
+            "Sound molecules travel around the room like the wave"
+          ],
+          "answer": 0,
+          "why": "Sound in air is longitudinal: molecules oscillate along the direction the wave travels.",
+          "traps": [
+            null,
+            "People do move: they stand up and sit down, which is the whole point of the picture.",
+            "Molecules stay near their places in sound too; that part of the picture is right."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A speaker plays the same note for a minute. Roughly how far does one air molecule beside it travel in that minute?",
+          "options": [
+            "About as far as the sound travels",
+            "A tiny distance, back and forth",
+            "Exactly one metre"
+          ],
+          "answer": 1,
+          "why": "Each molecule oscillates about its own position, so after a minute it is still near where it started.",
+          "traps": [
+            "The sound covers kilometres in a minute; the molecules do not, they only pass the squeeze on.",
+            null,
+            "Nothing fixes a distance of one metre: molecules oscillate around their place, they do not travel a set distance."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pitch",
+      "theme": "sound",
+      "type": "mechanism",
+      "name": "Pitch and frequency",
+      "place": "Tuning House",
+      "objective": "Predict how the pitch and the wavelength of a sound change when its frequency changes.",
+      "idea": "Pitch is how many squeezes reach the ear each second. In air the speed is fixed, so more squeezes per second means shorter ones.",
+      "wrongBelief": "A higher note travels faster, or has longer waves.",
+      "anchor": {
+        "type": "example",
+        "text": "A guitar string: press it shorter and it vibrates faster, and the note goes up."
+      },
+      "application": "Tuning an instrument; the note A that orchestras tune to is 440 vibrations per second.",
+      "remember": [
+        "Frequency is the number of squeezes per second, in hertz (Hz); we hear it as pitch.",
+        "Speed = frequency × wavelength: in air (343 m/s), twice the frequency means half the wavelength.",
+        "People hear roughly from 20 Hz to 20 000 Hz."
+      ],
+      "explain": {
+        "q": "Why do a high note and a low note played together reach you at the same moment?",
+        "a": "In a given medium sound travels at nearly the same speed whatever its frequency. The high note has more squeezes per second, and each of them is shorter."
+      },
+      "page": [
+        {
+          "title": "How many per second",
+          "text": "A source that vibrates 440 times a second sends 440 squeezes a second towards you: its frequency is 440 hertz. The perception of frequency is called pitch. People hear roughly from 20 Hz to 20 000 Hz."
+        },
+        {
+          "title": "Fixed speed, shorter waves",
+          "text": "For every wave, speed = frequency × wavelength. In air at 20 °C sound travels at about 343 m/s whatever its frequency, so a higher frequency must have a shorter wavelength: at 343 Hz one squeeze-and-stretch is 1 m long, at 686 Hz it is 0.5 m."
+        }
+      ],
+      "sources": [
+        "oscp172",
+        "os172"
+      ],
+      "callbacks": [
+        {
+          "to": "wave",
+          "text": "Each squeeze is the push of the Squeeze House; frequency counts how many arrive each second."
+        }
+      ],
+      "lab": {
+        "title": "Pitch",
+        "stations": [
+          {
+            "id": "tone",
+            "tab": "More per second",
+            "goal": "Pitch is the number of squeezes per second: more squeezes per second is a higher note.",
+            "beat": "ground",
+            "pattern": "cause-effect",
+            "object": "The air pressure at the ear over 25 milliseconds, with each squeeze marked, and the tone itself.",
+            "action": "Turns the frequency up and down, counts the squeezes, and listens.",
+            "surprise": "Doubling the frequency doubles the squeezes in the same 25 ms, and the note jumps up by an octave.",
+            "predict": {
+              "q": "Set the frequency to 880 Hz instead of 440 Hz. In 25 ms the ear receives...",
+              "options": [
+                "the same number of squeezes, but stronger",
+                "twice as many squeezes",
+                "half as many squeezes"
+              ],
+              "answer": 1,
+              "why": "Frequency counts squeezes per second: twice the frequency, twice as many squeezes in any time."
+            },
+            "controls": [
+              "Frequency, 100 to 1000 Hz"
+            ],
+            "tries": [
+              {
+                "text": "Set the note A, 440 Hz, and count the squeezes in 25 ms.",
+                "when": {
+                  "reach": {
+                    "control": "f",
+                    "value": 440,
+                    "within": 5
+                  }
+                }
+              },
+              {
+                "text": "Double it to 880 Hz and count again.",
+                "when": {
+                  "reach": {
+                    "control": "f",
+                    "value": 880,
+                    "within": 5
+                  }
+                }
+              }
+            ],
+            "takeaway": "Frequency is <b>squeezes per second</b> (hertz). The ear hears it as <b>pitch</b>: twice the frequency is the same note an <b>octave higher</b>.",
+            "source": "The pressure trace is a sine wave computed live from the frequency; the tone is played by your browser at that frequency. A real instrument adds overtones."
+          },
+          {
+            "id": "wavelength",
+            "tab": "Guess the curve",
+            "goal": "In air sound always travels at 343 m/s, so twice the frequency gives half the wavelength.",
+            "beat": "twist",
+            "pattern": "predict-test",
+            "object": "An empty chart of wavelength against frequency, with four handles to sketch a guess.",
+            "action": "Drags the handles to sketch how long one wave is at each frequency, then shows the real curve over the guess.",
+            "surprise": "The real curve is not a straight line: it falls steeply at low frequencies and flattens out, because wavelength is 343 divided by frequency.",
+            "predict": {
+              "q": "Double the frequency of a sound in air. Its wavelength...",
+              "options": [
+                "doubles",
+                "halves",
+                "stays the same"
+              ],
+              "answer": 1,
+              "why": "Speed = frequency × wavelength, and the speed in air stays 343 m/s: twice the frequency, half the wavelength."
+            },
+            "controls": [
+              "Show the real curve"
+            ],
+            "tries": [
+              {
+                "text": "Drag all four handles to your guess.",
+                "when": {
+                  "sketch": true
+                }
+              },
+              {
+                "text": "Show the real curve and compare.",
+                "when": {
+                  "reveal": true
+                }
+              }
+            ],
+            "takeaway": "Speed = <b>frequency × wavelength</b>. In air the speed stays about <b>343 m/s</b>, so the wavelength is <b>343 ÷ frequency</b>: twice the frequency, half the wavelength.",
+            "source": "The real curve is computed live as 343 m/s divided by the frequency, for air at 20 °C (OpenStax). Your sketch is only compared, never scored as right or wrong."
+          }
+        ]
+      },
+      "questions": [
+        {
+          "level": 1,
+          "q": "What does the frequency of a sound count?",
+          "options": [
+            "How loud it is",
+            "How far it travels",
+            "Squeezes per second"
+          ],
+          "answer": 2,
+          "why": "Frequency is the number of vibrations, or squeezes, per second, measured in hertz.",
+          "traps": [
+            "Loudness depends on how strong each squeeze is, not on how many arrive.",
+            "Distance depends on the medium and on losses, not on what the frequency counts.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Roughly which frequencies can people hear?",
+          "options": [
+            "From 20 Hz to 20 000 Hz",
+            "From 1 Hz to 100 Hz",
+            "From 1000 Hz to a million Hz"
+          ],
+          "answer": 0,
+          "why": "The audible range is about 20 to 20 000 Hz; it shrinks at the top with age.",
+          "traps": [
+            null,
+            "Below about 20 Hz vibrations are felt rather than heard, so this range misses almost all audible sound.",
+            "Above about 20 000 Hz is ultrasound, which bats hear but people do not."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Sound travels at 343 m/s in warm air. Its frequency is doubled. What happens to its wavelength?",
+          "options": [
+            "It doubles",
+            "It halves",
+            "It stays the same"
+          ],
+          "answer": 1,
+          "why": "Speed = frequency × wavelength, and the speed does not change, so the wavelength halves.",
+          "traps": [
+            "Doubling both would double the speed too, and the speed of sound in air does not depend on the note.",
+            null,
+            "If the wavelength stayed the same while the frequency doubled, the speed would have to double."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A flute plays a high note and a tuba a low note at the same moment, far away. Which reaches you first?",
+          "options": [
+            "The flute, high notes are faster",
+            "The tuba, low notes are faster",
+            "Both at the same time"
+          ],
+          "answer": 2,
+          "why": "In a given medium the speed of sound is nearly independent of frequency, so both arrive together.",
+          "traps": [
+            "High notes have more squeezes per second, not faster squeezes: the speed is the same.",
+            "Low notes have longer waves, but each wave still moves at the same speed.",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "What is the wavelength of a 343 Hz sound in air at 20 °C, where sound travels at 343 m/s?",
+          "options": [
+            "1 metre",
+            "343 metres",
+            "1 millimetre"
+          ],
+          "answer": 0,
+          "why": "Wavelength = speed ÷ frequency = 343 ÷ 343 = 1 m.",
+          "traps": [
+            null,
+            "This multiplies instead of dividing: 343 is the speed, and it must be divided by the frequency.",
+            "A millimetre would need a frequency of about 343 000 Hz, far above hearing."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A guitarist presses a string to make it vibrate twice as fast. Which describes the new sound in the air?",
+          "options": [
+            "Same wavelength, twice the speed",
+            "Half the wavelength, same speed, an octave higher",
+            "Twice the wavelength, a lower note"
+          ],
+          "answer": 1,
+          "why": "The air sets the speed; twice the frequency gives half the wavelength, which we hear as the same note an octave up.",
+          "traps": [
+            "The speed of sound is set by the air, not by the string, so it cannot double.",
+            null,
+            "Faster vibration means more squeezes per second: a higher note with shorter waves, not longer."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "loudness",
+      "theme": "sound",
+      "type": "mechanism",
+      "name": "Loudness and decibels",
+      "place": "Decibel House",
+      "objective": "Compute how many times more intense one sound is than another from the difference in decibels.",
+      "idea": "Loudness measures how strong the squeezes are. Every 10 decibels more means ten times the sound intensity.",
+      "wrongBelief": "Decibels add like metres: 70 dB is just a bit more than 60 dB.",
+      "anchor": {
+        "type": "example",
+        "text": "Ordinary talk is about 60 dB and a heavy truck about 90 dB: 30 dB more, a thousand times the intensity."
+      },
+      "application": "Noise limits at work and on headphones are set in decibels; agencies recommend not exceeding 85 dB for eight hours a day without protection.",
+      "remember": [
+        "Each 10 dB more is ten times the intensity: 20 dB more is a hundred times.",
+        "Intensity grows with the square of the pressure amplitude: stronger squeezes, much more energy."
+      ],
+      "explain": {
+        "q": "Why is a step from 80 dB to 90 dB a much bigger change in energy than a step from 20 dB to 30 dB?",
+        "a": "Both steps multiply the intensity by ten, but ten times a large intensity adds far more energy than ten times a tiny one."
+      },
+      "page": [
+        {
+          "title": "A scale of factors of ten",
+          "text": "The sound intensity level is measured in decibels on a logarithmic scale: each factor of 10 in intensity adds 10 dB. A 90 dB sound is three factors of ten, a thousand times, more intense than a 60 dB sound. The threshold of hearing is 0 dB."
+        },
+        {
+          "title": "Stronger squeezes",
+          "text": "Intensity is proportional to the square of the pressure amplitude, the strength of each squeeze. Ten times the intensity needs about 3.2 times the pressure amplitude."
+        }
+      ],
+      "sources": [
+        "oscp173"
+      ],
+      "callbacks": [
+        {
+          "to": "wave",
+          "text": "Loudness is how hard each squeeze of the Squeeze House pushes."
+        }
+      ],
+      "lab": {
+        "title": "Decibels",
+        "stations": [
+          {
+            "id": "decibels",
+            "tab": "Ten times",
+            "goal": "Each 10 decibels more is ten times the sound intensity: decibels count factors of ten.",
+            "beat": "rule",
+            "pattern": "contrast",
+            "object": "Two speakers side by side, A at 60 dB and B louder by the amount you set, with their sound intensities on one scale.",
+            "action": "Raises speaker B decibel by decibel and watches the ratio of intensities.",
+            "surprise": "At only 10 dB more, B already carries ten times the intensity of A; at 20 dB, a hundred times.",
+            "predict": {
+              "q": "Speaker B is 10 dB louder than speaker A. Compared with A, B carries...",
+              "options": [
+                "10% more sound intensity",
+                "twice the sound intensity",
+                "ten times the sound intensity"
+              ],
+              "answer": 2,
+              "why": "Each factor of 10 in intensity is 10 dB."
+            },
+            "controls": [
+              "How many decibels louder speaker B is"
+            ],
+            "tries": [
+              {
+                "text": "Make speaker B 10 dB louder than A.",
+                "when": {
+                  "reach": {
+                    "control": "extra",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "text": "Now 20 dB louder: read the ratio.",
+                "when": {
+                  "reach": {
+                    "control": "extra",
+                    "value": 20
+                  }
+                }
+              }
+            ],
+            "takeaway": "Decibels count <b>factors of ten</b>: +10 dB is <b>×10</b> the intensity, +20 dB is <b>×100</b>, +30 dB is <b>×1000</b>.",
+            "source": "Intensities computed live from the definition of the decibel, ten times the logarithm of the intensity ratio. The rings drawn round each speaker grow with the pressure amplitude, the square root of the intensity.",
+            "ready": {
+              "kind": "compare",
+              "controls": [
+                {
+                  "id": "extra",
+                  "label": "Speaker B, louder by",
+                  "min": 0,
+                  "max": 30,
+                  "step": 1,
+                  "value": 0,
+                  "unit": "dB"
+                }
+              ],
+              "cases": [
+                {
+                  "id": "a",
+                  "label": "Speaker A: 60 dB",
+                  "short": "A",
+                  "vars": {
+                    "k": 0
+                  }
+                },
+                {
+                  "id": "b",
+                  "label": "Speaker B: {60+extra:0} dB",
+                  "short": "B",
+                  "vars": {
+                    "k": 1
+                  }
+                }
+              ],
+              "vars": {
+                "db": "60 + k*extra",
+                "amp": "10^(k*extra/20)"
+              },
+              "layers": [
+                {
+                  "shapes": [
+                    {
+                      "circle": [
+                        22,
+                        42,
+                        "min(7*amp, 44)"
+                      ],
+                      "color": "accent",
+                      "outline": true,
+                      "width": 1.4,
+                      "opacity": 0.95
+                    },
+                    {
+                      "circle": [
+                        22,
+                        42,
+                        "min(11*amp, 52)"
+                      ],
+                      "color": "accent",
+                      "outline": true,
+                      "width": 1.1,
+                      "opacity": 0.6
+                    },
+                    {
+                      "circle": [
+                        22,
+                        42,
+                        "min(15*amp, 60)"
+                      ],
+                      "color": "accent",
+                      "outline": true,
+                      "width": 0.9,
+                      "opacity": 0.35
+                    },
+                    {
+                      "rect": [
+                        14,
+                        28,
+                        12,
+                        28
+                      ],
+                      "color": "dark",
+                      "round": 2
+                    },
+                    {
+                      "circle": [
+                        20,
+                        42,
+                        5
+                      ],
+                      "color": "grey"
+                    },
+                    {
+                      "text": "{db:0} dB",
+                      "at": [
+                        50,
+                        88
+                      ],
+                      "size": 12,
+                      "color": "gold"
+                    }
+                  ]
+                }
+              ],
+              "diff": {
+                "value": "10^(k*extra/10)",
+                "label": "Sound intensity (A = 1)",
+                "decimals": 0
+              }
+            }
+          }
+        ]
+      },
+      "questions": [
+        {
+          "level": 1,
+          "q": "Sound B is 10 dB louder than sound A. How does its intensity compare?",
+          "options": [
+            "Ten times as intense",
+            "10% more intense",
+            "Twice as intense"
+          ],
+          "answer": 0,
+          "why": "Each factor of 10 in intensity corresponds to 10 dB.",
+          "traps": [
+            null,
+            "This treats decibels like a percentage scale, but each 10 dB step multiplies the intensity.",
+            "Twice the intensity is only about 3 dB more, far less than 10 dB."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "What is 0 dB?",
+          "options": [
+            "The threshold of hearing, about the faintest sound people hear",
+            "Complete silence, no sound waves at all",
+            "The level where hearing damage starts"
+          ],
+          "answer": 0,
+          "why": "The reference intensity of the decibel scale is the threshold of hearing, so it is 0 dB.",
+          "traps": [
+            null,
+            "0 dB is a real, very faint sound; quieter sounds have negative decibel levels.",
+            "Damage comes from long exposure to levels around 85 dB and more, far above 0 dB."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Ordinary talk is about 60 dB and the inside of a heavy truck about 90 dB. How many times more intense is the truck?",
+          "options": [
+            "30 times",
+            "1000 times",
+            "1.5 times"
+          ],
+          "answer": 1,
+          "why": "30 dB more is three factors of ten: 10 × 10 × 10 = 1000.",
+          "traps": [
+            "This adds decibels like plain numbers, but each 10 dB multiplies the intensity by ten.",
+            null,
+            "This divides 90 by 60, but decibel levels are logarithms, so their ratio means nothing."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Two identical speakers play the same sound together instead of one alone. The level rises by about...",
+          "options": [
+            "3 dB",
+            "10 dB",
+            "100 dB"
+          ],
+          "answer": 0,
+          "why": "Twice the intensity is a factor of 2, which is about 3 dB; 10 dB would need ten speakers.",
+          "traps": [
+            null,
+            "10 dB more would need ten times the intensity, so ten speakers, not two.",
+            "A rise of 100 dB would mean ten billion times the intensity, impossible from a second speaker."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "Agencies recommend not exceeding 85 dB for eight hours a day. A machine runs at 95 dB. Compared with 85 dB, its intensity is...",
+          "options": [
+            "about 12% higher",
+            "ten times higher",
+            "the same, both are just loud"
+          ],
+          "answer": 1,
+          "why": "10 dB more is ten times the intensity, which is why limits get much stricter as the level rises.",
+          "traps": [
+            "This reads 95 as 12% more than 85, but decibels are not a linear scale.",
+            null,
+            "Ten dB is a factor of ten in intensity, a large difference in the energy reaching the ear."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "The pressure amplitude of a sound is made ten times larger. By how much does its level rise?",
+          "options": [
+            "10 dB",
+            "20 dB",
+            "100 dB"
+          ],
+          "answer": 1,
+          "why": "Intensity grows with the square of the pressure amplitude: ten times the amplitude is a hundred times the intensity, which is 20 dB.",
+          "traps": [
+            "This forgets that intensity grows with the square of the amplitude, not in proportion to it.",
+            null,
+            "A hundred times the intensity is two factors of ten, so 20 dB, not 100 dB."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "medium",
+      "theme": "sound",
+      "type": "cases",
+      "name": "What sound travels through",
+      "place": "Medium House",
+      "objective": "Predict whether sound can cross a material and whether it goes faster or slower than in air.",
+      "idea": "Sound needs matter to pass the squeeze along: none in a vacuum, faster in most liquids and solids than in air.",
+      "wrongBelief": "Sound can cross empty space, and it is slowest in solid things because they are dense.",
+      "anchor": {
+        "type": "example",
+        "text": "A bell ringing inside a jar: as the air is pumped out, the clapper still strikes but the sound fades away."
+      },
+      "application": "Doctors' ultrasound, sonar under water, and putting an ear to a railway track to hear a distant train.",
+      "remember": [
+        "Sound needs a medium: it cannot travel through a vacuum.",
+        "In air at 20 °C about 343 m/s; in water about 1480 m/s; in steel about 5960 m/s."
+      ],
+      "explain": {
+        "q": "Why can astronauts not talk to each other in space without radios?",
+        "a": "Sound is a squeeze passed from molecule to molecule. In the near vacuum of space there are almost no molecules to pass it, so the voice goes nowhere; radio waves need no medium."
+      },
+      "page": [
+        {
+          "title": "No matter, no sound",
+          "text": "Sound is a mechanical wave: it needs a medium, a material whose particles can pass the squeeze along. A bell in a jar can be seen ringing as the air is pumped out, but it is no longer heard."
+        },
+        {
+          "title": "Faster in water and steel",
+          "text": "Sound typically travels slowest in gases, faster in liquids and fastest in solids, because their particles interact more strongly. Approximate speeds: air 343 m/s at 20 °C, fresh water 1480 m/s, steel 5960 m/s. Among gases a light one carries it faster: helium about 965 m/s and carbon dioxide about 259 m/s, both at 0 °C, where air gives 331 m/s."
+        }
+      ],
+      "sources": [
+        "os172",
+        "wiki",
+        "pcspeed",
+        "pcmech"
+      ],
+      "callbacks": [
+        {
+          "to": "wave",
+          "text": "The squeeze of the Squeeze House needs molecules to pass it on."
+        },
+        {
+          "to": "pitch",
+          "text": "The speed set here is the one that fixes wavelengths in the Tuning House."
+        }
+      ],
+      "lab": {
+        "title": "Mediums",
+        "stations": [
+          {
+            "id": "mediums",
+            "tab": "Sort the mediums",
+            "goal": "Sound needs matter: it cannot cross a vacuum, and it goes faster in water and steel than in air.",
+            "beat": "rule",
+            "pattern": "sort-cases",
+            "object": "Cards of materials and places, and three bins: slower than in air, faster than in air, no sound at all.",
+            "action": "Drags each card into a bin and reads why it belongs there.",
+            "surprise": "Dense steel carries sound about seventeen times faster than air, and empty space carries none.",
+            "predict": {
+              "q": "In which of these does sound travel fastest?",
+              "options": [
+                "Air",
+                "Water",
+                "Steel"
+              ],
+              "answer": 2,
+              "why": "Sound is fastest in solids, where particles are most strongly bound to each other."
+            },
+            "controls": [],
+            "tries": [
+              {
+                "text": "Put outer space in its bin.",
+                "when": {
+                  "place": {
+                    "item": "space",
+                    "bin": "none"
+                  }
+                }
+              },
+              {
+                "text": "Sort every card correctly.",
+                "when": {
+                  "place": {
+                    "correct": true
+                  }
+                }
+              }
+            ],
+            "takeaway": "Sound needs a <b>medium</b>, so there is <b>no sound in a vacuum</b>. It is usually <b>faster in liquids and solids</b> than in air: water about <b>4×</b>, steel about <b>17×</b>.",
+            "source": "Speeds from OpenStax University Physics 1, table 17.1, and Wikipedia; the bell-in-a-jar from The Physics Classroom. Real speeds depend on temperature and, for solids, on the alloy.",
+            "ready": {
+              "kind": "sort",
+              "bins": [
+                {
+                  "id": "slow",
+                  "label": "Slower than in air",
+                  "emoji": "🐢",
+                  "color": "blue"
+                },
+                {
+                  "id": "fast",
+                  "label": "Faster than in air",
+                  "emoji": "🚀",
+                  "color": "gold"
+                },
+                {
+                  "id": "none",
+                  "label": "No sound at all",
+                  "emoji": "🔇",
+                  "color": "red"
+                }
+              ],
+              "cards": [
+                {
+                  "id": "water",
+                  "label": "Fresh water",
+                  "emoji": "💧",
+                  "bin": "fast",
+                  "why": "about 1480 m/s, over four times faster than in air."
+                },
+                {
+                  "id": "steel",
+                  "label": "A steel rail",
+                  "emoji": "🛤️",
+                  "bin": "fast",
+                  "why": "about 5960 m/s, some seventeen times faster than in air."
+                },
+                {
+                  "id": "space",
+                  "label": "Outer space",
+                  "emoji": "🌌",
+                  "bin": "none",
+                  "why": "a near vacuum: almost no molecules to pass the squeeze along."
+                },
+                {
+                  "id": "jar",
+                  "label": "A jar with the air pumped out",
+                  "emoji": "🔔",
+                  "bin": "none",
+                  "why": "the bell is seen ringing but no longer heard."
+                },
+                {
+                  "id": "helium",
+                  "label": "Helium gas",
+                  "emoji": "🎈",
+                  "bin": "fast",
+                  "why": "about 965 m/s at 0 °C, where air gives 331 m/s: light molecules pass the squeeze faster."
+                },
+                {
+                  "id": "co2",
+                  "label": "Carbon dioxide gas",
+                  "emoji": "🫧",
+                  "bin": "slow",
+                  "why": "about 259 m/s at 0 °C, where air gives 331 m/s: heavier molecules, slower squeeze."
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "questions": [
+        {
+          "level": 1,
+          "q": "Why is there no sound in outer space?",
+          "options": [
+            "It is too cold for sound",
+            "Sound is absorbed by starlight",
+            "There is almost no matter in it"
+          ],
+          "answer": 2,
+          "why": "Sound is a mechanical wave: it needs a medium, and space is a near vacuum.",
+          "traps": [
+            "Sound travels through very cold air and ice: temperature changes its speed, it does not stop it.",
+            "Light and sound do not absorb each other; the missing ingredient is matter.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "About how fast does sound travel in air at 20 °C?",
+          "options": [
+            "343 m/s",
+            "3 m/s",
+            "300 000 km/s"
+          ],
+          "answer": 0,
+          "why": "About 343 m/s, roughly a kilometre in three seconds.",
+          "traps": [
+            null,
+            "That is walking pace: you would see a thunderclap minutes before hearing it nearby, which never happens.",
+            "That is the speed of light, almost a million times faster than sound."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Through which does sound usually travel fastest?",
+          "options": [
+            "A gas such as air",
+            "A liquid such as water",
+            "A solid such as steel"
+          ],
+          "answer": 2,
+          "why": "Sound typically travels slowest in gases, faster in liquids and fastest in solids.",
+          "traps": [
+            "Gases are the slowest: their molecules are far apart and interact weakly.",
+            "Water is faster than air, about 1480 m/s, but steel is faster still at about 5960 m/s.",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "You put your ear to a long steel rail while a friend taps the far end. What do you notice?",
+          "options": [
+            "The tap through the rail arrives before the tap through the air",
+            "Both arrive together",
+            "Only the sound through the air arrives"
+          ],
+          "answer": 0,
+          "why": "Steel carries sound about seventeen times faster than air, so the rail brings the tap first.",
+          "traps": [
+            null,
+            "They would arrive together only if steel and air carried sound at the same speed, and they do not.",
+            "A steel rail carries sound very well: it is a medium, and a fast one."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A bell rings inside a glass jar while the air is pumped out. What happens?",
+          "options": [
+            "The bell stops moving",
+            "The bell is seen ringing but heard more and more faintly",
+            "The sound gets higher and higher"
+          ],
+          "answer": 1,
+          "why": "The clapper keeps striking, but with less and less air there is less and less medium to carry the sound out.",
+          "traps": [
+            "Removing the air does not stop the bell: you can still see the clapper strike.",
+            null,
+            "Pumping out air takes away the medium; it does not change how fast the bell vibrates."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "Helium is far less dense than air, yet sound travels faster in it. Which idea does this break?",
+          "options": [
+            "That sound needs a medium",
+            "That denser always means faster",
+            "That sound is a wave"
+          ],
+          "answer": 1,
+          "why": "Speed depends on how stiff the medium is and how light its particles are, not on density alone; light helium molecules pass the squeeze faster.",
+          "traps": [
+            "Helium is still a medium; the fact is about speed, not about whether sound can travel.",
+            null,
+            "Sound in helium is still a wave; only its speed differs."
+          ]
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "pitch",
+      "to": "wave",
+      "type": "requires"
+    },
+    {
+      "from": "loudness",
+      "to": "wave",
+      "type": "requires"
+    },
+    {
+      "from": "medium",
+      "to": "wave",
+      "type": "requires"
+    },
+    {
+      "from": "pitch",
+      "to": "loudness",
+      "type": "contrasts"
+    }
+  ],
+  "finalCheck": {
+    "name": "The Sound League",
+    "size": 6,
+    "pass": 0.67
+  }
+}

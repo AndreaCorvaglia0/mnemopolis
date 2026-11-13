@@ -111,7 +111,7 @@ export class Town extends Phaser.Scene {
     };
     if (this.ui.ready) ready(); else this.ui.events.once('ui-ready', ready);
     this.where = null; this.showWhere(this.player.tx, this.player.ty);
-    setMusic(this.tod === 'night' ? 'night' : 'town'); setFire(0); setSea(0.035);
+    setMusic(this.tod === 'night' ? 'night' : 'town', this); setFire(0); setSea(0.035); // this: the sound follows the player's tile
   }
 
   // Whole-number zoom keeps every art pixel the same size; aim for a view of about 320x180.

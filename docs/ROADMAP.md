@@ -56,6 +56,13 @@
   and of the main path's count. The course method gained a level and a reference on the
   progression of difficulty (`references/7-progression.md`); the example course has three riddles
   and one advanced station.
+- Sound: the chiptune replaced by a generative ambient soundscape, synthesised in the page
+  (`engine/src/systems/sound/`): a slow bed and sparse bell, pluck and glass notes on scales
+  without a leading tone, one motif heard only at discoveries, place sounds (water, wind,
+  fountain, crickets, birds) from the player's tile, a mix that follows the place, the time of
+  day and the learner's focus (ducked by 20 dB in labs, pages, locks and duels), three moods
+  (mist, lantern, deep) chosen in the menu, `world.json` or `?mood=`; checked by measurement
+  (`npm run sound`), not by ear.
 
 - Polish after the three large parts: a real play-through bot (`npm run play`, phone and CI
   variants) that plays the game from the title to the ending through the real screens and checks
@@ -77,9 +84,12 @@
    landscapes the first one does not.
 2. The game around the course, in the order of `docs/DESIGN.md`: duels of eloquence and the
    League as a duel, locks and upper floors and the road out of town are done; next coins and the
-   shop; ambient music. About one town in five has no way from the square to the edge for the
-   road (its ending plays at the League hall): a road that may bend would reach them too.
-3. Pocket mode (`docs/POCKET.md`): one question about budget at the start, ready-made parametric
+   shop. About one town in five has no way from the square to the edge for the road (its ending
+   plays at the League hall): a road that may bend would reach them too.
+3. The story (`docs/STORY.md`): arrival by steamship in the rain, a town that has forgotten,
+   remembering in place of duels, mementos upstairs, the lighthouse as the hidden League, the
+   turn at the end, the returning fog.
+3b. Pocket mode (`docs/POCKET.md`): one question about budget at the start, ready-made parametric
    labs, a prebuilt player that packs a course without a build, a one-page skill, a small fixed
    shape of game.
 4. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
