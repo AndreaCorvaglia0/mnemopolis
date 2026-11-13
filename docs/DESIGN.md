@@ -92,14 +92,48 @@ A skin over questions the course already has; no new content is required.
 
 ## Explore
 
+Exploring is how the game goes beyond the basics. Its central object is the **lock**.
+
+- **Locks**: a safe, a computer asking for its password, a door that wants the word of the day.
+  Using one switches to a **first-person close-up** (the safe's door, the screen with a sticky
+  note on its edge, the eyes behind a sliding hatch). The clue is there to be read; the answer is
+  **typed freely**, not chosen: a short term or a number that the learner must recall or work
+  out. Free recall is harder than recognition, which is why locks belong to exploring and never
+  to the main path.
+  - A wrong answer costs nothing. The character thinks aloud where to look ("Hm. I should go back
+    to the Dyer's House."): the lock knows which concept, and which part of it, holds the answer.
+    Repeated misses make the thought more specific (the house, then the reading wall or the lab
+    station), never the answer itself.
+  - Behind a lock is **secret knowledge**: an advanced lab station, a short document, a `further`
+    link, and sometimes a tool, coins or a key to a hidden place.
+  - In the course a lock is a `riddle` on a concept: kind, clue, accepted answers (text
+    normalised for case, accents, articles and one typo; numbers with a tolerance; codes exact),
+    where the answer is taught, and what is inside. Answers are at most three words or one number.
 - **Keys** come from owners, by winning their duel. A key opens that house's **upper floor**: a
-  small second room with the advanced side of the concept (its `further` links, level 3
-  questions as a harder rematch, an extra station when the course marks one `"advanced": true`,
-  and one secret).
+  second room with the advanced side of the concept: stations marked `"advanced": true`, its
+  locks, its `further` links, a harder rematch.
 - **Tools** come from the shop, for coins. A tool opens a kind of obstacle (exists:
   `mechanics/obstacles`, `canPass`, `state.tools`).
 - **Hidden buildings**: an extra concept may stand behind an obstacle (`world.json`).
 - The discoveries page lists what is found; what is not found is a silhouette.
+
+## Progression of difficulty
+
+The game never opens at the full depth of the subject. Depth is reached by climbing.
+
+| Where | Depth | Rule |
+|---|---|---|
+| Ground floor of a core house | the essential idea | 1 to 3 stations: first *see it* (one control, one surprise), then *the rule* (a comparison or a second control), then *use it elsewhere*. Basic, but with a picture and an interaction strong enough to be remembered |
+| The duel with the host | recognise and apply | levels 1 and 2 |
+| Upper floor (key) | the complication | the exception, the quantity, the second-order effect; one advanced station; locks |
+| Extra and hidden buildings | neighbouring ideas | what an expert would add |
+| Locks | recall and work out | free answers |
+
+- One new idea per station. Later houses may assume earlier ones; the first house assumes nothing.
+- The brief sets a **level** for the whole course, independent of size and care: *introductory*
+  (default), *intermediate*, *advanced*. It caps how far the upper floors and the extras go. A
+  hard subject at the introductory level still gets simple ground floors: the difficulty is moved
+  upstairs, not removed from the picture.
 
 ## Practise
 
@@ -137,6 +171,7 @@ One pure function, `nextStep(state, course)`, is the single source for every hin
 | `tools[name]`, `opened[id]` | tools carried, obstacles opened | exists |
 | `life.found`, `life.prints` | discoveries | exists |
 | `ended` | ending card seen | new |
+| `locks[id]` | lock opened; `tries[id]` counts misses | new |
 
 ## Where the code goes
 
@@ -145,14 +180,17 @@ One pure function, `nextStep(state, course)`, is the single source for every hin
 | Core/extra, `nextStep`, journey data | `engine/src/mechanics/quest/` |
 | Tracker, menu | `engine/src/mechanics/quest/` + hooks in `scenes/UI.js`, `lab/map.js` |
 | Duel rules (pure), duel screen, tempers | `engine/src/mechanics/duel/` |
-| Shop, coins, upper floors | `engine/src/mechanics/shop/`, `engine/src/mechanics/floors/` |
+| Locks (answer matching, close-ups), upper floors | `engine/src/mechanics/riddles/`, `engine/src/mechanics/floors/` |
+| Shop, coins | `engine/src/mechanics/shop/` |
 
 ## Order of work
 
 1. **Spine**: core/extra, `nextStep`, tracker, menu, gating of the League, ending.
 2. **Duel**: house duels and the League as duels, feedback from traps, tempers, keys handed over.
-3. **Beyond**: coins and shop, tools opening obstacles, upper floors, hidden buildings.
-4. Ambient, mysterious music that follows place and time; a second example course in Italian.
+3. **Locks and floors**: riddles with free answers in first person, upper floors opened by keys,
+   advanced stations, the progression of difficulty in the course method.
+4. **Shop**: coins spent on tools, tools opening obstacles, hidden buildings.
+5. Ambient, mysterious music that follows place and time; a second example course in Italian.
 
 ## Alternatives considered
 
