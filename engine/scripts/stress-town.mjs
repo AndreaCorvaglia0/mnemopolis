@@ -15,7 +15,7 @@ import { course } from './synthetic.mjs';
 import { planLife, checkLife } from '../src/mechanics/plan.js';
 
 const life = { towns: 0, obstacles: 0, secrets: 0, animals: 0, min: 99, max: 0, kinds: {} };
-const fails = [], notes = { crowded: 0, unreachable: 0, laneProps: 0, farthest: 0, far: 0, lanesCut: 0, gates: 0, noGate: 0, gateFar: 0 }, causes = new Map();
+const fails = [], notes = { crowded: 0, unreachable: 0, laneProps: 0, farthest: 0, far: 0, lanesCut: 0, gates: 0, noGate: 0, gateFar: 0, harbours: 0, harbourFar: 0 }, causes = new Map();
 let towns = 0, bad = 0;
 const judge = (label, town, L, theme = null, seed = '') => {
   towns++;
@@ -48,6 +48,22 @@ const judge = (label, town, L, theme = null, seed = '') => {
         const a0 = dist0[(y + 1) * bare.W + x], a1 = dist[(y + 1 + shift[1]) * town.W + x + shift[0]];
         if (a0 !== a1) all.push(`gate: the door of "${b.id}" is ${a1} steps away with the road out of town, ${a0} without`);
       }
+    }
+  } else if (town.HARBOUR) {
+    // the story's harbour (world/townMap.js HARBOUR): the quay is reached from the square, the harbour
+    // master and the notebook stand on free tiles, the ship lies on water, and the road changed no walk
+    const hb = town.HARBOUR, free = ({ x, y }) => !solid[y * town.W + x], d = dist[hb.start.y * town.W + hb.start.x];
+    if (d < 0) all.push(`harbour: the quay ${hb.start.x},${hb.start.y} cannot be reached from the square`);
+    for (const k of ['master', 'notebook']) if (!free(hb[k])) all.push(`harbour: something solid where the ${k} goes, ${hb[k].x},${hb[k].y} (${whatIsAt(town, L, hb[k].x, hb[k].y)})`);
+    if (hb.pier.some((t) => !free(t) || dist[t.y * town.W + t.x] < 0)) all.push('harbour: the pier cannot be walked to its end');
+    const sh = hb.ship, wx = Math.floor(sh.cx), wy = Math.floor(sh.bottom - 1);
+    for (const [dx, dy] of [[-3, 0], [0, 0], [3, 0]]) if (town.TERRAIN[wy + dy]?.[wx + dx] !== '~') all.push(`harbour: the ship's hull is not on water at ${wx + dx},${wy + dy}`);
+    if (!L) { notes.harbours++; notes.harbourFar = Math.max(notes.harbourFar, d); }
+    const bare = generate(town.course, { gate: false, harbour: false }), Lb = L && theme ? planDressingFor(bare, theme, town.course.id) : null;
+    const dist0 = checkDoors(bare, solidMap(bare, Lb), Lb).dist, shift = [town.HUB.x - bare.HUB.x, town.HUB.y - bare.HUB.y];
+    for (const b of bare.BUILDINGS) for (const [x, y] of b.doors) {
+      const a0 = dist0[(y + 1) * bare.W + x], a1 = dist[(y + 1 + shift[1]) * town.W + x + shift[0]];
+      if (a0 !== a1) all.push(`harbour: the door of "${b.id}" is ${a1} steps away with the harbour, ${a0} without`);
     }
   } else if (!L) notes.noGate++;
   if (all.length) { bad++; fails.push([label, all]); for (const p of all) { const k = p.replace(/"[^"]*"/, '"<id>"').replace(/\d+,\d+/g, 'x,y'); causes.set(k, (causes.get(k) || 0) + 1); } }
@@ -86,6 +102,6 @@ if (fails.length > 12 && !verbose) console.log(`... ${fails.length - 12} more fa
 console.log('\nBy cause:'); [...causes].sort((a, b) => b[1] - a[1]).forEach(([k, n]) => console.log(`  ${String(n).padStart(5)}  ${k}`));
 console.log(`\nstress: ${N} courses, ${towns} towns (dressing off, then on in ${themes.join(', ')}), ${bad} failed the door rule, the dressing check or the life check, ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 console.log(`reported, not failed: ${notes.crowded} towns with a house standing beside another door's corridor (districts too close); ${notes.unreachable} houses with an unreachable door; ${notes.lanesCut} lane or plaza tiles cut off from the square; ${notes.laneProps} solid props standing on lane or bridge tiles; farthest door ${notes.farthest} steps; ${notes.far} towns with a door beyond 45 steps`);
-console.log(`road out of town: ${notes.gates} towns with a gate (the champion at most ${notes.gateFar} steps from the start), ${notes.noGate} without (their ending plays at the League hall)`);
+console.log(`road out of town: ${notes.harbours} towns with the story's harbour (the quay at most ${notes.harbourFar} steps from the square), ${notes.gates} towns with a gate (the champion at most ${notes.gateFar} steps from the start), ${notes.noGate} without (their ending plays at the League hall)`);
 console.log(`life: ${life.towns} towns, ${(life.obstacles / life.towns).toFixed(1)} obstacles per town (${Object.entries(life.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}), ${(life.secrets / life.towns).toFixed(1)} secrets per town (${life.min} to ${life.max}, rooms not counted), ${(life.animals / life.towns).toFixed(1)} animals`);
 process.exit(bad ? 1 : 0);
