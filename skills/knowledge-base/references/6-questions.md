@@ -93,6 +93,10 @@ So:
 A concept's `expert` may name a `temper` for the duel (optional: smitten, sore, admirer, letwin,
 theatrical, absent, craftsman); without it the engine picks one.
 
+`why` and traps are expository text: write them in the handbook register of
+`references/9-prose.md` (complete, linked sentences; no punchlines). The validator's prose checks
+cover them.
+
 ## The final check
 
 The course ends with a set of questions drawn from levels 2 and 3 of every concept, mixed so

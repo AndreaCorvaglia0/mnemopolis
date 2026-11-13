@@ -31,8 +31,13 @@ const steps = [
   // walk into the first house and out again
   `eval:${enc(`(()=>{const s=__game.scene.getScene('Town');s.layout();s.cameras.main.startFollow(s.player.sprite);s.player.tx=${dx};s.player.ty=${dy + 2};s.player.place();return 1})()`)}`, 'wait:600',
   `walk:ArrowUp:${enc(`${cur}==='${scene(places[0])}'&&!__hb.probe().busy`)}`, 'wait:1200', 'shot:02-entered',
-  `walk:ArrowDown:${enc(`${cur}==='Town'&&!__hb.probe().busy`)}`, 'wait:1000', 'hold:ArrowDown:700',
-  `eval:${enc(`(()=>{const s=__game.scene.getScene('Town');return 'after leaving: player at '+s.player.tx+','+s.player.ty+' (door at ${dx},${dy}; must be at least 2 below)'})()`)}`, 'shot:03-back-in-town',
+  // back in town the player stands one tile below the door, facing down (Town.exitTile, by design);
+  // then one more step down must work (a frozen player was a real bug once). Wait on the condition:
+  // a fixed hold of the key could fall between two frames of a slow headless Chrome and show nothing
+  `walk:ArrowDown:${enc(`${cur}==='Town'&&!__hb.probe().busy`)}`, 'wait:1000',
+  `eval:${enc(`(()=>{const s=__game.scene.getScene('Town');return 'back in town at '+s.player.tx+','+s.player.ty+' (door at ${dx},${dy}: one below is the exit tile)'})()`)}`,
+  `walk:ArrowDown:${enc(`__game.scene.getScene('Town').player.ty>=${dy + 2}`)}`,
+  `eval:${enc(`(()=>{const s=__game.scene.getScene('Town');return 'after a step down: player at '+s.player.tx+','+s.player.ty+' (door at ${dx},${dy}; must be at least 2 below)'})()`)}`, 'shot:03-back-in-town',
 ];
 let from = 'Town';
 places.forEach((p, i) => {

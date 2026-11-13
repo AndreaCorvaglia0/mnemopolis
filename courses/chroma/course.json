@@ -108,7 +108,7 @@
         "text": "Three torches with coloured gels pointed at the same wall.",
         "limits": "Real torches are not pure red, green and blue, so their white is less clean than a screen’s."
       },
-      "application": "Every screen. The colour picker of any app shows these three numbers.",
+      "application": "Every screen works this way, and the colour picker of any app shows these three numbers.",
       "remember": [
         "Red + green light = yellow. All three lights = white.",
         "A pixel is three numbers: red, green, blue, each from 0 to 255.",
@@ -146,7 +146,7 @@
               "Drag the red lamp onto the green one.",
               "Bring all three lamps together."
             ],
-            "takeaway": "Red + green = <b>yellow</b>, green + blue = <b>cyan</b>, red + blue = <b>magenta</b>. All three = <b>white</b>. Adding light can only make things brighter.",
+            "takeaway": "Red and green light make <b>yellow</b>, green and blue make <b>cyan</b>, red and blue make <b>magenta</b>, and all three together make <b>white</b>. Adding light can only make the wall brighter, because nothing in the mix takes light away.",
             "source": "Drawn live with additive blending: each lamp adds its own channel."
           },
           {
@@ -167,7 +167,7 @@
               "Make a mid grey: three equal numbers.",
               "Step back until the stripes merge into one colour."
             ],
-            "takeaway": "Every colour on a screen is <code>(red, green, blue)</code>. Equal numbers give grey. The eye cannot resolve the three lamps, so it sees their sum.",
+            "takeaway": "Every colour on a screen is three numbers, <code>(red, green, blue)</code>, and equal numbers give a grey. The eye cannot resolve the three small lamps of a pixel, so it sees their sum.",
             "source": "On the left only pure red, green and blue stripes are drawn. Any other colour you see there is made by your eye."
           },
           {
@@ -197,7 +197,7 @@
               "Set the grey to 128 and compare it with the lines.",
               "Find the grey that sends out half the light: watch the read-out."
             ],
-            "takeaway": "Screen numbers are <b>not amounts of light</b>. sRGB puts them on a curve: <b>128</b> sends out about <b>22%</b> of white's light, and half the light is near <b>188</b>.",
+            "takeaway": "Screen numbers are not amounts of light, because sRGB places them on a curve: 128 sends out about 22% of the light of white, and half the light is reached near 188.",
             "source": "Light computed live with the sRGB formula in the WCAG 2.1 definition of relative luminance. The lines match the flat grey only on a screen close to sRGB, seen at 100% zoom: yours may be a few steps off."
           }
         ]
@@ -205,7 +205,7 @@
       "page": [
         {
           "title": "Lights add",
-          "text": "Shine a red lamp on a wall and the wall sends red light to your eye. Add a green lamp and it sends red and green together. Nothing is taken away, so two lamps are always brighter than one.",
+          "text": "When a red lamp shines on a dark wall, the wall sends red light to the eye. A green lamp on the same spot adds green light, so the wall now sends red and green together. Nothing in this process takes light away, which is why two lamps are always brighter than one.",
           "figure": {
             "kind": "animation",
             "ref": "lamps",
@@ -214,7 +214,7 @@
         },
         {
           "title": "A pixel is three lamps",
-          "text": "Look at a screen through a magnifying glass and every pixel splits into a red, a green and a blue stripe. Each has a brightness from 0 to 255. From normal distance the eye cannot separate them and sees their sum."
+          "text": "Under a magnifying glass every pixel of a screen splits into a red, a green and a blue stripe, and each stripe has a brightness from 0 to 255. From a normal distance the eye cannot separate the stripes, so it sees their sum as a single colour."
         }
       ],
       "questions": [
@@ -350,7 +350,7 @@
             "station": "mix"
           },
           "inside": {
-            "note": "Notes for the next experiment. A screen's yellow is red light plus green light: there is no yellow light in it at all. A pure yellow light can look exactly the same, because the eye keeps only three signals (see the Cone Cave). Next question: if 255 is all the light, is 128 half of it?",
+            "note": "Notes for the next experiment. A screen's yellow is red light plus green light, with no yellow light in it at all, and a pure yellow light can look exactly the same because the eye keeps only three signals (see the Cone Cave). The next thing to test is whether 128, half of 255, also sends out half of the light.",
             "station": "gamma"
           }
         }
@@ -406,7 +406,7 @@
               "Drag cyan onto yellow and read what comes back.",
               "Stack all three inks."
             ],
-            "takeaway": "Cyan absorbs <b>red</b>, magenta absorbs <b>green</b>, yellow absorbs <b>blue</b>. Two inks leave one light; three leave none: black.",
+            "takeaway": "Cyan absorbs red, magenta absorbs green and yellow absorbs blue. Two inks together leave one of the three lights, and all three leave none, which the eye sees as black.",
             "source": "Drawn live with multiply blending: each ink removes its own channel.",
             "predict": {
               "q": "Cyan ink printed over yellow ink on white paper will look...",
@@ -435,7 +435,7 @@
               "Switch on all three.",
               "Compare none with two."
             ],
-            "takeaway": "Lights start from <b>dark and add</b>: more lights, brighter. Paints start from <b>white and take away</b>: more paints, darker.",
+            "takeaway": "Lights start from dark and add, so more lights give a brighter colour. Paints start from white paper and take light away, so more paints give a darker one.",
             "source": "Idealised lights and paints: each paint is taken to reflect one primary only."
           },
           {
@@ -455,7 +455,7 @@
               "Step closer until you see single dots.",
               "Compare the print with the original tones."
             ],
-            "takeaway": "Tone on paper is <b>dot size</b>: big dots look dark, small dots look light. From reading distance the eye averages them.",
+            "takeaway": "Tone on paper comes from the size of the dots, with big dots looking dark and small dots looking light, because from reading distance the eye averages ink and paper.",
             "source": "A halftone computed live from a simple shaded ball."
           }
         ]
@@ -463,7 +463,7 @@
       "page": [
         {
           "title": "Ink takes away",
-          "text": "Paper has no lamps. It is white because it reflects all the light that falls on it. An ink is a filter: cyan ink absorbs red light and lets green and blue come back.",
+          "text": "Paper has no lamps of its own and looks white because it reflects all the light that falls on it. An ink works as a filter on that light. Cyan ink, for example, absorbs red light and lets green and blue come back, so the paper looks cyan where it is printed.",
           "figure": {
             "kind": "animation",
             "ref": "inks",
@@ -471,8 +471,8 @@
           }
         },
         {
-          "title": "Why not red, green and blue inks?",
-          "text": "A red ink absorbs green and blue: two thirds of the light at once. Put green ink on top and nothing is left. Cyan, magenta and yellow each remove only one third, so they can be combined."
+          "title": "Three inks instead of red, green and blue",
+          "text": "A red ink absorbs green and blue, which is two thirds of the light at once, so a green ink printed on top of it leaves nothing to come back. Cyan, magenta and yellow each remove only one third of the light, and this is why they can be layered and combined."
         },
         {
           "title": "Tone from dots",
@@ -637,7 +637,7 @@
       "page": [
         {
           "title": "Three dials",
-          "text": "Nobody says \"a bit more 214, 96, 30\". People say \"more orange\", \"less vivid\", \"lighter\". Hue, saturation and lightness turn those words into dials."
+          "text": "People rarely describe a colour with its three screen numbers: they ask for something more orange, less vivid or lighter. Hue, saturation and lightness turn those three words into three dials, so that a colour can be adjusted the way people talk about it."
         },
         {
           "title": "The same colours",
@@ -769,7 +769,7 @@
             "station": "dials"
           },
           "inside": {
-            "note": "Marta's note. Lightness on my dials is not how light a colour looks. At lightness 50%, pure yellow sends out about thirteen times as much light as pure blue: the eye weighs green most and blue least (0.2126 red + 0.7152 green + 0.0722 blue, in linear light). That is why my yellows never sit quietly next to my blues.",
+            "note": "Marta's note. Lightness on my dials is not how light a colour looks. At lightness 50%, pure yellow sends out about thirteen times as much light as pure blue, because the eye weighs green most and blue least (0.2126 red + 0.7152 green + 0.0722 blue, in linear light). That is why my yellows never sit quietly next to my blues.",
             "coins": 15
           }
         }
@@ -840,7 +840,7 @@
               "Drag one square next to the other.",
               "Replace the wall with a plain one."
             ],
-            "takeaway": "The squares have the <b>same numbers</b>. On a dark surround a patch looks lighter, on a light surround darker: <b>simultaneous contrast</b>.",
+            "takeaway": "The two squares have the same numbers. On a dark surround a patch looks lighter and on a light surround it looks darker, an effect called <b>simultaneous contrast</b>.",
             "source": "Drawn live: the wall is a gradient, the squares are flat fills computed by the same code."
           },
           {
@@ -869,7 +869,7 @@
               "Cover the coloured walls.",
               "Bring the walls back and look again."
             ],
-            "takeaway": "A neutral patch borrows the <b>opposite</b> of its surround: bluish on yellow, yellowish on blue. Always judge a colour on the background it will be used on.",
+            "takeaway": "A neutral patch takes on the opposite of its surround, so it looks bluish on a yellow wall and yellowish on a blue one. For this reason a colour is best judged on the background it will be used on.",
             "source": "Drawn live: the walls and the patches are flat fills."
           }
         ]
@@ -877,11 +877,11 @@
       "page": [
         {
           "title": "The eye compares",
-          "text": "The eye evolved to recognise surfaces under changing light, not to measure light. It judges every patch against its neighbours. A grey patch on black looks light; the same patch on white looks dark."
+          "text": "The eye evolved to recognise surfaces under changing light rather than to measure light, and for this it judges every patch against its neighbours. A grey patch on black therefore looks light, while the same patch on white looks dark."
         },
         {
           "title": "Why it matters",
-          "text": "Pick colours on the background they will live on. Two charts with different backgrounds can make the same value look different, and equal numbers in a file are no promise of equal appearance."
+          "text": "Since the eye compares, a colour should be chosen on the background where it will be used. Two charts with different backgrounds can make the same value look different, and equal numbers in a file do not promise an equal appearance."
         }
       ],
       "questions": [
@@ -1008,7 +1008,7 @@
             "station": "grey"
           },
           "inside": {
-            "note": "From Bruno's notebook. The same comparing that fooled you with the grey squares keeps a white shirt looking white under orange lamplight and under blue daylight: the eye judges a surface against its neighbours, not the light itself. A camera cannot do that by itself. It needs a white balance.",
+            "note": "From Bruno's notebook. The same comparison that fooled you with the grey squares keeps a white shirt looking white under orange lamplight and under blue daylight, because the eye judges a surface against its neighbours rather than by the light itself. A camera cannot do this on its own, which is why it needs a white balance.",
             "coins": 10
           }
         }
@@ -1049,7 +1049,7 @@
           "thread": "physics",
           "title": "White light is a mixture",
           "who": "Isaac Newton",
-          "text": "Newton passes sunlight through a prism and gets a band of colours; a second prism brings them back to white. Colour is not added by the glass: it is already in the light.",
+          "text": "Newton passes sunlight through a prism and gets a band of colours, and a second prism brings them back to white. This shows that the colour is already in the light and is not added by the glass.",
           "why": "The start of everything in the Lamp Quarter: lights can be split and added.",
           "src": "Newton, letter to the Royal Society, 1672"
         },
@@ -1059,7 +1059,7 @@
           "title": "Three kinds of receptor",
           "who": "Thomas Young",
           "text": "Young argues that the eye cannot hold a separate receptor for every colour. Three kinds, each answering to a broad range of light, would be enough.",
-          "why": "The reason three lamps are enough.",
+          "why": "This is the reason why three lamps are enough on a screen.",
           "src": "Young, Bakerian Lecture, Philosophical Transactions, 1802"
         },
         {
@@ -1068,7 +1068,7 @@
           "title": "The first colour photograph",
           "who": "James Clerk Maxwell",
           "text": "Three black-and-white photographs of a tartan ribbon, taken through red, green and blue filters and projected through the same filters, combine into a colour image.",
-          "why": "Young’s idea, working: three channels rebuild a coloured scene.",
+          "why": "It puts Young's idea to work, since three channels are enough to rebuild a coloured scene.",
           "src": "Maxwell, Royal Institution lecture, 1861"
         },
         {
@@ -1077,7 +1077,7 @@
           "title": "Opponent colours",
           "who": "Ewald Hering",
           "text": "In the 1870s Hering notes that nobody sees a reddish green or a yellowish blue. He proposes that vision works in opposing pairs: red against green, blue against yellow, light against dark.",
-          "why": "Both views are right: three receptors first, opposing pairs after.",
+          "why": "Both views turned out to be right, with the three receptors first and the opposing pairs formed after them.",
           "src": "Hering, Zur Lehre vom Lichtsinne, 1878"
         },
         {
@@ -1210,7 +1210,7 @@
       "wrongBelief": "To show a colour, a device must emit light of that colour.",
       "anchor": {
         "type": "analogy",
-        "text": "Three judges each give one score. Two very different performances can get the same three scores.",
+        "text": "Three judges each give one score, and two very different performances can get the same three scores.",
         "limits": "Judges score independently. The three cone curves overlap, and that overlap is exactly why a mixture can imitate a pure light."
       },
       "application": "A display with three lamps per pixel reproduces most of the colours we can see.",
@@ -1248,7 +1248,7 @@
               "Match light A using only the red and green lamps.",
               "Move light A to another wavelength and match it again."
             ],
-            "takeaway": "Pure yellow light and a red-plus-green mix are physically different and look <b>identical</b>: they are <b>metamers</b>. That is why three lamps are enough for a screen.",
+            "takeaway": "Pure yellow light and a red-plus-green mix are physically different but look identical, and lights of this kind are called <b>metamers</b>. This is why three lamps are enough for a screen.",
             "source": "Cone curves are simplified bell shapes. Both swatches are computed from the three signals with the same rule, so they are approximate but comparable."
           }
         ]
@@ -1260,7 +1260,7 @@
         },
         {
           "title": "Different lights, same signals",
-          "text": "Pure yellow light excites the long and medium cones together. So does a mix of red and green light, in the right proportion. The brain receives the same three signals and cannot tell them apart."
+          "text": "Pure yellow light excites the long and medium cones together, and so does a mix of red and green light in the right proportion. The brain then receives the same three signals from both lights and cannot tell them apart."
         }
       ],
       "questions": [

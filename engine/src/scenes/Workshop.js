@@ -50,7 +50,7 @@ function paint(lab, spots) {
   for (let y = 32; y < 176; y++) for (let x = 0; x < W * T; x++) px(ctx, x, y, x % 16 === 0 || y % 16 === 0 ? '#565c69' : hash(x >> 4, y >> 4, 5) > 0.5 ? '#6f7684' : '#687080');
   for (let k = 0; k < 5; k++) { ctx.fillStyle = `rgba(10,12,20,${0.25 - k * 0.05})`; ctx.fillRect(0, 32 + k, W * T, 1); }
   for (let i = 0; i < PATH.length - 1; i++) belt(ctx, ...PATH[i], ...PATH[i + 1]);
-  drawText(ctx, 'IN', 3, TOP * T - 8, '#e6e8ee'); drawText(ctx, 'OUT', 3, BOT * T - 8, '#e6e8ee');
+  drawText(ctx, w('room.beltIn'), 3, TOP * T - 8, '#e6e8ee'); drawText(ctx, w('room.beltOut'), 3, BOT * T - 8, '#e6e8ee');
   rect(ctx, 0, 176, W * T, 16, '#23262e'); rect(ctx, 0, 176, W * T, 2, '#17151c');
   rect(ctx, 19 * T, 177, 16, 15, '#3a3f6b'); rect(ctx, 19 * T + 1, 178, 14, 13, '#c9563f'); for (let y = 180; y < 190; y += 3) rect(ctx, 19 * T + 3, y, 10, 1, '#e7a34f');
   const zones = [...new Set(lab.stations.map((s) => s.zone || ''))];

@@ -66,7 +66,10 @@
   its core, with an optional goal-to-concept mapping for the ending card; locks that never cover the
   typed answer, show the password, and want the lab's exact value; an upstairs that looks like one;
   the road out of town with a gate at the edge of the map, where the champion waits and the ending
-  happens.
+  happens; a
+  reference on prose (`references/9-prose.md`: the handbook register for explanations, adapted from
+  the author's prosa-didattica skill, with its carve-outs for analogies, tasks and the game's
+  voices) and a prose checker in the validator, as warnings.
 
 ## Next
 

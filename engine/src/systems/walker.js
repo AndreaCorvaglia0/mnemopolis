@@ -18,6 +18,21 @@ export class Walker {
     this.shadow = scene.add.image(0, 0, 'shadow-s').setOrigin(0.5, 0.5);
     this.sprite = scene.add.sprite(0, 0, key, DIRS[dir].frame).setOrigin(0.5, 1);
     this.place();
+    // watchdog: a step tween that never finished froze the player for good (seen once on a phone in
+    // headless Chrome, cause not found). After a second, snap to the target tile and go on.
+    const watch = () => this.unstick();
+    scene.events.on('update', watch);
+    scene.events.once('shutdown', () => scene.events.off('update', watch));
+  }
+
+  unstick() {
+    if (!this.moving || !this.stepping || this.gone || this.scene.time.now - this.stepping.at < 1000) return;
+    const { tw, nx, ny, onDone } = this.stepping;
+    tw?.stop?.();
+    Object.assign(this, { tx: nx, ty: ny, moving: false, stepping: null });
+    this.place();
+    console.warn(`walker: a step tween never finished; snapped to ${nx},${ny}`);
+    if (onDone) onDone(nx, ny);
   }
 
   place() {
@@ -57,16 +72,19 @@ export class Walker {
     this.moving = true;
     this.sprite.anims.play(`${this.key}-${d.anim}`, true);
     this.sprite.anims.timeScale = 150 / speed;
-    this.scene.tweens.add({
+    this.stepping = { at: this.scene.time.now, nx, ny, onDone };
+    this.stepping.tw = this.scene.tweens.add({
       targets: this.sprite,
       x: nx * this.T + this.T / 2,
       y: ny * this.T + this.T - 1,
       duration: speed,
       onUpdate: () => this.syncShadow(),
       onComplete: () => {
+        if (!this.moving) return; // already snapped by the watchdog
         this.tx = nx;
         this.ty = ny;
         this.moving = false;
+        this.stepping = null;
         this.syncShadow();
         if (onDone) onDone(nx, ny);
       },

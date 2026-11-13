@@ -12,6 +12,7 @@ import { awardHouse, awardLeague, isFriendly } from './prize.js';
 import { openDuel } from './screen.js';
 import { CHALLENGE } from './lines.js';
 import { floorsOf } from '../floors/plan.js';
+import { Q } from '../quest/active.js';
 
 // The temper of a house: `expert.temper` in course.json if it names one, else seeded by the place.
 export function temperOf(id) {
@@ -61,7 +62,7 @@ export async function houseDuel(ui, id) {
 export async function leagueDuel(ui) {
   const host = LEAGUE.host || { name: 'Judge', look: 'nurse' };
   for (;;) {
-    const picked = leagueQuestions(PLACES, QUESTIONS, LEAGUE.size, shuffle);
+    const picked = leagueQuestions(Q.core, QUESTIONS, LEAGUE.size, shuffle); // the League asks only about the main path (docs/DESIGN.md)
     if (!picked.length) return null;
     const res = await ui.page(() => openDuel({
       kind: 'league', title: LEAGUE.name, bars: leagueBars(picked.length, LEAGUE.pass), tiers: [picked], pick: (l) => l[0],

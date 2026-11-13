@@ -201,7 +201,7 @@ export function openCloseup(r, o = {}) {
   };
   let busy = false;
   const reaction = (text, ok = false) => {
-    if (disp) { disp.textContent = ok ? 'OPEN' : 'ERROR'; disp.classList.toggle('err', !ok); }
+    if (disp) { disp.textContent = T(ok ? W.dispOpen : W.dispError); disp.classList.toggle('err', !ok); }
     if (msg) { msg.textContent = text; msg.classList.toggle('ok', ok); }
     if (kind === 'door') clueEl.replaceChildren(h('small', {}, T(W.voice)), text);
   };

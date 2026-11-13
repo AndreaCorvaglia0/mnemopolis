@@ -71,6 +71,16 @@ export function townMapView() {
     m.onclick = () => { for (const o of marks) o.classList.remove('on'); m.classList.add('on'); caption.textContent = text; };
     marks.push(m); byId[b.id] = m;
   }
+  // the town gate at the end of the road out of town: the champion waits there (the ring when the League is next)
+  if (TOWN.GATE) {
+    const g = TOWN.GATE, gx = Math.min(...g.tiles.map((t) => t[0])) - x0, gy = Math.min(...g.tiles.map((t) => t[1])) - y0;
+    const gw = g.dir[0] === 0 ? 2 : 1, gh = g.dir[0] === 0 ? 1 : 2;
+    ctx.fillStyle = '#0b0d14'; ctx.fillRect(gx * s - 1, gy * s - 1, gw * s + 2, gh * s + 2); ctx.fillStyle = '#8a5a34'; ctx.fillRect(gx * s, gy * s, gw * s, gh * s);
+    const text = tr(Q_WORDS.townGate.prompt), m = h('button', { type: 'button', class: `qt-mk league${nextId === 'league' ? ' next' : ''}`, style: `left:${(gx + gw / 2) * s}px;top:${(gy + gh / 2) * s}px`, 'aria-label': text, title: text }, h('b', {}, '∩'));
+    m.onclick = () => { for (const o of marks) o.classList.remove('on'); m.classList.add('on'); caption.textContent = `${text}: ${COURSE.league.name}`; };
+    marks.push(m);
+    byId.league?.classList.remove('next');
+  }
   const sq = h('span', { class: 'qt-sq', style: `left:${(HUB.x - x0 + 0.5) * s}px;top:${(HUB.y - y0 + 3.4) * s}px` }, tr(Q_WORDS.map.square));
   const pos = state.pos || TOWN.START;
   const me = h('span', { class: 'qt-me', style: `left:${(pos.x - x0 + 0.5) * s}px;top:${(pos.y - y0 + 0.5) * s}px`, title: tr(Q_WORDS.map.you) });

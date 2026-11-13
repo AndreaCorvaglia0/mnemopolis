@@ -66,7 +66,10 @@ mnemonic, a reminder to oneself, a bit of character. Never a textbook question.
 
 - One defensible answer. Give the accepted variants (`"answer": ["simultaneous contrast",
   "contrast"]`); the engine already forgives case, accents, a leading article, a plural and one
-  typo. For a number read off a slider, give a `tolerance`.
+  typo. For a number read off a lab's live value, give `"tolerance": 1`: the learner must read the
+  lab, not guess near it; and make sure the station lets them land on the exact value (an integer
+  read-out, a fine control on a phone: the example's colour disc has one-degree buttons). If exact
+  landing stays fiddly on a phone, use 2 and say why in the brief.
 - `from` says where it is taught (`{ "station": "dials" }` or `{ "page": true }`, of this concept
   or another earlier one). After a wrong answer the character thinks of that place: first the
   house, from the third miss the exact spot. The answer is never given.

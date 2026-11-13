@@ -113,12 +113,14 @@ test('house questions: levels 1 and 2 first, level 3 only to fill; a friendly re
   for (const p of PLACES) assert.ok(QUESTIONS.filter((q) => q.topic === p.id).length >= 3, `${p.id}: fewer than 3 questions`);
 });
 
-test('League questions: levels 2 and 3, spread over the houses', () => {
-  const qs = leagueQuestions(PLACES, QUESTIONS, LEAGUE.size);
-  assert.equal(qs.length, Math.min(LEAGUE.size, QUESTIONS.filter((q) => q.stars >= 2).length));
+test('League questions: levels 2 and 3, spread over the core houses, never an extra', async () => {
+  const { Q } = await import('../src/mechanics/quest/active.js');
+  const qs = leagueQuestions(Q.core, QUESTIONS, LEAGUE.size), core = new Set(Q.core.map((p) => p.id));
+  assert.equal(qs.length, Math.min(LEAGUE.size, QUESTIONS.filter((q) => q.stars >= 2 && core.has(q.topic)).length));
   assert.ok(qs.every((q) => q.stars >= 2));
+  assert.ok(qs.every((q) => core.has(q.topic)), 'the League asks only about the main path');
   const houses = new Set(qs.map((q) => q.topic));
-  assert.equal(houses.size, Math.min(qs.length, PLACES.filter((p) => QUESTIONS.some((q) => q.topic === p.id && q.stars >= 2)).length), 'one from each house before a second from any');
+  assert.equal(houses.size, Math.min(qs.length, Q.core.filter((p) => QUESTIONS.some((q) => q.topic === p.id && q.stars >= 2)).length), 'one from each house before a second from any');
 });
 
 test('feedback: the trap of the chosen wrong option, or the plain right answer', () => {

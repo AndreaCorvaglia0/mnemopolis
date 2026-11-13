@@ -59,6 +59,7 @@ export const WORDS = {
     mapSign: { en: 'The map is in the menu (Tab, or the Menu button).', it: 'La mappa è nel menu (Tab, o il pulsante Menu).' },
     learnHere: { en: 'Here you learn to: {what}', it: 'Qui impari a: {what}' },
     meadow: { en: 'REVIEW MEADOW', it: 'PRATO DEL RIPASSO' },
+    leagueSign: { en: 'LEAGUE', it: 'LEGA' },
     meadowText: { en: 'Quick questions hide in the tall grass, only about houses you have visited. They can be switched off in the menu.', it: 'Nell\'erba alta si nascondono domande veloci, solo sulle case che hai visitato. Si possono spegnere dal menu.' },
   },
   // the guide's default lines (world.json hub.guide replaces them)
@@ -80,6 +81,8 @@ export const WORDS = {
     coloursAre: { en: 'The colour of a plaque is its thread: {list}.', it: 'Il colore di una targa è il suo filo: {list}.' },
     firstPlaque: { en: 'Start from the first plaque', it: 'Comincia dalla prima targa' },
     upstairsTag: { en: 'UPSTAIRS', it: 'DI SOPRA' },
+    beltIn: { en: 'IN', it: 'ENTRA' },
+    beltOut: { en: 'OUT', it: 'ESCE' },
   },
   // ---- the quiz of the tall grass ----
   quiz: {

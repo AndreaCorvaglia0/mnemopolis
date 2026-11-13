@@ -63,7 +63,7 @@ export function generate(C = COURSE, { gate = true } = {}) {
   monuments.push({ x: cx - 1, y: cy - 1, kind: C.hub.monument || 'fountain', title: C.hub.name, lines: [C.title, C.bigIdea] });
   const g = C.hub.guide;
   npcs.push({ id: 'guide', name: g.name, x: cx + 2, y: cy + 1, dir: 'down', look: g.look || 'mentor' });
-  const lg = { id: 'league', kind: 'league', name: C.league.name, label: 'LEAGUE', paint: LEAGUE.paint, x: cx, y: hub.y0 - LEAGUE.h, w: LEAGUE.w, h: LEAGUE.h, open: false, league: true };
+  const lg = { id: 'league', kind: 'league', name: C.league.name, label: w('town.leagueSign'), paint: LEAGUE.paint, x: cx, y: hub.y0 - LEAGUE.h, w: LEAGUE.w, h: LEAGUE.h, open: false, league: true };
   lg.doors = LEAGUE.doors.map(([dx, dy]) => [lg.x + dx, lg.y + dy]);
   const home = { id: 'home', name: `${g.name}'s house`, paint: 'cottage', x: cx - 6, y: hub.y0 - 4, w: 4, h: 4, open: false, home: true };
   home.doors = [[home.x + 1, home.y + 3]];
@@ -239,8 +239,10 @@ export function generate(C = COURSE, { gate = true } = {}) {
     let [x, y] = sh(gateLane.end);
     while (x + dx >= 0 && y + dy >= 0 && x + dx < W && y + dy < Hh) { x += dx; y += dy; for (const k of [0, 1]) out[y + ay * k][x + ax * k] = out[y + ay * k][x + ax * k] === 'c' ? 'c' : 'p'; }
     const gx = x - dx * 2, gy = y - dy * 2, tiles = [[gx, gy], [gx + ax, gy + ay]];
-    const stand = [gx - dx, gy - dy], aside = [gx - dx - ax, gy - dy - ay], posts = [[gx - ax, gy - ay], [gx + 2 * ax, gy + 2 * ay]];
-    out[aside[1]][aside[0]] = 'p'; // room for the champion to step aside
+    const stand = [gx - dx, gy - dy], aside = [gx - 2 * dx - ax, gy - 2 * dy - ay], posts = [[gx - ax, gy - ay], [gx + 2 * ax, gy + 2 * ay]];
+    out[aside[1]][aside[0]] = 'p'; // room for the champion to step aside, in view
+    // a clearing before the gate: no tree of the forest's edge hides the gate, the champion or the player
+    for (let u = 1; u <= 3; u++) for (let v = -2; v <= 3; v++) { const X = gx - dx * u + ax * v, Y = gy - dy * u + ay * v; taken.add(`${X},${Y}`); }
     posts.forEach(([px2, py2]) => { out[py2][px2] = 'g'; taken.add(`${px2},${py2}`); PROPS.push([px2, py2, 'gatepost']); });
     [...tiles, stand, aside].forEach(([px2, py2]) => taken.add(`${px2},${py2}`));
     GATE = { tiles, stand, aside, posts, dir: [dx, dy], across: [ax, ay], edge: [x, y] };

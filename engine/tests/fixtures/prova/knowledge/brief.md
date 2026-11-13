@@ -5,7 +5,7 @@
   workflow does not publish it and nothing counts it among the examples.
 - **Subject:** simple machines: the lever, the inclined plane, the pulley (ideal machines, no friction).
 - **Learner:** a curious adult without physics.
-- **Size:** tiny (3 concepts, one station each). **Care:** light. **Level:** introductory.
+- **Size:** tiny (3 concepts, one station each). **Care:** standard. **Level:** introductory.
 - **Language:** Italian.
 - **Covers on purpose:** a lab (Casa della Leva), a workshop (Bottega delle Rampe), an expert's home
   with a temper (Gino, theatrical) and a lock on the ground floor (a safe), six questions per concept.

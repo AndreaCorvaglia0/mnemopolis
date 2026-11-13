@@ -54,7 +54,7 @@ const browser = await puppeteer.launch({
 const page = await browser.newPage();
 await page.setViewport(PHONE ? { width: 390, height: 844, deviceScaleFactor: 2, hasTouch: true, isMobile: true } : { width: 1280, height: 760, deviceScaleFactor: 1 });
 page.on('pageerror', (e) => fail(`page error: ${(e.stack || e.message).slice(0, 400)}`));
-page.on('console', (m) => { if (m.type() === 'error') fail(`console error: ${m.text().slice(0, 300)}`); });
+page.on('console', (m) => { if (m.type() === 'error') fail(`console error: ${m.text().slice(0, 300)}`); else if (m.text().startsWith('walker:')) log(`!! NOTE ${m.text()}`); });
 const q = `?lite&test${PHONE ? '&touch' : ''}${process.env.Q || ''}`;
 await page.goto(`file://${html}${q}`);
 log(`${TAG}: ${DATA.title} (${DATA.language}), ${PHONE ? 'phone 390x844, taps' : 'desktop 1280x760, mouse and keys'}${FAST ? ', FAST: carried to doors' : ''}, address ${q}`);
@@ -229,9 +229,14 @@ async function walkTo(tx, ty, what, { use = true } = {}) {
     for (let i = way.length - 1; i > 0; i--) { const at = await tilePage(...way[i]); if (onScreen(at)) { pick = at; break; } }
     if (!pick) { fail(`nothing of the way to ${what} is on screen`); return false; }
     await tap(...pick);
-    // wait until the player stops walking
+    // wait until the player stops walking; if nothing happens for long, say what the game was doing
     await sleep(400);
-    await until(() => { const s = __game.scene.getScenes(true).find((x) => x.sys.settings.key !== 'UI'); return s && !s.player.moving && !s.nav.walking; }, `walking toward ${what}`, 30000);
+    try { await until(() => { const s = __game.scene.getScenes(true).find((x) => x.sys.settings.key !== 'UI'); return s && !s.player.moving && !s.nav.walking; }, `walking toward ${what}`, 30000); }
+    catch (e) {
+      const d = await ev(() => { const s = __game.scene.getScenes(true).find((x) => x.sys.settings.key !== 'UI'), ui = __game.scene.getScene('UI'); return { scene: s?.sys.settings.key, moving: s?.player.moving, path: s?.nav.path.length, pending: s?.nav.pending, locked: s?.locked, busy: ui.busy, modals: ui.modals, phase: ui.phase, sleeping: __game.loop.sleeping, at: [s?.player.tx, s?.player.ty], tweens: s?.tweens.getTweens?.().length }; });
+      fail(`stuck walking toward ${what}: ${JSON.stringify(d)}`);
+      throw e;
+    }
   }
   fail(`gave up walking to ${what}`);
   return false;

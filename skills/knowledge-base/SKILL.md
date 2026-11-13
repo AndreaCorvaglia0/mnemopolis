@@ -38,8 +38,8 @@ Do them in order. Each has a reference file: read it when you reach the step, no
 | 3 | **Map**: extract ideas, find the big idea, choose, link | first half of `map.md` | `references/2-concept-map.md` |
 | 4 | **Path**: order, themes, call-backs | second half of `map.md` | `references/3-path.md` |
 | | **Show the map** (do not wait) | the map in the conversation | below |
-| 5 | **Activate**: for every concept, what the learner does to understand it | concepts in `course.json` | `references/4-active-learning.md`, `references/5-labs.md`, `references/7-progression.md` |
-| 6 | **Ask**: questions for remembering and for using | questions in `course.json` | `references/6-questions.md` |
+| 5 | **Activate**: for every concept, what the learner does to understand it | concepts in `course.json` | `references/4-active-learning.md`, `references/5-labs.md`, `references/7-progression.md`, `references/9-prose.md` (how pages, takeaways and notes are written) |
+| 6 | **Ask**: questions for remembering and for using | questions in `course.json` | `references/6-questions.md`, `references/9-prose.md` (`why` and traps are expository text) |
 
 Then run `node skills/knowledge-base/scripts/validate.mjs courses/<slug>` until it reports no
 errors, and read its warnings.

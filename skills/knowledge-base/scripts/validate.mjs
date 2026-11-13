@@ -195,8 +195,7 @@ if (themes.length > 1) themes.forEach((t) => { const inside = new Set(concepts.f
 // ---- final check ----
 const f = c.finalCheck || {};
 if (!(f.size >= 4) || !(f.pass > 0 && f.pass <= 1)) err('finalCheck needs "size" (4 or more) and "pass" (0 to 1)');
-const pool = concepts.reduce((s, p) => s + (p.questions || []).filter((q) => q.level >= 2).length, 0);
-if (f.size > pool) err(`finalCheck asks for ${f.size} questions but only ${pool} of level 2 or 3 exist`);
+
 
 // ---- core and extra: the main story of the game (references/3-path.md, "Core and extra") ----
 // Core concepts are the minimum set to take home in about an hour; only they gate the final check.
@@ -216,6 +215,10 @@ core.forEach((p) => {
   else if (n < 6) warn(`concept "${p.id}": ${n} questions. Its duel can ask at most ${n}; with fewer than 6 a learner who knows 40% wins too often and one who knows 70% loses too often. Write ${6 - n} more (levels 1 to 3)`);
 });
 
+// the final check asks only about core concepts (the League of the game)
+const pool = core.reduce((s, p) => s + (p.questions || []).filter((q) => q.level >= 2).length, 0);
+if (f.size > pool) err(`finalCheck asks for ${f.size} questions but the core concepts have only ${pool} of level 2 or 3`);
+
 // ---- locks, advanced stations, progression (riddles.mjs; references/7-progression.md) ----
 {
   const eng = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'engine', 'src', 'mechanics');
@@ -227,6 +230,12 @@ core.forEach((p) => {
   const { checkProgression } = await import('./riddles.mjs');
   const r = checkProgression(c, { match, tools, care });
   r.errors.forEach(err); r.warns.forEach(warn);
+}
+
+// ---- the register of expository text (references/9-prose.md): warnings, never errors ----
+{
+  const { checkCourseProse } = await import('./prose.mjs');
+  checkCourseProse(c).forEach((w) => warn(`prose: ${w}`));
 }
 
 // ---- working documents ----

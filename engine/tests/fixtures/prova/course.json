@@ -5,7 +5,7 @@
   "language": "it",
   "title": "Officina Prova",
   "subject": "Le macchine semplici",
-  "bigIdea": "Le macchine semplici scambiano forza con distanza: meno forza, più strada.",
+  "bigIdea": "Le macchine semplici scambiano forza con distanza, perché fanno spingere meno su una strada più lunga.",
   "learner": "Un adulto curioso, senza studi di fisica.",
   "goals": [
     "Prevedere dove spingere su una leva per fare meno forza.",
@@ -45,9 +45,9 @@
       "wrongBelief": "Per sollevare un peso serve sempre una forza grande quanto il peso.",
       "anchor": {
         "type": "example",
-        "text": "Un'altalena: un bambino leggero lontano dal centro equilibra un adulto vicino al centro."
+        "text": "Su un'altalena un bambino leggero seduto lontano dal centro equilibra un adulto seduto vicino al centro."
       },
-      "application": "Piedi di porco, schiaccianoci, forbici e carriole sono leve.",
+      "application": "Il piede di porco, lo schiaccianoci, le forbici e la carriola sono leve, e in ognuno il braccio lungo è quello su cui agisce la mano.",
       "remember": [
         "Il fulcro è il punto su cui la leva ruota.",
         "In equilibrio, forza × braccio è uguale dai due lati.",
@@ -85,7 +85,7 @@
             "tries": [
               "Sposta il bambino finché l'altalena è in equilibrio."
             ],
-            "takeaway": "In equilibrio <b>peso × distanza</b> è uguale dai due lati: 20 kg × 3 m = 40 kg × 1,5 m.",
+            "takeaway": "In equilibrio il prodotto <b>peso × distanza</b> è uguale dai due lati, e infatti 20 kg × 3 m dà lo stesso valore di 40 kg × 1,5 m.",
             "source": "Calcolato dal vivo: il momento di ciascun peso è peso × distanza dal fulcro."
           }
         ]
@@ -93,7 +93,11 @@
       "page": [
         {
           "title": "Forza e distanza",
-          "text": "Una leva non regala niente: se spingi con metà forza, la tua mano percorre il doppio della strada."
+          "text": "Una leva è un'asta rigida che ruota attorno a un punto fisso, il fulcro. Chi spinge lontano dal fulcro ha un braccio lungo e può sollevare con poca forza un peso posto vicino al fulcro, perché la leva è in equilibrio quando forza per braccio è uguale dai due lati. La leva non elimina la fatica: per sollevare il peso con metà della forza, la mano deve percorrere il doppio della strada."
+        },
+        {
+          "title": "L'altalena come esempio",
+          "text": "Su un'altalena l'asse è la leva e il sostegno al centro è il fulcro. Un adulto di 40 kg seduto a 1,5 m dal centro è equilibrato da un bambino di 20 kg seduto a 3 m, perché 40 per 1,5 e 20 per 3 danno lo stesso prodotto, 60. Nel laboratorio si sposta il bambino lungo l'asse finché i due prodotti coincidono."
         }
       ],
       "sources": [
@@ -213,9 +217,9 @@
       "wrongBelief": "Una rampa fa fare meno fatica in tutto, anche nel lavoro totale.",
       "anchor": {
         "type": "example",
-        "text": "Le strade di montagna salgono a tornanti: più strada, salita più dolce."
+        "text": "Le strade di montagna salgono a tornanti: percorrono più strada, ma la salita è più dolce."
       },
-      "application": "Rampe per carrozzine, scivoli dei camion, strade a tornanti.",
+      "application": "Le rampe per le carrozzine, gli scivoli di carico dei camion e le strade a tornanti usano lo stesso principio.",
       "remember": [
         "A parità di altezza, una rampa più lunga chiede meno forza.",
         "Il lavoro per salire resta lo stesso: meno forza, più strada.",
@@ -259,7 +263,7 @@
             "tries": [
               "Allunga la rampa finché basta una forza di 25 N."
             ],
-            "takeaway": "Forza = <b>peso × altezza ÷ lunghezza</b>: con 4 m di rampa per 1 m di altezza basta un quarto del peso. In cambio si percorre più strada.",
+            "takeaway": "Senza attrito la forza è <b>peso × altezza ÷ lunghezza</b>, quindi con 4 m di rampa per 1 m di altezza basta un quarto del peso, a prezzo di una strada quattro volte più lunga.",
             "source": "Calcolato dal vivo, senza attrito."
           }
         ]
@@ -267,7 +271,7 @@
       "page": [
         {
           "title": "Più strada, meno forza",
-          "text": "Salire su un gradino alto 1 m con una cassa di 100 N chiede sempre lo stesso lavoro. La rampa lo divide in una spinta più lunga e più leggera."
+          "text": "Per portare una cassa da 100 N su un gradino alto 1 m serve sempre lo stesso lavoro, cioè la forza per la strada percorsa. Una rampa divide questo lavoro in una spinta più leggera su una strada più lunga, e senza attrito la forza necessaria è il peso moltiplicato per l'altezza e diviso per la lunghezza della rampa. Con una rampa lunga 4 m basta quindi una spinta di 25 N, un quarto del peso."
         }
       ],
       "sources": [
@@ -393,9 +397,9 @@
       "wrongBelief": "Qualsiasi carrucola riduce la forza.",
       "anchor": {
         "type": "example",
-        "text": "Il secchio del pozzo: tiri giù la corda e il secchio sale. Stessa forza, direzione più comoda."
+        "text": "Il secchio del pozzo, che sale quando si tira la corda verso il basso, usa una carrucola fissa: la forza è la stessa, ma la direzione è più comoda."
       },
-      "application": "Pozzi, gru da cantiere, paranchi delle barche a vela.",
+      "application": "I pozzi, le gru da cantiere e i paranchi delle barche a vela combinano carrucole fisse e mobili.",
       "remember": [
         "Una carrucola fissa cambia la direzione della forza, non la sua grandezza.",
         "Una carrucola mobile dimezza la forza.",
@@ -440,15 +444,15 @@
               "Prova la carrucola fissa.",
               "Prova la carrucola mobile e confronta la forza."
             ],
-            "takeaway": "Fissa: <b>stessa forza</b>, direzione più comoda. Mobile: <b>metà forza</b>, ma il doppio della corda.",
+            "takeaway": "La carrucola fissa lascia <b>la stessa forza</b> e cambia solo la direzione in cui si tira. La carrucola mobile richiede <b>metà della forza</b>, ma per sollevare il carico di 1 m bisogna tirare 2 m di corda.",
             "source": "Calcolato dal vivo, senza attrito e con una carrucola senza peso."
           }
         ]
       },
       "page": [
         {
-          "title": "Due carrucole",
-          "text": "Una carrucola appesa al soffitto ti fa tirare verso il basso invece che verso l'alto. Una carrucola che sale con il carico divide il peso su due tratti di corda."
+          "title": "La carrucola fissa e la carrucola mobile",
+          "text": "Una carrucola fissa è appesa a un sostegno e serve a cambiare la direzione della forza: si tira la corda verso il basso e il carico sale, ma la forza necessaria resta uguale al peso. Una carrucola mobile sale invece insieme al carico, che resta appeso a due tratti di corda, e ciascun tratto ne regge metà. Per questo la forza si dimezza, mentre la corda da tirare raddoppia."
         }
       ],
       "sources": [
@@ -467,7 +471,7 @@
             "station": "paranco"
           },
           "inside": {
-            "note": "Appunti di Gino. Con due carrucole mobili la forza si dimezza due volte: un quarto del carico. E la corda? Quattro volte tanta.",
+            "note": "Appunti di Gino. Con due carrucole mobili la forza si dimezza due volte e diventa un quarto del carico, mentre la corda da tirare diventa quattro volte più lunga.",
             "coins": 10
           }
         }
