@@ -55,6 +55,22 @@ course and are as important:
 - the **prediction** at the start of a lab station (`predict`): a question before the learning;
 - the **explain** prompt on the page: free recall and explanation, ungraded, said aloud.
 
+## Questions in duels
+
+The game asks the questions in **duels**: the host of each house challenges the learner on that
+concept's questions (levels 1 and 2 first, at most six turns), and the final check is a duel with
+a champion. A wrong answer is answered by a rebuttal built from the `trap` of the chosen option
+("Why “Brown” tempts: paint-mixing intuition"), then the right answer with `why`. So:
+
+- every wrong option needs a trap that names the mistake in a few words, readable after
+  "Why … tempts:" (a noun phrase or a short clause: "paint-mixing intuition", "reads only the
+  first number");
+- `why` must say why the right answer holds; it is also shown after a right answer;
+- five or six questions per concept make a fairer duel than three or four.
+
+A concept's `expert` may name a `temper` for the duel (optional: smitten, sore, admirer, letwin,
+theatrical, absent, craftsman); without it the engine picks one.
+
 ## The final check
 
 The course ends with a set of questions drawn from levels 2 and 3 of every concept, mixed so

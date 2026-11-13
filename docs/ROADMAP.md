@@ -58,7 +58,10 @@
 2. The game around the course, in the order of `docs/DESIGN.md`: the spine (core and extra
    concepts, the next step, tracker, menu, ending), duels of eloquence and the League as a duel,
    then coins, shop, keys and upper floors; ambient music.
-3. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
+3. Pocket mode (`docs/POCKET.md`): one question about budget at the start, ready-made parametric
+   labs, a prebuilt player that packs a course without a build, a one-page skill, a small fixed
+   shape of game.
+4. Coins from questions, a shop for tools, obstacles opened by tools. The obstacles, their tools
    (`needs`), `canPass` and the saved `state.tools` / `state.opened` exist (`engine/src/mechanics/obstacles/`);
    what waits behind them is a placeholder listed as "sealed".
 

@@ -17,6 +17,7 @@ mkdirSync(out, { recursive: true });
 const { RIDDLES } = await import('../src/mechanics/riddles/data.js');
 const { PLACES } = await import('../src/data/content.js');
 const { floorsOf } = await import('../src/mechanics/floors/plan.js');
+const DUEL = existsSync(path.join(here, '..', 'src', 'mechanics', 'duel', 'index.js'));
 if (!RIDDLES.length) { console.log('This course has no riddles: nothing to show.'); process.exit(0); }
 const enc = encodeURIComponent, I = "__game.scene.getScene('Interior')", UI = "__game.scene.getScene('UI')";
 const cur = "__game.scene.getScenes(true).map(s=>s.sys.settings.key)[0]";
@@ -45,7 +46,14 @@ if (upHouse) {
   // 2. the stairs without the key
   steps.push(use, 'wait:700', bubble, 'shot:02-stairs-refused');
   // 3. with the key: upstairs
-  steps.push(`eval:${enc(`__hb.giveKey('${upHouse.id}')`)}`, 'wait:300', use, 'wait:2600', `eval:${enc(`'now in '+${cur}+' floor '+${I}.floor`)}`, 'shot:03-upstairs');
+  if (DUEL) { // the real way: win the house duel, the owner hands over the key, then the stairs
+    const Q = "(()=>{const id=document.querySelector('.dl')?.dataset.q;return __hb.content.QUESTIONS.find(q=>q.id===id)})()", mode = "document.querySelector('.dl')?.dataset.mode";
+    const right = `(()=>{const q=${Q};document.querySelectorAll('.dl-o')[q.answer].click();return 1})()`, next = "(document.querySelector('.dl-b.go')?.click(),1)";
+    steps.push(`eval:${enc(`(${I}.quizSeries(),1)`)}`, 'wait:1500', `eval:${enc(`(()=>{let n=0;while(${mode}!=='end'&&n++<40){if(${mode}==='q')(${right});else (${next});}return 'duel: '+${mode}})()`)}`, 'wait:900',
+      `eval:${enc("'key after the duel: '+!!__hb.state.keys['" + upHouse.id + "']")}`, `eval:${enc(next)}`, 'wait:1500', 'key:Escape', 'wait:600', 'key:Space', 'wait:600', 'key:Escape', 'wait:800',
+      `eval:${enc(`(()=>{const s=${I},t=s.room.stairs;if(!t)return 'already upstairs (a Space after the duel used the stairs)';s.player.tx=t.x;s.player.ty=t.y+1;s.player.place();s.player.face('up');return 1})()`)}`, 'wait:600');
+  } else steps.push(`eval:${enc(`__hb.giveKey('${upHouse.id}')`)}`, 'wait:300');
+  steps.push(prompt, use, 'wait:2600', `eval:${enc(`'now in '+${cur}+' floor '+${I}.floor`)}`, 'shot:03-upstairs');
 }
 // 4. every lock: before typing, a miss (three for the first, to see the thought escalate), the right answer
 RIDDLES.forEach((r, i) => {

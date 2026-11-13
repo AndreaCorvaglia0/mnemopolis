@@ -96,7 +96,7 @@ async function gamma(ctx) {
     bar(L.a[0], L.a[2], 0.5, 'light: 50% of white', L.bars);
     bar(L.b[0], L.b[2], light, `light: ${pct}% of white`, L.bars);
     g.fillStyle = '#c9cfdd'; g.font = pane.font(19);
-    g.fillText(`grey value ${v.g} = ${Math.round((v.g / 255) * 100)}% of 255`, L.b[0], L.bars + 84);
+    g.fillText(`grey value ${v.g} = ${Math.round((v.g / 255) * 100)}% of 255`, up ? L.a[0] : L.b[0], L.bars + 84); // the number is not the light
     if (Math.abs(v.g - 128) <= 2) ctx.did(0);
     if (pct >= 47 && pct <= 53) ctx.did(1);
   };
