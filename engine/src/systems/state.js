@@ -17,6 +17,7 @@ const fresh = () => ({
   bets: { 1: [0, 0], 2: [0, 0], 3: [0, 0] }, // confidence -> [right, total]
   steps: 0,
   musicOff: false,
+  voiceOff: false, // read-aloud switched off by the player (only when the course has a voice)
   grassOff: false, // tall-grass questions switched off by the player
 });
 

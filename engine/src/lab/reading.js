@@ -3,7 +3,7 @@
 //   concept and idea -> "think of it as" (the anchor) -> the author's sections (course.json)
 //   -> "where you meet it" (the application)
 //   -> "explain it yourself" -> "remember" (the 1 to 3 facts the review meadows will ask again).
-import { overlay, h } from './shell.js';
+import { overlay, h, listen, listenKey, stopVoice, speak, script, VOICE, isOn } from './shell.js';
 import { PLACE } from '../data/content.js';
 import { ANIMS } from '../course/_active.js';
 
@@ -24,10 +24,19 @@ function frame(p, body) {
   return `<div class="hb-num">${p.order} · ${esc(p.district.name)}</div><h2>${esc(p.concept)}</h2><p class="lead">${esc(p.idea)}</p>${anchor}${body || ''}${use}${explain}${remember}${more}`;
 }
 
+// What Listen reads: the page in order, without the hidden answer of "explain it yourself" and
+// without the links.
+function spoken(p) {
+  if (!p) return '';
+  return script([p.concept, p.idea, p.anchor && `${ANCHOR[p.anchor.type] || 'Think of it as'}: ${p.anchor.text}`, p.anchor?.limits && `Where it stops working: ${p.anchor.limits}`,
+    ...(p.page || []).flatMap((x) => [x.title, x.text]), p.application && 'Where you meet it', p.application,
+    p.explain && 'Explain it yourself', p.explain?.q, p.remember?.length && 'Remember', ...(p.remember || [])]);
+}
+
 // Opens the page of a place (or a free page from pages.js by id). Resolves with 'lab' if the reader asks for the lab.
 export function openReading(id, anchor = null) {
   const p = PLACE[id], page = { html: p ? sections(p) : '' };
-  const { root, close } = overlay(p ? p.name : page.title || '', p ? 'Reading wall' : page.sub || 'Deep dive');
+  const { root, close } = overlay(p ? p.name : page.title || '', p ? 'Reading wall' : page.sub || 'Deep dive', p ? () => spoken(p) : null);
   const hasLab = p && p.kind !== 'museum';
   const go = h('button', { class: 'hb-go' }, !p ? 'Back →' : p.kind === 'workshop' ? 'Go to the machines →' : 'Try it in the lab →');
   const art = h('article', { html: p ? frame(p, page.html) : page.html || '' });
@@ -53,9 +62,10 @@ export function openReading(id, anchor = null) {
     requestAnimationFrame(tick);
   });
   root.dataset.ready = '1';
+  if (p && VOICE.auto && isOn()) speak(spoken(p));
   return new Promise((resolve) => {
-    const done = (v) => { alive = false; window.removeEventListener('keydown', key, true); root.remove(); resolve(v); };
-    const key = (e) => { if (e.key === 'Escape') { e.preventDefault(); done(); } };
+    const done = (v) => { alive = false; stopVoice(); window.removeEventListener('keydown', key, true); root.remove(); resolve(v); };
+    const key = (e) => { if (e.key === 'Escape') { e.preventDefault(); done(); } else if (p && listenKey(e)) { e.preventDefault(); listen(() => spoken(p)); } };
     window.addEventListener('keydown', key, true);
     close.onclick = () => done();
     go.onclick = () => done('lab');

@@ -1,5 +1,5 @@
 // A plaque of a museum timeline. The timeline itself lives in the course database (place.timeline).
-import { h } from './shell.js';
+import { h, listenButton, listenKey, listen, stopVoice, speak, script, VOICE, isOn } from './shell.js';
 import { sfx } from '../systems/audio.js';
 import { touch } from '../systems/view.js';
 
@@ -10,27 +10,34 @@ const CSS = `.hb-card{position:relative}.hb-card .tag{margin-right:44px}.hb-card
 .hb-card .who{color:#b8a988;font-size:14px;margin-bottom:12px}.hb-card .tag{float:right;border:1px solid;border-radius:999px;padding:2px 10px;font-size:12px}
 .hb-card .why{border-left:3px solid #ffcf5a;padding:4px 0 4px 12px;margin:14px 0 10px;color:#fff}
 .hb-card .src{font-size:12px;color:#8c7e64}.hb-card nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:14px;color:#b8a988}
-.hb-card button{background:#2a2118;border:1px solid #8a6a3a;color:#efe6d2;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}.hb-card button:disabled{opacity:.3;cursor:default}`;
+.hb-card button{background:#2a2118;border:1px solid #8a6a3a;color:#efe6d2;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}.hb-card button:disabled{opacity:.3;cursor:default}
+.hb-card .hb-say{position:absolute;top:10px;right:56px;height:36px;padding:0 12px;font-size:14px;background:#2a2118;border-color:#8a6a3a;color:#efe6d2}
+.hb-card .hb-say[aria-pressed=true]{background:#ffcf5a;border-color:#ffcf5a;color:#1d1712}.hb-card .hb-say::before{border-left-color:#ffcf5a}.hb-card .hb-say[aria-pressed=true]::before{background:#1d1712}
+.hb-card.has-say .tag{margin-right:150px}`;
 let styled = false;
 
 // Shows one plaque. Arrow keys walk along the corridor; resolves with the index last shown.
 export function openPlaque(list, start, kinds = {}) {
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
   let i = start;
-  const card = h('div', { class: 'hb-card' }), bg = h('div', { class: 'hb-card-bg', role: 'dialog' }, card);
+  // Listen reads the plaque on show; it stops when the learner walks to another plaque or leaves
+  const spoken = () => { const m = list[i]; return script([String(m.year), m.title, m.who, m.text, m.why]); };
+  const say = listenButton(spoken);
+  const card = h('div', { class: `hb-card${say ? ' has-say' : ''}` }), bg = h('div', { class: 'hb-card-bg', role: 'dialog' }, card);
   document.body.append(bg);
   return new Promise((resolve) => {
     const show = () => {
       const m = list[i], [kn, kc] = kinds[m.kind] || ['', '#ffcf5a'];
-      card.replaceChildren(h('button', { class: 'x', 'aria-label': 'Close', onclick: () => done() }, '✕'), kn ? h('span', { class: 'tag', style: `color:${kc}` }, kn) : null, h('div', { class: 'yr' }, String(m.year)), h('h2', {}, m.title), h('div', { class: 'who' }, m.who || ''),
+      card.replaceChildren(h('button', { class: 'x', 'aria-label': 'Close', onclick: () => done() }, '✕'), ...(say ? [say] : []), kn ? h('span', { class: 'tag', style: `color:${kc}` }, kn) : null, h('div', { class: 'yr' }, String(m.year)), h('h2', {}, m.title), h('div', { class: 'who' }, m.who || ''),
         h('div', {}, m.text), m.why ? h('div', { class: 'why' }, m.why) : null, m.src ? h('div', { class: 'src' }, `Source: ${m.src}`) : null,
         h('nav', {}, h('button', { disabled: i === 0 ? '' : null, onclick: () => go(-1) }, '← earlier'), h('span', {}, touch.on ? `${i + 1} of ${list.length}` : `${i + 1} of ${list.length}  ·  Esc to close`), h('button', { disabled: i === list.length - 1 ? '' : null, onclick: () => go(1) }, 'later →')));
     };
-    const go = (d) => { const n = Math.max(0, Math.min(list.length - 1, i + d)); if (n !== i) { i = n; sfx.page(); show(); } };
-    const done = () => { window.removeEventListener('keydown', key, true); bg.remove(); resolve(i); };
-    const key = (e) => { if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); done(); } else if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1); };
+    const go = (d) => { const n = Math.max(0, Math.min(list.length - 1, i + d)); if (n !== i) { i = n; stopVoice(); sfx.page(); show(); if (VOICE.auto && isOn()) speak(spoken()); } };
+    const done = () => { stopVoice(); window.removeEventListener('keydown', key, true); bg.remove(); resolve(i); };
+    const key = (e) => { if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); done(); } else if (listenKey(e)) { e.preventDefault(); listen(spoken); } else if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1); };
     window.addEventListener('keydown', key, true);
     bg.addEventListener('pointerdown', (e) => { if (e.target === bg) done(); });
     show();
+    if (VOICE.auto && isOn()) speak(spoken());
   });
 }

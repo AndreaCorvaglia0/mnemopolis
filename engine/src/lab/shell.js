@@ -6,6 +6,7 @@ import { touch } from '../systems/view.js';
 import { sfx } from '../systems/audio.js';
 import { codePanel } from './code.js';
 import { COURSE } from '../course/course.js';
+import { available, isOn, isSpeaking, onChange, listen, stop as stopVoice, speak, script, VOICE } from '../systems/voice.js';
 
 const CSS = `
 .hb-over{position:fixed;inset:0;z-index:20;background:#0e1116;color:#e6e8ee;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column}
@@ -19,6 +20,13 @@ const CSS = `
 .hb-tab[aria-selected=true]{background:#1d2a33;border-color:#4fd1c5;color:#fff}
 .hb-close{background:#1b212c;border:1px solid #2a3240;color:#e6e8ee;border-radius:8px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
 .hb-close:hover,.hb-tab:hover{border-color:#4fd1c5}
+.hb-say{display:inline-flex;align-items:center;gap:8px;background:#1b212c;border:1px solid #2a3240;color:#e6e8ee;border-radius:8px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
+.hb-say::before{content:'';width:0;height:0;border-left:9px solid #4fd1c5;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.hb-say:hover,.hb-say:focus-visible{border-color:#4fd1c5}
+.hb-say[aria-pressed=true]{background:#4fd1c5;color:#06211f;border-color:#4fd1c5;font-weight:600}
+.hb-say[aria-pressed=true]::before{width:10px;height:10px;border:0;background:#06211f;border-radius:2px;animation:hbpulse 1s ease-in-out infinite alternate}
+.hb-say[hidden]{display:none}
+@keyframes hbpulse{from{opacity:1}to{opacity:.35}}
 .hb-main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 340px}
 .hb-main.wide{grid-template-columns:minmax(0,1fr) 500px}
 .hb-step{display:flex;align-items:center;gap:10px;flex:1;font-size:14px;color:#aeb6c8}.hb-step b{color:#fff}.hb-step .zone{color:#4fd1c5;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
@@ -56,9 +64,9 @@ const CSS = `
 .lab-chip.on{border-color:#7ddc8a;color:#7ddc8a}
 .lab-panel{background:#0e1116;border:1px solid #232a36;border-radius:8px;overflow:auto;min-height:0}
 @keyframes hbin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-@media (max-width:700px){.hb-top{flex-wrap:wrap;gap:8px 12px;padding:10px 12px}.hb-top h1{white-space:normal;flex:1 1 0;min-width:0;font-size:15px}.hb-tabs{order:3;flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.hb-tab{white-space:nowrap;flex:none}.hb-close{padding:8px 14px}}
+@media (max-width:700px){.hb-say{padding:8px 12px}.hb-top.has-say .hb-step{order:3;flex:1 1 100%;justify-content:space-between}.hb-top{flex-wrap:wrap;gap:8px 12px;padding:10px 12px}.hb-top h1{white-space:normal;flex:1 1 0;min-width:0;font-size:15px}.hb-tabs{order:3;flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.hb-tab{white-space:nowrap;flex:none}.hb-close{padding:8px 14px}}
 @media (max-width:900px){.hb-main{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}.lab-side{border-left:0;border-top:1px solid #232a36;max-height:42vh}}
-@media (prefers-reduced-motion:reduce){.lab-take{animation:none}}
+@media (prefers-reduced-motion:reduce){.lab-take,.hb-say[aria-pressed=true]::before{animation:none}}
 .hb-page{flex:1;overflow:auto;scroll-behavior:smooth}
 .hb-page article{max-width:760px;margin:0 auto;padding:28px 22px 80px;font-size:17px;line-height:1.65}
 .hb-page h2{font-size:30px;line-height:1.2;margin:8px 0 6px;text-wrap:balance}
@@ -118,20 +126,47 @@ export function predict(controls, question, options) {
 }
 
 
+// Read aloud (systems/voice.js): a Listen / Stop button for the text that getText() returns, or
+// null when the course has no voice or the browser cannot speak. Hidden while the learner has the
+// voice switched off. `listenKey(e)` is the key that does the same (L).
+export function listenButton(getText, cls = 'hb-say') {
+  if (!available()) return null;
+  style();
+  const b = h('button', { class: cls, type: 'button', 'aria-pressed': 'false', onclick: () => listen(getText) });
+  const draw = () => {
+    if (!b.isConnected && b.dataset.on) { off(); return; }
+    const on = isSpeaking();
+    b.hidden = !isOn();
+    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute('aria-label', on ? 'Stop reading aloud' : 'Read aloud');
+    b.textContent = `${on ? 'Stop' : 'Listen'}${touch.on ? '' : '  (L)'}`;
+  };
+  const off = onChange(draw);
+  requestAnimationFrame(() => { b.dataset.on = '1'; });
+  draw();
+  return b;
+}
+export const listenKey = (e) => (e.key === 'l' || e.key === 'L') && !e.ctrlKey && !e.metaKey && !e.altKey && !/^(INPUT|SELECT|TEXTAREA)$/.test(e.target?.tagName || '') && !e.target?.isContentEditable && isOn();
+export { listen, stopVoice, speak, script, VOICE, isOn };
+
 let styled = false;
-export function overlay(title, sub) {
-  if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
+const style = () => { if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; } };
+export function overlay(title, sub, getText = null) {
+  style();
   const close = h('button', { class: 'hb-close' }, touch.on ? 'Close  ✕' : 'Close  (Esc)');
   const tabs = h('div', { class: 'hb-tabs' });
-  const root = h('div', { class: 'hb-over', role: 'dialog', 'aria-label': title }, h('div', { class: 'hb-top' }, h('h1', { html: `${title} <span>· ${sub}</span>` }), tabs, close));
+  const say = getText ? listenButton(getText) : null;
+  const root = h('div', { class: 'hb-over', role: 'dialog', 'aria-label': title }, h('div', { class: `hb-top${say ? ' has-say' : ''}` }, h('h1', { html: `${title} <span>· ${sub}</span>` }), tabs, say, close));
   document.body.append(root);
-  return { root, tabs, close };
+  return { root, tabs, close, say };
 }
 
 // Opens the lab of one building. Resolves when the player goes back to town.
 export function openLab(id, start = 0) {
   const lab = LABS[id];
-  const { root, tabs, close } = overlay(PLACE_NAME(id), lab.title);
+  // what Listen reads: the station's goal, what to try, and the takeaway once it is shown
+  let speech = () => '';
+  const { root, tabs, close } = overlay(PLACE_NAME(id), lab.title, () => speech());
   const stage = h('div', { class: 'lab-stage' }), side = h('aside', { class: 'lab-side' });
   root.append(h('div', { class: `hb-main${lab.wide ? ' wide' : ''}` }, stage, side));
   let current = start, result;
@@ -140,6 +175,7 @@ export function openLab(id, start = 0) {
   const show = async (i) => {
     const my = ++token, st = lab.stations[i];
     current = i;
+    stopVoice();
     cleanup.forEach((f) => f()); cleanup = [];
     stage.replaceChildren(); side.replaceChildren();
     if (!lab.stepper) [...tabs.children].forEach((b, j) => b.setAttribute('aria-selected', j === i));
@@ -171,12 +207,16 @@ export function openLab(id, start = 0) {
     };
     root.dataset.station = `${id}:${i}`;
     root.dataset.ready = '0';
+    let waiting = !!st.predict;
+    speech = () => script([st.why || st.goal, waiting ? st.predict.q : null, ...(waiting ? st.predict.options.map((o, k) => `${k + 1}: ${o}`) : []), ...st.tries, shown ? st.takeaway : null]);
+    if (VOICE.auto && isOn()) speak(speech());
     // a prediction, when the design asks for one, comes before the learner touches anything
     if (st.predict) {
       const wait = h('div', { class: 'lab-box', style: 'display:grid;place-items:center;color:#8b93a7;font-size:17px' }, 'Make your prediction first. Then the stage opens.');
       stage.append(wait);
       await predict(controls, st.predict.q, st.predict.options);
       if (my !== token) return;
+      waiting = false;
       wait.remove();
     }
     await st.mount(ctx);
@@ -185,9 +225,10 @@ export function openLab(id, start = 0) {
 
   if (!lab.stepper) lab.stations.forEach((st, i) => tabs.append(h('button', { class: 'hb-tab', role: 'tab', onclick: () => show(i) }, h('b', {}, String(i + 1)), st.tab)));
   return new Promise((resolve) => {
-    const done = () => { cleanup.forEach((f) => f()); window.removeEventListener('keydown', key, true); root.remove(); resolve(result); };
+    const done = () => { stopVoice(); cleanup.forEach((f) => f()); window.removeEventListener('keydown', key, true); root.remove(); resolve(result); };
     const key = (e) => {
       if (e.key === 'Escape') { e.preventDefault(); done(); }
+      else if (listenKey(e)) { e.preventDefault(); listen(() => speech()); }
       else if (!lab.stepper && /^[1-9]$/.test(e.key) && +e.key <= lab.stations.length && e.target.tagName !== 'INPUT') show(+e.key - 1);
       else if (lab.stepper && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { const n = current + (e.key === 'ArrowRight' ? 1 : -1); if (n >= 0 && n < lab.stations.length) show(n); }
     };
