@@ -17,6 +17,8 @@ import { townThingAt } from './musings/things.js';
 import { OBSTACLES, REWARDS, canPass } from './obstacles/kinds.js';
 import { CHAIN, rhymeFor } from './secrets/registry.js';
 import { Animals } from './animals/live.js';
+import { STORY } from './story/config.js';
+import { S_WORDS } from './story/words.js';
 
 let C = null; // the context of the town: computed once
 const ctx = () => (C ||= lifeContext(TOWN, dressingPlan()));
@@ -67,7 +69,8 @@ class TownLife {
     return true;
   }
   thinkAnimal(an) {
-    if (an.lantern) { sfx.purr?.(); say(this.scene, deck.draw(`pet:${LANG}`, tr(CHAIN.pet))); return true; }
+    // the story: the cat is the only one in town who never forgot (one line in three)
+    if (an.lantern) { sfx.purr?.(); say(this.scene, STORY.on && (this.pets = (this.pets || 0) + 1) % 3 === 1 ? tr(S_WORDS.cat) : deck.draw(`pet:${LANG}`, tr(CHAIN.pet))); return true; }
     thinkAbout(this.scene, an.kind, { here: this.here() });
     return true;
   }

@@ -5,4 +5,4 @@
 //   sfx.js     the short sound effects and the fire
 //   index.js   the live context, the settings (moods), the game-state hooks
 // This file keeps the names the scenes have always imported.
-export { initAudio, toggleMute, setMusic, setMusicOn, duckMusic, setSea, setFire, sfx, moodSetting, setMood, cycleMood, currentMood } from './sound/index.js';
+export { initAudio, toggleMute, setMusic, setMusicOn, duckMusic, setSea, setFire, setRain, sfx, moodSetting, setMood, cycleMood, currentMood } from './sound/index.js';

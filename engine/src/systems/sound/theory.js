@@ -51,6 +51,34 @@ export const CUES = {
   ending: { notes: [0, 7, 14, 9, 7], gap: 0.7, voice: 'bell', vel: 0.9, cadence: true },
 };
 
+// The story's THEME (docs/STORY.md): one melody, the only tune of the game, built on the motif and
+// snapped to the course's scale. Four phrases: the motif (a question), its answer, a rise, and a
+// close that comes home. Notes as [semitones above the note root, beats].
+//   fragment: the motif alone (a memento)   opening: motif and answer (the arrival, the notebook)
+//   full: all four, then the ending's cadence (the turn, leaving)
+export const THEME_PHRASES = [
+  [[0, 1], [7, 1], [14, 1.5], [9, 2.5]],
+  [[7, 1], [9, 1], [12, 1], [14, 1], [12, 1.5], [7, 2.5]],
+  [[9, 1], [14, 1], [16, 1.5], [14, 1], [12, 1], [9, 2.5]],
+  [[7, 1], [9, 1], [7, 1], [4, 1], [2, 1.5], [0, 3]],
+];
+export const THEME_KINDS = { fragment: 1, opening: 2, full: 4 };
+export const THEME_BEAT = 0.62; // seconds: slow, a music box winding down
+// -> { notes: [{ t, midi, dur, vel }], pads: [{ t, midi, dur }], length, cadence }
+export function themeNotes(piece, kind = 'fragment', beat = THEME_BEAT) {
+  const n = THEME_KINDS[kind] || 1, notes = [], pads = [];
+  let t = 0;
+  THEME_PHRASES.slice(0, n).forEach((ph, i) => {
+    pads.push({ t, midi: piece.root + 12 + snap(i === 2 ? 5 : 0, piece.scale), dur: ph.reduce((a, [, b]) => a + b, 0) * beat + 1.5 });
+    ph.forEach(([semi, beats], k) => {
+      notes.push({ t, midi: piece.noteRoot + snap(semi, piece.scale), dur: beats * beat, vel: k === ph.length - 1 ? 0.8 : k === 0 ? 1 : 0.88 });
+      t += beats * beat;
+    });
+    t += beat * 0.5; // a breath between phrases
+  });
+  return { notes, pads, length: t, cadence: kind === 'full' };
+}
+
 // nearest tone of the scale (ties go down: darker)
 export function snap(semi, scale) {
   const oct = Math.floor(semi / 12), pc = semi - oct * 12;

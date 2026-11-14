@@ -1,3 +1,5 @@
+// The plain town's main path (?story=0: the guide, the League, the champion, the gate); the story's own
+// path is pictured by storyshots.mjs.
 // Pictures of the main path (src/mechanics/quest/): the guide's first speech, the town with the
 // tracker at the start, the mark over the next house, the three tabs of the menu in mid-game (two
 // houses done), a room's tracker, the League refused, the champion stepping aside, the ending card,
@@ -15,6 +17,7 @@ const chrome = process.env.CHROME || ['/usr/bin/google-chrome', '/usr/bin/chromi
 if (!chrome) { console.log('No Chrome: nothing checked on screen.'); process.exit(0); }
 for (const f of existsSync(out) ? readdirSync(out) : []) if (f.endsWith('.png')) rmSync(path.join(out, f));
 mkdirSync(out, { recursive: true });
+process.env.STORY = '0'; // the same plain town in Node as in the page
 const { Q } = await import('../src/mechanics/quest/active.js');
 const { BUILDINGS, GATE } = await import('../src/world/townMap.js');
 const enc = encodeURIComponent, T = "__game.scene.getScene('Town')", UI = "__game.scene.getScene('UI')";
@@ -51,7 +54,7 @@ const steps = [
   'key:Escape', 'wait:1200', `eval:${enc(`'after the ending: '+${UI}.trackFull+' ended='+__hb.state.ended`)}`, 'shot:11-free-roaming',
   `eval:${enc(`(${UI}.showAtlas('journey'),1)`)}`, 'wait:900', 'shot:12-journey-after', 'key:Escape', 'wait:500',
 ];
-const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch' : '?lite&test' } });
+const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch&story=0' : '?lite&test&story=0' } });
 if (process.env.OUT2) for (const f of readdirSync(out)) if (f.endsWith('.png')) copyFileSync(path.join(out, f), path.join(process.env.OUT2, `spine-${PHONE ? 'phone-' : ''}${f}`));
 console.log(`Pictures are in ${out}${process.env.OUT2 ? ` and ${process.env.OUT2}/spine-${PHONE ? 'phone-' : ''}*.png` : ''}.`);
 process.exit(r.status || 0);

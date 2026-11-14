@@ -1,4 +1,6 @@
 // Choosing what the player thinks. Pure functions, tested in Node (tests/life.test.mjs).
+import { STORY } from '../story/config.js';
+import { NUDGES_STORY } from '../story/words.js';
 import { LINES, NUDGES, NEAR } from './lines.js';
 import { HINTS } from '../secrets/registry.js';
 import { fill } from '../config.js';
@@ -31,12 +33,13 @@ export function nudgeKind(step) {
   const k = step.kind;
   if (k === 'visit' || k === 'lab') return step.here ? 'here' : k === 'lab' ? 'lab' : 'visit';
   if (k === 'duel') return step.here ? 'duelHere' : 'duel';
+  if (k === 'memento') return 'memento';
   if (k === 'intro') return step.place ? 'visit' : 'free';
   return k; // league, ending, free
 }
 
 export function nudgeLine(g, noun, lang, pick = (l) => l[0]) {
-  const st = g.step, kind = nudgeKind(st), list = NUDGES[kind][lang] || NUDGES[kind].en;
+  const st = g.step, kind = nudgeKind(st), table = (STORY.on && NUDGES_STORY[kind]) || NUDGES[kind] || NUDGES.free, list = table[lang] || table.en;
   const p = st.place, near = p ? (g.here && p.district?.id === g.here ? NEAR.here : NEAR[p.district?.landmark] || NEAR.here) : null;
   return { target: { kind, step: st, place: p }, text: fill(pick(list), { n: noun, place: p?.name, near: near?.[lang] ?? near?.en, order: p?.order, final: g.finalName, person: st.person }) };
 }

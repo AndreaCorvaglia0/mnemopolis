@@ -4,10 +4,12 @@
 // {count} a number in words. To add a string: both languages (npm test checks).
 import { tr, fill, LANG } from '../config.js';
 import { NEAR } from '../musings/lines.js';
+import { STORY } from '../story/config.js';
+import { Q_STORY } from '../story/words.js';
 
 export { tr, fill, LANG };
 
-export const Q_WORDS = {
+const BASE = {
   // ---- the tracker: one line, top right ----
   tracker: {
     intro: { en: 'Talk to {person}', it: 'Parla con {person}' },
@@ -99,7 +101,6 @@ export const Q_WORDS = {
     numbers: { en: 'Your numbers', it: 'I tuoi numeri' },
     answered: { en: 'questions answered', it: 'domande risposte' },
     accuracy: { en: 'right', it: 'giuste' },
-    sure: { en: 'When you were certain, you were right {r} times out of {t}.', it: 'Quando puntavi sul sicuro, avevi ragione {r} volte su {t}.' },
     time: { en: 'played', it: 'di gioco' },
     left: { en: 'Things in town still a question mark: {n}.', it: 'Cose in città ancora un punto interrogativo: {n}.' },
     leftNone: { en: 'You have seen everything the town had to show. Almost.', it: 'Hai visto tutto quello che la città aveva da mostrare. Quasi.' },
@@ -165,6 +166,17 @@ export const Q_WORDS = {
   },
 };
 
+// The story (docs/STORY.md) changes some of these words: its table (story/words.js Q_STORY) is laid
+// over this one, key by key, when the story is on. Q_BASE is the plain town's.
+const isLeaf = (v) => v && typeof v === 'object' && !Array.isArray(v) && ('en' in v || 'it' in v);
+export function mergeWords(base, over) {
+  const out = { ...base };
+  for (const [k, v] of Object.entries(over || {})) out[k] = isLeaf(v) || !base[k] || typeof v !== 'object' ? v : mergeWords(base[k], v);
+  return out;
+}
+export const Q_BASE = BASE;
+export const Q_WORDS = STORY.on ? mergeWords(BASE, Q_STORY) : BASE;
+
 // "2 and 4", "2, 4 and 5"
 export function listOf(nums, lang = LANG) {
   const a = nums.map(String);
@@ -175,7 +187,7 @@ export const countWord = (n, lang = LANG) => tr(Q_WORDS.numbers, lang)[n] ?? Str
 // The tracker's line for a step (nothing at all is never returned: "free" has its quiet line)
 export function trackerLine(st, lang = LANG) {
   const T = Q_WORDS.tracker, v = { person: st.person, order: st.order, place: st.place?.name, n: st.n, m: st.m };
-  const key = st.kind === 'lab' ? (st.here ? 'labHere' : 'lab') : st.kind === 'duel' ? (st.here ? 'duelHere' : 'duel') : st.kind;
+  const key = st.kind === 'lab' ? (st.here ? 'labHere' : 'lab') : st.kind === 'duel' ? (st.here ? 'duelHere' : 'duel') : st.kind === 'memento' ? (st.here ? 'mementoHere' : 'memento') : st.kind;
   return fill(tr(T[key], lang), v);
 }
 

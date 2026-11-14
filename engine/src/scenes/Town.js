@@ -18,6 +18,8 @@ import { markSeen } from '../mechanics/quest/townmap.js';
 import { NEAR } from '../mechanics/musings/lines.js';
 import { Deck } from '../mechanics/musings/think.js';
 import { w } from '../data/words.js';
+import { STORY } from '../mechanics/story/config.js';
+import { attachStoryTown, storyNpc, storyStart } from '../mechanics/story/town.js';
 
 const talkDeck = new Deck(); // people's hints and congratulations cycle before repeating
 const TOD = {
@@ -54,13 +56,14 @@ export class Town extends Phaser.Scene {
     this.makeNPCs();
     this.makeChampion();
 
-    const p = data.from ? this.exitTile(data.from) : state.pos || START;
+    const p = data.from ? this.exitTile(data.from) : state.pos || storyStart() || START; // the story starts on the quay
     this.player = new Walker(this, 'ch-player', p.x, p.y, p.dir || 'up');
     this.lights.push({ follow: this.player.sprite, r: 30, oy: -10 });
 
     this.makeLighting();
     this.makeAtmosphere();
     this.makeMark();
+    this.story = STORY.on ? attachStoryTown(this) : null; // the story (mechanics/story/): ship, rain, windows, lighthouse
     markSeen(this.player.tx, this.player.ty);
 
     const cam = this.cameras.main;
@@ -97,6 +100,7 @@ export class Town extends Phaser.Scene {
         this.ui.showTitle().then(() => {
           drift.stop();
           if (!this.sys.isActive()) return;
+          if (this.story) { cam.centerOn(this.player.sprite.x, this.player.sprite.y); cam.startFollow(this.player.sprite, true, 0.15, 0.15); this.story.begin(); return; }
           cam.pan(this.player.sprite.x, this.player.sprite.y, 900, 'Sine.easeInOut', false, (c, t) => {
             if (t === 1) {
               cam.startFollow(this.player.sprite, true, 0.15, 0.15);
@@ -107,6 +111,7 @@ export class Town extends Phaser.Scene {
       } else {
         cam.startFollow(this.player.sprite, true, 0.15, 0.15);
         cam.fadeIn(250);
+        if (data.from && this.story) this.time.delayedCall(320, () => this.story?.returned(data.from)); // a window lights up
       }
     };
     if (this.ui.ready) ready(); else this.ui.events.once('ui-ready', ready);
@@ -190,20 +195,20 @@ export class Town extends Phaser.Scene {
       this.add.rectangle(bx + 5, by - 3, b.w * T, 8, 0x10121f, 0.22).setOrigin(0).setDepth(2);
       this.add.image(bx, by, `bld-${b.id}`).setOrigin(0, 1).setDepth(by - 1);
       const lit = this.add.image(bx, by, `bld-${b.id}-lit`).setOrigin(0, 1).setDepth(by - 0.5).setAlpha(this.cur.lit);
-      this.glows.push({ img: lit, kind: 'lit' });
+      this.glows.push({ img: lit, kind: 'lit', b: b.id });
       for (let y = b.y; y < b.y + b.h; y++) for (let x = b.x; x < b.x + b.w; x++) this.block(x, y);
       b.doors.forEach(([dx, dy]) => this.doors.set(`${dx},${dy}`, b));
       for (const [gx, gy, kind] of res.glows) {
         const wx = bx + gx, wy = by - H + gy;
         if (kind === 'lantern') {
-          this.lantern = { x: wx, y: wy };
+          this.lantern = { x: wx, y: wy, b: b.id };
           this.lights.push({ x: wx, y: wy, r: 60 });
-          this.addGlow(wx, wy, 'glow', 2.2, 'lantern');
+          this.addGlow(wx, wy, 'glow', 2.2, 'lantern').b = b.id;
         } else if (kind === 'teal') {
-          this.addGlow(wx, wy, 'glow-teal', 1.1, 'glow');
+          this.addGlow(wx, wy, 'glow-teal', 1.1, 'glow').b = b.id;
           this.lights.push({ x: wx, y: wy, r: 26 });
         } else {
-          this.addGlow(wx, wy, 'glow', 0.45, 'glow');
+          this.addGlow(wx, wy, 'glow', 0.45, 'glow').b = b.id;
           this.lights.push({ x: wx, y: wy, r: 16 });
         }
       }
@@ -212,8 +217,9 @@ export class Town extends Phaser.Scene {
 
   addGlow(x, y, key, scale, kind) {
     const g = this.add.image(x, y, key).setDepth(9001).setBlendMode(Phaser.BlendModes.ADD).setScale(scale).setAlpha(this.cur.glow);
-    this.glows.push({ img: g, kind });
-    return g;
+    const e = { img: g, kind };
+    this.glows.push(e);
+    return e;
   }
 
   makeProps() {
@@ -245,7 +251,8 @@ export class Town extends Phaser.Scene {
   }
 
   makeNPCs() {
-    for (const n of NPCS) {
+    for (const n0 of NPCS) {
+      const n = storyNpc(n0); // the story: the guide is the harbour master, on the quay
       const nw = new Walker(this, `ch-${n.look}`, n.x, n.y, n.dir);
       nw.def = n;
       nw.home = n.dir;
@@ -269,6 +276,7 @@ export class Town extends Phaser.Scene {
     if (this.isGate(x, y)) return { gate: true };
     if (this.blocked[y * MAP_W + x]) return false;
     if (this.npcAt(x, y)) return false;
+    if (this.story?.blocks(x, y)) return false;
     return true;
   };
 
@@ -320,6 +328,7 @@ export class Town extends Phaser.Scene {
   }
 
   updateLighting(time) {
+    this.sizeDark(); // the view can grow when a cinematic moment zooms out (cheap when it did not)
     const c = this.cur;
     const v = this.cameras.main.worldView, ox = Math.floor(v.x) - 8, oy = Math.floor(v.y) - 8, dw = this.dark.width, dh = this.dark.height;
     this.dark.setPosition(ox, oy);
@@ -333,20 +342,23 @@ export class Town extends Phaser.Scene {
         this.dark.erase(this.brush, x - ox, y - oy);
       }
       if (this.beam) {
-        this.beamBrush.setRotation(this.beam.rotation).setAlpha(0.8);
+        this.beamBrush.setRotation(this.beam.rotation).setAlpha(0.8 * (this.story?.litOf(this.lantern.b) ?? 1));
         this.dark.erase(this.beamBrush, this.lantern.x - ox, this.lantern.y - oy);
       }
+      this.story?.light(this.dark, ox, oy); // the lighthouse's beam, once lit
     }
-    for (const g of this.glows) g.img.setAlpha(g.kind === 'lit' ? c.lit : g.kind === 'lantern' ? c.glow * (0.85 + Math.sin(time / 180) * 0.15) : c.glow);
-    if (this.beam) { this.beam.setRotation(time / 1400); this.beam.setAlpha(c.beam); }
+    // the story keeps a house's windows dark until its owner remembers (story/town.js litOf)
+    for (const g of this.glows) g.img.setAlpha((g.kind === 'lit' ? c.lit : g.kind === 'lantern' ? c.glow * (0.85 + Math.sin(time / 180) * 0.15) : c.glow) * (this.story && g.b ? this.story.litOf(g.b) : 1));
+    if (this.beam) { this.beam.setRotation(time / 1400); this.beam.setAlpha(c.beam * (this.story?.litOf(this.lantern.b) ?? 1)); }
     this.sun.setAlpha(c.sun);
     for (const f of this.fireflies) f.setAlpha(c.fire * (0.5 + 0.5 * Math.sin(time / 260 + f.phase)));
     for (const s of this.sparkles) s.setVisible(c.spark > 0.05);
   }
 
   // ---------- play ----------
-  update(time) {
+  update(time, delta) {
     this.updateLighting(time);
+    this.story?.update(time, delta);
     this.life?.update(time);
     const k = this.keys;
     if (this.ui.busy || this.locked || this.player.moving) {
@@ -354,7 +366,7 @@ export class Town extends Phaser.Scene {
       return;
     }
     const [px, py] = this.player.facing(), near = this.npcAt(px, py);
-    this.ui.setPrompt(near ? `Space  ${w('town.talkTo', { name: near.def.name })}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? `Space  ${w('town.readSign')}` : this.objects.get(`${px},${py}`)?.kind === 'monument' ? `Space  ${w('town.landmark')}` : this.isGate(px, py) ? `Space  ${tr(state.passedLeague ? Q_WORDS.townGate.through : Q_WORDS.townGate.prompt)}` : this.life?.prompt(px, py) || null);
+    this.ui.setPrompt(near ? `Space  ${w('town.talkTo', { name: near.def.name })}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? `Space  ${w('town.readSign')}` : this.objects.get(`${px},${py}`)?.kind === 'monument' ? `Space  ${w('town.landmark')}` : this.isGate(px, py) ? `Space  ${tr(state.passedLeague ? Q_WORDS.townGate.through : Q_WORDS.townGate.prompt)}` : this.story?.prompt(px, py) || this.life?.prompt(px, py) || null);
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
     const tapped = !key && this.nav.walking, dir = key || this.nav.next();
@@ -372,6 +384,7 @@ export class Town extends Phaser.Scene {
     state.steps += 1;
     this.showWhere(x, y);
     this.life?.step(x, y);
+    this.story?.step(x, y); // the story: the end of the pier, once the lamp is lit
     markSeen(x, y);
     if (state.steps % 8 === 0) save();
     const g = this.grassIndex.get(`${x},${y}`);
@@ -412,11 +425,13 @@ export class Town extends Phaser.Scene {
     const door = this.doors.get(`${fx},${fy}`);
     if (door) return this.tryDoor(door);
     if (this.isGate(fx, fy)) return this.useGate();
+    if (this.story?.use(fx, fy)) return;
     this.life?.use(fx, fy);
   }
 
   async talk(npc) {
     if (npc.def.id === 'champion') return this.league();
+    if (this.story) return this.story.talk(npc); // people by stage: cold, thawing, warm
     npc.faceToward(this.player.tx, this.player.ty);
     sfx.select();
     // after the ending, everyone congratulates once
@@ -449,6 +464,7 @@ export class Town extends Phaser.Scene {
   // (docs/DESIGN.md asks for a gate on the town's edge; the generator is left alone and the scene
   // plays at the League hall, which every town has on its square.)
   makeChampion() {
+    if (STORY.on) return; // the story has no champion: the lighthouse's keeper waits at the top
     const lg = BUILDINGS.find((b) => b.league);
     if (!lg) return;
     const d = lg.doors[lg.doors.length - 1];
@@ -585,6 +601,7 @@ export class Town extends Phaser.Scene {
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(b.scene || 'Interior', { id: b.id }));
       return;
     }
+    if (b.league && this.story) return this.story.door(b); // the lighthouse (story/lighthouse.js)
     if (b.league) return GATE ? this.ui.say([fill(tr(Q_WORDS.townGate.hall), { person: LEAGUE.host?.name || w('town.judge') })], { name: b.name }) : this.league();
     return this.ui.say(DIALOG.closedHome, { name: b.name });
   }

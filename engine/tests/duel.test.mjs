@@ -1,4 +1,4 @@
-// The duel of eloquence (src/mechanics/duel/): the numbers, tuned by simulation, and the rules
+// The duel (remembering, in the story) (src/mechanics/duel/): the numbers, tuned by simulation, and the rules
 // around them; the tempers and lines in both languages; the feedback from traps; what winning gives.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -7,7 +7,8 @@ import { mkdtempSync, cpSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { HIT, COST, HOUSE, houseBars, leagueBars, startDuel, answer, settle, timeWinner, houseTiers, nextQuestion, leagueQuestions, feedback, missedTopics, duelDelta, simulate, mulberry } from '../src/mechanics/duel/rules.js';
+import { HIT, COST, houseBars, leagueBars, startDuel, answer, settle, timeWinner, houseTiers, nextQuestion, leagueQuestions, feedback, missedTopics, coinsFor, simulate, mulberry } from '../src/mechanics/duel/rules.js';
+import { R_TEMPERS, KEEPER, REMEMBER, REMEMBER_STOCK, REMEMBER_CHALLENGE } from '../src/mechanics/story/words.js';
 import { TEMPERS, CHAMPION, TEMPER_NAMES, temperFor } from '../src/mechanics/duel/tempers.js';
 import { STOCK, WORDS, CHALLENGE } from '../src/mechanics/duel/lines.js';
 import { awardHouse, awardLeague, isFriendly } from '../src/mechanics/duel/prize.js';
@@ -15,87 +16,86 @@ import { QUESTIONS, PLACES, LEAGUE } from '../src/data/content.js';
 
 const LANGS = ['en', 'it'];
 const RUNS = 4000, K = 6; // runs per cell; spread of the learner's knowledge across questions (Beta concentration)
-const rate = (bars, p, policy, seed = 11) => simulate({ bars, p, policy, runs: RUNS, k: K, rnd: mulberry(seed) });
+const rate = (bars, p, seed = 11) => simulate({ bars, p, runs: RUNS, k: K, rnd: mulberry(seed) });
 
 test('the table of simulated win rates (printed) meets the targets', () => {
-  const rows = [], pct = (x) => `${Math.round(x * 100)}%`.padStart(5);
-  const cell = (bars, p, pol) => { const s = rate(bars, p, pol); return s; };
-  const lines = ['', 'Simulated win rates (4000 duels per cell; learners right with probability p, knowledge spread Beta k=6)', '',
-    'duel             turns | p=.4 state | p=.4 calib | p=.6 state | p=.6 calib | p=.6 reckless | p=.7 state | p=.7 calib | p=.9 state | longest'];
-  for (const n of [4, 5, 6]) {
-    const b = houseBars(n), r = {};
-    for (const [k, p, pol] of [['s4', 0.4, 'state'], ['c4', 0.4, 'calibrated'], ['s6', 0.6, 'state'], ['c6', 0.6, 'calibrated'], ['r6', 0.6, 'reckless'], ['s7', 0.7, 'state'], ['c7', 0.7, 'calibrated'], ['s9', 0.9, 'state']]) r[k] = cell(b, p, pol);
+  const pct = (x) => `${Math.round(x * 100)}%`.padStart(5), P = [0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
+  const lines = ['', 'Simulated success rates (4000 per cell; one right = one piece, one wrong = one step; learners right with probability p, spread Beta k=6)', '',
+    `remembering         need/slips | ${P.map((p) => `p=${p}`.padEnd(6)).join(' | ')} | longest`];
+  const rows = [];
+  for (const n of [3, 4, 5, 6]) {
+    const b = houseBars(n), r = Object.fromEntries(P.map((p) => [p, rate(b, p)]));
     const longest = Math.max(...Object.values(r).map((x) => x.longest));
-    lines.push(`house (${n} questions)  ${String(n).padStart(2)} | ${pct(r.s4.win)}      | ${pct(r.c4.win)}      | ${pct(r.s6.win)}      | ${pct(r.c6.win)}      | ${pct(r.r6.win)}         | ${pct(r.s7.win)}      | ${pct(r.c7.win)}      | ${pct(r.s9.win)}      | ${longest}`);
+    lines.push(`house, ${n} questions    ${b.conviction} right / ${b.composure} wrong | ${P.map((p) => pct(r[p].win).padEnd(6)).join(' | ')} | ${longest}`);
     rows.push({ n, r, longest });
   }
   const L = leagueBars(LEAGUE.size, LEAGUE.pass), lp = LEAGUE.pass, lr = {};
-  for (const [k, p, pol] of [['sp', lp, 'state'], ['cp', lp, 'calibrated'], ['sq', lp + 0.15, 'state'], ['cq', lp + 0.15, 'calibrated'], ['rk', lp, 'reckless'], ['sl', lp - 0.15, 'state']]) lr[k] = rate(L, Math.min(0.99, p), pol);
-  lines.push('', `League (${LEAGUE.size} turns, pass ${lp}: conviction ${L.conviction}, composure ${L.composure})`,
-    `  p=pass state ${pct(lr.sp.win)} · calibrated ${pct(lr.cp.win)} · reckless ${pct(lr.rk.win)}   p=pass+.15 state ${pct(lr.sq.win)} · calibrated ${pct(lr.cq.win)}   p=pass-.15 state ${pct(lr.sl.win)}   longest ${Math.max(...Object.values(lr).map((x) => x.longest))}`, '');
+  for (const [k, p] of [['p', lp], ['q', lp + 0.15], ['l', lp - 0.15]]) lr[k] = rate(L, Math.min(0.99, p));
+  lines.push('', `The keeper (${LEAGUE.size} turns, pass ${lp}: ${L.conviction} right before ${L.composure} wrong)`,
+    `  p=pass ${pct(lr.p.win)}   p=pass+.15 ${pct(lr.q.win)}   p=pass-.15 ${pct(lr.l.win)}   longest ${Math.max(...Object.values(lr).map((x) => x.longest))}`, '');
   console.log(lines.join('\n'));
 
   for (const { n, r, longest } of rows) {
-    assert.ok(longest <= Math.min(6, n), `house duel with ${n} questions lasted ${longest} turns`);
-    assert.ok(r.s9.win >= 0.94, `p=.9 nearly always wins (${n}): ${r.s9.win}`);
-    assert.ok(r.c6.win > r.r6.win + 0.08, `a reckless proclaimer at p=.6 does worse than a calibrated one (${n}): ${r.r6.win} vs ${r.c6.win}`);
-    assert.ok(r.c7.win >= 0.7, `p=.7 calibrated usually wins (${n}): ${r.c7.win}`);
-    assert.ok(r.s4.win <= 0.35 && r.c4.win <= 0.38, `p=.4 usually loses (${n}): ${r.s4.win} / ${r.c4.win}`);
+    assert.ok(longest <= Math.min(6, n), `a remembering with ${n} questions lasted ${longest} turns`);
+    assert.ok(r[0.9].win >= 0.9, `p=.9 nearly always succeeds (${n}): ${r[0.9].win}`);
+    if (n >= 5) assert.ok(r[0.7].win >= 0.7, `p=.7 usually succeeds (${n}): ${r[0.7].win}`);
+    if (n >= 4) assert.ok(r[0.4].win <= 0.35, `p=.4 usually does not (${n}): ${r[0.4].win}`);
+    for (let i = 1; i < P.length; i++) assert.ok(r[P[i]].win >= r[P[i - 1]].win - 0.02, 'knowing more never makes it harder');
   }
-  // six questions: the full targets; five and four are what a small pool allows (see ENGINE.md)
   const six = rows.find((x) => x.n === 6).r;
-  assert.ok(six.s7.win >= 0.72 && six.c7.win >= 0.72, `six questions: p=.7 wins about 75%: ${six.s7.win} / ${six.c7.win}`);
-  assert.ok(six.s4.win <= 0.25, `six questions: p=.4 loses at least 75%: ${six.s4.win}`);
-  assert.ok(rows.find((x) => x.n === 5).r.s7.win >= 0.75, 'five questions: p=.7 wins at least 75%');
-  // the League: a coin flip at the pass mark, clearly winnable 15 points above
-  assert.ok(lr.sp.win > 0.4 && lr.sp.win < 0.68, `League at p=pass: ${lr.sp.win}`);
-  assert.ok(lr.sq.win >= 0.8 && lr.cq.win >= 0.78, `League at p=pass+.15: ${lr.sq.win} / ${lr.cq.win}`);
-  assert.ok(lr.sl.win < 0.3, `League at p=pass-.15: ${lr.sl.win}`);
+  assert.ok(six[0.7].win >= 0.7 && six[0.4].win <= 0.2, `six questions: p=.7 ${six[0.7].win}, p=.4 ${six[0.4].win}`);
+  // the keeper: a coin flip at the pass mark, clearly winnable 15 points above
+  assert.ok(lr.p.win > 0.4 && lr.p.win < 0.7, `keeper at p=pass: ${lr.p.win}`);
+  assert.ok(lr.q.win >= 0.8, `keeper at p=pass+.15: ${lr.q.win}`);
+  assert.ok(lr.l.win < 0.3, `keeper at p=pass-.15: ${lr.l.win}`);
   assert.ok(Object.values(lr).every((x) => x.longest <= LEAGUE.size));
 });
 
-test('the League bars agree with the old pass mark when every answer is stated', () => {
+test('the League bars are exactly the pass mark', () => {
   for (const size of [8, 10, 12]) for (const pass of [0.6, 0.7, 0.8]) {
     const need = Math.ceil(size * pass);
     for (let right = 0; right <= size; right++) {
       // the worst order for the player: the wrong answers first
       let d = startDuel(leagueBars(size, pass));
-      for (let i = 0; i < size && !d.over; i++) d = answer(d, i >= size - right, 2);
+      for (let i = 0; i < size && !d.over; i++) d = answer(d, i >= size - right);
       assert.equal(d.won, right >= need, `size ${size} pass ${pass}: ${right} right`);
     }
   }
 });
 
-test('a turn: a right answer lands the tone, a wrong one costs composure, bars never go below zero', () => {
-  let d = startDuel(houseBars(6));
-  d = answer(d, true, 3);
-  assert.equal(d.conviction, HOUSE.conviction - HIT[3]);
-  d = answer(d, false, 1);
-  assert.equal(d.composure, HOUSE.composure - COST[1]);
-  d = answer(d, false, 3);
+test('a turn: a right answer is one piece, a wrong one one step; a remembering is always decided in its turns', () => {
+  assert.equal(HIT, 1); assert.equal(COST, 1);
+  const b = houseBars(6);
+  assert.deepEqual([b.conviction, b.composure, b.turns], [4, 3, 6], 'six questions: four right before three wrong');
+  let d = startDuel(b);
+  d = answer(d, true);
+  assert.equal(d.conviction, b.conviction - 1);
+  d = answer(d, false);
+  assert.equal(d.composure, b.composure - 1);
+  d = answer(answer(d, false), false);
   assert.equal(d.composure, 0);
   assert.equal(d.over, true);
   assert.equal(d.won, false);
-  assert.equal(answer(d, true, 3), d, 'a finished duel does not move');
-  assert.deepEqual([HIT[1] < HIT[2], HIT[2] < HIT[3], COST[1] < COST[2], COST[2] < COST[3]], [true, true, true, true], 'bolder is both stronger and riskier');
+  assert.equal(answer(d, true), d, 'a finished remembering does not move');
+  for (let n = 1; n <= 9; n++) {
+    const hb = houseBars(n);
+    for (let mask = 0; mask < 1 << hb.turns; mask++) {
+      let e = startDuel(hb);
+      for (let i = 0; i < hb.turns && !e.over; i++) e = answer(e, !!(mask & (1 << i)));
+      assert.ok(e.over && e.how !== 'time', `${n} questions: decided by a bar, not by the clock`);
+    }
+  }
 });
 
 test('out of questions: the fuller bar wins; a tie goes to the player only at the pass share', () => {
-  // two questions only: one right (stated), one wrong (stated)
-  let d = startDuel({ conviction: 4, composure: 4, turns: 2, pass: 0.5 });
-  d = answer(answer(d, true, 2), false, 2);
+  let d = startDuel({ conviction: 2, composure: 2, turns: 2, pass: 0.5 });
+  d = answer(answer(d, true), false);
   assert.equal(d.how, 'time');
   assert.equal(d.won, true, 'a tie with half right at pass 0.5');
-  let e = startDuel({ conviction: 4, composure: 4, turns: 2, pass: 2 / 3 });
-  e = answer(answer(e, true, 2), false, 2);
+  let e = startDuel({ conviction: 2, composure: 2, turns: 2, pass: 2 / 3 });
+  e = answer(answer(e, true), false);
   assert.equal(e.won, false, 'a tie with half right at pass 2/3');
-  // fuller bar
-  let f = startDuel({ conviction: 6, composure: 5, turns: 2, pass: 2 / 3 });
-  f = answer(answer(f, true, 1), true, 1);
-  assert.equal(f.how, 'time');
-  assert.equal(f.won, true, 'two murmured rights: their bar is emptier');
-  // the pool runs dry before the turns do
-  const g = settle(answer(startDuel(houseBars(6)), true, 2), 0);
+  const g = settle(answer(startDuel(houseBars(6)), true), 0);
   assert.equal(g.over, true);
   assert.equal(g.won, timeWinner(g));
   assert.equal(timeWinner(startDuel(houseBars(6))), false, 'no answer, no win');
@@ -135,10 +135,10 @@ test('feedback: the trap of the chosen wrong option, or the plain right answer',
   assert.deepEqual(missedTopics([{ topic: 'a' }, { topic: 'b' }, { topic: 'b' }, { topic: 'c' }], [false, false, false, true]), ['b', 'a']);
 });
 
-test('coins in a duel: the reward when right, nothing taken when wrong', () => {
-  assert.equal(duelDelta(15), 15);
-  assert.equal(duelDelta(-30), 0);
-  assert.equal(duelDelta(0), 0);
+test('coins: by the level of the question when right, nothing taken when wrong', () => {
+  assert.equal(coinsFor({ stars: 1 }, true), 10);
+  assert.equal(coinsFor({ stars: 3 }, true), 30);
+  assert.equal(coinsFor({ stars: 3 }, false), 0);
 });
 
 test('winning: badge and key once; a rematch gives no second key; the League once', () => {
@@ -158,7 +158,7 @@ test('winning: badge and key once; a rematch gives no second key; the League onc
   // leaving mid-duel: nothing is awarded (the screen calls the award only at the end of a won duel)
   const left = { stamps: {}, keys: {}, passedLeague: false };
   let d = startDuel(houseBars(5));
-  d = answer(d, true, 2);
+  d = answer(d, true);
   assert.equal(d.over, false);
   assert.deepEqual(left, { stamps: {}, keys: {}, passedLeague: false });
 });
@@ -180,6 +180,13 @@ test('tempers: complete in English and Italian, short, and chosen by seed or by 
     assert.match(TEMPERS[n].it.lose, /chiave/i, `${n}: the Italian losing line hands over the key`);
   }
   check('champion', CHAMPION);
+  // the story's tempers: the same names, both languages, the key handed over when they remember
+  for (const n of TEMPER_NAMES) {
+    assert.ok(R_TEMPERS[n], `story temper ${n}`);
+    check(`story ${n}`, R_TEMPERS[n]);
+    assert.match(R_TEMPERS[n].en.lose, /key/i); assert.match(R_TEMPERS[n].it.lose, /chiave/i);
+  }
+  check('keeper', KEEPER);
   assert.equal(temperFor('sore', () => 0.99), 'sore', 'the course chooses');
   assert.ok(TEMPER_NAMES.includes(temperFor('grumpy', () => 0.5)), 'unknown: one by seed');
   const seeds = new Set([0, 0.2, 0.4, 0.6, 0.8, 0.99].map((r) => temperFor(undefined, () => r)));
@@ -189,7 +196,10 @@ test('tempers: complete in English and Italian, short, and chosen by seed or by 
 test('lines and words: both languages, the same keys, short stock phrases', () => {
   for (const [k, v] of Object.entries(STOCK)) for (const l of LANGS) { assert.ok(v[l].length >= 4, `${k} ${l}`); assert.equal(new Set(v[l]).size, v[l].length); for (const s of v[l]) assert.ok(s.length <= 32, s); }
   assert.deepEqual(Object.keys(WORDS.it).sort(), Object.keys(WORDS.en).sort());
-  for (const l of LANGS) { assert.equal(WORDS[l].tones.length, 3); assert.equal(WORDS[l].toneHelp.length, 3); assert.ok(CHALLENGE[l].first && CHALLENGE[l].friendly); }
+  for (const l of LANGS) { assert.ok(!('tones' in WORDS[l]) && !/how sure|quanto sei sicur/i.test(JSON.stringify(WORDS[l])), 'no tone, no "how sure"'); assert.ok(CHALLENGE[l].first && CHALLENGE[l].friendly); assert.ok(REMEMBER_CHALLENGE[l].first.includes('{name}')); }
+  assert.deepEqual(Object.keys(REMEMBER.it).sort(), Object.keys(REMEMBER.en).sort());
+  assert.deepEqual(Object.keys(REMEMBER.en).sort(), Object.keys(WORDS.en).filter((k) => !['wrongWas', 'fails', 'nextKey'].includes(k)).sort().filter((k) => k in REMEMBER.en));
+  for (const [k, v] of Object.entries(REMEMBER_STOCK)) for (const l of LANGS) { assert.ok(v[l].length >= 4, `${k} ${l}`); for (const s of v[l]) assert.ok(s.length <= 32, s); }
 });
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');

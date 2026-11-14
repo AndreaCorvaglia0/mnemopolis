@@ -18,6 +18,7 @@
 | `node scripts/playcheck.mjs [course folder]` | The `/play/` page end to end over http: files in, no problem reported, the game starts in the page; a broken course and a foreign import are refused in plain words. |
 | `npm run shots` | Opens the build in headless Chrome and saves a picture of the town, of a real walk into a house and back, of every room, station and page, to `shots/`; then the duels (`scripts/duelshots.mjs`: a house duel at the start, after a hit, after a miss, won, a friendly rematch, lost; the League mid-way, lost and won) into `shots/duel/`, copied to `/tmp/duel-*.png`. Needs Chrome or Chromium (`CHROME=/path` if it is not found). |
 | `npm run shots` (end) | Also runs `scripts/spineshots.mjs`: the main path in pictures (the guide's first speech, the tracker at the start, the mark over the next house, the three tabs of the menu in mid-game, a room's tracker, the League refused, the champion stepping aside, the ending card, free roaming), into `shots/spine*/`, copied to `/tmp/spine-*.png` (`OUT2=/dir` to change). |
+| `npm run shots:story` | The story in pictures (see "The story"): the arrival played for real, then every moment up to the ending card, desktop and phone, into `/tmp/story-*.png` and `/tmp/story-phone-*.png`. |
 | `npm run shots:life` | Pictures of the ambient-life layer (thoughts outdoors and indoors, a double click, an animal, a secret, an obstacle tried and opened, a locked door, a painting, the discoveries), desktop then phone, into `shots/life*/` (`OUT2=/dir` copies them). Also run at the end of `shots`. |
 | `npm run shots:locks` | Pictures of locks and upper floors: a room with stairs, the stairs refused without the key, the upper floor, each close-up before typing, misses with the thought, each lock opened, the discoveries page, the advanced station, the way back down; desktop then phone (with the phone keyboard open), into `shots/locks*/`, copied to `/tmp/locks-*.png`. |
 | `npm run play` | A real play-through (`scripts/playthrough.mjs`): a bot plays the built game from the title to the ending through the real screens, as a player would (taps or clicks on tiles and buttons, keys, drags on the lab pictures, typing into locks; it knows the right answers from the course). It checks the tracker at every step against its own plan, loses one duel on purpose and takes the rematch, opens the menu at the start, in mid-game and at the end, answers one tall-grass question, visits an extra house, types one wrong answer into every lock first, walks through the town gate. Pictures `/tmp/play-*.png`, log `/tmp/play-log.txt` (`OUT=` to change). It only reads the state (`__hb`, the scenes), except that every run starts from a fresh save. Exit code 1 on any problem. About 8 minutes of headless Chrome for the example course. |
@@ -67,8 +68,9 @@ Course work happens in `courses/<slug>/`, not here. See `WORLD.md` for what a cu
   with the host of that house is won; `state.passedLeague` when the League's duel is won (see
   "Duels"); `state.ended` once the ending card was seen, `state.seen[id]` for houses walked near
   (the town map), `state.played` for seconds played. `state.insight` holds the points, shown as
-  coins (certainty-based: sure and right earns more, sure and wrong costs, except in duels, where a
-  wrong answer costs composure and no points); nothing spends them yet.
+  coins (10 per level of the question for a right answer, nothing lost for a wrong one; no
+  confidence bet); nothing spends them yet. `state.story` holds the story's own progress (see "The
+  story").
 - Every hint of what to do next comes from one pure function, `nextStep` (next section).
 
 ## Pitfalls already paid for
@@ -311,6 +313,149 @@ gate) the ending card; afterwards "the next town is not built yet", or the `next
 hall's door carries a note that sends the player to the gate. A town without a gate plays the
 ending at the League hall as before.
 
+## The story
+
+The fiction of `docs/STORY.md`, on by default: `"story": false` in `world.json` gives the plain
+town (the guide, the League hall, the champion at the gate), `?story=0` in the address does the same
+for a test, `STORY=0` in the environment for scripts in Node. Everything is in
+`src/mechanics/story/`; the rest of the engine has small hooks (marked "the story" in the code).
+
+```
+src/mechanics/story/
+  config.js    STORY (on, ship, word), now() for the fog (?days=N), ?arrived (skip the arrival)
+  logic.js     pure: stage and rain from progress, the order of the mementos, the pages, the word
+               at the lighthouse door, the fog's schedule, the notebook's log (notesOf), which
+               ending plays (endingOf) (tests/story.test.mjs)
+  words.js     every word of the story, English and Italian: S_WORDS (captions, people, mementos,
+               notebook (nb), lighthouse, lamp, register, loop, fog), Q_STORY (laid over the main path's words),
+               REMEMBER (the duel's screen), R_TEMPERS and KEEPER (the owners' lines)
+  cinema.js    the cinematic moments: bars, caption, camera, skip
+  paint.js     the illustrated register's toolkit: gradients, glow, soft blur, grain, vignette, rain,
+               a handwriting stack, paper; view() runs a painter full screen (DPR-aware, slow push-in)
+  scenes/      the painters: ship.js (the steamship), harbour.js (the quay, the ship, the headland),
+               objects.js (each memento and the notebook on a table), ending.js (the lamp room, the
+               register, the pages on the quay, the gangway), index.js (by name)
+  opening.js   the arrival: the harbour painted, the purser's register, the title
+  finale.js    the lamp and the register (playLamp), the loop (playEnding, ENDINGS by endingOf)
+  art.js       the pixel register: the steamship and the lighthouse in town, rain tiles, the notebook on the quay
+  town.js      the story in the town: the ship at the quay, the notebook, the harbour master, rain,
+               windows, people by stage, the lamp; begin() and returned(id) play the outdoor moments
+  stages.js    how much the town remembers; greetings and curt answers by stage
+  weather.js   the rain overlay and its place sound
+  remember.js  the moment of finding a memento (its illustrated close-up, the page restored)
+  mementos.js  the older pixel close-ups of the mementos (kept, unused by the story's moments)
+  notebook.js  the menu as the notebook: Journey, Map, Clues on paper, in hand (openNotebook)
+  lighthouse.js the door (the word), the climb, the keeper
+  room.js      in a house: the memento upstairs, the owner when the fog returns, keys of old saves
+  fog.js       the returning fog, kept in the save
+  debug.js     __hb.story: jump between moments (the pictures of npm run shots:story)
+```
+
+**The harbour.** The road out of town that the generator lays for the gate (`world/townMap.js`)
+ends, in the story, at a harbour inlet at the edge of the map (`HARBOUR`): a cobbled quay two tiles
+deep, a pier of planks, water to the edge with a strip of sand, and the steamship moored at the
+pier's end (11 x 7 tiles, its waterline on the water). The map grows by 15 tiles on that side.
+Where no straight road leaves the square (four districts close around it), a road leaves from the
+end of a district's lane instead, the one nearest the square first; when a road would change any
+door's walking distance the next one is tried. The quay is a dead end beyond the town's content:
+every door keeps its distance (the generator checks, the stress test checks over hundreds of towns,
+200 of 200 got their quay); the dressing keeps off it. A new game starts on the quay (`HARBOUR.start`),
+the guide stands there as the harbour master; the square, `START` and every check about the town
+are unchanged. The gate is not built in the story: the ending is the lighthouse.
+
+**The lighthouse** is the League hall's building (same footprint, same door tiles), painted by
+`art.js` `paintLighthouse` as a keeper's cottage with a banded tower about nine tiles tall, dark
+glass in the lantern room; its lit layer (lamp and windows) stays off until the end. The door, before
+every core memento is found, only gives the thought "Locked from the inside."; then a first-person
+close-up of the locks' door with the hatch (`riddles/closeup.js`, with three small options: a
+heading, a line to ask, a thought of the caller's own, close on open) wants the word: `doorWord`
+of the course's big idea (its longest uncommon word) or `"story": { "word" }`, matched like any lock's
+text answer; after two misses the character remembers the word. Up the stair the keeper: the League's
+duel with the story's skin, darker.
+
+**Windows.** `Town.updateLighting` multiplies a building's lit layer and its glows by
+`story.litOf(id)`: 0 until its owner remembers (the badge; a house without questions: its lab done),
+1 after, 0.3 when the fog has returned; the guide's house lights at the warm stage, the lighthouse at
+the end. Back from a house just remembered, `returned(id)` lights its window in a short cinematic.
+
+**Rain** is two tiles of streaks scrolled over the view above the darkness (no sprite per drop),
+and a place sound (`setRain`, a band of noise under 3.4 kHz) of the same amount: `1 − 0.75 ×` the
+share of core houses remembered, 0 after the ending, gliding.
+
+**Stages.** cold (under 30% of the core remembered), thawing, warm (75% and over, and after the
+ending): what people say first (`S_WORDS.greet`), and what they answer to "What should I do now?":
+curtly when cold ("Look in that notebook of yours"; the tracker and the notebook always have the
+way), from `nextStep` otherwise. The harbour master always gives the way, grudgingly.
+
+**The path.** `questOf({ mementos })` adds one step after the remembering of a core house: `memento`
+("House 3: look upstairs"), done when `state.story.mementos[id]` is set. Every core house drawn as a
+composed room gets an upstairs (`attic: true` on the place, `floors/plan.js`), even with no advanced
+material; a workshop or a museum has none, and its owner hands the memento over when they remember.
+The League opens when every core house is remembered and its memento found.
+
+**Mementos** (`logic.js` `mementoOrder`): page, ticket, flower, photograph, drawing, letter, watch,
+card, escalating; with fewer houses always the first, the photograph and the card, then the ticket,
+the watch, the letter, the drawing, the flower as houses allow; more houses than kinds: more pages.
+Each close-up is an illustrated painting (`scenes/objects.js`) on a table under a lamp: the
+photograph puts a house of the town's shape in sepia with four people and one face violently
+scratched out (the first thing one sees); the child's drawing is in crayon; the watch stops at the hour of the
+arrival; the ticket and the flower carry the arrival's date in another year; the card carries the
+name given to the purser as real text. Finding one restores a page of the notebook: the concept's
+`idea`. The last page plays the pages in order, the big idea, and the lighthouse with its word; back
+in town the camera lifts to the dark tower.
+
+**The lamp and the register** (`finale.js` `playLamp`, after the keeper is won): the lamp room
+painted, the keeper hooded (never a face), the lamp lit; two lines; the arrivals register on the
+desk (`registerPainter`: the course's town name, the player's name handwritten down the page with
+dates going back, the last line empty); "That is my signature." Then in town: the lamp lights and
+its beam sweeps, the rain stops, every window lit; people say goodbye, the harbour master "Same
+berth as always.", the tracker says the ship.
+
+**The loop** (`playEnding`, at "Board the ship" or the pier's end): `endingOf(state)` picks the
+sequence in `ENDINGS`; today always `loop`: the pages scattered on the quay and the first stretch
+of the lane (a figure stooping, the harbour master pocketing one), the cover with one more tally
+mark, the purser at the gangway ("Another round, <name>?"), the ship's lights going out as at the
+arrival, then the first shot again (cross-dissolve), the rain beginning, the first caption, the
+title, the ending card ("Another round.", "What you carry this time", the numbers), "Back to town".
+The save is kept (`state.story.rounds` counts the rounds). Cuts are cross-dissolves (`cut`).
+
+**The notebook (the menu)** (`notebook.js`): `quest/menu.js` `openMenu` hands over to
+`openNotebook` when the story is on. A dark backdrop, a leather cover, paper pages (a fibre tile
+painted once per session, ruled lines in CSS): a spread on a desktop, one page and "Next page" on a
+phone (under 760 px). Ribbon tabs for the sections, plain Settings and Close buttons in the corner
+(44 px targets). Handwriting: system handwriting faces upright where present, else an italic serif
+(`font-synthesis: none`), 17 px and over. The Journey's latest entry comes from `nextStep` in the
+character's words (`S_WORDS.nb.next`); the Map is drawn on a canvas from the town data (lane
+edges in jittered ink, water hatched, houses outlined, the ship sketched, numbers as buttons); the
+Clues' log is `notesOf(state, coreProgress)`, derived from the state (old saves show it too); the
+mementos are thumbnails painted once from their close-up painters and cropped.
+
+**After the ending** (`fog.js`, `logic.js`): per house `{ at, n }` in `state.story.fog`, started at
+the ending (later for houses remembered afterwards). After 1, 3, 7, 16 days (then 16) the house's
+windows dim, the notebook marks it "fog again", and its owner says "Do I know you?": two right
+answers in a short remembering (`fogDuel`, friendly questions) bring it back and lengthen the next
+interval. The tracker never nags about it. `?days=3` in the address moves the clock.
+
+**Sound.** `sfx.theme('fragment' | 'opening' | 'full')` (see "Sound"), `sfx.horn()`, `setRain(v)`.
+
+**State.** `state.story`: `name`, `arrived`, `arrivedAt`, `notebook`, `mementos` (id -> kind),
+`lit` (windows shown lighting), `understood` (1: the lighthouse pan pending; 2: done), `door`,
+`turned`, `left`, `rounds`, `fog`. Old saves load: a house with a badge and no key gets the key in the story.
+
+**Pictures**: `npm run shots:story` (`scripts/storyshots.mjs`) plays the arrival for real, then
+jumps with `__hb.story` (`at(n)`, `memento(id)`, `window(id)`, `understood()`, `door()`, `lamp()`, `ending()`, `paint(name, params)`,
+`fog(id)`, `where(what)`), desktop 1440 x 800 then a phone 390 x 844, into `/tmp/story-*.png` and
+`/tmp/story-phone-*.png`; the notebook's three sections at the start, mid-game and after the
+ending are `story-nb-*.png`. One painter alone: `node scripts/paintshot.mjs harbour '{"dock":1}'
+/tmp/x.png [w h dpr]`. The older picture scripts add `?arrived` (the story on, the arrival
+skipped), except `spineshots.mjs` and the play-through bot (`npm run play`), which show and play the
+plain town's main path (`?story=0`).
+
+**Adding**: a caption or a line in `words.js` (both languages; `npm test` checks the placeholders,
+one sentence per caption, no exclamation marks outside the owners' comedy); a memento: a kind in
+`MEMENTO_ORDER` and `ADD` (`logic.js`), its painter in `mementos.js`, its title and thought in
+`S_WORDS.mementos`.
+
 ## Ambient life
 
 An optional layer of atmosphere in `src/mechanics/` (the place for game dynamics: they are a
@@ -546,9 +691,11 @@ taller, so there are no dark bands. The password field shows its letters.
 
 ## Duels
 
-The house quiz and the League are a **duel of eloquence**: a skin over the course's questions
-(`docs/DESIGN.md` is the specification; the reasons are in the wiki). Everything is in
-`src/mechanics/duel/`:
+The house quiz and the League are a **duel**: a skin over the course's questions (`docs/DESIGN.md`
+is the specification). In the story (`docs/STORY.md`, on by default) the same duel is **remembering**:
+the owner's bar is MEMORY, which fills, the player's is CLARITY, the League's champion is the keeper
+of the lighthouse; in the plain town it is a duel of eloquence (conviction and composure). Everything
+is in `src/mechanics/duel/` (the story's words and tempers are in `src/mechanics/story/words.js`):
 
 ```
 rules.js    the rules as pure functions (Node): bars, a turn, the end, which questions, feedback,
@@ -556,77 +703,64 @@ rules.js    the rules as pure functions (Node): bars, a turn, the end, which que
 tempers.js  the registry of tempers (no imports: the course validator reads the names)
 lines.js    stock phrases of debating and every word of the screen, English and Italian
 prize.js    what winning gives, on the state object: badge, key, League (each once)
-screen.js   the duel screen (HTML over the game, opened with ui.page), style.js its look
-index.js    houseDuel(ui, id) (Interior.quizSeries) and leagueDuel(ui) (UI.league)
+screen.js   the duel screen (HTML over the game, opened with ui.page), style.js its look;
+            cfg.skin (the story) swaps the words, fills the opponent's bar, darkens the keeper's room
+index.js    houseDuel(ui, id) (Interior.quizSeries), leagueDuel(ui) (UI.league), fogDuel (the story)
 ```
 
 ### Rules
 
-| | House duel | League |
+| | House | League |
 |---|---|---|
-| Questions | the concept's own; levels 1 and 2 first, level 3 only to fill; a friendly rematch (house already won) puts levels 2 and 3 first | `finalCheck.size` of levels 2 and 3, one from each house per round, shuffled |
+| Questions | the concept's own; levels 1 and 2 first, level 3 only to fill; a friendly rematch (house already won) puts levels 2 and 3 first | `finalCheck.size` of levels 2 and 3, one from each core house per round, shuffled |
 | Turns | at most `min(6, questions of the concept)` | `finalCheck.size` |
-| Opponent's conviction | 7 | `2 × ceil(size × pass)` (12 for 8 at 0.7) |
-| Player's composure | 5 | `2 × (size − need) + 1` (5 for 8 at 0.7) |
+| Right answers needed (the opponent's bar) | `ceil(0.6 × turns)`: 4 of 6, 3 of 5, 3 of 4 | `ceil(size × pass)` (6 for 8 at 0.7) |
+| Wrong answers that end it (the player's bar) | `turns − need + 1`: 3, 3, 2 | `size − need + 1` (3 for 8 at 0.7) |
 
-Each turn the player picks a **tone** (the confidence bet), preselected at *State* every turn, and
-taps an answer: one tap commits both. Right: the opponent loses 1, 2 or 3 (murmur, state,
-proclaim). Wrong: the player loses 1, 2 or 4 composure. A bar at zero ends the duel. When the
-turns (or the questions) run out, the fuller bar, as a share of its start, wins; on an exact tie
-the player wins only with at least the pass share right (2/3 in a house, `pass` in the League).
+The learner just answers: no tone, no bet, no "how sure are you" (removed from the whole game,
+the tall grass included). One right answer moves the opponent's bar by one (in the story: one
+piece of memory comes back); one wrong answer costs one step of the player's. A bar done ends it,
+so a house is always decided within its turns; the League is exactly the old pass mark (tested
+for sizes 8 to 12). When the questions run out first, the fuller bar, as a share of its start,
+wins; on an exact tie the player wins only with at least the pass share right.
 
-With every answer *stated*, a house duel is "three right before three wrong", and the League is
-exactly the old pass mark: `ceil(size × pass)` right wins, one slip more loses (tested for sizes
-8 to 12). Proclaiming wins sooner and risks more; murmuring is safe and slow, and over a short
-duel the slow side tends to run out of turns.
+**Coins**: 10 per level of the question for a right answer (`scoreAnswer`, which also keeps the
+question history), nothing for a wrong one, in the duel and in the tall grass. **Losing** takes
+nothing; Rematch ("Try again") draws other questions at once (`pickQuestion` prefers unseen, then
+missed ones). **Step back** (Esc) leaves at any time; only coins already earned stay. An old save
+with the confidence bet's statistics (`bets`) loads; they are ignored.
 
-**Coins in a duel**: a right answer earns the usual certainty-based reward (`scoreAnswer`, which
-also keeps the question history and the bet statistics); a wrong answer takes no coins, whatever
-the tone. Its cost is composure: charging twice for the same mistake would contradict "mistakes
-cost nothing but a turn". **Losing** takes nothing; Rematch draws other questions at once
-(`pickQuestion` prefers unseen, then missed ones). **Step back** (Esc) leaves at any time; only
-coins already earned stay.
-
-**Why the tone comes before the answer, preselected**: one tap per turn in the common case, and
-the stake is visible before committing: the striped part of each bar is what the chosen tone puts
-at risk (theirs if right, yours if wrong). Answer first, then tone (the old quiz) costs two taps
-every turn and shows the stake only once the answer is chosen. Resetting to *State* every turn keeps a bold tone a decision about
-this question, not a leftover.
-
-### Simulated win rates
+### Simulated success rates
 
 Simulated learners are right on a question with probability `p_q`, drawn around their mean `p`
-(Beta, concentration 6: some questions known well, some not). *state* always states; *calibrated*
-feels `p_q` and proclaims above 0.75, murmurs below 0.45; *reckless* always proclaims.
-`npm test` prints this table (4000 duels per cell):
+(Beta, concentration 6: some questions known well, some not). `npm test` prints this table (4000
+per cell):
 
-| Duel | p=.4 state | p=.4 calibrated | p=.6 state | p=.6 calibrated | p=.6 reckless | p=.7 state | p=.7 calibrated | p=.9 state |
+| Remembering | need / wrong | p=.4 | p=.5 | p=.6 | p=.7 | p=.8 | p=.9 | longest |
 |---|---|---|---|---|---|---|---|---|
-| house, 4 questions | 17% | 33% | 47% | 58% | 46% | 65% | 73% | 95% |
-| house, 5 questions | 31% | 28% | 67% | 61% | 46% | 84% | 76% | 99% |
-| house, 6 questions | 18% | 28% | 54% | 61% | 46% | 75% | 76% | 98% |
+| house, 3 questions | 2 / 2 | 35% | 50% | 63% | 78% | 90% | 97% | 3 |
+| house, 4 questions | 3 / 2 | 17% | 31% | 46% | 66% | 82% | 95% | 4 |
+| house, 5 questions | 3 / 3 | 32% | 50% | 67% | 84% | 94% | 99% | 5 |
+| house, 6 questions | 4 / 3 | 18% | 34% | 54% | 75% | 90% | 98% | 6 |
 
-League (8 turns, pass 0.7): at p = pass about a coin flip (state 56%, calibrated 57%, reckless
-54%); at p = pass + 0.15, 90% (state) and 83% (calibrated); at p = pass − 0.15, 23%. No duel ever
-lasted more than its turns (6 in a house, 8 in this League).
+The keeper (8 turns, pass 0.7: 6 right before 3 wrong): at p = pass 56%, at p = pass + 0.15 90%,
+at p = pass − 0.15 23%. Nothing ever lasted more than its turns.
 
-Reading it: with six questions the targets hold (p = 0.7 wins about 75%, p = 0.4 loses over 80%
-when stating). Fewer questions discriminate less, and no rule can fix that: with four questions
-a learner at 0.7 who always states wins 65% (73% calibrated); with five, a learner at 0.4 still
-wins about 30%. A calibrated learner at 0.4 wins more often than one who always states because
-they proclaim what they do know well: that is the bet doing its job. Recklessness never pays: at
-0.6 the reckless player wins 46%, the calibrated one about 60%. Concepts with five or six
-questions make the fairest duels (`skills/knowledge-base/references/6-questions.md`).
+Reading it: with six questions the targets hold (p = 0.7 succeeds three times in four, p = 0.4
+fails more than four times in five). Fewer questions discriminate less, and no rule can fix that:
+with four, a learner at 0.7 succeeds about two times in three; with five or three, one at 0.4 still
+succeeds about a third of the time. Concepts with five or six questions make the fairest
+rememberings (`skills/knowledge-base/references/6-questions.md`).
 
 ### Feedback
 
-After a wrong answer the rebuttal shows the chosen option and the right one, side by side, then
-"Why <chosen> tempts:" with the option's `trap`, then the right answer with the question's `why`.
-Without a trap: the right answer and `why` only. After a right answer: `why`, never just
-"correct". In the League the house of the question is named only after answering (recognising
-which idea a question needs is part of the League). A lost duel ends with what to look at again:
-the concept, the reading wall here and the lab (house duel, with a Read the wall button), or the
-houses of the missed questions by number and name (League); then Rematch and Not now.
+After a wrong answer the screen shows the chosen option and the right one, then "Why <chosen>
+tempts:" (in the story: "The false memory, <chosen>:") with the option's `trap`, then the right answer
+with the question's `why`; the owner defends the false memory in character. Without a trap: the
+right answer and `why` only. After a right answer: `why`, never just "correct". In the League the
+house of the question is named only after answering. A lost duel ends with what to look at again:
+the concept, the reading wall here and the lab (house, with a Read the wall button), or the houses
+of the missed questions by number and name (League); then Try again and Not now.
 
 ### Tempers and lines
 
@@ -634,28 +768,29 @@ A house owner's temper comes from `expert.temper` in `course.json` when it names
 validator warns about unknown names), otherwise from `seeded('<id>:temper')`. Tempers:
 smitten, sore (sore loser), admirer, letwin (insists they let you win), theatrical, absent
 (absent-minded), craftsman (proud craftsman). The League's champion has its own, grander temper
-(`CHAMPION`), and steps aside when beaten: the duel sets `state.passedLeague` and returns.
+(`CHAMPION`), and steps aside when beaten; in the story, the keeper (`KEEPER`).
 
 - **A temper**: one more entry in `TEMPERS` with `open`, `hit` (2+), `score` (2+), `lose` (hands
   over the key), `again` (a friendly rematch lost), `win` (in character; the screen adds what to
-  review), in `en` and `it`. Add its name to the description of `expert.temper` in
-  `course.schema.json`. `npm test` checks both languages, lengths, and that `lose` mentions the key.
-- **A stock phrase**: append it to both languages in `STOCK` (`lines.js`). Short; about debating,
-  never about the learner. Lines cycle without immediate repeats (`Deck`).
-- **Another language**: one more key in `TEMPERS[*]`, `CHAMPION`, `STOCK`, `WORDS`, `CHALLENGE`.
+  review), in `en` and `it`, and the same in `R_TEMPERS` (story/words.js: opening confused, pieces
+  coming back, the false memory defended, remembering and handing over the key). Add its name to
+  the description of `expert.temper` in `course.schema.json`. `npm test` checks both languages,
+  lengths, and that `lose` mentions the key.
+- **A stock phrase**: append it to both languages in `STOCK` (`lines.js`) or `REMEMBER_STOCK`.
+- **Another language**: one more key in `TEMPERS[*]`, `CHAMPION`, `STOCK`, `WORDS`, `CHALLENGE`,
+  and in the story's tables.
 
 ### The screen
 
 Readable first: the question is the largest text (20 to 22 px), answers are 52 px buttons 8 px
-apart, the tone is three buttons with what each lands and risks, the turn counter sits between
-the fighters, Step back is always in the header. The two characters are the game's own painters
-(side frame, scaled up, crisp); the opponent is the host or expert with their look, the League's
-the champion. Bars shake and drop when hit; with `prefers-reduced-motion` nothing moves. Sounds
-are the soft existing ones (`confirm`, `bump`, `reveal`) and follow the sound switches; questions
-are not read aloud.
+apart, the turn counter sits between the fighters, Step back is always in the header. The two
+characters are the game's own painters (side frame, scaled up, crisp); the opponent is the host or
+expert with their look, the League's the champion (the hooded keeper in the story). Bars shake and
+move when hit; with `prefers-reduced-motion` nothing moves. Sounds are the soft existing ones
+(`confirm`, `bump`, `reveal`) and follow the sound switches; questions are not read aloud.
 
-Keys: 1 to 4 answer; arrows up and down move between answers and Enter answers; Q, W, E (or
-arrows left and right) pick the tone; Enter or Space for Next; Esc steps back.
+Keys: 1 to 4 answer; arrows up and down move between answers and Enter answers; Enter or Space for
+Next; Esc steps back.
 
 ## The lab kit and ready-made labs
 
@@ -763,6 +898,16 @@ keeps a question open until the ending.
   four quick plucks rising; glass with an echo; plucks over a low note; and at the ending the one
   resolution of the game: the motif, then IV to I in major, warm and short). It is not ducked.
   With music off the old chime says it instead.
+- **The theme** (the story): one melody, the only tune of the game, built on the motif and snapped
+  to the course's scale (`theory.js` `themeNotes`): four phrases (the motif, its answer, a rise, a
+  close that comes home on the root), on a music-box voice (`box`) over a soft triangle bed, at
+  `LEVELS.theme` 0.1 (a little above the sparse notes, 0.08). `sfx.theme('fragment')` (the motif,
+  about 4 s: a memento, a window), `'opening'` (two phrases: the arrival, the notebook), `'full'`
+  (all four, then the ending's cadence: the first shot again, at the loop). Never over a lab, a page or a duel (it
+  returns 0 then); without music, the old chime. `sfx.horn()`: the ship's horn, the foghorn's saws,
+  near. Tested for determinism, the motif first, every note in the scale, lengths and levels.
+- **Rain** (the story): a place sound, a band of noise low-passed at 3.4 kHz with a slow swell,
+  `setRain(0..1)` from `story/weather.js`, heard outdoors only.
 - **Place sounds**, under the music and quiet: water (low-passed noise breathing slowly) near the
   river, the ponds and the sea; wind (band-passed noise, its band drifting) in the groves;
   a fountain near a fountain monument; crickets at night in the grass; a few birds by day. Three

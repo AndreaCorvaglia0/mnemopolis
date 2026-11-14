@@ -19,6 +19,8 @@
 //              questions): visited, and every lab station finished if it has a lab. A badge always counts, whatever the house.
 //   steps      intro -> for each core house in path order: visit -> lab (n/m) -> duel
 //              -> league -> ending -> free (after state.ended)
+//   story      with `mementos` (docs/STORY.md: a set of house ids), a house is done only once its
+//              memento is found upstairs (state.story.mementos[id]); its step comes after the duel
 export const MIN_DUEL_QUESTIONS = 2;
 
 export const isCore = (p) => p.core !== false;
@@ -27,7 +29,7 @@ export const isCore = (p) => p.core !== false;
 export const stationsOf = (p) => p.lab?.stations?.filter((st) => !st.advanced).length || 0;
 export const hasDuel = (p) => (p.questions?.length || 0) >= MIN_DUEL_QUESTIONS;
 
-export function questOf({ places, guide = 'the guide', champion = 'the champion' }) {
+export function questOf({ places, guide = 'the guide', champion = 'the champion', mementos = null }) {
   const all = [...places].sort((a, b) => a.order - b.order);
   // a course that marks nothing has everything core; one that marks everything extra is not valid,
   // but the game must not get stuck: then everything is core
@@ -39,8 +41,9 @@ export function questOf({ places, guide = 'the guide', champion = 'the champion'
   function placeProgress(p, s) {
     const m = stationsOf(p), n = Array.from({ length: m }, (_, i) => !!s.done?.[`${p.id}:${i}`]).filter(Boolean).length;
     const visited = !!s.visited?.[p.id], duel = hasDuel(p), won = !!s.stamps?.[p.id];
-    const done = won || (!duel && visited && n >= m);
-    return { id: p.id, place: p, order: p.order, core: core.includes(p), visited, n, m, duel, won, key: !!s.keys?.[p.id], done };
+    const memento = !!mementos?.has(p.id), found = memento && !!s.story?.mementos?.[p.id];
+    const done = (won || (!duel && visited && n >= m)) && (!memento || found);
+    return { id: p.id, place: p, order: p.order, core: core.includes(p), visited, n, m, duel, won, key: !!s.keys?.[p.id], done, memento, found };
   }
   const progress = (s) => all.map((p) => placeProgress(p, s));
   const coreProgress = (s) => core.map((p) => placeProgress(p, s));
@@ -55,9 +58,11 @@ export function questOf({ places, guide = 'the guide', champion = 'the champion'
       if (r.done) continue;
       const p = r.place, here = ctx.inside === p.id;
       const base = { place: p, order: p.order, here };
+      if (r.won && r.memento && !r.found) return { kind: 'memento', ...base, here: ctx.inside === p.id || ctx.inside === `${p.id}+up` }; // remembered: upstairs, whatever else
       if (!r.visited && !(here && r.m)) return { kind: 'visit', ...base };
       if (r.n < r.m) return { kind: 'lab', ...base, n: r.n, m: r.m };
-      if (r.duel) return { kind: 'duel', ...base, person: p.host?.name || p.expert?.name || 'the host' };
+      if (r.duel && !r.won) return { kind: 'duel', ...base, person: p.host?.name || p.expert?.name || 'the host' };
+      if (r.memento && !r.found) return { kind: 'memento', ...base, here: ctx.inside === p.id || ctx.inside === `${p.id}+up` };
       return { kind: 'visit', ...base }; // not reached: a house without a duel is done once visited with its lab finished
     }
     if (!s.passedLeague) return { kind: 'league', person: champion };

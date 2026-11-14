@@ -53,6 +53,7 @@ export function initAudio() {
       else ctx.resume().then(() => scape.resync()).catch(() => {});
     });
     if (fireWanted) fx.setFire(fireWanted);
+    if (rainWanted) scape.setRain(rainWanted);
   } catch (e) { ctx = null; scape = null; }
 }
 
@@ -100,6 +101,9 @@ export function duckMusic(on) {
   where = { ...where, focus: on ? 'page' : null };
   applyMix(on ? 0.6 : 1.5);
 }
+// the story's rain as a place sound, 0..1 (story/weather.js); 0 when the story is off
+let rainWanted = 0;
+export function setRain(v) { rainWanted = v; scape?.setRain(v); }
 export function setSea(level) { outdoor = level > 0; scape?.setOutdoor(outdoor); }
 let fireWanted = 0;
 export function setFire(level) { fireWanted = level; fx.setFire(level); }
@@ -125,6 +129,14 @@ export const sfx = {
   ...fx.sfx,
   // secret | lock | cat | key | ending. Without music the old chime says it instead.
   motif: (kind) => { if (scape && playing() && ctx.state === 'running') scape.cue(kind); else if (kind !== 'ending') fx.sfx.chime(); },
+  // the story's theme (docs/STORY.md): 'fragment' | 'opening' | 'full'. Never over a lab, a page or a
+  // remembering; without music, the old chime. Returns its length in seconds (0 when not played).
+  theme: (kind = 'fragment') => {
+    if (where.focus) return 0;
+    if (scape && playing() && ctx.state === 'running') return scape.theme(kind);
+    fx.sfx.chime(); return 0;
+  },
+  horn: () => { if (scape && !muted && ctx.state === 'running') return scape.horn(); return 0; },
   tension: (on) => { where = { ...where, focus: on ? 'duel' : where.focus === 'duel' ? 'page' : where.focus }; applyMix(0.8); },
 };
 

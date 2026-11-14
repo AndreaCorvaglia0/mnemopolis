@@ -4,10 +4,16 @@ The working design of the game around the course: what the player is asked to do
 what comes next, and how they know they have won. The reasons are in the wiki
 (`docs/wiki/`, published to the repository's wiki); this file is the specification.
 
+The fiction that carries all this is in `STORY.md` (on by default; `"story": false` in
+`world.json` gives the plain town described here): the duel is played as **helping an owner
+remember**, the League is a dark **lighthouse** and its champion a **keeper**, the guide is the
+harbour master, the ending is the lamp, the register and the loop by ship, and the menu is the notebook. The rules below hold in both.
+
 ## One sentence
 
-Understand the key ideas of a subject in about an hour by doing, prove it in a duel of
-eloquence, and stay as long as you like for what the town still hides.
+Understand the key ideas of a subject in about an hour by doing, prove it by helping the town's
+people remember (a duel of eloquence in the plain town), and stay as long as you like for what the
+town still hides.
 
 ## Principles
 
@@ -31,7 +37,7 @@ eloquence, and stay as long as you like for what the town still hides.
 |---|---|---|---|
 | **Prove** | checking understanding | duels with the experts, then the League | badges, the open road, the ending |
 | **Explore** | going beyond the basics | secrets, locked places, upper floors, hidden buildings | advanced material, discoveries |
-| **Practise** | memory | many small questions: tall grass, passers-by, rematches | coins for the town shop |
+| **Practise** | memory | many small questions: tall grass, passers-by, rematches; after the ending, the returning fog (`STORY.md`) | coins for the town shop |
 
 The axes feed each other: practice earns coins, coins buy tools, tools open places (Explore);
 winning a duel earns the owner's key to the upper floor (Explore); what is found upstairs makes
@@ -63,15 +69,16 @@ afterwards: the town stays open for exploring and practising, without limit
   champion, at the town gate, says in one line what is missing ("Two experts still think they know
   better than you: houses 4 and 6."). The League hall on the square has a note on its door that
   sends the player to the gate.
-- **Ending.** The road out of town is real: a straight lane, two tiles wide, runs from the square to
+- **Ending.** (In the story the same road ends at a quay where the ship is moored, and the ending is
+  the lighthouse, the register and the loop: `STORY.md`. What follows is the plain town.) The road
+  out of town is real: a straight lane, two tiles wide, runs from the square to
   the edge of the map and ends in a **town gate**, with the League's champion standing before it.
   The gate is shut until the League is won (walking into it, or talking to the champion, is the
   League: the missing houses while it is closed, the duel once it is open). Beaten, the champion
   steps aside with a line in character and the gate swings open; walking through it opens a short
   ending card: the course title, the big idea, what the player can now do (the course goals that
   the path taught: a goal may name the concepts that teach it, and is then listed only if each is
-  core or was done by the player), questions answered, accuracy, how often "certain" was right,
-  time played, and how many things in town are still a question mark (unvisited houses and
+  core or was done by the player), questions answered, accuracy, time played, and how many things in town are still a question mark (unvisited houses and
   undiscovered secrets, as one count). Then back to the town; the Journey tab reopens the card.
   Walking through the gate again says that the road goes on and the next town is not built yet,
   or, when `world.json` names it (`"next": {"title", "url"}`), offers "On to <title>" (the card
@@ -80,44 +87,43 @@ afterwards: the town stays open for exploring and practising, without limit
   of the square has such a way out (about one in five) has no gate, and the champion waits before
   the League hall on the square, where the card opens as soon as the League is won.
 
-## The duel of eloquence
+## The duel (remembering, in the story)
 
-A skin over questions the course already has; no new content is required.
+A skin over questions the course already has; no new content is required. In the story it is
+**remembering** (`STORY.md`): the owner's bar is their memory, which fills; the player's is clarity,
+which the fog eats; a wrong answer is the owner's false memory. In the plain town it is a duel of
+eloquence: conviction and composure. The rules are the same.
 
-- Two bars: the opponent's **conviction**, the player's **composure**.
-- Each turn is one question. With it the player picks a **tone** (the existing confidence bet):
-  *murmur*, *state*, *proclaim*, preselected at *state* every turn so that one tap on an answer
-  commits both. A right answer lands an argument (1, 2 or 3); a wrong one costs composure
-  (1, 2 or 4) and the opponent's rebuttal explains the mistake with the `trap` of the chosen option
-  and the question's `why`. A right answer is followed by its `why`, never by "correct" alone.
-- **House duel**: questions of that concept (levels 1 and 2 first, level 3 only to fill), at
-  most six turns (fewer if the concept has fewer questions); conviction 7, composure 5: with every
-  answer stated, three right before three wrong. Winning gives the badge and the owner's key.
-  Once won, the duel becomes a **friendly rematch** (levels 2 and 3 first, nothing new to win).
-  The key is shown and mentioned only where the house has an upstairs to open.
-- **League**: `finalCheck.size` turns of levels 2 and 3, one question from each house per round,
-  shuffled; conviction `2 × ceil(size × pass)`, composure `2 × (size − need) + 1`, so that with
-  every answer stated the duel is won exactly at the pass mark. The house of a question is named
-  only after it is answered.
+- **The learner just answers.** No tone, no bet, no "how sure are you?" anywhere in the game (the
+  confidence bet was removed: one tap per question, and nothing to explain that is not the subject).
+  A right answer is one piece (the opponent's bar moves by one); a wrong one costs one step of the
+  player's bar. After a wrong answer the screen shows the chosen option's `trap` (why it tempts: in
+  the story, the false memory the owner clings to) and the right answer with the question's `why`;
+  after a right one, the `why`, never "correct" alone.
+- **House**: questions of that concept (levels 1 and 2 first, level 3 only to fill), at most six
+  turns (fewer if the concept has fewer questions). With n turns, `ceil(0.6 n)` right answers before
+  `n − need + 1` wrong ones: six questions, four right before three wrong; five, three before three;
+  four, three before two. A remembering is always decided within its turns. Winning gives the badge
+  (in the story: a window lights up) and the owner's key. Once won, it becomes a **friendly rematch**
+  ("remember together again": levels 2 and 3 first, nothing new to win).
+- **League** (the keeper, in the story): `finalCheck.size` turns of levels 2 and 3, one question
+  from each core house per round, shuffled; `ceil(size × pass)` right before the remaining slips plus
+  one: exactly the pass mark. The house of a question is named only after it is answered.
 - **Out of questions**: the fuller bar (as a share of its start) wins; on an exact tie the player
-  wins only with at least the pass share right (2/3 in a house).
-- **Losing**: nothing is taken, coins included (a wrong answer in a duel costs composure, not
-  coins). The opponent says, in character, which idea to look at again: in a house the concept,
-  the reading wall and the lab; in the League the houses of the missed questions, by number and
-  name. Rematch draws other questions at once. Step back (Esc) leaves at any time.
-- **Six questions per core concept.** The validator warns below six and refuses fewer than three
-  (`skills/knowledge-base/references/6-questions.md`). Every wrong option's `trap` is a short
-  sentence the learner reads after a miss: why the option tempts, then why it fails.
+  wins only with at least the pass share right.
+- **Losing**: nothing is taken, coins included. The opponent says, in character, which idea to look
+  at again: in a house the concept, the reading wall and the lab; in the League the houses of the
+  missed questions, by number and name. Rematch draws other questions at once. Step back (Esc)
+  leaves at any time.
 - **Calibration** is tested by simulation (`engine/tests/duel.test.mjs`, table in
-  `engine/docs/ENGINE.md`): with six questions a learner right 70% of the time wins about three
-  duels in four and one right 40% of the time loses more than four in five; at 90% one nearly
-  always wins; always proclaiming does worse than a calibrated tone; the League is a coin flip
-  at the pass mark and won nine times in ten fifteen points above it. Concepts with fewer
-  questions make less decisive duels.
-- **Tempers.** How an owner duels and gives up the key depends on a temper (smitten, sore loser,
-  admirer, insists they let you win, theatrical, absent-minded, proud craftsman), from a
-  registry, in English and Italian, chosen by seed or by `expert.temper`. The League's champion
-  is grander and steps aside when beaten. Comic, never mean.
+  `engine/docs/ENGINE.md`): with six questions a learner right 70% of the time succeeds three times
+  in four and one right 40% of the time fails more than four times in five; at 90% one nearly always
+  succeeds; the League is a coin flip at the pass mark and won nine times in ten fifteen points above
+  it. Concepts with fewer questions make less decisive rememberings.
+- **Tempers.** How an owner resists and gives up the key depends on a temper (smitten, sore loser,
+  admirer, insists they let you win, theatrical, absent-minded, proud craftsman), from a registry,
+  in English and Italian, chosen by seed or by `expert.temper`; the story has its own lines for each
+  (they defend what they misremember, then remember in character). Comic, never mean.
 
 ## Explore
 
@@ -185,7 +191,8 @@ The game never opens at the full depth of the subject. Depth is reached by climb
 ## Practise
 
 - One currency. The existing score becomes **coins**: earned by answering (tall grass, passers-by,
-  duels), with the level of a question as its difficulty and its worth.
+  duels), with the level of a question as its difficulty and its worth: 10 coins per level for a
+  right answer, nothing lost for a wrong one.
 - **Shop** in the square: tools (key ring excluded: keys are earned), and small comforts
   (a lantern, a map of footprints). Prices are tuned so that the first tool costs about ten
   good answers.
@@ -263,6 +270,7 @@ then league, ending, and free roaming after the ending.
 | Question | Chosen | Left out, and why |
 |---|---|---|
 | Final exam | duel with bars | a plain scored quiz (no stakes, no visible tolerance); a card battle with items (heavy, hides the questions) |
+| Confidence | the learner just answers | a bet on how sure one is (a tone in the duel, three buttons in the grass): one more decision per question, and a thing to explain that is not the subject; removed |
 | Cost of losing | none, plus feedback | losing coins or a waiting time (punishes the errors that teach) |
 | What gates the League | core concepts only | every concept (too long for one sitting) |
 | Currencies | one | score plus coins (two numbers to explain) |

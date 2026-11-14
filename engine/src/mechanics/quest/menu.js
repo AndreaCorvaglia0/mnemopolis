@@ -3,7 +3,8 @@
 //              that the town keeps more to itself; after the ending, the ending card again
 //   Map        the town as explored so far (townmap.js), and the mind map of the course one tap away
 //   Mysteries  the discoveries page (secrets/journal.js), keys and tools carried, coins
-// Footer: settings as plain toggles, and the keys. Tab or Esc closes; 1 2 3 or the arrows switch tabs.
+// Footer: settings as plain toggles, and the keys. In the story the whole menu is the notebook found
+// on the quay (story/notebook.js), with the same tabs and keys. Tab or Esc closes; 1 2 3 or the arrows switch tabs.
 //
 // openMenu({ tab, settings, touch }) resolves with 'ending' (the player asked to see the ending card
 // again) or undefined. settings: [{ label, value: () => string, on: () => bool, toggle: () => void }].
@@ -20,6 +21,8 @@ import { Q } from './active.js';
 import { Q_WORDS, tr, fill, trackerLine } from './strings.js';
 import { townMapView, MAP_CSS } from './townmap.js';
 import { floorsOf } from '../floors/plan.js';
+import { STORY } from '../story/config.js';
+import { openNotebook } from '../story/notebook.js';
 
 const TABS = ['journey', 'map', 'mysteries'];
 const W = Q_WORDS;
@@ -120,6 +123,7 @@ function mysteries(busy) {
 }
 
 export function openMenu({ tab = null, settings = [], touch = false } = {}) {
+  if (STORY.on) return openNotebook({ tab, settings, touch }); // the story: the menu is the notebook (story/notebook.js)
   if (!styled) { document.head.append(h('style', { html: CSS })); styled = true; }
   const { root, tabs, close } = overlay(COURSE.title, '');
   root.classList.add('qm');

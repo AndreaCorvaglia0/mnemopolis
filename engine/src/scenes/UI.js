@@ -220,7 +220,7 @@ export class UI extends Phaser.Scene {
 
   // the room the player stands in, if any (the tracker says "Do the lab" there)
   insideId() {
-    for (const k of ROOMS) if (this.scene.isActive(k)) return this.scene.get(k).id || null;
+    for (const k of ROOMS) if (this.scene.isActive(k)) { const sc = this.scene.get(k); return sc.floor === 'up' ? `${sc.id}+up` : sc.id || null; }
     return null;
   }
 
@@ -548,8 +548,7 @@ export class UI extends Phaser.Scene {
   }
 
   // ---------- quiz card ----------
-  // Lays out the question and options, shrinking the type until everything fits
-  // above the confidence buttons.
+  // Lays out the question and options, shrinking the type until everything fits.
   quizBody(q, tx, tw, qy, limit, rowMin) {
     let body = null;
     for (const [qs, os] of [[24, 19], [21, 17], [19, 15], [17, 14]]) {
@@ -632,48 +631,17 @@ export class UI extends Phaser.Scene {
     if (choice === -1) { c.destroy(); this.close(); return { ran: true }; }
     sfx.select();
 
-    // confidence bet: three buttons in a row, or stacked on a narrow screen
     rows.forEach((r) => r.z.disableInteractive());
-    help.setText(w(this.touch ? 'quiz.sureTouch' : 'quiz.sureKeys'));
-    this.phase = 'quiz-bet';
-    const bets = w('quiz.bets').map((l, i) => [l, ['+1 / 0', '+2 / -2', '+3 / -6'][i]]);
-    const bw = P ? tw : 236, bh = 58;
-    help.setY(by + 10);
-    const b0 = by + 28;
-    const betObjs = bets.map(([label, pay], i) => {
-      const x = P ? tx : tx + i * 258, y = P ? b0 + i * (bh + 8) : b0;
-      const g = this.add.graphics();
-      g.fillStyle(C.bg2, 1).fillRoundedRect(x, y, bw, bh, 8).lineStyle(2, [C.teal, C.gold, C.coral][i], 1).strokeRoundedRect(x, y, bw, bh, 8);
-      const t1 = this.text(x + bw / 2, y + 19, `${i + 1}  ${label}`, 19, C.text).setOrigin(0.5);
-      const t2 = this.text(x + bw / 2, y + 41, w('quiz.pays', { pay, k: q.stars * 5 }), 14, C.muted).setOrigin(0.5);
-      const z = this.add.zone(x, y, bw, bh).setOrigin(0).setInteractive({ useHandCursor: true });
-      c.add([g, t1, t2, z]);
-      return [g, t1, t2, z];
-    });
-    this.quizState.bets = betObjs.map(([, , , z]) => [z.x + z.width / 2, z.y + z.height / 2]);
-    const betBottom = P ? b0 + 3 * (bh + 8) - 8 : b0 + bh;
-    drawCard(P ? betBottom + 20 - top : 492);
-    const conf = await new Promise((resolve) => {
-      const pick = (v) => { cleanup(); resolve(v); };
-      const k1 = () => pick(1), k2 = () => pick(2), k3 = () => pick(3), quit = () => pick(0);
-      const ev = [['keydown-ONE', k1], ['keydown-TWO', k2], ['keydown-THREE', k3], ['keydown-ESC', quit]];
-      const cleanup = () => { ev.forEach(([e, f]) => this.input.keyboard.off(e, f)); leave.off('pointerdown', quit); };
-      this.time.delayedCall(120, () => ev.forEach(([e, f]) => this.input.keyboard.on(e, f)));
-      leave.on('pointerdown', quit);
-      betObjs.forEach((b, i) => b[3].on('pointerdown', () => pick(i + 1)));
-    });
-    betObjs.forEach((b) => b.forEach((o) => o.destroy()));
-    if (!conf) { c.destroy(); this.close(); return { ran: true }; }
     leave.setVisible(false);
     const right = choice === q.answer;
-    const delta = scoreAnswer(q, right, conf);
+    const delta = scoreAnswer(q, right);
     (right ? sfx.right : sfx.wrong)();
     drawRows(-1, { choice });
     this.refreshHUD();
 
     // reveal: the box grows with the explanation
     const verdict = right ? w('quiz.right')[Math.floor(Math.random() * 3)] : w('quiz.wrong');
-    const dtxt = w('quiz.coins', { d: `${delta >= 0 ? '+' : ''}${delta}` });
+    const dtxt = delta > 0 ? w('quiz.coins', { d: `+${delta}` }) : '';
     const rx = x0 + 26, rw = cw - 52;
     let why, dt, bh2;
     if (P) {
@@ -695,7 +663,7 @@ export class UI extends Phaser.Scene {
     await this.waitKey();
     c.destroy();
     this.close();
-    return { right, conf, delta };
+    return { right, delta };
   }
 
   // ---------- a question from the tall grass: always an offer, never a trap ----------

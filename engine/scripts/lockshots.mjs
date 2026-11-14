@@ -79,7 +79,7 @@ if (adv) steps.push(`eval:${enc(`(${UI}.page(()=>__hb.openLab('${adv.id}',0,{upp
 // back down the stairs
 if (upHouse) steps.push(start(from, upHouse.id, 'up'), 'wait:2200', `eval:${enc(`(()=>{const s=${I};s.leave();return 1})()`)}`, 'wait:2200', `eval:${enc(`'after the stairs down: '+${cur}+' floor '+${I}.floor+', player at '+${I}.player.tx+','+${I}.player.ty`)}`, 'shot:32-back-down');
 
-const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: PHONE ? '390x844x2' : '1440x800x1', Q: PHONE ? '?lite&test&touch' : '?lite&test' } });
+const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: PHONE ? '390x844x2' : '1440x800x1', Q: PHONE ? '?lite&test&touch&arrived' : '?lite&test&arrived' } });
 if (process.env.OUT2) for (const f of readdirSync(out)) if (f.endsWith('.png')) copyFileSync(path.join(out, f), path.join(process.env.OUT2, `locks${PHONE ? '-phone' : ''}-${f}`));
 console.log(`Pictures are in ${out}. Open them.`);
 process.exit(r.status || 0);

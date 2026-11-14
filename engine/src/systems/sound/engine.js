@@ -11,13 +11,15 @@
 //
 // Nothing is allocated per frame: pump() is called on a timer (or once, offline) and creates the
 // short-lived oscillators of the events it schedules; the beds of noise run all the time.
-import { Planner, hz, snap, CUES } from './theory.js';
+import { Planner, hz, snap, CUES, themeNotes } from './theory.js';
 
 // Every level in one place (linear gains). Measured, not guessed: see ENGINE.md "Sound".
 export const LEVELS = {
   master: 0.9, // times the volume of world.json (default 0.6); raised from 0.36: inaudible on phone speakers
   pad: 0.038, note: 0.08, cue: 0.09, drone: 0.05, choir: 0.018, pulse: 0.03, creak: 0.025,
   water: 0.035, wind: 0.024, fountain: 0.03, cricket: 0.0035, bird: 0.006, sfx: 0.42, // sfx: the old master was 0.5
+  theme: 0.1, // the story's theme: a little louder than the sparse notes (0.08), never during labs
+  rain: 0.03, // the story's rain, a place sound that follows how much the town remembers
 };
 
 const prng = (seed) => { let a = seed >>> 0 || 1; return () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
@@ -27,6 +29,7 @@ const VOICES = {
   bell: { attack: 0.014, ring: 6, partials: [[1, 1, 1], [2, 0.28, 0.55], [2.76, 0.22, 0.4], [5.4, 0.07, 0.18]] },
   pluck: { attack: 0.012, ring: 2.4, partials: [[1, 1, 1], [2, 0.16, 0.3], [5.6, 0.05, 0.08]] },
   glass: { attack: 0.45, ring: 5, partials: [[1, 0.8, 1], [1.0017, 0.6, 1], [2, 0.1, 0.6]] },
+  box: { attack: 0.006, ring: 3.2, partials: [[1, 1, 1], [2, 0.32, 0.5], [3, 0.1, 0.3], [4.2, 0.06, 0.18]] }, // a music box, for the theme
 };
 
 export function createSoundscape(ctx, { piece, rng, out = ctx.destination, volume = 0.6, seed = 1 }) {
@@ -71,15 +74,19 @@ export function createSoundscape(ctx, { piece, rng, out = ctx.destination, volum
 
   // place sounds: three loops of noise, filtered, slowly breathing
   const place = node.gain(0);
+  const outdoor = node.gain(1); // multiplies the place loops (index.js: 0 indoors)
+  const outdoor0 = () => outdoor;
   const loop = (rate, offset) => { const s = ctx.createBufferSource(); s.buffer = noise; s.loop = true; s.playbackRate.value = rate; s.start(ctx.currentTime, offset); return s; };
   const lfo = (f, depth, param) => { const o = node.osc('sine', f), g = node.gain(depth); o.connect(g); g.connect(param); o.start(); return g; };
-  const water = node.gain(0), wind = node.gain(0), fount = node.gain(0);
+  const water = node.gain(0), wind = node.gain(0), fount = node.gain(0), rain = node.gain(0);
   { const f = node.filter('lowpass', 420, 0.6), sw = node.gain(1); loop(1, 0).connect(f); f.connect(sw); sw.connect(water); lfo(0.09, 0.45, sw.gain); lfo(0.023, 120, f.frequency); }
   { const f = node.filter('bandpass', 520, 0.9), sw = node.gain(1); loop(0.5, 1.3).connect(f); f.connect(sw); sw.connect(wind); lfo(0.047, 260, f.frequency); lfo(0.071, 0.5, sw.gain); }
   { const f = node.filter('bandpass', 1300, 0.7), f2 = node.filter('lowpass', 3200, 0.5), sw = node.gain(1); loop(1, 2.7).connect(f); f.connect(f2); f2.connect(sw); sw.connect(fount); lfo(2.3, 0.18, sw.gain); }
+  // rain (the story): a broad hiss, low-passed under 3.4 kHz, with a slow swell
+  { const f = node.filter('bandpass', 1500, 0.35), f2 = node.filter('lowpass', 3400, 0.5), sw = node.gain(1); loop(0.8, 3.1).connect(f); f.connect(f2); f2.connect(sw); sw.connect(rain); lfo(0.05, 0.2, sw.gain); }
   for (const g of [water, wind, fount]) g.connect(place);
+  rain.connect(outdoor0());
   const sfx = node.gain(LEVELS.sfx), sfxLP = node.filter('lowpass', 5200, 0.5); sfx.connect(sfxLP); sfxLP.connect(all); // not under the music volume
-  const outdoor = node.gain(1); // multiplies the place loops (index.js: 0 indoors)
   place.connect(outdoor); outdoor.connect(master);
 
   // ---- voices
@@ -179,6 +186,8 @@ export function createSoundscape(ctx, { piece, rng, out = ctx.destination, volum
       glide(place.gain, m.place, at, tc);
     },
     setOutdoor(on, at = ctx.currentTime) { glide(outdoor.gain, on ? 1 : 0, at, 1.2); },
+    // the story's rain, 0..1 (it is not under the place mix: the rain is heard as long as one is outdoors)
+    setRain(v, at = ctx.currentTime) { glide(rain.gain, Math.max(0, Math.min(1, v)) * LEVELS.rain, at, 2); },
     setPlace(l, at = ctx.currentTime) {
       levels = l;
       glide(water.gain, l.water * LEVELS.water, at, 1.5); glide(wind.gain, l.wind * LEVELS.wind, at, 2);
@@ -206,6 +215,23 @@ export function createSoundscape(ctx, { piece, rng, out = ctx.destination, volum
       }
     },
     resync(now = ctx.currentTime) { planner.reset(now); tChirp = now; },
+    // the story's theme: a music box over a soft bed; 'full' ends on the ending's cadence. Returns its length.
+    theme(kind = 'fragment', at = ctx.currentTime + 0.1) {
+      const th = themeNotes(piece, kind);
+      for (const n of th.notes) tone({ t: at + n.t, voice: 'box', midi: n.midi, vel: n.vel, pan: 0 }, cueOut, LEVELS.theme, Math.max(0.6, n.dur / 1.2));
+      for (const p of th.pads) padVoice({ t: at + p.t, midi: p.midi, dur: p.dur, attack: 1.2, vel: 0.8, pan: 0 }, cueOut, LEVELS.pad * 0.9, 'triangle');
+      counts.theme = (counts.theme || 0) + th.notes.length;
+      if (th.cadence) return th.length + api.cue('ending', at + th.length + 0.3) + 0.3;
+      return th.length + 2.5;
+    },
+    // the ship's horn (the story's leaving): the foghorn's two beating saws, near and long
+    horn(at = ctx.currentTime + 0.05) {
+      const f = hz(piece.root - 12), env = node.gain(0), lp = node.filter('lowpass', 420, 0.9), pk = LEVELS.drone * 2.4, d = 5.5;
+      env.gain.setValueAtTime(0, at); env.gain.linearRampToValueAtTime(pk, at + 0.6); env.gain.setValueAtTime(pk, at + d - 1.6); env.gain.linearRampToValueAtTime(0, at + d);
+      for (const m of [1, 1.007, 2.003]) { const o = node.osc('sawtooth', f * m); o.connect(lp); o.start(at); o.stop(at + d + 0.1); }
+      lp.connect(env); env.connect(cueOut);
+      return d;
+    },
     // the motif, in the variation of the moment; not ducked: it is the answer to the learner
     cue(kind, at = ctx.currentTime + 0.05) {
       const c = CUES[kind]; if (!c) return 0;

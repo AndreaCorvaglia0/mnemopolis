@@ -15,6 +15,8 @@ import { attachFloor } from '../mechanics/floors/room.js';
 import { attachLocks } from '../mechanics/riddles/room.js';
 import { houseDuel, challengeLabel } from '../mechanics/duel/index.js';
 import { w } from '../data/words.js';
+import { STORY } from '../mechanics/story/config.js';
+import { attachStoryRoom } from '../mechanics/story/room.js';
 
 const RW = 15, RH = 11, T = 16; // the size of the standard room
 
@@ -183,7 +185,8 @@ export class Interior extends Phaser.Scene {
     this.life = attachRoomLife(this); // optional ambient life (src/mechanics/)
     // ---- floors and locks (mechanics/floors/, mechanics/riddles/): stairs, upper lab, shelf, locks
     this.floorX = attachFloor(this);
-    this.extras = [this.floorX, attachLocks(this)].filter(Boolean);
+    this.storyRoom = STORY.on ? attachStoryRoom(this) : null; // the story: the memento upstairs, the returning fog
+    this.extras = [this.floorX, attachLocks(this), this.storyRoom].filter(Boolean);
     this.layout();
     this.scale.on('resize', this.layout, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.layout, this));
@@ -277,6 +280,7 @@ export class Interior extends Phaser.Scene {
     const pool = QUESTIONS.filter((q) => q.topic === id);
     this.master.faceToward(this.player.tx, this.player.ty);
     sfx.select();
+    if (this.storyRoom && (await this.storyRoom.talk())) { this.master.face('down'); return; } // the fog came back
     await ui.converse(m.name, { root: { say: m.hi, options: [
       { label: w('room.openLab'), do: async () => { await ui.lab(id); return 'end'; } },
       { label: w('room.showWall'), do: async () => { await ui.reading(id); return 'end'; } },

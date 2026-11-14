@@ -1,30 +1,35 @@
-// The duel of eloquence: the rules, as pure functions (no browser, no Phaser, no state).
-// A duel is a skin over the course's questions. Two bars: the opponent's CONVICTION and the
-// player's COMPOSURE. One turn = one question. Before answering, the player picks a TONE, which
-// is the confidence bet of certainty-based marking under another name:
-//   1 murmur    right: the argument lands for 1    wrong: composure -1
-//   2 state     right: lands for 2                 wrong: composure -2
-//   3 proclaim  right: lands for 3                 wrong: composure -4
-// The duel ends when a bar is empty, or when the turns run out: then the fuller bar (as a share
-// of its start) wins; on a tie the player wins only with at least the pass share of right answers.
+// The duel (in the story: helping an owner REMEMBER), as pure functions (no browser, no Phaser, no
+// state). A skin over the course's questions. Two bars: the opponent's (conviction in the plain
+// town, MEMORY in the story, which fills) and the player's (composure, CLARITY in the story, which the
+// fog eats). One turn = one question; the learner just answers (no tone, no "how sure are you"):
+//   right: one piece (the opponent's bar moves by 1)     wrong: one step of the player's bar
+// The duel ends when the opponent's bar is done or the player's is empty: "need right before
+// slips + 1 wrong", so it is always decided within its turns. When the questions run out first,
+// the fuller bar (as a share of its start) wins; on a tie the player wins with the pass share.
 // The numbers are tuned by simulation (tests/duel.test.mjs prints the table).
+//
+// Internally the opponent's bar is still called `conviction` (what is left to win) and the
+// player's `composure`; the story's screen shows memory as max - conviction.
 
-export const TONES = [1, 2, 3];
-export const HIT = [0, 1, 2, 3]; // conviction the opponent loses on a right answer, by tone
-export const COST = [0, 1, 2, 4]; // composure the player loses on a wrong answer, by tone
+export const HIT = 1; // one right answer: one piece
+export const COST = 1; // one wrong answer: one step
 
-// House duel: first to three "stated" arguments wins; two stated slips are survived, a third is not.
-export const HOUSE = { maxTurns: 6, conviction: 7, composure: 5, pass: 2 / 3 };
+// House: at most six turns; with n turns, ceil(0.6 n) right before n - need + 1 wrong.
+//   6 turns: 4 right before 3 wrong   5: 3 before 3   4: 3 before 2   3: 2 before 2
+export const HOUSE = { maxTurns: 6, share: 0.6, pass: 0.6 };
 
-// The League: LEAGUE.size turns; with every answer "stated", winning means exactly the old pass
-// mark (ceil(size * pass) right), and losing means one slip more than the old mark allowed.
+export function needFor(turns, share) { return Math.max(1, Math.ceil(turns * share - 1e-9)); }
+
+// The League: LEAGUE.size turns; winning means exactly the pass mark (ceil(size * pass) right),
+// losing one slip more than the mark allows.
 export function leagueBars(size, pass) {
-  const need = Math.max(1, Math.ceil(size * pass)), slips = Math.max(0, size - need);
-  return { conviction: 2 * need, composure: 2 * slips + 1, turns: size, pass };
+  const need = needFor(size, pass), slips = Math.max(0, size - need);
+  return { conviction: need, composure: slips + 1, turns: size, pass };
 }
 
 export function houseBars(poolSize) {
-  return { conviction: HOUSE.conviction, composure: HOUSE.composure, turns: Math.min(HOUSE.maxTurns, poolSize), pass: HOUSE.pass };
+  const turns = Math.max(1, Math.min(HOUSE.maxTurns, poolSize)), need = needFor(turns, HOUSE.share);
+  return { conviction: need, composure: turns - need + 1, turns, pass: HOUSE.pass };
 }
 
 // A fresh duel. `turns` is how many questions there are at most.
@@ -33,20 +38,19 @@ export function startDuel({ conviction, composure, turns, pass }) {
 }
 
 // One answer. Returns a new duel; `last` describes what happened (for the screen and the lines).
-export function answer(d, right, tone) {
-  const t = TONES.includes(tone) ? tone : 2;
+export function answer(d, right) {
   if (d.over) return d;
-  const hit = right ? HIT[t] : 0, cost = right ? 0 : COST[t];
+  const hit = right ? HIT : 0, cost = right ? 0 : COST;
   const n = {
     ...d, turn: d.turn + 1, right: d.right + (right ? 1 : 0), wrong: d.wrong + (right ? 0 : 1),
     conviction: Math.max(0, d.conviction - hit), composure: Math.max(0, d.composure - cost),
-    log: [...d.log, { right, tone: t, hit, cost }],
+    log: [...d.log, { right, hit, cost }],
   };
   n.last = n.log[n.log.length - 1];
   return settle(n);
 }
 
-// Ends the duel if a bar is empty or the turns are used up. `left` = questions still available
+// Ends the duel if a bar is done or the turns are used up. `left` = questions still available
 // (when the pool runs dry before `turns`, the duel ends the same way).
 export function settle(d, left = Infinity) {
   if (d.over) return d;
@@ -105,21 +109,12 @@ export function missedTopics(asked, results) {
   return Object.entries(n).sort((a, b) => b[1] - a[1]).map(([t]) => t);
 }
 
-// Coins in a duel: the certainty-based reward for a right answer, nothing taken for a wrong one
-// (the cost of a wrong answer in a duel is composure, not coins).
-export const duelDelta = (rawDelta) => Math.max(0, rawDelta);
+// Coins: a right answer earns by the level of the question; a wrong one costs nothing.
+export const coinsFor = (q, right) => (right ? 10 * (q.stars || q.level || 1) : 0);
 
 // ---- simulation (used by the tests and to tune the numbers) ----
 // A learner whose chance of being right on a question is p_q, drawn around p (a Beta with
-// concentration k); a calibrated learner feels p_q and picks the tone that pays, others follow a
-// fixed policy. rnd: a random source in [0, 1).
-export const POLICIES = {
-  state: () => 2,
-  murmur: () => 1,
-  reckless: () => 3,
-  calibrated: (pq) => (pq >= 0.75 ? 3 : pq >= 0.45 ? 2 : 1),
-};
-
+// concentration k). rnd: a random source in [0, 1).
 function gamma(k, rnd) { // Marsaglia and Tsang, k >= 1 (k < 1 by boosting)
   if (k < 1) return gamma(k + 1, rnd) * rnd() ** (1 / k);
   const d = k - 1 / 3, c = 1 / Math.sqrt(9 * d);
@@ -133,14 +128,13 @@ function gamma(k, rnd) { // Marsaglia and Tsang, k >= 1 (k < 1 by boosting)
 }
 const beta = (a, b, rnd) => { const x = gamma(a, rnd); return x / (x + gamma(b, rnd)); };
 
-export function simulate({ bars, p, policy = 'state', runs = 4000, k = 4, rnd = Math.random }) {
-  const pol = POLICIES[policy];
+export function simulate({ bars, p, runs = 4000, k = 4, rnd = Math.random }) {
   let wins = 0, turns = 0, longest = 0;
   for (let r = 0; r < runs; r++) {
     let d = startDuel(bars);
     while (!d.over) {
       const pq = p >= 1 ? 1 : p <= 0 ? 0 : beta(p * k, (1 - p) * k, rnd);
-      d = answer(d, rnd() < pq, pol(pq));
+      d = answer(d, rnd() < pq);
     }
     if (d.won) wins += 1;
     turns += d.turn;

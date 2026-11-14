@@ -174,3 +174,39 @@ test('the mood: the address, then the learner, then world.json, then mist', asyn
   const [s] = moodSetting();
   assert.ok(s.label && typeof s.toggle === 'function' && s.value());
 });
+
+// ---- the story's theme (docs/STORY.md): one melody on the motif, in the course's key
+test('the theme: the motif first, in the scale, slow, in range; fragment < opening < full; deterministic', async () => {
+  const { themeNotes, THEME_PHRASES, MOTIF } = await import('../src/systems/sound/theory.js');
+  const { LEVELS } = await import('../src/systems/sound/engine.js');
+  for (const id of ['chroma', 'pocket-demo', 'prova', 'x1', 'x2']) for (const theme of Object.keys(THEME_SOUND)) for (const mood of MOOD_ORDER) {
+    const p = piece(id, theme, mood), f = themeNotes(p, 'fragment'), o = themeNotes(p, 'opening'), full = themeNotes(p, 'full');
+    assert.deepEqual(themeNotes(p, 'full'), full, 'the same piece gives the same theme');
+    assert.deepEqual(f.notes.map((n) => n.midi), MOTIF.map((s) => p.noteRoot + snap(s, p.scale)), 'the fragment is the motif');
+    assert.deepEqual(o.notes.slice(0, f.notes.length), f.notes, 'the opening begins with the fragment');
+    assert.deepEqual(full.notes.slice(0, o.notes.length), o.notes, 'the whole theme begins with the opening');
+    assert.ok(f.length < 6 && o.length < 14 && full.length < 32, `lengths ${f.length} ${o.length} ${full.length}`);
+    assert.ok(full.cadence && !o.cadence && !f.cadence, 'only the whole theme comes home');
+    for (const n of full.notes) {
+      assert.ok(p.scale.includes((((n.midi - p.noteRoot) % 12) + 12) % 12), 'every note in the scale');
+      assert.ok(n.midi >= p.noteRoot - 1 && n.midi <= p.noteRoot + 17, 'within an octave and a half');
+      assert.ok(n.dur >= 0.5 && n.vel > 0 && n.vel <= 1, 'slow and soft');
+    }
+    assert.equal(full.notes.at(-1).midi, p.noteRoot, 'it ends on the root');
+  }
+  assert.equal(THEME_PHRASES.length, 4);
+  // a little louder than the sparse notes, never louder than the motif's cue by much
+  assert.ok(LEVELS.theme > LEVELS.note && LEVELS.theme <= LEVELS.cue * 1.25, `theme level ${LEVELS.theme}`);
+  // its peak (all partials at once, the loudest note) stays well under full scale
+  const peak = LEVELS.theme * 1.48 * 0.9 * 0.6; // partial sum x master x default volume
+  assert.ok(peak < 0.25, `theme peak ${peak}`);
+});
+
+test('the theme and the rain in the Web Audio graph: no NaN, the theme counted, rain clamped', () => {
+  const f = fakeContext(), p = piece('chroma', 'harbour', 'mist');
+  const sc = createSoundscape(f.ctx, { piece: p, rng: seeded('music:play', 'chroma'), seed: 1 });
+  for (const k of ['fragment', 'opening', 'full']) assert.ok(sc.theme(k) > 3, k);
+  assert.ok(sc.counts.theme >= 4 + 10 + 22);
+  sc.setRain(1); sc.setRain(0.3); sc.setRain(-1); sc.setRain(9);
+  assert.deepEqual(f.bad(), []);
+});

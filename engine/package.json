@@ -19,6 +19,7 @@
     "play:phone": "PHONE=1 node scripts/playthrough.mjs",
     "play:ci": "FAST=1 node scripts/playthrough.mjs",
     "shots:it": "node scripts/itshots.mjs",
+    "shots:story": "node scripts/storyshots.mjs",
     "test": "node scripts/use-course.mjs && node --test \"tests/*.test.mjs\"",
     "build:player": "node scripts/build-player.mjs",
     "shots:ready": "node scripts/readyshots.mjs",

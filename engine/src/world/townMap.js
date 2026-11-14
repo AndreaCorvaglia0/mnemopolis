@@ -10,6 +10,7 @@
 import { COURSE } from '../course/course.js';
 import { solidMap, reach } from './doors.js';
 import { w } from '../data/words.js';
+import { STORY } from '../mechanics/story/config.js';
 
 export const T = 16;
 
@@ -28,7 +29,9 @@ export const KINDS = {
 const LEAGUE = { paint: 'league', w: 8, h: 5, doors: [[3, 4], [4, 4]] };
 
 // Distances are kept short on purpose: a district's plaza is a few seconds' walk from the square.
-export function generate(C = COURSE, { gate = true } = {}) {
+// harbour: the story's quay (docs/STORY.md): the road out of town ends at a small harbour inlet at the
+// edge of the map, with a quay, a pier and the steamship moored (HARBOUR); there is no gate then.
+export function generate(C = COURSE, { gate = true, harbour = STORY.on && STORY.ship, skip = 0 } = {}) {
   const GW = 160, GH = 140, cx = 80, cy = 70;
   const m = Array.from({ length: GH }, () => Array(GW).fill('g'));
   const at = (x, y) => m[y]?.[x];
@@ -171,12 +174,12 @@ export function generate(C = COURSE, { gate = true } = {}) {
   const inHouse = (x, y, pad) => buildings.some((b) => x >= b.x - pad && x < b.x + b.w + pad && y >= b.y - pad && y < b.y + b.h + pad);
   // landmarks, people and the houses' own signposts: the road keeps a tile away from them
   const things = [...monuments.flatMap((o) => [[o.x, o.y], [o.x + 1, o.y]]), ...npcs.map((o) => [o.x, o.y]), ...signs.filter((o) => o.b).map((o) => [o.x, o.y])]; // lamps, benches and loose signs are settled off the lane later
-  const laneOf = ([dx, dy], off) => {
+  const laneOf = ([dx, dy], off, from = null) => {
     // u: along the lane (outward), v: across it; the two lane cells are base and base + across
     const across = dx ? [0, 1] : [1, 0];
-    const base = dy > 0 ? [cx - 1 + off, hub.y1 + 1] : dy < 0 ? [cx - 1 + off, hub.y0 - 1] : dx > 0 ? [hub.x1 + 1, cy - 1 + off] : [hub.x0 - 1, cy - 1 + off];
+    const base = from || (dy > 0 ? [cx - 1 + off, hub.y1 + 1] : dy < 0 ? [cx - 1 + off, hub.y0 - 1] : dx > 0 ? [hub.x1 + 1, cy - 1 + off] : [hub.x0 - 1, cy - 1 + off]);
     const cells = [];
-    for (let t = 0; t < 32; t++) { // a short road: the League must not be a long walk away
+    for (let t = 0; t < (harbour ? 44 : 32); t++) { // a short road: the League must not be a long walk away (the story's quay may lie a little farther)
       const x = base[0] + dx * t, y = base[1] + dy * t, pair = [[x, y], [x + across[0], y + across[1]]];
       for (const [X, Y] of pair) {
         const ch = at(X, Y), nearSquare = t < 2 && 'cp'.includes(ch);
@@ -191,10 +194,27 @@ export function generate(C = COURSE, { gate = true } = {}) {
   let gateLane = null;
   // nearest the middle of a side first; south, east, west, then north (behind the League hall)
   const offs = (lo, hi, mid) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).sort((a, b) => Math.abs(a - mid) - Math.abs(b - mid));
+  let skipped = 0;
   for (const [d, list] of [[[0, 1], offs(-9, 10, 3)], [[1, 0], offs(-3, 4, 1)], [[-1, 0], offs(-3, 4, 1)], [[0, -1], [...offs(10, 16, 10), ...offs(-14, -9, -9)]]]) {
     if (!gate) break;
-    for (const off of list) { gateLane = laneOf(d, off); if (gateLane) break; }
+    for (const off of list) { gateLane = laneOf(d, off); if (gateLane && skipped++ < skip) { gateLane = null; continue; } if (gateLane) break; }
     if (gateLane) break;
+  }
+  // the story's harbour, where no road leaves the square straight: a straight road out from the end of
+  // a lane that already exists (a district's), the one nearest the square first
+  if (harbour && gate && !gateLane) {
+    const found = [];
+    for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) {
+      if (at(x, y) !== 'p') continue;
+      for (const d of [[0, 1], [1, 0], [-1, 0], [0, -1]]) {
+        const from = [x + d[0], y + d[1]];
+        if (at(...from) !== 'g' && at(...from) !== 'f') continue;
+        const ln = laneOf(d, 0, from);
+        if (ln) found.push([Math.abs(x - cx) + Math.abs(y - cy) + ln.cells.length / 2, ln]);
+      }
+    }
+    found.sort((a, b) => a[0] - b[0]);
+    gateLane = found[skip - skipped]?.[1] || null;
   }
   if (gateLane) gateLane.cells.forEach(([x, y]) => { if (at(x, y) !== 'c') set(x, y, 'p'); });
 
@@ -203,7 +223,9 @@ export function generate(C = COURSE, { gate = true } = {}) {
   const grow = (x, y) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); };
   for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (m[y][x] !== 'g') grow(x, y);
   buildings.forEach((b) => { grow(b.x - 1, b.y - 2); grow(b.x + b.w, b.y + b.h + 1); });
-  x0 -= 6; y0 -= 6; x1 += 6; y1 += 6;
+  // the harbour needs room beyond the end of the road: water, the pier and the ship
+  const HX = harbour && gateLane ? 15 : 0, [ldx, ldy] = gateLane?.dir || [0, 0];
+  x0 -= 6 + (ldx < 0 ? HX : 0); y0 -= 6 + (ldy < 0 ? HX : 0); x1 += 6 + (ldx > 0 ? HX : 0); y1 += 6 + (ldy > 0 ? HX : 0);
   const W = x1 - x0 + 1, Hh = y1 - y0 + 1, sh = ([x, y, ...r]) => [x - x0, y - y0, ...r];
   const taken = new Set();
   buildings.forEach((b) => { b.x -= x0; b.y -= y0; b.doors = b.doors.map(sh); for (let y = b.y - 1; y <= b.y + b.h + 1; y++) for (let x = b.x - 1; x <= b.x + b.w; x++) taken.add(`${x},${y}`); });
@@ -233,8 +255,9 @@ export function generate(C = COURSE, { gate = true } = {}) {
   const SIGNS = [...own, ...settle(signs.filter((s) => !s.b).map((s) => ({ ...s, x: s.x - x0, y: s.y - y0 })), 'g', (o) => [o.x, o.y], (o, x, y) => ({ ...o, x, y }))];
   const NPCS = npcs.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), MONUMENTS = monuments.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })), PROPS = settle(props.map(sh), 'gc');
   // the road out of town runs on to the edge of the map; the gate stands two tiles before the edge
-  let GATE = null;
-  if (gateLane) {
+  let GATE = null, HARBOUR = null;
+  if (gateLane && HX) HARBOUR = makeHarbour(out, taken, sh(gateLane.end), gateLane.dir, gateLane.across, W, Hh);
+  else if (gateLane) {
     const [dx, dy] = gateLane.dir, [ax, ay] = gateLane.across;
     let [x, y] = sh(gateLane.end);
     while (x + dx >= 0 && y + dy >= 0 && x + dx < W && y + dy < Hh) { x += dx; y += dy; for (const k of [0, 1]) out[y + ay * k][x + ax * k] = out[y + ay * k][x + ax * k] === 'c' ? 'c' : 'p'; }
@@ -252,7 +275,7 @@ export function generate(C = COURSE, { gate = true } = {}) {
   const near = (x, y, chars, r = 1) => { for (let j = -r; j <= r; j++) for (let i = -r; i <= r; i++) { const c = out[y + j]?.[x + i]; if (c && chars.includes(c)) return true; } return false; };
   for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) {
     const edge = Math.min(x, y, W - 1 - x, Hh - 1 - y) + (noise2(x * 0.3, y * 0.3, 2) - 0.5) * 3;
-    if (edge < 2.2) { if ('gfG'.includes(out[y][x]) && !(GATE && taken.has(`${x},${y}`))) out[y][x] = 'T'; continue; } // the gate's posts and apron stay clear
+    if (edge < 2.2) { if ('gfG'.includes(out[y][x]) && !((GATE || HARBOUR) && taken.has(`${x},${y}`))) out[y][x] = 'T'; continue; } // the gate's posts and apron stay clear
     if (!free(x, y) || near(x, y, 'pcwG')) continue;
     // groves, not confetti: trees gather where a slow noise field is high, and toward the edge of the map
     const grove = noise2(x * 0.16, y * 0.16, seed + 5), r = hashI(x, y, 1), water = near(x, y, '~', 2);
@@ -263,19 +286,61 @@ export function generate(C = COURSE, { gate = true } = {}) {
     else if (water && hashI(x, y, 6) < 0.06) PROPS.push([x, y, 'boulder']);
   }
   const town = {
-    W, H: Hh, TERRAIN: out.map((r) => r.join('')), BUILDINGS: buildings, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, GATE,
+    W, H: Hh, TERRAIN: out.map((r) => r.join('')), BUILDINGS: buildings, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, GATE, HARBOUR,
     QUARTERS: quarters.map((q) => ({ ...q, x0: q.x0 - x0, y0: q.y0 - y0, x1: q.x1 - x0, y1: q.y1 - y0 })),
     START: { x: cx - 1 - x0, y: cy + 1 - y0, dir: 'up' }, HUB: { x: cx - x0, y: cy - y0 },
   };
   // the road must not change any walk: the same town without it, every door at the same distance
   // (trees keep a tile off lanes, so a road through a grove could open a shortcut); else no gate
-  if (GATE) {
-    const bare = generate(C, { gate: false }), d0 = reach(bare, solidMap(bare)), d1 = reach(town, solidMap(town));
+  if (GATE || HARBOUR) {
+    const bare = generate(C, { gate: false, harbour: false }), d0 = reach(bare, solidMap(bare)), d1 = reach(town, solidMap(town));
     const ox = town.HUB.x - bare.HUB.x, oy = town.HUB.y - bare.HUB.y;
     const moved = bare.BUILDINGS.flatMap((b) => b.doors.filter(([x, y]) => d0[(y + 1) * bare.W + x] !== d1[(y + 1 + oy) * town.W + x + ox]).map(([x, y]) => `${b.id} ${d0[(y + 1) * bare.W + x]}->${d1[(y + 1 + oy) * town.W + x + ox]}`));
-    if (moved.length) return bare;
+    if (moved.length) return harbour && skip < 8 ? generate(C, { gate, harbour, skip: skip + 1 }) : bare; // the story tries the next road
   }
   return town;
+}
+
+// The harbour at the end of the road (the story). In lane coordinates from the road's last tile e:
+// u along the road (outward), v across it (the road is v = 0 and 1).
+//   u 1..2,  v -3..4    the quay: cobbles; the player arrives here, the harbour master stands here
+//   u 3..5,  v 0..1     the pier: planks over the water
+//   u >= 3,  v -9..10   the water of the inlet, to the edge of the map; the ship lies at the pier
+// Everything is beyond the content of the town (the road leaves it before ending), so nothing else
+// moves; the generator checks that every door keeps its walking distance, as for the gate.
+function makeHarbour(out, taken, e, d, a, W, H) {
+  const at = (u, v) => [e[0] + d[0] * u + a[0] * v, e[1] + d[1] * u + a[1] * v];
+  const put = ([x, y], ch) => { if (x >= 0 && y >= 0 && x < W && y < H) { out[y][x] = ch; taken.add(`${x},${y}`); } };
+  const inside = ([x, y]) => x >= 0 && y >= 0 && x < W && y < H;
+  // the inlet: a little irregular, with a strip of sand along its shores
+  for (let u = 3; u < 40; u++) {
+    if (!inside(at(u, 0))) break;
+    const lo = -9 + Math.round(Math.sin(u * 0.9 + e[0]) * 0.8 + 0.4 * (u > 8)), hi = 10 - Math.round(Math.cos(u * 0.7 + e[1]) * 0.8 + 0.4 * (u > 9));
+    for (let v = lo; v <= hi; v++) put(at(u, v), '~');
+    for (const v of [lo - 1, hi + 1]) { const [x, y] = at(u, v); if ('gf'.includes(out[y]?.[x] ?? '#')) put([x, y], 's'); }
+  }
+  for (let v = -10; v <= 11; v++) { const [x, y] = at(3, v); if (v < -3 || v > 4) { const [x2, y2] = at(2, v); if ('gf'.includes(out[y2]?.[x2] ?? '#')) put([x2, y2], 's'); } void x; void y; }
+  for (let u = 1; u <= 2; u++) for (let v = -3; v <= 4; v++) put(at(u, v), 'c');
+  for (let u = 3; u <= 5; u++) for (const v of [0, 1]) put(at(u, v), 'w');
+  // the clearing around the quay: no tree hides the arrival
+  for (let u = -2; u <= 2; u++) for (let v = -5; v <= 6; v++) { const [x, y] = at(u, v); if (inside([x, y])) taken.add(`${x},${y}`); }
+  const tile = (u, v) => { const [x, y] = at(u, v); return { x, y }; };
+  // the ship, in tiles: where its centre is across, and where its waterline is (the bottom of the picture)
+  const [p0, p1] = [at(5, 0), at(5, 1)];
+  let ship;
+  // (the picture is 11 x 7 tiles, its waterline at the bottom; the pier ends against the hull)
+  if (d[1] > 0) ship = { cx: p0[0] + 1, bottom: p0[1] + 6, flip: false, side: 'end' }; // the road goes south: the ship below the pier
+  else if (d[1] < 0) ship = { cx: p0[0] + 1, bottom: p0[1] + 0.2, flip: false, side: 'end' }; // north: above it
+  else ship = { cx: (p0[0] + (d[0] > 0 ? 4.5 : -3.5)), bottom: Math.min(p0[1], p1[1]) + 0.1, flip: d[0] < 0, side: 'along' }; // east or west: alongside, north of the pier
+  return {
+    dir: d, across: a, end: e,
+    start: { ...tile(2, 1), dir: d[0] > 0 ? 'left' : d[0] < 0 ? 'right' : d[1] > 0 ? 'up' : 'down' },
+    // the quay and its approach stay clear of dressing (gen/dressing.js)
+    zone: (() => { const c = [at(-2, -4), at(2, 5)]; return [Math.min(c[0][0], c[1][0]), Math.min(c[0][1], c[1][1]), Math.max(c[0][0], c[1][0]), Math.max(c[0][1], c[1][1])]; })(),
+    master: tile(1, -2), notebook: tile(2, 3), pier: [tile(5, 0), tile(5, 1)], ship,
+    // the tiles one stands on to look at the ship: the far end of the pier
+    shipTiles: [tile(5, 0), tile(5, 1)].map(({ x, y }) => [x + d[0], y + d[1]]),
+  };
 }
 
 // smooth value noise in 0..1
@@ -286,7 +351,7 @@ const lower = (s) => s.charAt(0).toLowerCase() + s.slice(1);
 const G = generate();
 export const TOWN = G; // the same data as one object (scripts that build other towns call generate(course) themselves)
 export const MAP_W = G.W, MAP_H = G.H;
-export const { TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, QUARTERS, PROPS, START, HUB, GATE } = G;
+export const { TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, QUARTERS, PROPS, START, HUB, GATE, HARBOUR } = G;
 
 export function terrainAt(x, y) {
   if (x < 0 || y < 0 || x >= MAP_W || y >= MAP_H) return 'T';

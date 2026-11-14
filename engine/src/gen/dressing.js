@@ -29,9 +29,9 @@ import { T, TOWN } from '../world/townMap.js';
 
 // The town being dressed. It is the real one unless planDressingFor() is given another (scripts/stress-town.mjs
 // dresses many synthetic towns in one Node process), so these are set by use().
-let W, H, TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, QUARTERS, START, HUB, THEME, SEED;
+let W, H, TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, QUARTERS, START, HUB, HARBOUR, THEME, SEED;
 const seeded = (key) => seededFor(key, SEED);
-function use(town, theme, seed) { ({ W, H, TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, QUARTERS, START, HUB } = town); THEME = theme; SEED = seed; }
+function use(town, theme, seed) { ({ W, H, TERRAIN, BUILDINGS, LAMPS, SIGNS, NPCS, MONUMENTS, PROPS, QUARTERS, START, HUB, HARBOUR } = town); THEME = theme; SEED = seed; }
 use(TOWN, THEME0, DATA.id);
 const N4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 const N8 = [...N4, [1, 1], [1, -1], [-1, 1], [-1, -1]];
@@ -87,6 +87,7 @@ function plan() {
   for (const m of MONUMENTS) mark(m.x - 2, m.y - 3, m.x + 3, m.y + 2, 2);
   for (const [x, y] of [...LAMPS, ...PROPS, ...NPCS.map((n) => [n.x, n.y]), [START.x, START.y]]) mark(x - 1, y - 1, x + 1, y + 1, 2);
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (ter(x, y) === 'G') mark(x - 1, y - 1, x + 1, y + 1, 2);
+  if (HARBOUR) mark(...HARBOUR.zone, 2); // the story's quay: the arrival, the harbour master, the notebook
 
   // what must not get farther: lanes, plazas, meadow, door steps, and the tiles next to things one reads or talks to
   const target = new Uint8Array(W * H);

@@ -78,6 +78,15 @@
   the author's prosa-didattica skill, with its carve-outs for analogies, tasks and the game's
   voices) and a prose checker in the validator, as warnings.
 
+- The story, first version (`docs/STORY.md`, `engine/docs/ENGINE.md` "The story", on by default):
+  arrival by steamship in the rain with a purser's register, a harbour at the end of the road in
+  every town, cinematic moments in an illustrated register, the notebook as the whole menu (in
+  hand, clues written as they are learnt), remembering in place of the duel
+  (and no confidence bet anywhere), mementos upstairs, rain and dark windows that answer progress,
+  people by stage, the lighthouse as the hidden League with a word at its door, the keeper, the
+  lamp and the arrivals register, the loop back to the first shot, the theme, the returning fog's
+  schedule.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
@@ -86,9 +95,10 @@
    League as a duel, locks and upper floors and the road out of town are done; next coins and the
    shop. About one town in five has no way from the square to the edge for the road (its ending
    plays at the League hall): a road that may bend would reach them too.
-3. The story (`docs/STORY.md`): arrival by steamship in the rain, a town that has forgotten,
-   remembering in place of duels, mementos upstairs, the lighthouse as the hidden League, the
-   turn at the end, the returning fog.
+3. The story (`docs/STORY.md`), after its first version: play-testing the idea; the lighthouse's
+   inside as a room (today the keeper's remembering is staged over the town); the play-through bot
+   taught to play the story; per-course art for the mementos; deeper rooms behind locks and the cat
+   as "memories you did not know you had"; the theme heard on real speakers.
 3b. Pocket mode (`docs/POCKET.md`): one question about budget at the start, ready-made parametric
    labs, a prebuilt player that packs a course without a build, a one-page skill, a small fixed
    shape of game.
@@ -97,6 +107,15 @@
    what waits behind them is a placeholder listed as "sealed".
 
 ## Later
+
+- New game plus: "Another round" today keeps the save. A true second round would start on the
+  quay again with the town forgotten, the tally on the cover one higher, and something carried
+  over (the name in the register, a page that stays). Not designed.
+
+- Endings by score and completion (`docs/STORY.md`, "Endings (planned)"): the bitter loop stays the
+  ending of the main path alone; side missions (locks, upper floors, hidden buildings, secrets,
+  houses kept from the fog) could earn happier ones (the notebook kept, the purser's line changed,
+  the crossing remembered). Not designed yet; `endingOf` in `story/logic.js` is where it plugs in.
 
 - Locks, left out on purpose: locks in the town (a door on a hidden nook's gate, a safe in an
   institution's hall); more kinds (a chest with a letter padlock, a diary with a clasp); a lock that

@@ -1,0 +1,261 @@
+// The ending, illustrated (docs/STORY.md, beats 8 to 10): the lamp room and its keeper (hooded, never
+// unmasked), the arrivals register with the same name signed down the page, the pages torn out and
+// taken home by the wind over the roofs, the purser at the gangway.
+//   lampRoomPainter()  P.lamp 0..1 (the lamp lighting)
+//   registerPainter()  P.name, P.arrived
+//   pagesPainter()     P.pages (how many), the wind takes them toward the lit windows
+//   gangwayPainter()   P.name (the purser's register), P.lights
+import { canvas, lin, rad, glow, blobs, rnd, smooth, soften, paper, handwrite, HAND, SERIF, rain, C } from '../paint.js';
+
+// ---- the lamp room: the great lens, the glass all round, the keeper reaching for the lamp, the desk
+export function lampRoomPainter() {
+  return {
+    baseKeys: [],
+    focus: (W, H) => [W * 0.45, H * 0.45],
+    base(g, W, H) {
+      // the night through the glass: panes between iron mullions, rain on them
+      g.fillStyle = lin(g, 0, 0, 0, H, [[0, '#070a14'], [0.7, '#111a2e'], [1, '#0a0d16']]); g.fillRect(0, 0, W, H);
+      g.drawImage(blobs(W, H * 0.7, 30, '#1e2840', { seed: 6, rx: [0.2, 0.5], ry: [0.05, 0.12], a: [0.3, 0.6] }), 0, 0);
+      const r = rnd(5);
+      for (let i = 0; i < 260; i++) { const x = r() * W, y = r() * H * 0.72, l = H * (0.01 + r() * 0.04); g.strokeStyle = `rgba(160,180,220,${0.05 + r() * 0.1})`; g.lineWidth = Math.max(1, W / 1600); g.beginPath(); g.moveTo(x, y); g.lineTo(x + (r() - 0.5) * 3, y + l); g.stroke(); }
+      for (let k = 0; k <= 6; k++) { const x = (k / 6) * W; g.fillStyle = '#05060a'; g.fillRect(x - W * 0.008, 0, W * 0.016, H * 0.74); }
+      g.fillStyle = '#05060a'; g.fillRect(0, H * 0.06, W, H * 0.014); g.fillRect(0, H * 0.4, W, H * 0.01);
+      // the gallery's floor and the low wall
+      g.fillStyle = lin(g, 0, H * 0.72, 0, H, [[0, '#1c1a20'], [1, '#0b0a0d']]); g.fillRect(0, H * 0.72, W, H * 0.28);
+      g.fillStyle = '#0e0d11'; g.fillRect(0, H * 0.72, W, H * 0.02);
+      // the desk on the right, and the register lying open on it
+      const dx = W * 0.62, dy = H * 0.76, dw = W * 0.34;
+      g.fillStyle = '#2a1c14'; g.fillRect(dx, dy, dw, H * 0.03); g.fillStyle = '#160e0a'; g.fillRect(dx + dw * 0.05, dy + H * 0.03, dw * 0.04, H * 0.2); g.fillRect(dx + dw * 0.9, dy + H * 0.03, dw * 0.04, H * 0.2);
+      g.save(); g.translate(dx + dw * 0.5, dy - H * 0.005); g.transform(1, 0, -0.5, 0.35, 0, 0);
+      paper(g, -dw * 0.36, -H * 0.2, dw * 0.35, H * 0.2, { color: '#d9ccaa', seed: 3, ruled: true }); paper(g, dw * 0.01, -H * 0.2, dw * 0.35, H * 0.2, { color: '#ddd0ae', seed: 4, ruled: true });
+      g.restore();
+    },
+    live(g, W, H, t, P) {
+      const L = P.lamp || 0, cx = W * 0.36, cy = H * 0.42, lw = Math.min(W * 0.22, H * 0.3), lh = lw * 1.7;
+      // the light first: it fills the room as the lamp catches
+      if (L > 0.01) {
+        glow(g, cx, cy, Math.max(W, H) * 0.7, '#ffb35c', 0.35 * L);
+        // the beam, turning, through the glass
+        const a = t * 0.6;
+        g.save(); g.globalCompositeOperation = 'lighter'; g.translate(cx, cy);
+        for (const side of [0, Math.PI]) { const ang = a + side, len = Math.max(W, H) * 1.2, k = Math.abs(Math.cos(ang)); g.rotate(0); g.fillStyle = rad(g, 0, 0, 0, len, [[0, `rgba(255,236,180,${0.35 * L * k})`], [1, 'rgba(255,236,180,0)']]); g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(ang) * len, -lh * 0.22 * k); g.lineTo(Math.cos(ang) * len, lh * 0.22 * k); g.fill(); }
+        g.restore();
+      }
+      // the lens: a beehive of glass rings, dark until it is lit
+      g.save();
+      g.beginPath(); smooth(g, [[cx - lw * 0.35, cy - lh / 2], [cx - lw * 0.5, cy - lh * 0.2], [cx - lw * 0.52, cy + lh * 0.15], [cx - lw * 0.4, cy + lh / 2], [cx + lw * 0.4, cy + lh / 2], [cx + lw * 0.52, cy + lh * 0.15], [cx + lw * 0.5, cy - lh * 0.2], [cx + lw * 0.35, cy - lh / 2]], true);
+      g.fillStyle = lin(g, cx - lw / 2, 0, cx + lw / 2, 0, [[0, '#1a2234'], [0.45, `rgba(${Math.round(60 + 195 * L)},${Math.round(70 + 160 * L)},${Math.round(90 + 60 * L)},1)`], [1, '#0e121c']]); g.fill();
+      g.clip();
+      for (let k = 0; k < 18; k++) { const y = cy - lh / 2 + (k / 18) * lh; g.fillStyle = `rgba(255,${200 + 40 * L},${150 + 60 * L},${0.06 + 0.25 * L})`; g.fillRect(cx - lw, y, lw * 2, lh * 0.012); g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(cx - lw, y + lh * 0.03, lw * 2, lh * 0.008); }
+      if (L > 0.01) glow(g, cx, cy, lw * 0.5, '#fff6d8', L);
+      g.restore();
+      g.fillStyle = '#0a0a0e'; g.fillRect(cx - lw * 0.45, cy + lh / 2, lw * 0.9, H * 0.04); g.fillRect(cx - lw * 0.3, cy - lh / 2 - H * 0.02, lw * 0.6, H * 0.025);
+      // the keeper, hooded, seen from behind and to the side, one arm toward the lamp: a heavy cloak with
+      // its folds, the hood's deep opening turned away from us; only the lamp's rim light on the edges
+      const kx = W * 0.6, ky = H * 0.8, kh = H * 0.64;
+      const P2 = (a2, b2) => [kx + kh * a2, ky - kh * b2];
+      g.save();
+      // the body under the cloak: shoulders, back, the hem on the floor
+      g.beginPath(); smooth(g, [P2(-0.26, -0.05), P2(-0.24, 0.3), P2(-0.2, 0.6), P2(-0.12, 0.7), P2(0.02, 0.72), P2(0.16, 0.66), P2(0.24, 0.5), P2(0.28, 0.2), P2(0.32, -0.05)]); g.closePath();
+      g.fillStyle = lin(g, kx - kh * 0.26, 0, kx + kh * 0.32, 0, [[0, '#26222d'], [0.35, '#15131b'], [1, '#07060a']]); g.fill();
+      // folds: long soft shadows down the cloak
+      g.save(); g.clip();
+      for (const [x0, w] of [[-0.12, 0.05], [0.02, 0.07], [0.15, 0.05], [-0.2, 0.03]]) { g.fillStyle = lin(g, kx + kh * x0, 0, kx + kh * (x0 + w), 0, [[0, 'rgba(0,0,0,0)'], [0.5, 'rgba(0,0,0,0.45)'], [1, 'rgba(0,0,0,0)']]); g.fillRect(kx + kh * x0, ky - kh * 0.7, kh * w, kh * 0.8); }
+      g.restore();
+      // the hood: a deep cowl, its opening toward the lamp and away from us; inside, darkness
+      g.beginPath(); smooth(g, [P2(-0.14, 0.62), P2(-0.17, 0.78), P2(-0.1, 0.94), P2(0.04, 0.98), P2(0.14, 0.88), P2(0.15, 0.72), P2(0.08, 0.62)]); g.closePath();
+      g.fillStyle = lin(g, kx - kh * 0.17, 0, kx + kh * 0.15, 0, [[0, '#2a2632'], [0.5, '#16141c'], [1, '#09080c']]); g.fill();
+      g.beginPath(); smooth(g, [P2(-0.16, 0.66), P2(-0.165, 0.78), P2(-0.12, 0.88), P2(-0.07, 0.8), P2(-0.08, 0.68)]); g.closePath(); g.fillStyle = '#020203'; g.fill();
+      // the arm, reaching toward the lens, the sleeve falling back
+      g.beginPath(); smooth(g, [P2(-0.16, 0.56), P2(-0.32, 0.5), P2(-0.46, 0.47), P2(-0.52, 0.45), P2(-0.5, 0.41), P2(-0.34, 0.42), P2(-0.18, 0.44)]); g.closePath();
+      g.fillStyle = lin(g, kx - kh * 0.5, 0, kx - kh * 0.16, 0, [[0, '#2c2833'], [1, '#121017']]); g.fill();
+      g.fillStyle = '#3a2a22'; g.beginPath(); g.ellipse(kx - kh * 0.54, ky - kh * 0.43, kh * 0.025, kh * 0.018, -0.3, 0, Math.PI * 2); g.fill(); // the hand, a shadow in the glare
+      // the rim light: the lamp catches the edge of the hood, the shoulder and the sleeve
+      g.globalCompositeOperation = 'lighter'; g.lineCap = 'round';
+      for (const [pts, w] of [[[P2(-0.17, 0.78), P2(-0.1, 0.94), P2(0.04, 0.98)], 1], [[P2(-0.2, 0.6), P2(-0.24, 0.3), P2(-0.26, -0.05)], 0.6], [[P2(-0.32, 0.5), P2(-0.46, 0.47), P2(-0.52, 0.45)], 1]]) {
+        g.strokeStyle = `rgba(255,200,120,${(0.12 + 0.6 * L) * w})`; g.lineWidth = Math.max(1.5, H / 260); g.beginPath(); smooth(g, pts); g.stroke();
+      }
+      g.restore();
+      // the register on the desk catches the light too
+      if (L > 0.01) glow(g, W * 0.79, H * 0.72, W * 0.12, '#ffd9a0', 0.25 * L);
+    },
+  };
+}
+
+// ---- the arrivals register: the same name signed down the page, dates going back; the last line empty
+export function registerPainter() {
+  return {
+    baseKeys: ['name'],
+    base(g, W, H, P) {
+      g.fillStyle = '#120c09'; g.fillRect(0, 0, W, H);
+      const pw = Math.min(W * 0.9, H * 0.95 * 0.78), ph = pw / 0.78, x = (W - pw) / 2, y = (H - ph) / 2 + H * 0.02;
+      g.save(); g.translate(W / 2, H / 2); g.rotate(-0.015); g.translate(-W / 2, -H / 2);
+      g.shadowColor = 'rgba(0,0,0,0.7)'; g.shadowBlur = pw * 0.05; g.fillStyle = '#000'; g.fillRect(x, y, pw, ph); g.shadowBlur = 0;
+      paper(g, x, y, pw, ph, { color: '#e3d6b4', seed: 21, edge: 0.4 });
+      const u = ph / 100, cols = [x + pw * 0.06, x + pw * 0.3, x + pw * 0.66];
+      g.fillStyle = '#5a4a30'; g.font = `${2.4 * u}px ${SERIF}`; g.textBaseline = 'alphabetic';
+      g.fillText(`ARRIVALS  ·  ${String(P.place || '').toUpperCase()}`, x + pw * 0.06, y + 6 * u);
+      g.font = `${1.7 * u}px ${SERIF}`; ['DATE', 'NAME', 'SIGNATURE'].forEach((s, i) => g.fillText(s, cols[i], y + 11 * u));
+      g.strokeStyle = 'rgba(90,70,40,0.5)'; g.lineWidth = Math.max(1, u * 0.12);
+      for (const cx of cols.slice(1)) { g.beginPath(); g.moveTo(cx - pw * 0.02, y + 8.5 * u); g.lineTo(cx - pw * 0.02, y + ph - 4 * u); g.stroke(); }
+      const rows = 11, top = y + 13 * u, rh = (ph - 17 * u) / rows, name = String(P.name || '');
+      const d0 = new Date(P.arrived || Date.now()), r = rnd(13);
+      for (let i = 0; i < rows; i++) {
+        const yy = top + (i + 1) * rh;
+        g.beginPath(); g.moveTo(x + pw * 0.04, yy + u * 0.6); g.lineTo(x + pw * 0.96, yy + u * 0.6); g.stroke();
+        if (i === rows - 1) continue; // the last line: empty
+        // the years go back far: a crossing every few years, the oldest from before the ticket and the flower
+        const YEARS = [1903, 1907, 1911, 1924, 1938, 1951, 1969, 1987, 2006, d0.getFullYear()], back = rows - 2 - i;
+        const dt = new Date(YEARS[i] ?? d0.getFullYear(), (d0.getMonth() + (i % 3) - 1 + 12) % 12, Math.max(1, Math.min(28, d0.getDate() + ((i * 7) % 9) - 4)));
+        const ink = `rgba(${Math.round(70 - back * 3)},${Math.round(55 - back * 2)},${Math.round(80 + (8 - back) * 4)},${0.95 - back * 0.04})`; // older lines browner and paler
+        handwrite(g, `${dt.getDate()}.${dt.getMonth() + 1}.${dt.getFullYear()}`, cols[0], yy - rh * 0.22, pw * 0.22, rh * 0.42, { color: ink, seed: 30 + i });
+        handwrite(g, name, cols[1], yy - rh * 0.22, pw * 0.34, rh * 0.48, { color: ink, seed: 50 + i });
+        // the signature: the same hand, a little different every time
+        g.save(); g.strokeStyle = ink; g.lineWidth = Math.max(1, u * 0.22); g.lineCap = 'round'; g.beginPath();
+        const sx = cols[2] + pw * 0.02, sy = yy - rh * 0.3, sw = pw * 0.24;
+        g.moveTo(sx, sy + rh * 0.1);
+        const loops = 6 + Math.floor(r() * 4);
+        for (let k = 0; k < loops; k++) { const kx = sx + (k / (loops - 1)) * sw * (0.85 + r() * 0.15); g.bezierCurveTo(kx - sw * 0.08, sy - rh * (0.3 + r() * 0.35), kx + sw * 0.02, sy + rh * (0.05 + r() * 0.2), kx, sy + rh * (r() - 0.5) * 0.15); }
+        g.moveTo(sx - sw * 0.05, sy + rh * 0.22); g.quadraticCurveTo(sx + sw * 0.5, sy + rh * (0.32 + r() * 0.1), sx + sw * 1.05, sy + rh * 0.12); g.stroke(); g.restore();
+      }
+      g.restore();
+      g.save(); g.globalCompositeOperation = 'lighter'; g.fillStyle = rad(g, W * 0.3, 0, 0, Math.hypot(W, H), [[0, 'rgba(255,200,120,0.25)'], [1, 'rgba(0,0,0,0)']]); g.fillRect(0, 0, W, H); g.restore();
+    },
+  };
+}
+
+// ---- the pages: torn out one by one, they fall and scatter nearby, on the wet planks of the quay
+// and the first stretch of the lane; they will be picked up: someone stoops for one at the edge of the
+// frame, one is caught against the lamp post, the harbour master puts one in his pocket
+export function pagesPainter() {
+  let fg = null, key = '';
+  // where the pages come to rest, in the frame's proportions (the lane goes up to the right)
+  const RESTS = [[0.3, 0.86, -0.4], [0.44, 0.92, 0.3], [0.56, 0.84, -0.1], [0.66, 0.74, 0.5], [0.19, 0.8, 0.2], [0.75, 0.66, -0.3], [0.38, 0.75, 0.6], [0.84, 0.6, 0.1], [0.5, 0.97, -0.6], [0.6, 0.64, 0.2]];
+  return {
+    baseKeys: [],
+    focus: (W, H) => [W * 0.5, H * 0.6],
+    base(g, W, H) {
+      // the night after the rain: a clearing sky over the roofs at the top of the lane
+      g.fillStyle = lin(g, 0, 0, 0, H * 0.5, [[0, '#060a16'], [1, '#18233c']]); g.fillRect(0, 0, W, H);
+      const r = rnd(8); for (let i = 0; i < 160; i++) { g.fillStyle = `rgba(230,236,255,${0.2 + r() * 0.5})`; g.fillRect(r() * W, r() * H * 0.3, 1, 1); }
+      g.drawImage(blobs(W, H * 0.45, 18, '#28344f', { seed: 2, y: [0.3, 0.9], rx: [0.2, 0.5], ry: [0.04, 0.08], a: [0.2, 0.4] }), 0, 0);
+      // the roofs at the top of the lane, a few windows lit
+      for (const [x, w, hh, lit] of [[0.52, 0.12, 0.1, 1], [0.63, 0.1, 0.13, 1], [0.72, 0.14, 0.09, 0], [0.85, 0.12, 0.12, 1], [0.95, 0.1, 0.08, 1]]) {
+        const X = W * x, Wd = W * w, top = H * (0.42 - hh);
+        g.fillStyle = '#0b0d16'; g.beginPath(); g.moveTo(X, H * 0.5); g.lineTo(X, top); g.lineTo(X + Wd / 2, top - H * 0.05); g.lineTo(X + Wd, top); g.lineTo(X + Wd, H * 0.5); g.fill();
+        if (lit) { g.fillStyle = '#ffcf7a'; g.fillRect(X + Wd * 0.3, top + H * 0.03, Wd * 0.14, H * 0.025); glow(g, X + Wd * 0.37, top + H * 0.04, Wd * 0.4, '#ffb35c', 0.35); }
+      }
+      // the lane going up between them, wet, cobbled
+      g.fillStyle = '#141218'; g.beginPath(); g.moveTo(W * 0.42, H); g.lineTo(W * 0.62, H * 0.5); g.lineTo(W * 0.72, H * 0.5); g.lineTo(W * 1.02, H); g.fill();
+      // the quay's planks, wet, in the foreground and to the left
+      g.fillStyle = lin(g, 0, H * 0.55, 0, H, [[0, '#211913'], [1, '#120c09']]); g.beginPath(); g.moveTo(0, H * 0.58); g.lineTo(W * 0.62, H * 0.52); g.lineTo(W * 0.5, H); g.lineTo(0, H); g.fill();
+      g.strokeStyle = 'rgba(0,0,0,0.55)'; g.lineWidth = Math.max(1, H / 500);
+      for (let k = 0; k < 14; k++) { const t = k / 14; g.beginPath(); g.moveTo(0, H * (0.58 + t * 0.42)); g.lineTo(W * (0.62 - t * 0.12), H * (0.52 + t * 0.48)); g.stroke(); }
+      // puddles holding the windows' light
+      for (let i = 0; i < 9; i++) { const x = W * (0.1 + r() * 0.7), y = H * (0.65 + r() * 0.3); g.fillStyle = 'rgba(140,160,200,0.08)'; g.beginPath(); g.ellipse(x, y, W * (0.03 + r() * 0.06), H * (0.008 + r() * 0.012), -0.1, 0, Math.PI * 2); g.fill(); }
+      // the lamp post on the quay, lit
+      const lx = W * 0.24, ly = H * 0.35;
+      g.fillStyle = '#07070b'; g.fillRect(lx - W * 0.004, ly, W * 0.008, H * 0.42); g.fillRect(lx - W * 0.012, ly - H * 0.04, W * 0.024, H * 0.045);
+      g.fillStyle = '#ffd98a'; g.fillRect(lx - W * 0.009, ly - H * 0.035, W * 0.018, H * 0.03);
+      glow(g, lx, ly - H * 0.02, H * 0.35, '#ffb35c', 0.4); glow(g, lx, ly - H * 0.02, H * 0.06, '#fff1c4', 0.7);
+    },
+    live(g, W, H, t, P) {
+      if (key !== `${W}x${H}`) {
+        key = `${W}x${H}`;
+        const [c, cg] = canvas(W, H);
+        // the harbour master, by the lamp, putting one page into his coat
+        const hx = W * 0.14, hy = H * 0.8, hh = H * 0.36;
+        // a long coat, broad in the shoulders, flaring to the hem; a peaked cap
+        cg.fillStyle = '#08090d'; cg.beginPath(); smooth(cg, [[hx - hh * 0.17, hy], [hx - hh * 0.13, hy - hh * 0.4], [hx - hh * 0.15, hy - hh * 0.68], [hx - hh * 0.1, hy - hh * 0.77], [hx - hh * 0.03, hy - hh * 0.79], [hx + hh * 0.05, hy - hh * 0.79], [hx + hh * 0.13, hy - hh * 0.74], [hx + hh * 0.15, hy - hh * 0.6], [hx + hh * 0.13, hy - hh * 0.35], [hx + hh * 0.16, hy]]); cg.closePath(); cg.fill();
+        cg.beginPath(); cg.ellipse(hx + hh * 0.01, hy - hh * 0.85, hh * 0.058, hh * 0.072, 0, 0, Math.PI * 2); cg.fill();
+        cg.beginPath(); cg.ellipse(hx + hh * 0.01, hy - hh * 0.915, hh * 0.07, hh * 0.035, 0, Math.PI, 0); cg.fill();
+        cg.beginPath(); cg.ellipse(hx + hh * 0.05, hy - hh * 0.9, hh * 0.08, hh * 0.012, 0.1, 0, Math.PI * 2); cg.fill(); // the brim
+        cg.fillStyle = '#d9ccaa'; cg.save(); cg.translate(hx + hh * 0.05, hy - hh * 0.55); cg.rotate(0.4); cg.fillRect(-hh * 0.035, -hh * 0.05, hh * 0.07, hh * 0.09); cg.restore(); // the page, half in the pocket
+        cg.strokeStyle = 'rgba(255,190,110,0.35)'; cg.lineWidth = Math.max(1, H / 600); cg.beginPath(); cg.moveTo(hx + hh * 0.13, hy - hh * 0.6); cg.lineTo(hx + hh * 0.12, hy); cg.stroke(); // the lamp on his edge
+        // someone at the right edge, up the lane, stooping for a page
+        const sx = W * 0.95, sy = H * 0.64, sh = H * 0.26; // half out of the frame
+        cg.fillStyle = '#0a0b10'; cg.beginPath(); smooth(cg, [[sx - sh * 0.1, sy], [sx - sh * 0.16, sy - sh * 0.35], [sx - sh * 0.05, sy - sh * 0.62], [sx + sh * 0.22, sy - sh * 0.66], [sx + sh * 0.26, sy - sh * 0.5], [sx + sh * 0.12, sy - sh * 0.3], [sx + sh * 0.1, sy]]); cg.closePath(); cg.fill();
+        cg.beginPath(); cg.ellipse(sx - sh * 0.15, sy - sh * 0.6, sh * 0.075, sh * 0.085, 0, 0, Math.PI * 2); cg.fill();
+        cg.strokeStyle = '#0a0b10'; cg.lineWidth = sh * 0.05; cg.lineCap = 'round'; cg.beginPath(); cg.moveTo(sx - sh * 0.02, sy - sh * 0.45); cg.lineTo(sx - sh * 0.2, sy - sh * 0.08); cg.stroke();
+        fg = c;
+      }
+      // the pages: torn from the notebook at the bottom of the frame, carried a little by the wind,
+      // falling, each coming to rest nearby; the n-th leaves at n * gap seconds
+      const n = Math.min(RESTS.length, P.pages || 6), gap = 1.1, fall = 3.2, pw = Math.min(W, H) * 0.05;
+      const pageAt = (x, y, rot, sc, flip, alpha = 1, wet = 0) => {
+        g.save(); g.translate(x, y); g.rotate(rot); g.scale(flip, 0.55 + 0.45 * Math.abs(flip)); g.globalAlpha = alpha;
+        g.fillStyle = lin(g, -sc / 2, 0, sc / 2, 0, [[0, wet ? '#c8bc9c' : '#e6dcc0'], [1, wet ? '#a89a78' : '#c2b28e']]); g.fillRect(-sc / 2, -sc * 0.65, sc, sc * 1.3);
+        g.fillStyle = 'rgba(40,50,90,0.45)'; for (let k = 0; k < 5; k++) g.fillRect(-sc * 0.35, -sc * 0.45 + k * sc * 0.2, sc * 0.6, Math.max(1, sc * 0.03));
+        g.restore();
+      };
+      for (let i = 0; i < n; i++) {
+        const [rx, ry, rr] = RESTS[i], tx = W * rx, ty = H * ry, s = Math.max(0, Math.min(1, (t - 0.5 - i * gap) / fall));
+        if (s <= 0) continue;
+        const sc = pw * (0.7 + ry * 0.5);
+        if (s >= 1) { pageAt(tx, ty, rr, sc, 1, 1, 1); continue; }
+        // from the notebook (bottom centre) up a little in the gust, then down, fluttering, to its place
+        const x0 = W * 0.5, y0 = H * 1.02, x = x0 + (tx - x0) * s + Math.sin(s * 10 + i) * W * 0.03 * (1 - s), y = y0 + (ty - y0) * s - Math.sin(s * Math.PI) * H * 0.3;
+        pageAt(x, y, rr * s + Math.sin(s * 11 + i) * 0.9 * (1 - s), sc, Math.cos(s * 13 + i) * (1 - s) + s, 1);
+      }
+      // a page caught against the lamp post, trembling
+      if (t > 2) pageAt(W * 0.245, H * 0.74 + Math.sin(t * 6) * H * 0.002, 0.15 + Math.sin(t * 5) * 0.05, pw * 0.9, 1, Math.min(1, (t - 2) / 0.6), 1);
+      g.drawImage(fg, 0, 0);
+    },
+  };
+}
+const lerp2 = (a, b, t) => a + (b - a) * Math.min(1, t);
+
+// ---- the gangway: the hull's side, a lamp over the door, the purser with the register open
+export function gangwayPainter() {
+  return {
+    baseKeys: [],
+    focus: (W, H) => [W * 0.6, H * 0.45],
+    base(g, W, H) {
+      g.fillStyle = lin(g, 0, 0, 0, H, [[0, '#070b16'], [1, '#0c1320']]); g.fillRect(0, 0, W, H);
+      const r = rnd(4); for (let i = 0; i < 120; i++) { g.fillStyle = `rgba(230,236,255,${0.2 + r() * 0.5})`; g.fillRect(r() * W, r() * H * 0.25, 1, 1); }
+      // the hull, black plates and rivets, filling the right of the frame
+      const hx = W * 0.32, top = H * 0.22;
+      g.fillStyle = lin(g, hx, 0, W, 0, [[0, '#1c1b24'], [1, '#0b0a10']]); g.fillRect(hx, top, W - hx, H - top);
+      g.strokeStyle = 'rgba(255,255,255,0.05)'; g.lineWidth = Math.max(1, W / 1200);
+      for (let y = top + H * 0.08; y < H; y += H * 0.1) { g.beginPath(); g.moveTo(hx, y); g.lineTo(W, y); g.stroke(); }
+      for (let x = hx + W * 0.06; x < W; x += W * 0.09) { g.beginPath(); g.moveTo(x, top); g.lineTo(x, H); g.stroke(); }
+      g.fillStyle = 'rgba(255,255,255,0.06)'; for (let x = hx; x < W; x += W * 0.012) for (let y = top + H * 0.08; y < H; y += H * 0.1) g.fillRect(x, y - 2, 2, 2);
+      g.fillStyle = '#3a3846'; g.fillRect(hx, top, W - hx, H * 0.012); // the rail
+      // portholes, lit
+      for (let x = hx + W * 0.08; x < W; x += W * 0.1) { const y = top + H * 0.16; g.fillStyle = '#5a4a2c'; g.beginPath(); g.arc(x, y, H * 0.022, 0, Math.PI * 2); g.fill(); g.fillStyle = '#ffd9a0'; g.beginPath(); g.arc(x, y, H * 0.015, 0, Math.PI * 2); g.fill(); glow(g, x, y, H * 0.06, '#ffb35c', 0.4); }
+      // the door in the hull, open, warm light inside
+      const dx = W * 0.56, dy = top + H * 0.3, dw = W * 0.09, dh = H * 0.2;
+      g.fillStyle = '#ffcf8a'; g.fillRect(dx, dy, dw, dh); g.fillStyle = 'rgba(120,70,30,0.6)'; g.fillRect(dx, dy + dh * 0.6, dw, dh * 0.4);
+      glow(g, dx + dw / 2, dy + dh / 2, dh * 1.4, '#ffb35c', 0.45);
+      // the lamp over the door
+      g.fillStyle = '#0a0a0e'; g.fillRect(dx + dw / 2 - W * 0.004, dy - H * 0.07, W * 0.008, H * 0.03); g.fillStyle = '#ffe8b0'; g.fillRect(dx + dw / 2 - W * 0.008, dy - H * 0.05, W * 0.016, H * 0.025);
+      glow(g, dx + dw / 2, dy - H * 0.04, H * 0.25, '#ffd77a', 0.5);
+      // the gangway: a sloping plank with its rails, from the quay up to the door
+      g.strokeStyle = '#2a2018'; g.lineWidth = H * 0.02; g.lineCap = 'butt';
+      g.beginPath(); g.moveTo(W * 0.05, H * 0.92); g.lineTo(dx + dw * 0.1, dy + dh); g.stroke();
+      g.strokeStyle = '#4a3a2a'; g.lineWidth = Math.max(1, H / 300);
+      g.beginPath(); g.moveTo(W * 0.05, H * 0.86); g.lineTo(dx + dw * 0.1, dy + dh - H * 0.06); g.stroke();
+      for (let k = 0; k <= 8; k++) { const t2 = k / 8, x = W * 0.05 + (dx + dw * 0.1 - W * 0.05) * t2, y = H * 0.92 + (dy + dh - H * 0.92) * t2; g.beginPath(); g.moveTo(x, y); g.lineTo(x, y - H * 0.06); g.stroke(); }
+      // the quay below, wet
+      g.fillStyle = lin(g, 0, H * 0.9, 0, H, [[0, '#1e1712'], [1, '#0c0907']]); g.fillRect(0, H * 0.9, hx + W * 0.05, H * 0.1);
+    },
+    live(g, W, H, t, P) {
+      // the purser at the top of the gangway, in the doorway: a dark uniform, a peaked cap, the register
+      // open in his hands; his face stays under the cap's shadow
+      const top = H * 0.22, dx = W * 0.56, dy = top + H * 0.3, dw = W * 0.09, dh = H * 0.2, px = dx + dw * 0.5, py = dy + dh;
+      const ph = dh * 0.95, sway = Math.sin(t * 0.8) * ph * 0.004;
+      g.save(); g.translate(px, py + sway);
+      g.fillStyle = '#0d0e14';
+      g.beginPath(); smooth(g, [[-ph * 0.14, 0], [-ph * 0.16, -ph * 0.55], [-ph * 0.12, -ph * 0.72], [ph * 0.12, -ph * 0.72], [ph * 0.16, -ph * 0.55], [ph * 0.14, 0]]); g.closePath(); g.fill();
+      g.beginPath(); g.ellipse(0, -ph * 0.8, ph * 0.07, ph * 0.085, 0, 0, Math.PI * 2); g.fill(); // the head, in shadow
+      g.fillRect(-ph * 0.1, -ph * 0.9, ph * 0.2, ph * 0.035); g.beginPath(); g.ellipse(0, -ph * 0.91, ph * 0.08, ph * 0.035, 0, Math.PI, 0); g.fill(); // the cap
+      g.fillStyle = 'rgba(255,200,120,0.5)'; g.fillRect(-ph * 0.1, -ph * 0.875, ph * 0.2, ph * 0.006); // the cap's band catching the lamp
+      // the register, open, pale in the light
+      g.save(); g.translate(-ph * 0.02, -ph * 0.48); g.rotate(-0.15); g.fillStyle = '#d9ccaa'; g.fillRect(-ph * 0.16, -ph * 0.05, ph * 0.32, ph * 0.1); g.fillStyle = 'rgba(60,50,40,0.6)'; g.fillRect(-ph * 0.005, -ph * 0.05, ph * 0.01, ph * 0.1); g.restore();
+      // the gold of the buttons
+      g.fillStyle = '#c99a3a'; for (let k = 0; k < 3; k++) g.fillRect(-ph * 0.01, -ph * (0.6 - k * 0.1), ph * 0.02, ph * 0.02);
+      g.restore();
+      if (P.rain) rain(g, W, H, t, P.rain, 5);
+    },
+  };
+}

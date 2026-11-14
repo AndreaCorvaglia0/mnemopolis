@@ -32,7 +32,6 @@ export const CSS = `
 .dl-f.them .dl-fill{left:auto;right:0;background:var(--conv)}
 .dl-ticks{position:absolute;inset:0;pointer-events:none}
 .dl-ticks i{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#0d1016aa}
-.dl-risk{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(135deg,#fff8 0 4px,#fff2 4px 8px);transition:all .2s}
 .dl-num{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
 .dl-vs{align-self:center;display:flex;flex-direction:column;align-items:center;gap:0;padding:0 4px;color:var(--muted);font-size:15px;white-space:nowrap}
 .dl-vs b{font-size:18px;color:var(--text)}
@@ -55,17 +54,6 @@ export const CSS = `
 .dl-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:15px;color:var(--muted)}
 .dl-chip{padding:1px 9px;border-radius:6px;background:#2a3550;color:#dfe5f3;font-size:15px}
 .dl-q{margin:0 0 10px;font-size:20px;line-height:1.35;font-weight:650;color:#fff}
-.dl-tone{margin:0 0 12px}
-.dl-tone-h{font-size:15px;color:var(--muted);margin:0 0 6px}
-.dl-tones{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.dl-t{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;padding:4px 6px;border-radius:10px;background:#141a26;border:2px solid var(--line);cursor:pointer;line-height:1.2}
-.dl-t .n{font-weight:700;font-size:17px}
-.dl-t .e{font-size:15px;color:var(--muted);text-align:center}
-.dl-t .e .l{color:#e9c88f}
-@media (max-width:520px){.dl-t .e .l,.dl-t .e .r{display:block}}
-.dl-t .k{display:none}
-.dl-t[aria-pressed=true]{border-color:var(--gold);background:#2a2614}
-.dl-t[aria-pressed=true] .n{color:var(--gold)}
 .dl-opts{display:flex;flex-direction:column;gap:8px}
 .dl-o{display:flex;align-items:center;gap:12px;min-height:52px;padding:8px 12px;border-radius:10px;background:#141a26;border:2px solid var(--line);text-align:left;cursor:pointer;font-size:17px}
 .dl-o:hover:not(:disabled){border-color:#5b6880;background:#1a2231}
@@ -106,7 +94,14 @@ export const CSS = `
   .dl-sprite{width:80px;height:120px}
   .dl-q{font-size:22px}
   .dl-col{padding-top:16px}
-  .dl-t .k{display:inline;color:var(--muted);font-size:15px}
 }
+/* the story: remembering. Memory fills (a warm lamp colour) from the owner's side; clarity is
+   the player's; the keeper's room is darker, lit by a single lamp */
+.dl.story{--conv:#ffd27a;--comp:#9fd8ff;background:radial-gradient(ellipse at 50% 0%,#202536 0%,#0b0d14 65%)}
+.dl.story .dl-f.them .dl-fill{box-shadow:0 0 12px #ffd27a88}
+.dl.story .dl-fb.no .trap{color:#ffe0b0;font-style:italic}
+.dl.dark{background:radial-gradient(ellipse at 50% 10%,#2a2416 0%,#07080c 55%)}
+.dl.dark .dl-top{background:#0a0b10}
+.dl.dark .dl-card,.dl.dark .dl-end{background:#11131b}
 @media (prefers-reduced-motion:reduce){.dl *,.dl *::before{animation:none !important;transition:none !important}}
 `;

@@ -1,6 +1,6 @@
 // The ending card: an HTML page like the others, shown once when the League is won (and again from the
 // Journey tab). The course title, the big idea, what the learner can do now (the course goals), the
-// numbers (questions, accuracy, sure-and-right from the confidence bets, time played), how many things
+// numbers (questions, accuracy, time played), how many things
 // in town are still a question mark (a count, never a list), and the way on.
 // Resolves with 'back' (or 'next' after the link to the next town was followed).
 import { overlay, h } from '../../lab/shell.js';
@@ -37,10 +37,9 @@ let styled = false;
 // the numbers of the card, from the save (pure: tests call it with any state)
 export function endingNumbers(s = state, places = PLACES, secrets = null) {
   const qs = Object.values(s.q || {}), seen = qs.reduce((n, q) => n + (q.seen || 0), 0), right = qs.reduce((n, q) => n + (q.right || 0), 0);
-  const [cr, ct] = s.bets?.[3] || [0, 0];
   const housesLeft = places.filter((p) => !s.visited?.[p.id]).length;
   const secretsLeft = secrets ? secrets.filter((x) => !s.life?.found?.[x.id]).length : 0;
-  return { answered: seen, right, accuracy: seen ? Math.round((100 * right) / seen) : 0, certain: [cr, ct], played: s.played || 0, left: housesLeft + secretsLeft };
+  return { answered: seen, right, accuracy: seen ? Math.round((100 * right) / seen) : 0, played: s.played || 0, left: housesLeft + secretsLeft };
 }
 
 // What the card claims the player can now do: the course goals that the path taught. A goal is a
@@ -68,8 +67,7 @@ export function openEnding() {
     h('h2', {}, COURSE.title),
     h('div', { class: 'qe-sec', style: 'text-align:center;background:#1c1a12;border-color:#4d4220' }, h('h3', {}, tr(W.big)), h('p', { class: 'qe-big', style: 'padding:0;border:0' }, COURSE.bigIdea)),
     goals.length ? h('div', { class: 'qe-sec' }, h('h3', {}, tr(W.can)), h('ul', {}, goals.map((g) => h('li', {}, g)))) : null,
-    h('div', { class: 'qe-sec' }, h('h3', {}, tr(W.numbers)), h('div', { class: 'qe-nums' }, nums),
-      n.certain[1] ? h('p', { class: 'qe-p' }, fill(tr(W.sure), { r: n.certain[0], t: n.certain[1] })) : null),
+    h('div', { class: 'qe-sec' }, h('h3', {}, tr(W.numbers)), h('div', { class: 'qe-nums' }, nums)),
     h('p', { class: 'qe-left' }, n.left ? fill(tr(W.left), { n: n.left }) : tr(W.leftNone)),
     h('div', { class: 'qe-go' }, go));
   const body = h('div', { class: 'qe-body', tabindex: '-1' }, card);

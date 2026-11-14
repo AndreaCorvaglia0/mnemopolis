@@ -14,7 +14,6 @@ const fresh = () => ({
   seenIntro: false,
   passedReview: false,
   q: {}, // id -> { seen, right, last }
-  bets: { 1: [0, 0], 2: [0, 0], 3: [0, 0] }, // confidence -> [right, total]
   steps: 0,
   musicOff: false,
   voiceOff: false, // read-aloud switched off by the player (only when the course has a voice)
@@ -34,6 +33,9 @@ const fresh = () => ({
   seen: {},
   played: 0,
   cheered: {},
+  // the story (src/mechanics/story/, docs/STORY.md): the name given to the purser, the arrival, the
+  // notebook, the mementos found, windows lit, the lighthouse, the turn, the returning fog
+  story: {},
 });
 
 export const state = fresh();
@@ -56,18 +58,16 @@ export function reset() {
 
 export const stampCount = () => Object.values(state.stamps).filter(Boolean).length;
 
-// Certainty-based marking (Gardner-Medwin): right = +1/+2/+3, wrong = 0/-2/-6, scaled by difficulty
-export function scoreAnswer(question, right, confidence) {
-  const marks = right ? confidence : [0, 0, -2, -6][confidence];
-  const delta = marks * question.stars * 5;
+// A right answer earns coins by the question's level (10 per level); a wrong one costs nothing.
+// The history (seen, right, last) is what pickQuestion prefers unseen and missed questions by.
+// (Old saves may still hold `bets`, from the confidence bet the game had before: it is ignored.)
+export function scoreAnswer(question, right) {
+  const delta = right ? 10 * (question.stars || question.level || 1) : 0;
   const s = state.q[question.id] || { seen: 0, right: 0, last: 0 };
   s.seen += 1;
   if (right) s.right += 1;
   s.last = Date.now();
   state.q[question.id] = s;
-  const b = state.bets[confidence];
-  b[1] += 1;
-  if (right) b[0] += 1;
   state.insight = Math.max(0, state.insight + delta);
   save();
   return delta;
