@@ -410,7 +410,7 @@ Object.assign(RECIPES, {
   'string:pluck': async () => { await tapItem('fret0'); await tapItem('pluck'); await tapItem('fret12'); await tapItem('pluck'); await setSlider(0, 75); },
   'string:harmonics': async () => { for (const m of [12, 7, 5]) { await tapItem(`touch${m}`); await tapItem('pluck'); } },
   'beats:wobble': async () => { await fine(110, [1, 0.1]); await fine(165, [1, 0.1]); },
-  'beats:third': async () => { await segBtn(T('Guitar', 'Chitarra')); await labBtn(T('Play A and', 'Suona La e')); await segBtn(T('Pure', 'Pura')); await labBtn(T('Play A and', 'Suona La e')); },
+  'beats:third': async () => { await segBtn(T('Guitar', 'Chitarra')); await labBtn(T('Play A and', 'Suona La (A) e')); await segBtn(T('Pure', 'Pura')); await labBtn(T('Play A and', 'Suona La (A) e')); },
   'beats:tuneup': async () => { await fine(2.7, [0.5, 0.05]); await sleep(1500); },
   'twelve:circle': async () => { for (let k = 0; k < 12; k++) await labBtn(T('One fret up', 'Un tasto')); await tapItem('fret3'); },
   'twelve:fifthfret': async () => { await tapItem('e5'); await tapItem('g4'); },

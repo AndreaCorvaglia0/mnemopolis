@@ -30,6 +30,8 @@ export const toLetter = (label) => String(label).replace(/^(Sol|Do|Re|Mi|Fa|La|S
 // "Fa♯ (F♯)" in Italian, "F♯" in English
 export const both = (m, flats = false) => (isIt() ? `${nameOf(m, flats)} (${letterOf(m, flats)})` : letterOf(m, flats));
 export const bothLabel = (label) => (isIt() ? `${label} (${toLetter(label)})` : label);
+// a row of names with its letters after it: "Sol La Si  ·  G A B" in Italian, the names alone in English
+export const pairList = (names, sep = ' ') => (isIt() ? `${names.join(sep)}  ·  ${names.map(toLetter).join(sep)}` : names.join(sep));
 export const fullName = (m, flats = false) => `${nameOf(m, flats)}${Math.floor(m / 12) - 1}`;
 export const isLetter = (m) => !SHARPS[pc(m)].includes('♯');
 // decimal comma in Italian, in every read-out of a drawing as in the running text
@@ -119,13 +121,15 @@ export function drawDial(d, D, { lit = new Set(), gold = new Set(), flats = fals
   for (let p = 0; p < 12; p++) {
     const [x, y] = D.at(p), letter = !SHARPS[p].includes('♯'), on = lit.has(p), g = gold.has(p);
     // in Italian each disc holds the Italian name and, under it, the letter ("La" over "A")
-    const rr = it ? Math.max(23, D.r * (letter ? 0.235 : 0.215)) : Math.max(fs * 0.95, D.r * (letter ? 0.15 : 0.12));
+    // (the disc is never smaller than what the two lines need at the real text size: the letter is always there)
+    const sz = it ? d.lineH(16) / 1.25 : 0;
+    const rr = it ? Math.max(23, 1.22 * sz, D.r * (letter ? 0.235 : 0.215)) : Math.max(fs * 0.95, D.r * (letter ? 0.15 : 0.12));
     d.circle(x, y, rr, { fill: g ? C.gold : on ? C.acc : letter ? C.card2 : '#151b27', stroke: on || g ? null : C.line2, width: 1.5 });
     const label = names ? names[p] : nameOf(p, flats);
     const col = on || g ? '#04201d' : letter ? C.text : C.muted;
     if (it) {
-      // two lines (name over letter) when the disc holds them at the real text size, else the name alone
-      const sz = d.lineH(16) / 1.25, two = rr >= 1.2 * sz;
+      // always two lines: the name over its letter
+      const two = true;
       d.text(label, x, two ? y - 0.1 * sz : y + 0.36 * sz, { size: 16, weight: on || g ? 700 : letter ? 600 : 400, color: col, align: 'center' });
       if (two) d.text(toLetter(label), x, y + 0.95 * sz, { size: 16, weight: 400, color: on || g ? '#04201d' : C.dim, align: 'center' });
     } else d.text(label, x, y + fs * 0.36, { size: letter ? fs : fs * 0.86, weight: on || g ? 700 : letter ? 600 : 400, color: col, align: 'center' });

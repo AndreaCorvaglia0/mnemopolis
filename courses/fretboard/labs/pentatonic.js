@@ -1,7 +1,7 @@
 // The Bluesman's House: the minor pentatonic box is movable; the root under the first finger on the
 // low E string names the key.
 import { stage, button, tasks, animate, spring, C, alpha, L } from '../../../engine/src/lab/kit.js';
-import { TUNING, hz, nameOf, both, neckGeom, drawNeck, dot } from './lib/music.js';
+import { TUNING, hz, nameOf, both, pairList, neckGeom, drawNeck, dot } from './lib/music.js';
 import { sound, soundNote } from './lib/sound.js';
 
 // the root-position box (Premier Guitar, Cram Session): frets above the root fret, per string, low E first
@@ -32,8 +32,8 @@ async function box(ctx) {
     const rootLine = L(`root on the low E string at fret ${r}${r === 0 ? ' (open)' : ''}`, `tonica sulla corda di Mi (E) basso al tasto ${r}${r === 0 ? ' (a vuoto)' : ''}`);
     const names = [0, 3, 5, 7, 10].map((x) => nameOf(root + x, [5, 10, 3, 8, 1].includes((root + 3) % 12)));
     d.text(L(`${nameOf(root)} minor pentatonic`, `Pentatonica minore di ${both(root)}`), 24, 44, { size: pane.upright ? 24 : 28, weight: 700, color: C.gold, max: pane.W - 48 });
-    if (pane.upright) { d.text(rootLine, 24, 76, { size: 18, color: C.muted }); d.text(names.join('  '), 24, 104, { size: 20, weight: 700, color: C.text }); }
-    else d.text(`${rootLine}:  ${names.join('  ')}`, 24, 76, { size: 18, color: C.muted, max: pane.W - 48 });
+    if (pane.upright) { d.text(rootLine, 24, 76, { size: 18, color: C.muted }); d.text(pairList(names, '  '), 24, 104, { size: 20, weight: 700, color: C.text, max: pane.W - 48 }); }
+    else d.text(`${rootLine}:  ${pairList(names, '  ')}`, 24, 76, { size: 18, color: C.muted, max: pane.W - 48 });
     d.text(L('drag the box along the neck', 'trascina il box lungo il manico'), 24, y1 + 54, { size: 16, color: C.dim });
   });
   const anim = animate(ctx, (dt) => { const more = pos.step(dt); view.redraw(); return more; });

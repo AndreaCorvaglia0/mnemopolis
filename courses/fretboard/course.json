@@ -17,7 +17,7 @@
   },
   "pitch": {
     "en": "Pluck a string, hear two notes beat, and find out why the twelfth fret, the major scale and an open E chord work.",
-    "it": "Pizzica una corda, ascolta due note che battono e scopri perché il dodicesimo tasto, la scala maggiore e un accordo di Mi a vuoto funzionano."
+    "it": "Pizzica una corda, ascolta due note che battono e scopri perché il dodicesimo tasto, la scala maggiore e un accordo di Mi (E) a vuoto funzionano."
   },
   "tags": [
     {
@@ -113,7 +113,7 @@
       "tier": "A",
       "note": {
         "en": "Shorter string, higher pitch; the A string at 110 Hz; the 5th fret of the top string at 440 Hz; the lowest note E at about 83 Hz.",
-        "it": "Corda più corta, altezza maggiore; la corda di La a 110 Hz; il 5° tasto della corda più acuta a 440 Hz; la nota più bassa, il Mi, a circa 83 Hz."
+        "it": "Corda più corta, altezza maggiore; la corda di La (A) a 110 Hz; il 5° tasto della corda più acuta a 440 Hz; la nota più bassa, il Mi (E), a circa 83 Hz."
       }
     },
     {
@@ -143,7 +143,7 @@
       "tier": "A",
       "note": {
         "en": "A4 = 440 Hz by convention; f = 440 x 2^(n/12) for n half steps from A4. All frequencies in the course are computed from this formula.",
-        "it": "La4 = 440 Hz per convenzione; f = 440 × 2^(n/12) per n semitoni da La4. Tutte le frequenze del corso sono calcolate con questa formula."
+        "it": "La4 (A4) = 440 Hz per convenzione; f = 440 × 2^(n/12) per n semitoni da La4 (A4). Tutte le frequenze del corso sono calcolate con questa formula."
       }
     },
     {
@@ -213,7 +213,7 @@
       "tier": "B",
       "note": {
         "en": "Major, minor, minor, major, major, minor, diminished; G major: G Am Bm C D Em F#dim.",
-        "it": "Maggiore, minore, minore, maggiore, maggiore, minore, diminuito; Sol maggiore: G Am Bm C D Em F♯dim."
+        "it": "Maggiore, minore, minore, maggiore, maggiore, minore, diminuito; Sol maggiore (G): G Am Bm C D Em F♯dim."
       }
     },
     {
@@ -223,7 +223,7 @@
       "tier": "B",
       "note": {
         "en": "Minor pentatonic 1-b3-4-5-b7; A minor pentatonic A C D E G; root-position box in 5th position; same notes as C major pentatonic.",
-        "it": "Pentatonica minore 1-♭3-4-5-♭7; La minore pentatonica La Do Re Mi Sol; box in posizione di tonica alla 5ª posizione; stesse note della pentatonica maggiore di Do."
+        "it": "Pentatonica minore 1-♭3-4-5-♭7; La minore (Am) pentatonica La (A), Do (C), Re (D), Mi (E), Sol (G); box in posizione di tonica alla 5ª posizione; stesse note della pentatonica maggiore di Do (C)."
       }
     },
     {
@@ -263,7 +263,7 @@
       "tier": "B",
       "note": {
         "en": "Do Re Mi Fa Sol La Si as fixed names for C D E F G A B in Italian and other languages.",
-        "it": "Do Re Mi Fa Sol La Si come nomi fissi per C D E F G A B in italiano e in altre lingue."
+        "it": "Do (C), Re (D), Mi (E), Fa (F), Sol (G), La (A), Si (B) come nomi fissi per C D E F G A B in italiano e in altre lingue."
       }
     }
   ],
@@ -564,7 +564,7 @@
           },
           "text": {
             "en": "When a string is plucked it swings back and forth many times each second, and each swing pushes the air, which carries the push to the ear. The number of swings per second is the frequency, measured in hertz (Hz), and the ear hears a higher frequency as a higher note. The open A string of a guitar vibrates 110 times per second, and the A that orchestras tune to vibrates 440 times.",
-            "it": "Quando una corda viene pizzicata oscilla avanti e indietro molte volte al secondo, e a ogni oscillazione spinge l'aria, che porta la spinta fino all'orecchio. Il numero di oscillazioni al secondo è la frequenza, misurata in hertz (Hz), e l'orecchio sente una frequenza più alta come una nota più acuta. La corda di La (A) a vuoto di una chitarra vibra 110 volte al secondo, mentre il La a cui si accordano le orchestre ne vibra 440."
+            "it": "Quando una corda viene pizzicata oscilla avanti e indietro molte volte al secondo, e a ogni oscillazione spinge l'aria, che porta la spinta fino all'orecchio. Il numero di oscillazioni al secondo è la frequenza, misurata in hertz (Hz), e l'orecchio sente una frequenza più alta come una nota più acuta. La corda di La (A) a vuoto di una chitarra vibra 110 volte al secondo, mentre il La (A) a cui si accordano le orchestre ne vibra 440."
           }
         },
         {
@@ -971,7 +971,7 @@
         },
         "a": {
           "en": "The fretted note and the open A are two slightly different frequencies, so their waves add up into one sound that swells and fades at the difference between them. As the peg brings the two closer the difference shrinks and the beats slow down, and when the beats stop the two frequencies are equal.",
-          "it": "La nota premuta e il La a vuoto hanno due frequenze leggermente diverse, quindi le loro onde si sommano in un unico suono che cresce e cala alla differenza tra le due. Man mano che il piolo avvicina le due frequenze la differenza si riduce e i battimenti rallentano, e quando i battimenti si fermano le due frequenze sono uguali."
+          "it": "La nota premuta e il La (A) a vuoto hanno due frequenze leggermente diverse, quindi le loro onde si sommano in un unico suono che cresce e cala alla differenza tra le due. Man mano che il piolo avvicina le due frequenze la differenza si riduce e i battimenti rallentano, e quando i battimenti si fermano le due frequenze sono uguali."
         }
       },
       "callbacks": [
@@ -1078,7 +1078,7 @@
             "pattern": "contrast",
             "object": {
               "en": "The notes A and C♯ sounding together, with their 5th and 4th harmonics side by side.",
-              "it": "Le note La e Do♯ (A e C♯) che suonano insieme, con la loro 5ª e 4ª armonica una accanto all'altra."
+              "it": "Le note La (A) e Do♯ (C♯) che suonano insieme, con la loro 5ª e 4ª armonica una accanto all'altra."
             },
             "action": {
               "en": "Switches the third between the pure ratio 5:4 and the guitar's equal-tempered third.",
@@ -1091,7 +1091,7 @@
             "predict": {
               "q": {
                 "en": "The guitar's major third from A (220 Hz) to C♯, compared with the pure ratio 5:4, is...",
-                "it": "La terza maggiore della chitarra da La (220 Hz) a Do♯, confrontata con il rapporto puro 5:4, è..."
+                "it": "La terza maggiore della chitarra da La (A) (220 Hz) a Do♯ (C♯), confrontata con il rapporto puro 5:4, è..."
               },
               "options": [
                 {
@@ -1110,7 +1110,7 @@
               "answer": 1,
               "why": {
                 "en": "Four equal half steps multiply the frequency by 1.260, slightly more than 1.25, so the guitar's C♯ is 277.2 Hz instead of 275 Hz.",
-                "it": "Quattro semitoni uguali moltiplicano la frequenza per 1,260, un po' più di 1,25, quindi il Do♯ della chitarra è a 277,2 Hz invece che a 275 Hz."
+                "it": "Quattro semitoni uguali moltiplicano la frequenza per 1,260, un po' più di 1,25, quindi il Do♯ (C♯) della chitarra è a 277,2 Hz invece che a 275 Hz."
               }
             },
             "controls": [
@@ -1131,11 +1131,11 @@
             ],
             "takeaway": {
               "en": "Twelve equal half steps make the guitar's fifth almost exactly 3:2 (1.498), but its major third <b>1.260</b> instead of <b>1.25</b>. At A3 the 5th harmonic of A and the 4th of C♯ then differ by about 9 Hz and beat. This compromise, <b>equal temperament</b>, gives up pure thirds so that every key sounds the same and any fret works in any key.",
-              "it": "Dodici semitoni uguali rendono la quinta della chitarra quasi esattamente 3:2 (1,498), ma la sua terza maggiore <b>1,260</b> invece di <b>1,25</b>. Sul La3 la 5ª armonica del La e la 4ª del Do♯ differiscono allora di circa 9 Hz e battono. Questo compromesso, il <b>temperamento equabile</b>, rinuncia alle terze pure perché ogni tonalità suoni allo stesso modo e ogni tasto vada bene in ogni tonalità."
+              "it": "Dodici semitoni uguali rendono la quinta della chitarra quasi esattamente 3:2 (1,498), ma la sua terza maggiore <b>1,260</b> invece di <b>1,25</b>. Sul La3 (A3) la 5ª armonica del La (A) e la 4ª del Do♯ (C♯) differiscono allora di circa 9 Hz e battono. Questo compromesso, il <b>temperamento equabile</b>, rinuncia alle terze pure perché ogni tonalità suoni allo stesso modo e ogni tasto vada bene in ogni tonalità."
             },
             "source": {
               "en": "Frequencies computed live: A3 = 220 Hz, the pure third 275 Hz, the equal-tempered C♯4 277.18 Hz (UNSW Music Acoustics). Each note is the sum of its first six harmonics.",
-              "it": "Frequenze calcolate in tempo reale: La3 = 220 Hz, terza pura 275 Hz, Do♯4 equabile 277,18 Hz (UNSW Music Acoustics). Ogni nota è la somma delle sue prime sei armoniche."
+              "it": "Frequenze calcolate in tempo reale: La3 (A3) = 220 Hz, terza pura 275 Hz, Do♯4 (C♯4) equabile 277,18 Hz (UNSW Music Acoustics). Ogni nota è la somma delle sue prime sei armoniche."
             }
           },
           {
@@ -1157,7 +1157,7 @@
             },
             "action": {
               "en": "Turns the peg of the A string while both notes sound.",
-              "it": "Gira il piolo della corda di La mentre le due note suonano."
+              "it": "Gira il piolo della corda di La (A) mentre le due note suonano."
             },
             "surprise": {
               "en": "The ear finds the right spot without any number: the beats get slower and slower and stop.",
@@ -1177,11 +1177,11 @@
             ],
             "takeaway": {
               "en": "The fifth fret of each string gives the note of the next open string (four frets on the G string), so a guitarist can tune <b>by beats</b>: play both, listen for the wobble and turn the peg until it <b>stops</b>, without a tuner.",
-              "it": "Il quinto tasto di ogni corda dà la nota della corda a vuoto successiva (il quarto sulla corda di Sol), quindi un chitarrista può accordare <b>per battimenti</b>: suona entrambe, ascolta l'ondeggiare e gira il piolo finché si <b>ferma</b>, senza bisogno di un accordatore."
+              "it": "Il quinto tasto di ogni corda dà la nota della corda a vuoto successiva (sulla corda di Sol (G) è il quarto), quindi un chitarrista può accordare <b>per battimenti</b>: suona entrambe, ascolta l'ondeggiare e gira il piolo finché si <b>ferma</b>, senza bisogno di un accordatore."
             },
             "source": {
               "en": "Computed live: the fretted E-string note is 110 Hz, the A string starts a few hertz away, and the beat rate shown is the difference between the two frequencies.",
-              "it": "Calcolato in tempo reale: la nota premuta sulla corda di Mi (E) è 110 Hz, la corda di La parte a pochi hertz di distanza e il ritmo dei battimenti mostrato è la differenza tra le due frequenze."
+              "it": "Calcolato in tempo reale: la nota premuta sulla corda di Mi (E) è 110 Hz, la corda di La (A) parte a pochi hertz di distanza e il ritmo dei battimenti mostrato è la differenza tra le due frequenze."
             }
           }
         ]
@@ -1361,7 +1361,7 @@
           "answer": 1,
           "why": {
             "en": "Faster beats mean a larger difference between the frequencies, so tightening is moving the A string away from the fretted note; loosening brings it back until the difference, and the beating, is zero.",
-            "it": "Battimenti più veloci vogliono dire una differenza maggiore tra le frequenze, quindi tendere allontana la corda di La dalla nota premuta; allentare la riporta indietro finché la differenza, e il battimento, è zero."
+            "it": "Battimenti più veloci vogliono dire una differenza maggiore tra le frequenze, quindi tendere allontana la corda di La (A) dalla nota premuta; allentare la riporta indietro finché la differenza, e il battimento, è zero."
           },
           "traps": [
             {
@@ -1521,7 +1521,7 @@
           "inside": {
             "note": {
               "en": "Ilse's tuning card. The pure fifth above A 110 is 165 Hz, but the E string of a tuned guitar is 164.81 Hz, a hair narrower, because the guitar divides the octave into twelve equal steps. Its fifth beats about once every three seconds, too slowly to bother anyone; the guitar's major third is another matter.",
-              "it": "La scheda di accordatura di Ilse. La quinta pura sopra il La 110 è 165 Hz, ma la corda di Mi (E) di una chitarra accordata è 164,81 Hz, un soffio più stretta, perché la chitarra divide l'ottava in dodici passi uguali. La sua quinta batte circa una volta ogni tre secondi, troppo piano per dare fastidio a qualcuno; la terza maggiore della chitarra è un altro discorso."
+              "it": "La scheda di accordatura di Ilse. La quinta pura sopra il La (A) 110 è 165 Hz, ma la corda di Mi (E) di una chitarra accordata è 164,81 Hz, un soffio più stretta, perché la chitarra divide l'ottava in dodici passi uguali. La sua quinta batte circa una volta ogni tre secondi, troppo piano per dare fastidio a qualcuno; la terza maggiore della chitarra è un altro discorso."
             },
             "station": "third",
             "coins": 15
@@ -1556,7 +1556,7 @@
       },
       "wrongBelief": {
         "en": "There are seven notes, A to G, evenly spaced, so the next A is eight frets up, as the 'oct' in octave suggests.",
-        "it": "Le note sono sette, da Do a Si, a distanze uguali, quindi il La successivo sta otto tasti più in su, come suggerisce la parola «ottava»."
+        "it": "Le note sono sette, da Do (C) a Si (B), a distanze uguali, quindi il La (A) successivo sta otto tasti più in su, come suggerisce la parola «ottava»."
       },
       "anchor": {
         "type": "metaphor",
@@ -1576,11 +1576,11 @@
       "remember": [
         {
           "en": "The twelve notes are A, A♯/B♭, B, C, C♯/D♭, D, D♯/E♭, E, F, F♯/G♭, G, G♯/A♭, and then A again.",
-          "it": "Le dodici note sono Do, Do♯/Re♭, Re, Re♯/Mi♭, Mi, Fa, Fa♯/Sol♭, Sol, Sol♯/La♭, La, La♯/Si♭, Si, e poi di nuovo Do."
+          "it": "Le dodici note sono Do (C), Do♯ (C♯) / Re♭ (D♭), Re (D), Re♯ (D♯) / Mi♭ (E♭), Mi (E), Fa (F), Fa♯ (F♯) / Sol♭ (G♭), Sol (G), Sol♯ (G♯) / La♭ (A♭), La (A), La♯ (A♯) / Si♭ (B♭), Si (B), e poi di nuovo Do (C)."
         },
         {
           "en": "One fret is a half step and two frets a whole step; B to C and E to F are half steps, with no note between them.",
-          "it": "Un tasto è un semitono e due tasti un tono; da Mi a Fa e da Si a Do c'è un semitono, senza nessuna nota in mezzo."
+          "it": "Un tasto è un semitono e due tasti un tono; da Mi (E) a Fa (F) e da Si (B) a Do (C) c'è un semitono, senza nessuna nota in mezzo."
         },
         {
           "en": "Each fret multiplies the frequency by the same factor, about 1.06, so twelve frets double it.",
@@ -1634,12 +1634,12 @@
             },
             "surprise": {
               "en": "Twelve steps, not eight, bring A back, at twice the frequency; and between B and C, and between E and F, there is no note.",
-              "it": "Servono dodici passi, non otto, per tornare al La, con una frequenza doppia; e tra Si e Do, e tra Mi e Fa, non c'è nessuna nota."
+              "it": "Servono dodici passi, non otto, per tornare al La (A), con una frequenza doppia; e tra Si (B) e Do (C), e tra Mi (E) e Fa (F), non c'è nessuna nota."
             },
             "predict": {
               "q": {
                 "en": "Walking up the A string one fret at a time, how many frets until you reach A again?",
-                "it": "Salendo sulla corda di La (A) un tasto alla volta, quanti tasti servono per arrivare di nuovo al La?"
+                "it": "Salendo sulla corda di La (A) un tasto alla volta, quanti tasti servono per arrivare di nuovo al La (A)?"
               },
               "options": [
                 "7",
@@ -1650,27 +1650,27 @@
               "answer": 2,
               "why": {
                 "en": "An octave holds twelve different notes, one per fret; the letters A to G name only seven of them.",
-                "it": "Un'ottava contiene dodici note diverse, una per tasto; i nomi da Do a Si ne indicano soltanto sette."
+                "it": "Un'ottava contiene dodici note diverse, una per tasto; i nomi da Do (C) a Si (B) ne indicano soltanto sette."
               }
             },
             "controls": [],
             "tries": [
               {
                 "en": "Walk up the A string fret by fret until the dial shows A again.",
-                "it": "Sali sulla corda di La (A) tasto per tasto finché il quadrante mostra di nuovo La."
+                "it": "Sali sulla corda di La (A) tasto per tasto finché il quadrante mostra di nuovo La (A)."
               },
               {
                 "en": "Find C on the A string and count its half steps above A.",
-                "it": "Trova il Do sulla corda di La (A) e conta quanti semitoni sopra il La si trova."
+                "it": "Trova il Do (C) sulla corda di La (A) e conta quanti semitoni sopra il La (A) si trova."
               }
             ],
             "takeaway": {
               "en": "An octave holds <b>twelve</b> notes, one per fret, and each fret multiplies the frequency by <b>1.0595</b>, the twelfth root of two, so twelve frets double it. Seven notes have letter names; the five between them are sharps or flats, except at <b>B–C</b> and <b>E–F</b>, which are already a half step apart.",
-              "it": "Un'ottava contiene <b>dodici</b> note, una per tasto, e ogni tasto moltiplica la frequenza per <b>1,0595</b>, la radice dodicesima di due, quindi dodici tasti la raddoppiano. Sette note hanno un nome proprio; le cinque tra di esse sono diesis o bemolli, tranne tra <b>Mi–Fa</b> e <b>Si–Do</b>, che distano già un semitono."
+              "it": "Un'ottava contiene <b>dodici</b> note, una per tasto, e ogni tasto moltiplica la frequenza per <b>1,0595</b>, la radice dodicesima di due, quindi dodici tasti la raddoppiano. Sette note hanno un nome proprio; le cinque tra di esse sono diesis o bemolli, tranne tra <b>Mi (E)–Fa (F)</b> e <b>Si (B)–Do (C)</b>, che distano già un semitono."
             },
             "source": {
               "en": "Frequencies computed live in equal temperament from A4 = 440 Hz (UNSW Music Acoustics); fret positions computed from the twelfth root of two for a 650 mm string.",
-              "it": "Frequenze calcolate in tempo reale in temperamento equabile a partire da La4 = 440 Hz (UNSW Music Acoustics); posizioni dei tasti calcolate dalla radice dodicesima di due per una corda di 650 mm."
+              "it": "Frequenze calcolate in tempo reale in temperamento equabile a partire da La4 (A4) = 440 Hz (UNSW Music Acoustics); posizioni dei tasti calcolate dalla radice dodicesima di due per una corda di 650 mm."
             }
           },
           {
@@ -1682,7 +1682,7 @@
             "advanced": true,
             "goal": {
               "en": "Neighbouring strings are five half steps apart, except G and B, four apart: so fret 5 gives the next open string, and fret 4 on G.",
-              "it": "Le corde vicine distano cinque semitoni, tranne Sol e Si che ne distano quattro: il tasto 5 dà la corda successiva, il tasto 4 sul Sol."
+              "it": "Le corde distano cinque semitoni, ma solo quattro tra Sol (G) e Si (B): il tasto 5 dà la corda successiva, il 4 sul Sol (G)."
             },
             "beat": "rule",
             "pattern": "puzzle",
@@ -1724,27 +1724,27 @@
               "answer": 2,
               "why": {
                 "en": "Standard tuning puts five half steps between neighbouring strings except between G and B, which are four apart.",
-                "it": "L'accordatura standard mette cinque semitoni tra le corde vicine, tranne tra Sol e Si, che ne distano quattro."
+                "it": "L'accordatura standard mette cinque semitoni tra le corde vicine, tranne tra Sol (G) e Si (B), che ne distano quattro."
               }
             },
             "controls": [],
             "tries": [
               {
                 "en": "Find the fret on the low E string that gives the note of the open A.",
-                "it": "Trova il tasto della corda di Mi (E) basso che dà la nota del La a vuoto."
+                "it": "Trova il tasto della corda di Mi (E) basso che dà la nota del La (A) a vuoto."
               },
               {
                 "en": "Find the fret on the G string that gives the note of the open B.",
-                "it": "Trova il tasto della corda di Sol (G) che dà la nota del Si a vuoto."
+                "it": "Trova il tasto della corda di Sol (G) che dà la nota del Si (B) a vuoto."
               }
             ],
             "takeaway": {
               "en": "Standard tuning, <b>E A D G B E</b>, puts <b>five half steps</b> between neighbouring strings and <b>four</b> between G and B. That is why fret 5 gives the next open string and fret 4 on the G string gives the open B, and why chord and scale shapes bend when they cross from G to B.",
-              "it": "L'accordatura standard, <b>Mi La Re Sol Si Mi</b> (E A D G B E), mette <b>cinque semitoni</b> tra le corde vicine e <b>quattro</b> tra Sol e Si. Ecco perché il tasto 5 dà la corda a vuoto successiva e il tasto 4 sulla corda di Sol dà il Si a vuoto, ed ecco perché le forme di accordi e scale si piegano quando passano dal Sol al Si."
+              "it": "L'accordatura standard, <b>Mi (E), La (A), Re (D), Sol (G), Si (B), Mi (E)</b>, mette <b>cinque semitoni</b> tra le corde vicine e <b>quattro</b> tra Sol (G) e Si (B). Ecco perché il tasto 5 dà la corda a vuoto successiva e il tasto 4 sulla corda di Sol (G) dà il Si (B) a vuoto, ed ecco perché le forme di accordi e scale si piegano quando passano dal Sol (G) al Si (B)."
             },
             "source": {
               "en": "Standard tuning E2 A2 D3 G3 B3 E4; note names and frequencies computed live in equal temperament from A4 = 440 Hz.",
-              "it": "Accordatura standard E2 A2 D3 G3 B3 E4 (Mi2 La2 Re3 Sol3 Si3 Mi4); nomi delle note e frequenze calcolati in tempo reale in temperamento equabile da La4 = 440 Hz."
+              "it": "Accordatura standard Mi2 (E2), La2 (A2), Re3 (D3), Sol3 (G3), Si3 (B3), Mi4 (E4); nomi delle note e frequenze calcolati in tempo reale in temperamento equabile da La4 (A4) = 440 Hz."
             }
           }
         ]
@@ -1757,7 +1757,7 @@
           },
           "text": {
             "en": "Western music divides the octave into twelve notes. Seven of them carry the letter names A to G, and the other five sit between letters and are named with a sharp (♯, a half step up) or a flat (♭, a half step down), so the note between A and B is called A♯ or B♭. Two pairs of letters have no note between them, B and C, and E and F, because they are already a half step apart. Readers who learnt the Italian names will know C, D, E, F, G, A and B as Do, Re, Mi, Fa, Sol, La and Si.",
-            "it": "La musica occidentale divide l'ottava in dodici note. Sette di esse hanno i nomi Do, Re, Mi, Fa, Sol, La e Si, e le altre cinque stanno tra un nome e l'altro e si indicano con un diesis (♯, un semitono sopra) o con un bemolle (♭, un semitono sotto), così la nota tra La e Si si chiama La♯ oppure Si♭. Due coppie di nomi non hanno nessuna nota in mezzo, Mi e Fa, e Si e Do, perché distano già un semitono. Sui manici, negli accordi scritti e sugli accordatori i chitarristi incontrano però le lettere dell'alfabeto anglosassone, e la corrispondenza è questa: Do = C, Re = D, Mi = E, Fa = F, Sol = G, La = A, Si = B. Nel resto del corso i nomi italiani vengono usati nel testo e le lettere accanto, dove servono sul manico e per gli accordi."
+            "it": "La musica occidentale divide l'ottava in dodici note. Sette di esse hanno i nomi Do (C), Re (D), Mi (E), Fa (F), Sol (G), La (A) e Si (B), e le altre cinque stanno tra un nome e l'altro e si indicano con un diesis (♯, un semitono sopra) o con un bemolle (♭, un semitono sotto), così la nota tra La (A) e Si (B) si chiama La♯ (A♯) oppure Si♭ (B♭). Due coppie di nomi non hanno nessuna nota in mezzo, Mi (E) e Fa (F), e Si (B) e Do (C), perché distano già un semitono. Sui manici, negli accordi scritti e sugli accordatori i chitarristi incontrano però le lettere dell'alfabeto anglosassone: Do è C, Re è D, Mi è E, Fa è F, Sol è G, La è A, Si è B. In questo corso ogni nome italiano porta accanto, tra parentesi, la sua lettera, e le due cose sono la stessa nota."
           }
         },
         {
@@ -1767,7 +1767,7 @@
           },
           "text": {
             "en": "On a guitar every fret raises the note by one half step, on every string, so the distance between two notes on the same string is the number of frets between them. Two frets make a whole step. From the open A string, fret 2 is B, fret 3 is C, fret 5 is D, fret 7 is E and fret 12 is A again, an octave higher.",
-            "it": "Su una chitarra ogni tasto alza la nota di un semitono, su ogni corda, quindi la distanza tra due note della stessa corda è il numero di tasti che le separa. Due tasti fanno un tono. Partendo dalla corda di La (A) a vuoto, il tasto 2 è Si, il tasto 3 è Do, il tasto 5 è Re, il tasto 7 è Mi e il tasto 12 è di nuovo La, un'ottava più in alto."
+            "it": "Su una chitarra ogni tasto alza la nota di un semitono, su ogni corda, quindi la distanza tra due note della stessa corda è il numero di tasti che le separa. Due tasti fanno un tono. Partendo dalla corda di La (A) a vuoto, il tasto 2 è Si (B), il tasto 3 è Do (C), il tasto 5 è Re (D), il tasto 7 è Mi (E) e il tasto 12 è di nuovo La (A), un'ottava più in alto."
           }
         },
         {
@@ -1824,39 +1824,39 @@
           "options": [
             {
               "en": "A and B",
-              "it": "La e Si"
+              "it": "La (A) e Si (B)"
             },
             {
               "en": "B and C",
-              "it": "Si e Do"
+              "it": "Si (B) e Do (C)"
             },
             {
               "en": "C and D",
-              "it": "Do e Re"
+              "it": "Do (C) e Re (D)"
             },
             {
               "en": "G and A",
-              "it": "Sol e La"
+              "it": "Sol (G) e La (A)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "B to C and E to F are half steps, one fret apart, so no sharp or flat fits between them.",
-            "it": "Da Si a Do e da Mi a Fa c'è un semitono, cioè un tasto, quindi in mezzo non entra nessun diesis o bemolle."
+            "it": "Da Si (B) a Do (C) e da Mi (E) a Fa (F) c'è un semitono, cioè un tasto, quindi in mezzo non entra nessun diesis o bemolle."
           },
           "traps": [
             {
               "en": "A and B are a whole step apart, with A♯ or B♭ between them.",
-              "it": "La e Si distano un tono, con La♯ o Si♭ in mezzo."
+              "it": "La (A) e Si (B) distano un tono, con La♯ (A♯) o Si♭ (B♭) in mezzo."
             },
             null,
             {
               "en": "C and D are two frets apart, with C♯ or D♭ between them.",
-              "it": "Do e Re distano due tasti, con Do♯ o Re♭ in mezzo."
+              "it": "Do (C) e Re (D) distano due tasti, con Do♯ (C♯) o Re♭ (D♭) in mezzo."
             },
             {
               "en": "G and A are a whole step apart, with G♯ or A♭ between them.",
-              "it": "Sol e La distano un tono, con Sol♯ o La♭ in mezzo."
+              "it": "Sol (G) e La (A) distano un tono, con Sol♯ (G♯) o La♭ (A♭) in mezzo."
             }
           ]
         },
@@ -1911,39 +1911,39 @@
           "options": [
             {
               "en": "F",
-              "it": "Fa"
+              "it": "Fa (F)"
             },
             {
               "en": "F♯",
-              "it": "Fa♯"
+              "it": "Fa♯ (F♯)"
             },
             {
               "en": "G",
-              "it": "Sol"
+              "it": "Sol (G)"
             },
             {
               "en": "G♯",
-              "it": "Sol♯"
+              "it": "Sol♯ (G♯)"
             }
           ],
           "answer": 2,
           "why": {
             "en": "From E, fret 1 is F (E to F is a half step), fret 2 is F♯ and fret 3 is G.",
-            "it": "Partendo da Mi, il tasto 1 è Fa (da Mi a Fa c'è un semitono), il tasto 2 è Fa♯ e il tasto 3 è Sol."
+            "it": "Partendo da Mi (E), il tasto 1 è Fa (F), perché da Mi (E) a Fa (F) c'è un semitono; il tasto 2 è Fa♯ (F♯) e il tasto 3 è Sol (G)."
           },
           "traps": [
             {
               "en": "F is at fret 1, because E to F is only a half step.",
-              "it": "Il Fa sta al tasto 1, perché da Mi a Fa c'è un solo semitono."
+              "it": "Il Fa (F) sta al tasto 1, perché da Mi (E) a Fa (F) c'è un solo semitono."
             },
             {
               "en": "F♯ is at fret 2; one more fret reaches G.",
-              "it": "Il Fa♯ sta al tasto 2; un tasto più su si arriva al Sol."
+              "it": "Il Fa♯ (F♯) sta al tasto 2; un tasto più su si arriva al Sol (G)."
             },
             null,
             {
               "en": "G♯ is at fret 4, one fret past G; counting a whole step from E to F is the usual slip here.",
-              "it": "Il Sol♯ sta al tasto 4, un tasto oltre il Sol; contare da Mi a Fa come un tono intero è lo scivolone più comune."
+              "it": "Il Sol♯ (G♯) sta al tasto 4, un tasto oltre il Sol (G); contare da Mi (E) a Fa (F) come un tono intero è lo scivolone più comune."
             }
           ]
         },
@@ -1951,7 +1951,7 @@
           "level": 2,
           "q": {
             "en": "How many half steps are there from C up to the next E?",
-            "it": "Quanti semitoni ci sono da un Do al Mi successivo?"
+            "it": "Quanti semitoni ci sono da un Do (C) al Mi (E) successivo?"
           },
           "options": [
             "2",
@@ -1962,21 +1962,21 @@
           "answer": 2,
           "why": {
             "en": "C, C♯, D, D♯, E: four steps of one fret each.",
-            "it": "Do, Do♯, Re, Re♯, Mi: quattro passi di un tasto ciascuno."
+            "it": "Do (C), Do♯ (C♯), Re (D), Re♯ (D♯), Mi (E): quattro passi di un tasto ciascuno."
           },
           "traps": [
             {
               "en": "Two is the number of letters skipped from C to E; each letter step here is a whole step, so the distance is four half steps.",
-              "it": "Due è il numero di nomi saltati da Do a Mi; qui ogni passo tra nomi vicini è un tono, quindi la distanza è di quattro semitoni."
+              "it": "Due è il numero di nomi saltati da Do (C) a Mi (E); qui ogni passo tra nomi vicini è un tono, quindi la distanza è di quattro semitoni."
             },
             {
               "en": "Three half steps reach D♯ or E♭, one fret short of E.",
-              "it": "Tre semitoni arrivano al Re♯ o Mi♭, un tasto prima del Mi."
+              "it": "Tre semitoni arrivano al Re♯ (D♯) o Mi♭ (E♭), un tasto prima del Mi (E)."
             },
             null,
             {
               "en": "Five half steps go one fret past E, to F, because E to F is a half step.",
-              "it": "Cinque semitoni superano il Mi di un tasto, fino al Fa, perché da Mi a Fa c'è un semitono."
+              "it": "Cinque semitoni superano il Mi (E) di un tasto, fino al Fa (F), perché da Mi (E) a Fa (F) c'è un semitono."
             }
           ]
         },
@@ -1984,7 +1984,7 @@
           "level": 3,
           "q": {
             "en": "A bass player tunes a string to 55 Hz, one octave below the guitar's A string. Where on that string is the A at 110 Hz?",
-            "it": "Un bassista accorda una corda a 55 Hz, un'ottava sotto la corda di La (A) della chitarra. Dove si trova su quella corda il La a 110 Hz?"
+            "it": "Un bassista accorda una corda a 55 Hz, un'ottava sotto la corda di La (A) della chitarra. Dove si trova su quella corda il La (A) a 110 Hz?"
           },
           "options": [
             {
@@ -2057,7 +2057,7 @@
           "kind": "computer",
           "clue": {
             "en": "pw = the note eight frets up from the open A. One letter, no symbols. The clerk",
-            "it": "pw = la nota otto tasti sopra il La a vuoto. Una parola sola, nessun simbolo. L'impiegato"
+            "it": "pw = la nota otto tasti sopra il La (A) a vuoto. Una parola sola, nessun simbolo. L'impiegato"
           },
           "answer": [
             "F",
@@ -2070,7 +2070,7 @@
           "inside": {
             "note": {
               "en": "The clerk's notes on tuning the strings. The open strings, low to high, are E2 A2 D3 G3 B3 E4, at 82.41, 110, 146.83, 196, 246.94 and 329.63 Hz, and each string is five half steps above the one below it except B, which is four above G. That is why fret 5 gives the next open string, and fret 4 on the G string.",
-              "it": "Gli appunti dell'impiegato sull'accordatura delle corde. Le corde a vuoto, dalla più grave alla più acuta, sono Mi2 La2 Re3 Sol3 Si3 Mi4 (E2 A2 D3 G3 B3 E4), a 82,41, 110, 146,83, 196, 246,94 e 329,63 Hz, e ogni corda sta cinque semitoni sopra la precedente, tranne il Si, che sta quattro sopra il Sol. Per questo il tasto 5 dà la corda a vuoto successiva, e il tasto 4 sulla corda di Sol."
+              "it": "Gli appunti dell'impiegato sull'accordatura delle corde. Le corde a vuoto, dalla più grave alla più acuta, sono Mi2 (E2), La2 (A2), Re3 (D3), Sol3 (G3), Si3 (B3) e Mi4 (E4), a 82,41, 110, 146,83, 196, 246,94 e 329,63 Hz, e ogni corda sta cinque semitoni sopra la precedente, tranne il Si (B), che sta quattro sopra il Sol (G). Per questo il tasto 5 dà la corda a vuoto successiva, e il tasto 4 sulla corda di Sol (G)."
             },
             "station": "fifthfret",
             "coins": 15
@@ -2105,13 +2105,13 @@
       },
       "wrongBelief": {
         "en": "Each key has its own list of seven notes to memorise, C major is the normal one, and other scales are C major with odd exceptions.",
-        "it": "Ogni tonalità ha una sua lista di sette note da memorizzare, Do maggiore è quella normale e le altre scale sono Do maggiore con qualche eccezione strana."
+        "it": "Ogni tonalità ha una sua lista di sette note da memorizzare, Do maggiore (C) è quella normale e le altre scale sono Do maggiore (C) con qualche eccezione strana."
       },
       "anchor": {
         "type": "example",
         "text": {
           "en": "Do, re, mi, fa, sol, la, ti, do, sung from any starting pitch, is a major scale every time: the singer keeps the pattern of steps, not the notes.",
-          "it": "La sequenza «do re mi fa sol la si do», cantata a partire da un'altezza qualsiasi (con il do mobile, come si usa in molte scuole di canto), è ogni volta una scala maggiore: chi canta mantiene lo schema dei passi e non le note."
+          "it": "La sequenza «do re mi fa sol la si do», cantata a partire da un'altezza qualsiasi con il do mobile (come si usa in molte scuole di canto: «do re mi…» sono i gradi della scala, non i nomi delle note), è ogni volta una scala maggiore: chi canta mantiene lo schema dei passi e non le note."
         }
       },
       "application": {
@@ -2129,17 +2129,17 @@
         },
         {
           "en": "The same pattern from another note gives that note's major scale: started on G it needs F♯.",
-          "it": "Lo stesso schema a partire da un'altra nota dà la scala maggiore di quella nota: partendo da Sol (G) serve il Fa♯."
+          "it": "Lo stesso schema a partire da un'altra nota dà la scala maggiore di quella nota: partendo da Sol (G) serve il Fa♯ (F♯)."
         }
       ],
       "explain": {
         "q": {
           "en": "Why does G major need an F♯ when C major needs no sharps or flats?",
-          "it": "Perché Sol maggiore ha bisogno di un Fa♯ mentre Do maggiore non ha né diesis né bemolli?"
+          "it": "Perché Sol maggiore (G) ha bisogno di un Fa♯ (F♯) mentre Do maggiore (C) non ha né diesis né bemolli?"
         },
         "a": {
           "en": "The pattern ends with a half step from the seventh note to the octave. From C the seventh note is B, and B to C is already a half step, but from G the seventh note must be a half step below G, which is F♯ and not F.",
-          "it": "Lo schema finisce con un semitono dalla settima nota all'ottava. Da Do la settima nota è Si, e da Si a Do c'è già un semitono, ma da Sol la settima nota deve stare un semitono sotto il Sol, cioè Fa♯ e non Fa."
+          "it": "Lo schema finisce con un semitono dalla settima nota all'ottava. Da Do (C) la settima nota è Si (B), e da Si (B) a Do (C) c'è già un semitono, ma da Sol (G) la settima nota deve stare un semitono sotto il Sol (G), cioè Fa♯ (F♯) e non Fa (F)."
         }
       },
       "callbacks": [
@@ -2179,12 +2179,12 @@
             },
             "surprise": {
               "en": "Turned to G, the same holes fall on F♯ instead of F: the same pattern needs a sharp.",
-              "it": "Ruotata su Sol, gli stessi fori cadono sul Fa♯ invece che sul Fa: lo stesso schema richiede un diesis."
+              "it": "Ruotata su Sol (G), gli stessi fori cadono sul Fa♯ (F♯) invece che sul Fa (F): lo stesso schema richiede un diesis."
             },
             "predict": {
               "q": {
                 "en": "From C, the pattern lands only on letter names, with no sharps. Turn the same stencil to start on G. How many sharps does the scale need?",
-                "it": "Partendo da Do, lo schema cade solo su note senza alterazioni, senza diesis. Ruota la stessa dima per partire da Sol. Quanti diesis servono alla scala?"
+                "it": "Partendo da Do (C), lo schema cade solo su note senza alterazioni, senza diesis. Ruota la stessa dima per partire da Sol (G). Quanti diesis servono alla scala?"
               },
               "options": [
                 {
@@ -2207,7 +2207,7 @@
               "answer": 1,
               "why": {
                 "en": "From G the last step must be a half step below G, which is F♯; every other note of G major is a plain letter name.",
-                "it": "Da Sol l'ultimo passo deve essere un semitono sotto il Sol, cioè Fa♯; tutte le altre note di Sol maggiore hanno il loro nome semplice."
+                "it": "Da Sol (G) l'ultimo passo deve essere un semitono sotto il Sol (G), cioè Fa♯ (F♯); tutte le altre note di Sol maggiore (G) hanno il loro nome semplice."
               }
             },
             "controls": [
@@ -2219,42 +2219,42 @@
             "tries": [
               {
                 "en": "Turn the stencil to start on G and play the scale.",
-                "it": "Ruota la dima per partire da Sol e suona la scala."
+                "it": "Ruota la dima per partire da Sol (G) e suona la scala."
               },
               {
                 "en": "Tap the note of G major that is not in C major.",
-                "it": "Tocca la nota di Sol maggiore che non c'è in Do maggiore."
+                "it": "Tocca la nota di Sol maggiore (G) che non c'è in Do maggiore (C)."
               }
             ],
             "takeaway": {
               "en": "A major scale is the pattern <b>W W H W W W H</b>, started on any note. From C it lands only on letter names; from G the seventh step must be a half step below G, so F becomes <b>F♯</b>. The pattern, not a list of notes, is what to remember, and on one string it is 2, 2, 1, 2, 2, 2, 1 frets.",
-              "it": "Una scala maggiore è lo schema <b>T T S T T T S</b>, a partire da una nota qualsiasi. Da Do cade solo su note senza alterazioni; da Sol il settimo passo deve stare un semitono sotto il Sol, quindi il Fa diventa <b>Fa♯</b>. Da ricordare è lo schema, non un elenco di note, e su una corda corrisponde a 2, 2, 1, 2, 2, 2, 1 tasti."
+              "it": "Una scala maggiore è lo schema <b>T T S T T T S</b>, a partire da una nota qualsiasi. Da Do (C) cade solo su note senza alterazioni; da Sol (G) il settimo passo deve stare un semitono sotto il Sol (G), quindi il Fa (F) diventa <b>Fa♯ (F♯)</b>. Da ricordare è lo schema, non un elenco di note, e su una corda corrisponde a 2, 2, 1, 2, 2, 2, 1 tasti."
             },
             "source": {
               "en": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz. The scale is played on one string of the neck (UNSW Music Acoustics, Open Music Theory).",
-              "it": "Note calcolate in tempo reale dallo schema; frequenze in temperamento equabile da La4 = 440 Hz. La scala è suonata su una corda del manico (UNSW Music Acoustics, Open Music Theory)."
+              "it": "Note calcolate in tempo reale dallo schema; frequenze in temperamento equabile da La4 (A4) = 440 Hz. La scala è suonata su una corda del manico (UNSW Music Acoustics, Open Music Theory)."
             }
           },
           {
             "id": "relative",
             "tab": {
               "en": "Same notes, from A",
-              "it": "Stesse note, da La"
+              "it": "Stesse note, da La (A)"
             },
             "advanced": true,
             "goal": {
               "en": "Played from its sixth note, a major scale becomes a minor scale with the same notes: A minor uses the notes of C major.",
-              "it": "Suonata a partire dalla sua sesta nota, una scala maggiore diventa una scala minore con le stesse note: La minore usa le note di Do maggiore."
+              "it": "Suonata dalla sua sesta nota, una scala maggiore diventa una minore con le stesse note: La minore (Am) usa le note di Do maggiore (C)."
             },
             "beat": "twist",
             "pattern": "predict-test",
             "object": {
               "en": "The stencil of C major with a second marker that chooses where the scale starts.",
-              "it": "La dima di Do maggiore con un secondo segnalino che sceglie da dove parte la scala."
+              "it": "La dima di Do maggiore (C) con un secondo segnalino che sceglie da dove parte la scala."
             },
             "action": {
               "en": "Moves the starting marker to A and plays the same seven notes from there.",
-              "it": "Sposta il segnalino di partenza sul La e suona le stesse sette note da lì."
+              "it": "Sposta il segnalino di partenza sul La (A) e suona le stesse sette note da lì."
             },
             "surprise": {
               "en": "No note changes, yet the scale sounds minor, because the half steps now fall in different places: W H W W H W W.",
@@ -2263,12 +2263,12 @@
             "predict": {
               "q": {
                 "en": "Play the seven notes of C major, starting and ending on A. You hear...",
-                "it": "Suona le sette note di Do maggiore, partendo e finendo sul La. Senti..."
+                "it": "Suona le sette note di Do maggiore (C), partendo e finendo sul La (A). Senti..."
               },
               "options": [
                 {
                   "en": "C major again",
-                  "it": "di nuovo Do maggiore"
+                  "it": "di nuovo Do maggiore (C)"
                 },
                 {
                   "en": "a minor scale",
@@ -2282,7 +2282,7 @@
               "answer": 1,
               "why": {
                 "en": "Starting from A moves the half steps to the second and fifth steps, which is the pattern of the natural minor scale.",
-                "it": "Partire dal La sposta i semitoni al secondo e al quinto passo, che è lo schema della scala minore naturale."
+                "it": "Partire dal La (A) sposta i semitoni al secondo e al quinto passo, che è lo schema della scala minore naturale."
               }
             },
             "controls": [
@@ -2294,20 +2294,20 @@
             "tries": [
               {
                 "en": "Move the start to A and play the scale.",
-                "it": "Sposta la partenza sul La e suona la scala."
+                "it": "Sposta la partenza sul La (A) e suona la scala."
               },
               {
                 "en": "Find the first half step of the scale from A.",
-                "it": "Trova il primo semitono della scala che parte dal La."
+                "it": "Trova il primo semitono della scala che parte dal La (A)."
               }
             ],
             "takeaway": {
               "en": "The notes of C major, played from <b>A</b>, give <b>A minor</b>: the same notes with the pattern <b>W H W W H W W</b>. Every major key has such a <b>relative minor</b>, which starts on its sixth note.",
-              "it": "Le note di Do maggiore, suonate a partire dal <b>La</b>, danno <b>La minore</b>: le stesse note con lo schema <b>T S T T S T T</b>. Ogni tonalità maggiore ha una <b>relativa minore</b> di questo tipo, che parte dalla sua sesta nota."
+              "it": "Le note di Do maggiore (C), suonate a partire dal <b>La (A)</b>, danno <b>La minore (Am)</b>: le stesse note con lo schema <b>T S T T S T T</b>. Ogni tonalità maggiore ha una <b>relativa minore</b> di questo tipo, che parte dalla sua sesta nota."
             },
             "source": {
               "en": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz (Open Music Theory).",
-              "it": "Note calcolate in tempo reale dallo schema; frequenze in temperamento equabile da La4 = 440 Hz (Open Music Theory)."
+              "it": "Note calcolate in tempo reale dallo schema; frequenze in temperamento equabile da La4 (A4) = 440 Hz (Open Music Theory)."
             }
           }
         ]
@@ -2320,7 +2320,7 @@
           },
           "text": {
             "en": "A major scale is seven notes chosen from the twelve by one pattern of steps: whole, whole, half, whole, whole, whole, half, after which the starting note returns an octave higher. Started on C, the pattern lands only on letter names, C D E F G A B C, because its two half steps fall exactly where the letters have no note between them, at E–F and B–C.",
-            "it": "Una scala maggiore è formata da sette note scelte tra le dodici con un solo schema di passi, tono, tono, semitono, tono, tono, tono, semitono, dopo il quale la nota di partenza ritorna un'ottava più in alto. Partendo da Do, lo schema cade solo su note senza alterazioni, Do Re Mi Fa Sol La Si Do (C D E F G A B C), perché i suoi due semitoni cadono proprio dove i nomi non hanno nessuna nota in mezzo, tra Mi e Fa e tra Si e Do."
+            "it": "Una scala maggiore è formata da sette note scelte tra le dodici con un solo schema di passi, tono, tono, semitono, tono, tono, tono, semitono, dopo il quale la nota di partenza ritorna un'ottava più in alto. Partendo da Do (C), lo schema cade solo su note senza alterazioni: Do (C), Re (D), Mi (E), Fa (F), Sol (G), La (A), Si (B), Do (C). I suoi due semitoni cadono proprio dove i nomi non hanno nessuna nota in mezzo, tra Mi (E) e Fa (F) e tra Si (B) e Do (C)."
           }
         },
         {
@@ -2330,7 +2330,7 @@
           },
           "text": {
             "en": "Because the pattern is a set of distances, it can start on any of the twelve notes, and each start gives a different major scale. Started on G it gives G A B C D E F♯ G, since the last step must be a half step below G. On one string of the guitar the pattern is 2, 2, 1, 2, 2, 2, 1 frets, so the same finger movements play every major scale, only moved along the neck.",
-            "it": "Poiché lo schema è un insieme di distanze, può partire da una qualsiasi delle dodici note, e ogni partenza dà una scala maggiore diversa. Partendo da Sol dà Sol La Si Do Re Mi Fa♯ Sol, perché l'ultimo passo deve essere un semitono sotto il Sol. Su una corda della chitarra lo schema è 2, 2, 1, 2, 2, 2, 1 tasti, quindi gli stessi movimenti delle dita suonano ogni scala maggiore, spostati soltanto lungo il manico."
+            "it": "Poiché lo schema è un insieme di distanze, può partire da una qualsiasi delle dodici note, e ogni partenza dà una scala maggiore diversa. Partendo da Sol (G) dà Sol (G), La (A), Si (B), Do (C), Re (D), Mi (E), Fa♯ (F♯), Sol (G), perché l'ultimo passo deve essere un semitono sotto il Sol (G). Su una corda della chitarra lo schema è 2, 2, 1, 2, 2, 2, 1 tasti, quindi gli stessi movimenti delle dita suonano ogni scala maggiore, spostati soltanto lungo il manico."
           }
         }
       ],
@@ -2372,7 +2372,7 @@
             },
             {
               "en": "Starting with a half step gives a scale from E with C major's notes, which is neither major nor natural minor.",
-              "it": "Cominciare con un semitono dà una scala da Mi con le note di Do maggiore, che non è né maggiore né minore naturale."
+              "it": "Cominciare con un semitono dà una scala da Mi (E) con le note di Do maggiore (C), che non è né maggiore né minore naturale."
             },
             {
               "en": "Moving the first half step one place to the right gives a scale with a sharpened fourth; in the major scale the first half step is from the third to the fourth note.",
@@ -2421,44 +2421,44 @@
           "level": 1,
           "q": {
             "en": "G major contains one note that C major lacks. Which?",
-            "it": "Sol maggiore contiene una nota che Do maggiore non ha. Quale?"
+            "it": "Sol maggiore (G) contiene una nota che Do maggiore (C) non ha. Quale?"
           },
           "options": [
             {
               "en": "F♯",
-              "it": "Fa♯"
+              "it": "Fa♯ (F♯)"
             },
             {
               "en": "C♯",
-              "it": "Do♯"
+              "it": "Do♯ (C♯)"
             },
             {
               "en": "B♭",
-              "it": "Si♭"
+              "it": "Si♭ (B♭)"
             },
             {
               "en": "G♯",
-              "it": "Sol♯"
+              "it": "Sol♯ (G♯)"
             }
           ],
           "answer": 0,
           "why": {
             "en": "The seventh note of G major is a half step below G, which is F♯; all its other notes are in C major too.",
-            "it": "La settima nota di Sol maggiore è un semitono sotto il Sol, cioè Fa♯; tutte le altre sue note ci sono anche in Do maggiore."
+            "it": "La settima nota di Sol maggiore (G) è un semitono sotto il Sol (G), cioè Fa♯ (F♯); tutte le altre sue note ci sono anche in Do maggiore (C)."
           },
           "traps": [
             null,
             {
               "en": "C♯ appears in D major, two fifths up from C; G major keeps C natural as its fourth note.",
-              "it": "Il Do♯ compare in Re maggiore, due quinte sopra Do; Sol maggiore tiene il Do naturale come quarta nota."
+              "it": "Il Do♯ (C♯) compare in Re maggiore (D), due quinte sopra Do (C); Sol maggiore (G) tiene il Do (C) naturale come quarta nota."
             },
             {
               "en": "B♭ is the flat that F major needs, the key a fifth below C, not the one above.",
-              "it": "Il Si♭ è il bemolle che serve a Fa maggiore, la tonalità una quinta sotto Do, non a quella una quinta sopra."
+              "it": "Il Si♭ (B♭) è il bemolle che serve a Fa maggiore (F), la tonalità una quinta sotto Do (C), non a quella una quinta sopra."
             },
             {
               "en": "G♯ is a half step above the root and has no place in G major, whose root is G itself.",
-              "it": "Il Sol♯ è un semitono sopra la tonica e non ha posto in Sol maggiore, la cui tonica è il Sol stesso."
+              "it": "Il Sol♯ (G♯) è un semitono sopra la tonica e non ha posto in Sol maggiore (G), la cui tonica è il Sol (G) stesso."
             }
           ]
         },
@@ -2499,44 +2499,44 @@
           "level": 2,
           "q": {
             "en": "Build the major scale on D with the pattern. Which notes are sharp?",
-            "it": "Costruisci con lo schema la scala maggiore di Re. Quali note sono con il diesis?"
+            "it": "Costruisci con lo schema la scala maggiore di Re (D). Quali note sono con il diesis?"
           },
           "options": [
             {
               "en": "F♯ only",
-              "it": "solo Fa♯"
+              "it": "solo Fa♯ (F♯)"
             },
             {
               "en": "F♯ and C♯",
-              "it": "Fa♯ e Do♯"
+              "it": "Fa♯ (F♯) e Do♯ (C♯)"
             },
             {
               "en": "C♯ and G♯",
-              "it": "Do♯ e Sol♯"
+              "it": "Do♯ (C♯) e Sol♯ (G♯)"
             },
             {
               "en": "F♯, C♯ and G♯",
-              "it": "Fa♯, Do♯ e Sol♯"
+              "it": "Fa♯ (F♯), Do♯ (C♯) e Sol♯ (G♯)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "Counting the pattern from D gives D, E, F♯, G, A, B, C♯ and D, so the scale needs two sharps, F♯ and C♯, because the steps from E and from B are whole steps.",
-            "it": "Contando lo schema da Re si ottiene Re, Mi, Fa♯, Sol, La, Si, Do♯ e Re, quindi la scala ha due diesis, Fa♯ e Do♯, perché i passi da Mi e da Si sono toni."
+            "it": "Contando lo schema da Re (D) si ottiene Re (D), Mi (E), Fa♯ (F♯), Sol (G), La (A), Si (B), Do♯ (C♯) e Re (D), quindi la scala ha due diesis, Fa♯ (F♯) e Do♯ (C♯), perché i passi da Mi (E) e da Si (B) sono toni."
           },
           "traps": [
             {
               "en": "F♯ alone is G major; from D the seventh note must also be a half step below D, which is C♯.",
-              "it": "Il solo Fa♯ è Sol maggiore; da Re anche la settima nota deve stare un semitono sotto il Re, cioè Do♯."
+              "it": "Il solo Fa♯ (F♯) è Sol maggiore (G); da Re (D) anche la settima nota deve stare un semitono sotto il Re (D), cioè Do♯ (C♯)."
             },
             null,
             {
               "en": "G♯ would be a whole step above F♯, but the step from the third to the fourth note is a half step, which gives G.",
-              "it": "Il Sol♯ sarebbe un tono sopra il Fa♯, ma il passo dalla terza alla quarta nota è un semitono, che dà Sol."
+              "it": "Il Sol♯ (G♯) sarebbe un tono sopra il Fa♯ (F♯), ma il passo dalla terza alla quarta nota è un semitono, che dà Sol (G)."
             },
             {
               "en": "Three sharps belong to A major; in D major the fourth note is G, a half step above F♯.",
-              "it": "Tre diesis appartengono a La maggiore; in Re maggiore la quarta nota è Sol, un semitono sopra il Fa♯."
+              "it": "Tre diesis appartengono a La maggiore (A); in Re maggiore (D) la quarta nota è Sol (G), un semitono sopra il Fa♯ (F♯)."
             }
           ]
         },
@@ -2544,44 +2544,44 @@
           "level": 3,
           "q": {
             "en": "A singer starts 'do re mi' on E. What is the third note, 'mi'?",
-            "it": "Un cantante parte da Mi (E) e canta «do re mi» con il do mobile, cioè con il «do» sulla nota di partenza. Qual è la terza nota, il «mi»?"
+            "it": "Un cantante parte da Mi (E) e canta «do re mi» con il do mobile: qui «do», «re» e «mi» non sono nomi di nota ma i primi tre gradi della scala, e il «do» cade sulla nota di partenza. Quale nota canta sul terzo grado, il «mi»?"
           },
           "options": [
             {
               "en": "G",
-              "it": "Sol"
+              "it": "Sol (G)"
             },
             {
               "en": "G♯",
-              "it": "Sol♯"
+              "it": "Sol♯ (G♯)"
             },
             {
               "en": "F♯",
-              "it": "Fa♯"
+              "it": "Fa♯ (F♯)"
             },
             {
               "en": "A",
-              "it": "La"
+              "it": "La (A)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "Do re mi starts the major scale, so mi is two whole steps above E: E, F♯, G♯.",
-            "it": "«Do re mi» apre la scala maggiore, quindi il «mi» sta due toni sopra la nota di partenza: Mi, Fa♯, Sol♯."
+            "it": "«Do re mi» (do mobile: gradi della scala, non nomi di nota) apre la scala maggiore, quindi il «mi» sta due toni sopra la nota di partenza: Mi (E), Fa♯ (F♯), Sol♯ (G♯)."
           },
           "traps": [
             {
               "en": "G is three half steps above E, a minor third; the major scale's third note is four half steps up.",
-              "it": "Il Sol è tre semitoni sopra il Mi, una terza minore; la terza nota della scala maggiore è quattro semitoni più su."
+              "it": "Il Sol (G) è tre semitoni sopra il Mi (E), una terza minore; la terza nota della scala maggiore è quattro semitoni più su."
             },
             null,
             {
               "en": "F♯ is the second note, re, one whole step above E.",
-              "it": "Il Fa♯ è la seconda nota, il «re», un tono sopra il Mi."
+              "it": "Il Fa♯ (F♯) è la seconda nota, il «re», un tono sopra il Mi (E)."
             },
             {
               "en": "A is the fourth note, fa, five half steps above E.",
-              "it": "Il La è la quarta nota, il «fa», cinque semitoni sopra il Mi."
+              "it": "Il La (A) è la quarta nota, il «fa», cinque semitoni sopra il Mi (E)."
             }
           ]
         }
@@ -2615,7 +2615,7 @@
           "kind": "door",
           "clue": {
             "en": "A voice behind the hatch: 'Word of the day is the one note G major has and C major hasn't. Letter and sign.'",
-            "it": "Una voce dietro lo sportello: «La parola del giorno è l'unica nota che Sol maggiore ha e Do maggiore no. Nome e segno.»"
+            "it": "Una voce dietro lo sportello: «La parola del giorno è l'unica nota che Sol maggiore (G) ha e Do maggiore (C) no. Nome e segno.»"
           },
           "answer": [
             "F sharp",
@@ -2629,7 +2629,7 @@
           "inside": {
             "note": {
               "en": "Chalked inside the door. Each major key one fifth above another needs one more sharp: C none, G one (F♯), D two (F♯, C♯), A three. The new sharp is always the seventh note, the one a half step below the root. The circle of fifths puts the keys in this order.",
-              "it": "Scritto col gesso dentro la porta. Ogni tonalità maggiore una quinta sopra un'altra ha un diesis in più: Do nessuno, Sol uno (Fa♯), Re due (Fa♯, Do♯), La tre. Il nuovo diesis è sempre la settima nota, quella un semitono sotto la tonica. Il circolo delle quinte mette le tonalità in quest'ordine."
+              "it": "Scritto col gesso dentro la porta. Ogni tonalità maggiore una quinta sopra un'altra ha un diesis in più: Do (C) nessuno, Sol (G) uno, cioè Fa♯ (F♯), Re (D) due, cioè Fa♯ (F♯) e Do♯ (C♯), La (A) tre. Il nuovo diesis è sempre la settima nota, quella un semitono sotto la tonica. Il circolo delle quinte mette le tonalità in quest'ordine."
             },
             "station": "relative",
             "coins": 15
@@ -2671,31 +2671,31 @@
       },
       "wrongBelief": {
         "en": "The box at the 5th fret is 'the' blues scale, a fixed thing that belongs to A, and every other key needs another shape to learn.",
-        "it": "Il box al 5° tasto è «la» scala blues, una cosa fissa che appartiene al La, e ogni altra tonalità richiede un'altra forma da imparare."
+        "it": "Il box al 5° tasto è «la» scala blues, una cosa fissa che appartiene al La (A), e ogni altra tonalità richiede un'altra forma da imparare."
       },
       "anchor": {
         "type": "example",
         "text": {
           "en": "The first solo shape most guitarists learn, at fret 5 for A minor, played two frets higher, is B minor.",
-          "it": "La prima forma da solista che la maggior parte dei chitarristi impara, al tasto 5 per La minore, suonata due tasti più in alto è Si minore."
+          "it": "La prima forma da solista che la maggior parte dei chitarristi impara, al tasto 5 per La minore (Am), suonata due tasti più in alto è Si minore (Bm)."
         }
       },
       "application": {
         "en": "Most rock and blues solos start from this box: a guitarist told that a song is in E minor moves the box until its first finger sits on E, at fret 12, or plays it with open strings.",
-        "it": "La maggior parte degli assoli rock e blues parte da questo box: a un chitarrista che sente dire che un brano è in Mi minore basta spostare il box finché il suo primo dito sta sul Mi, al tasto 12, oppure suonarlo con le corde a vuoto."
+        "it": "La maggior parte degli assoli rock e blues parte da questo box: a un chitarrista che sente dire che un brano è in Mi minore (Em) basta spostare il box finché il suo primo dito sta sul Mi (E), al tasto 12, oppure suonarlo con le corde a vuoto."
       },
       "remember": [
         {
           "en": "The minor pentatonic has five notes, 1, ♭3, 4, 5 and ♭7; in A they are A, C, D, E and G.",
-          "it": "La pentatonica minore ha cinque note, 1, ♭3, 4, 5 e ♭7; in La sono La, Do, Re, Mi e Sol (A, C, D, E, G)."
+          "it": "La pentatonica minore ha cinque note, 1, ♭3, 4, 5 e ♭7; in La (A) sono La (A), Do (C), Re (D), Mi (E) e Sol (G)."
         },
         {
           "en": "The first box starts with the index finger on the root, on the low E string: fret 5 for A.",
-          "it": "Il primo box parte con l'indice sulla tonica, sulla corda di Mi (E) basso: tasto 5 per il La."
+          "it": "Il primo box parte con l'indice sulla tonica, sulla corda di Mi (E) basso: tasto 5 per il La (A)."
         },
         {
           "en": "A minor pentatonic and C major pentatonic share the same five notes.",
-          "it": "La pentatonica minore di La e la pentatonica maggiore di Do hanno le stesse cinque note."
+          "it": "La pentatonica minore di La (A) e la pentatonica maggiore di Do (C) hanno le stesse cinque note."
         }
       ],
       "explain": {
@@ -2745,17 +2745,17 @@
             },
             "surprise": {
               "en": "The shape never changes: at fret 3 it is G minor, at fret 12 E minor, and its five note names follow it.",
-              "it": "La forma non cambia mai: al tasto 3 è Sol minore, al tasto 12 Mi minore, e i nomi delle sue cinque note la seguono."
+              "it": "La forma non cambia mai: al tasto 3 è Sol minore (Gm), al tasto 12 Mi minore (Em), e i nomi delle sue cinque note la seguono."
             },
             "predict": {
               "q": {
                 "en": "The A minor box starts at fret 5. Where does the E minor box start?",
-                "it": "Il box di La minore parte dal tasto 5. Da dove parte il box di Mi minore?"
+                "it": "Il box di La minore (Am) parte dal tasto 5. Da dove parte il box di Mi minore (Em)?"
               },
               "options": [
                 {
                   "en": "fret 7, because E comes after A",
-                  "it": "dal tasto 7, perché il Mi viene dopo il La"
+                  "it": "dal tasto 7, perché il Mi (E) viene dopo il La (A)"
                 },
                 {
                   "en": "fret 12, or fret 0 with open strings",
@@ -2763,13 +2763,13 @@
                 },
                 {
                   "en": "nowhere: E minor needs another shape",
-                  "it": "da nessuna parte: Mi minore richiede un'altra forma"
+                  "it": "da nessuna parte: Mi minore (Em) richiede un'altra forma"
                 }
               ],
               "answer": 1,
               "why": {
                 "en": "The first finger sits on the root on the low E string, and the note E is the open low E string and fret 12.",
-                "it": "Il primo dito sta sulla tonica sulla corda di Mi (E) basso, e la nota Mi è la corda di Mi (E) basso a vuoto e il tasto 12."
+                "it": "Il primo dito sta sulla tonica sulla corda di Mi (E) basso, e la nota Mi (E) è la corda di Mi (E) basso a vuoto e il tasto 12."
               }
             },
             "controls": [
@@ -2781,20 +2781,20 @@
             "tries": [
               {
                 "en": "Play the box at fret 5, A minor, and listen over the drone.",
-                "it": "Suona il box al tasto 5, La minore, e ascoltalo sopra il bordone."
+                "it": "Suona il box al tasto 5, La minore (Am), e ascoltalo sopra il bordone."
               },
               {
                 "en": "Slide the box to E minor and play it.",
-                "it": "Fai scorrere il box su Mi minore e suonalo."
+                "it": "Fai scorrere il box su Mi minore (Em) e suonalo."
               }
             ],
             "takeaway": {
               "en": "The minor pentatonic box is <b>movable</b>: its first finger sits on the <b>root on the low E string</b>, so fret 5 gives A minor, fret 3 G minor and fret 12, or the open strings, E minor. The shape holds <b>1, ♭3, 4, 5, ♭7</b> in every key.",
-              "it": "Il box della pentatonica minore è <b>mobile</b>: il suo primo dito sta sulla <b>tonica sulla corda di Mi (E) basso</b>, quindi il tasto 5 dà La minore, il tasto 3 Sol minore e il tasto 12, o le corde a vuoto, Mi minore. La forma contiene <b>1, ♭3, 4, 5, ♭7</b> in ogni tonalità."
+              "it": "Il box della pentatonica minore è <b>mobile</b>: il suo primo dito sta sulla <b>tonica sulla corda di Mi (E) basso</b>, quindi il tasto 5 dà La minore (Am), il tasto 3 Sol minore (Gm) e il tasto 12, o le corde a vuoto, Mi minore (Em). La forma contiene <b>1, ♭3, 4, 5, ♭7</b> in ogni tonalità."
             },
             "source": {
               "en": "Box shape: the root-position minor pentatonic (Premier Guitar). Notes and frequencies computed live in equal temperament from A4 = 440 Hz.",
-              "it": "Forma del box: la pentatonica minore in posizione di tonica (Premier Guitar). Note e frequenze calcolate in tempo reale in temperamento equabile da La4 = 440 Hz."
+              "it": "Forma del box: la pentatonica minore in posizione di tonica (Premier Guitar). Note e frequenze calcolate in tempo reale in temperamento equabile da La4 (A4) = 440 Hz."
             }
           }
         ]
@@ -2807,7 +2807,7 @@
           },
           "text": {
             "en": "The minor pentatonic scale keeps five notes from the twelve: the root, the flat third (three half steps up), the fourth (five), the fifth (seven) and the flat seventh (ten). In A they are A, C, D, E and G. Between neighbouring notes of the scale the distance is always three or two half steps, never one.",
-            "it": "La scala pentatonica minore tiene cinque note delle dodici: la tonica, la terza minore (tre semitoni sopra), la quarta (cinque), la quinta (sette) e la settima minore (dieci). In La sono La, Do, Re, Mi e Sol. Tra due note vicine della scala la distanza è sempre di tre o di due semitoni, mai di uno."
+            "it": "La scala pentatonica minore tiene cinque note delle dodici: la tonica, la terza minore (tre semitoni sopra), la quarta (cinque), la quinta (sette) e la settima minore (dieci). In La (A) sono La (A), Do (C), Re (D), Mi (E) e Sol (G). Tra due note vicine della scala la distanza è sempre di tre o di due semitoni, mai di uno."
           }
         },
         {
@@ -2817,7 +2817,7 @@
           },
           "text": {
             "en": "On the guitar these five notes fit under one hand as a box of two notes per string. The box starts with the index finger on the root on the low E string, so its key is the note under that finger: fret 5 is A, fret 3 is G, fret 7 is B. The same five notes, started from C, are the C major pentatonic, which is why one box serves A minor and C major alike.",
-            "it": "Sulla chitarra queste cinque note stanno sotto una mano come un box di due note per corda. Il box parte con l'indice sulla tonica sulla corda di Mi (E) basso, quindi la sua tonalità è la nota sotto quel dito: il tasto 5 è La, il tasto 3 è Sol, il tasto 7 è Si. Le stesse cinque note, partendo dal Do, sono la pentatonica maggiore di Do, ed è per questo che un solo box serve sia per La minore sia per Do maggiore."
+            "it": "Sulla chitarra queste cinque note stanno sotto una mano come un box di due note per corda. Il box parte con l'indice sulla tonica sulla corda di Mi (E) basso, quindi la sua tonalità è la nota sotto quel dito: il tasto 5 è La (A), il tasto 3 è Sol (G), il tasto 7 è Si (B). Le stesse cinque note, partendo dal Do (C), sono la pentatonica maggiore di Do (C), ed è per questo che un solo box serve sia per La minore (Am) sia per Do maggiore (C)."
           }
         }
       ],
@@ -2826,44 +2826,44 @@
           "level": 1,
           "q": {
             "en": "The notes of A minor pentatonic are...",
-            "it": "Le note della pentatonica minore di La sono..."
+            "it": "Le note della pentatonica minore di La (A) sono..."
           },
           "options": [
             {
               "en": "A B C D E",
-              "it": "La Si Do Re Mi"
+              "it": "La (A), Si (B), Do (C), Re (D), Mi (E)"
             },
             {
               "en": "A C D E G",
-              "it": "La Do Re Mi Sol"
+              "it": "La (A), Do (C), Re (D), Mi (E), Sol (G)"
             },
             {
               "en": "A C♯ E F♯ G",
-              "it": "La Do♯ Mi Fa♯ Sol"
+              "it": "La (A), Do♯ (C♯), Mi (E), Fa♯ (F♯), Sol (G)"
             },
             {
               "en": "A B D E F",
-              "it": "La Si Re Mi Fa"
+              "it": "La (A), Si (B), Re (D), Mi (E), Fa (F)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "1, ♭3, 4, 5 and ♭7 from A are A, C, D, E and G.",
-            "it": "1, ♭3, 4, 5 e ♭7 a partire dal La sono La, Do, Re, Mi e Sol."
+            "it": "1, ♭3, 4, 5 e ♭7 a partire dal La (A) sono La (A), Do (C), Re (D), Mi (E) e Sol (G)."
           },
           "traps": [
             {
               "en": "Five neighbouring notes of the scale include the second, B, which the pentatonic leaves out; it keeps 1, ♭3, 4, 5, ♭7.",
-              "it": "Cinque note vicine della scala comprendono la seconda, il Si, che la pentatonica lascia fuori; tiene 1, ♭3, 4, 5, ♭7."
+              "it": "Cinque note vicine della scala comprendono la seconda, il Si (B), che la pentatonica lascia fuori; tiene 1, ♭3, 4, 5, ♭7."
             },
             null,
             {
               "en": "C♯ and F♯ are the major third and the major sixth, which belong to A major, not to A minor pentatonic.",
-              "it": "Do♯ e Fa♯ sono la terza e la sesta maggiori, che appartengono a La maggiore e non alla pentatonica minore di La."
+              "it": "Do♯ (C♯) e Fa♯ (F♯) sono la terza e la sesta maggiori, che appartengono a La maggiore (A) e non alla pentatonica minore di La (A)."
             },
             {
               "en": "B and F are the second and the flat sixth, the two notes the minor pentatonic leaves out of A minor.",
-              "it": "Si e Fa sono la seconda e la sesta minore, le due note che la pentatonica minore lascia fuori da La minore."
+              "it": "Si (B) e Fa (F) sono la seconda e la sesta minore, le due note che la pentatonica minore lascia fuori da La minore (Am)."
             }
           ]
         },
@@ -2871,16 +2871,16 @@
           "level": 1,
           "q": {
             "en": "Where does the first finger sit for the G minor box?",
-            "it": "Dove sta il primo dito per il box di Sol minore?"
+            "it": "Dove sta il primo dito per il box di Sol minore (Gm)?"
           },
           "options": [
             {
               "en": "On G on the low E string, fret 3",
-              "it": "Sul Sol della corda di Mi (E) basso, tasto 3"
+              "it": "Sul Sol (G) della corda di Mi (E) basso, tasto 3"
             },
             {
               "en": "On G on the G string, open",
-              "it": "Sul Sol della corda di Sol (G), a vuoto"
+              "it": "Sul Sol (G) della corda di Sol (G), a vuoto"
             },
             {
               "en": "At fret 5, as for every key",
@@ -2894,21 +2894,21 @@
           "answer": 0,
           "why": {
             "en": "The box starts with the index finger on the root on the low E string, and G is at fret 3 there.",
-            "it": "Il box parte con l'indice sulla tonica sulla corda di Mi (E) basso, e lì il Sol sta al tasto 3."
+            "it": "Il box parte con l'indice sulla tonica sulla corda di Mi (E) basso, e lì il Sol (G) sta al tasto 3."
           },
           "traps": [
             null,
             {
               "en": "The open G string is a G, but the box is placed by the root on the low E string, which carries the shape's lowest note.",
-              "it": "La corda di Sol (G) a vuoto è un Sol, ma il box si colloca con la tonica sulla corda di Mi (E) basso, che porta la nota più bassa della forma."
+              "it": "La corda di Sol (G) a vuoto è un Sol (G), ma il box si colloca con la tonica sulla corda di Mi (E) basso, che porta la nota più bassa della forma."
             },
             {
               "en": "Fret 5 is A on the low E string; leaving the box there plays A minor, whatever the song's key.",
-              "it": "Il tasto 5 sulla corda di Mi (E) basso è La; lasciare il box lì suona La minore, qualunque sia la tonalità del brano."
+              "it": "Il tasto 5 sulla corda di Mi (E) basso è La (A); lasciare il box lì suona La minore (Am), qualunque sia la tonalità del brano."
             },
             {
               "en": "Fret 7 on the low E string is B, so the box there plays B minor.",
-              "it": "Il tasto 7 sulla corda di Mi (E) basso è Si, quindi il box lì suona Si minore."
+              "it": "Il tasto 7 sulla corda di Mi (E) basso è Si (B), quindi il box lì suona Si minore (Bm)."
             }
           ]
         },
@@ -2916,36 +2916,36 @@
           "level": 1,
           "q": {
             "en": "A minor pentatonic shares its five notes with...",
-            "it": "La pentatonica minore di La ha le stesse cinque note di..."
+            "it": "La pentatonica minore di La (A) ha le stesse cinque note di..."
           },
           "options": [
             {
               "en": "A major pentatonic",
-              "it": "la pentatonica maggiore di La"
+              "it": "la pentatonica maggiore di La (A)"
             },
             {
               "en": "C major pentatonic",
-              "it": "la pentatonica maggiore di Do"
+              "it": "la pentatonica maggiore di Do (C)"
             },
             {
               "en": "E minor pentatonic",
-              "it": "la pentatonica minore di Mi"
+              "it": "la pentatonica minore di Mi (E)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "C major pentatonic, C D E G A, is the same five notes as A C D E G started from C.",
-            "it": "La pentatonica maggiore di Do, Do Re Mi Sol La, ha le stesse cinque note di La Do Re Mi Sol partendo dal Do."
+            "it": "La pentatonica maggiore di Do (C) è formata da Do (C), Re (D), Mi (E), Sol (G) e La (A): sono le stesse cinque note di La (A), Do (C), Re (D), Mi (E) e Sol (G), solo che si parte dal Do (C)."
           },
           "traps": [
             {
               "en": "A major pentatonic has C♯ and F♯, the major third and sixth, so it shares the root but not the notes.",
-              "it": "La pentatonica maggiore di La ha Do♯ e Fa♯, la terza e la sesta maggiori, quindi condivide la tonica ma non le note."
+              "it": "La pentatonica maggiore di La (A) ha Do♯ (C♯) e Fa♯ (F♯), la terza e la sesta maggiori, quindi condivide la tonica ma non le note."
             },
             null,
             {
               "en": "E minor pentatonic, E G A B D, has B where A minor has C, so the two share four notes, not five.",
-              "it": "La pentatonica minore di Mi, Mi Sol La Si Re, ha il Si dove La minore ha il Do, quindi le due condividono quattro note e non cinque."
+              "it": "La pentatonica minore di Mi (E) è formata da Mi (E), Sol (G), La (A), Si (B) e Re (D): ha il Si (B) dove La minore (Am) ha il Do (C), quindi le due condividono quattro note e non cinque."
             }
           ]
         },
@@ -2953,7 +2953,7 @@
           "level": 2,
           "q": {
             "en": "A song is in B minor. Where do you put the box?",
-            "it": "Un brano è in Si minore. Dove metti il box?"
+            "it": "Un brano è in Si minore (Bm). Dove metti il box?"
           },
           "options": [
             {
@@ -2976,21 +2976,21 @@
           "answer": 2,
           "why": {
             "en": "B is at fret 7 on the low E string (E, F, F♯, G, G♯, A, A♯, B), and the box is placed by its root there.",
-            "it": "Il Si sta al tasto 7 sulla corda di Mi (E) basso (Mi, Fa, Fa♯, Sol, Sol♯, La, La♯, Si), e il box si colloca con la sua tonica lì."
+            "it": "Il Si (B) sta al tasto 7 sulla corda di Mi (E) basso, contando i tasti: Mi (E), Fa (F), Fa♯ (F♯), Sol (G), Sol♯ (G♯), La (A), La♯ (A♯), Si (B). Il box si colloca con la sua tonica lì."
           },
           "traps": [
             {
               "en": "Fret 2 on the low E string is F♯, so the box there plays F♯ minor.",
-              "it": "Il tasto 2 sulla corda di Mi (E) basso è Fa♯, quindi il box lì suona Fa♯ minore."
+              "it": "Il tasto 2 sulla corda di Mi (E) basso è Fa♯ (F♯), quindi il box lì suona Fa♯ minore (F♯m)."
             },
             {
               "en": "Fret 5 is A, so the box there stays in A minor.",
-              "it": "Il tasto 5 è La, quindi il box lì resta in La minore."
+              "it": "Il tasto 5 è La (A), quindi il box lì resta in La minore (Am)."
             },
             null,
             {
               "en": "Fret 9 is C♯; counting E to F as a whole step lands two frets too high.",
-              "it": "Il tasto 9 è Do♯; contare da Mi a Fa come un tono intero porta due tasti troppo in alto."
+              "it": "Il tasto 9 è Do♯ (C♯); contare da Mi (E) a Fa (F) come un tono intero porta due tasti troppo in alto."
             }
           ]
         }
@@ -3015,7 +3015,7 @@
           "kind": "door",
           "clue": {
             "en": "Sam, through the door: 'Tonight we play in G minor. Tell me the fret, and you can come in.'",
-            "it": "Sam, attraverso la porta: «Stasera suoniamo in Sol minore. Dimmi il tasto e puoi entrare.»"
+            "it": "Sam, attraverso la porta: «Stasera suoniamo in Sol minore (Gm). Dimmi il tasto e puoi entrare.»"
           },
           "answer": 3,
           "type": "number",
@@ -3025,7 +3025,7 @@
           "inside": {
             "note": {
               "en": "Sam's set list on the back of an envelope. The same box, placed at fret 3, also plays in B flat major, because G minor pentatonic and B flat major pentatonic have the same five notes. Next to learn: the four other shapes that join this box up and down the neck.",
-              "it": "La scaletta di Sam sul retro di una busta. Lo stesso box, messo al tasto 3, suona anche in Si♭ maggiore, perché la pentatonica minore di Sol e la pentatonica maggiore di Si♭ hanno le stesse cinque note. Da imparare dopo: le altre quattro forme che collegano questo box in alto e in basso sul manico."
+              "it": "La scaletta di Sam sul retro di una busta. Lo stesso box, messo al tasto 3, suona anche in Si♭ maggiore (B♭), perché la pentatonica minore di Sol (G) e la pentatonica maggiore di Si♭ (B♭) hanno le stesse cinque note. Da imparare dopo: le altre quattro forme che collegano questo box in alto e in basso sul manico."
             },
             "coins": 15
           }
@@ -3066,7 +3066,7 @@
         "type": "contrast",
         "text": {
           "en": "The clock of half steps puts C next to C♯, which share almost no scale notes; the circle of fifths puts C next to G, which share six of their seven.",
-          "it": "L'orologio dei semitoni mette il Do accanto al Do♯, che condividono quasi nessuna nota della scala; il circolo delle quinte mette il Do accanto al Sol, che ne condividono sei su sette."
+          "it": "L'orologio dei semitoni mette il Do (C) accanto al Do♯ (C♯), che condividono quasi nessuna nota della scala; il circolo delle quinte mette il Do (C) accanto al Sol (G), che ne condividono sei su sette."
         },
         "limits": {
           "en": "Both circles hold the same twelve notes; only the order differs, by steps of one half step or of seven.",
@@ -3106,7 +3106,7 @@
           "to": "scale",
           "how": {
             "en": "The sharp that appears when the stencil of the Step Ladder moves from C to G is the one note that changes at each step round this circle.",
-            "it": "Il diesis che compare quando la dima della Scala a Pioli passa dal Do al Sol è l'unica nota che cambia a ogni passo lungo questo circolo."
+            "it": "Il diesis che compare quando la dima della Scala a Pioli passa dal Do (C) al Sol (G) è l'unica nota che cambia a ogni passo lungo questo circolo."
           }
         },
         {
@@ -3145,12 +3145,12 @@
             },
             "surprise": {
               "en": "Each step moves one single note by a half step, F to F♯, then C to C♯, while the lit shape on the circle of fifths only rotates.",
-              "it": "Ogni passo sposta una sola nota di un semitono, da Fa a Fa♯, poi da Do a Do♯, mentre la figura accesa sul circolo delle quinte si limita a ruotare."
+              "it": "Ogni passo sposta una sola nota di un semitono, da Fa (F) a Fa♯ (F♯), poi da Do (C) a Do♯ (C♯), mentre la figura accesa sul circolo delle quinte si limita a ruotare."
             },
             "predict": {
               "q": {
                 "en": "From C major to G major, one step round the circle of fifths, how many notes of the key change?",
-                "it": "Da Do maggiore a Sol maggiore, un passo lungo il circolo delle quinte, quante note della tonalità cambiano?"
+                "it": "Da Do maggiore (C) a Sol maggiore (G), un passo lungo il circolo delle quinte, quante note della tonalità cambiano?"
               },
               "options": [
                 {
@@ -3169,18 +3169,18 @@
               "answer": 0,
               "why": {
                 "en": "G major is C major with F raised to F♯; every other note is shared.",
-                "it": "Sol maggiore è Do maggiore con il Fa alzato a Fa♯; tutte le altre note sono in comune."
+                "it": "Sol maggiore (G) è Do maggiore (C) con il Fa (F) alzato a Fa♯ (F♯); tutte le altre note sono in comune."
               }
             },
             "controls": [],
             "tries": [
               {
                 "en": "Turn the key from C to G and find the note that changed.",
-                "it": "Gira la tonalità da Do a Sol e trova la nota che è cambiata."
+                "it": "Gira la tonalità da Do (C) a Sol (G) e trova la nota che è cambiata."
               },
               {
                 "en": "Keep turning until the circle brings you back to C.",
-                "it": "Continua a girare finché il circolo ti riporta al Do."
+                "it": "Continua a girare finché il circolo ti riporta al Do (C)."
               }
             ],
             "takeaway": {
@@ -3202,7 +3202,7 @@
           },
           "text": {
             "en": "The twelve notes can be put on a circle in a second order, by fifths instead of half steps: C, G, D, A, E, B, F♯, C♯, G♯, D♯, A♯, F, and C again. Seven half steps and twelve have no common factor, so the steps of a fifth visit every note once before coming home, after seven octaves.",
-            "it": "Le dodici note si possono disporre su un cerchio in un secondo ordine, per quinte invece che per semitoni: Do, Sol, Re, La, Mi, Si, Fa♯, Do♯, Sol♯, Re♯, La♯, Fa, e di nuovo Do. Sette semitoni e dodici non hanno fattori in comune, quindi i passi di quinta toccano ogni nota una volta sola prima di tornare a casa, dopo sette ottave."
+            "it": "Le dodici note si possono disporre su un cerchio in un secondo ordine, per quinte invece che per semitoni: Do (C), Sol (G), Re (D), La (A), Mi (E), Si (B), Fa♯ (F♯), Do♯ (C♯), Sol♯ (G♯), Re♯ (D♯), La♯ (A♯), Fa (F), e di nuovo Do (C). Sette semitoni e dodici non hanno fattori in comune, quindi i passi di quinta toccano ogni nota una volta sola prima di tornare a casa, dopo sette ottave."
           }
         },
         {
@@ -3212,7 +3212,7 @@
           },
           "text": {
             "en": "Keys next to each other on this circle differ by one note. G major is C major with F♯ in place of F, and D major is G major with C♯ in place of C, so each step clockwise adds a sharp and each step anticlockwise adds a flat. The seven notes of any major key are seven neighbours in a row on the circle, which is why nearby keys sound related.",
-            "it": "Le tonalità vicine su questo circolo differiscono per una nota. Sol maggiore è Do maggiore con il Fa♯ al posto del Fa, e Re maggiore è Sol maggiore con il Do♯ al posto del Do, quindi ogni passo in senso orario aggiunge un diesis e ogni passo in senso antiorario aggiunge un bemolle. Le sette note di una tonalità maggiore sono sette vicine di fila sul circolo, ed è per questo che le tonalità prossime suonano imparentate."
+            "it": "Le tonalità vicine su questo circolo differiscono per una nota. Sol maggiore (G) è Do maggiore (C) con il Fa♯ (F♯) al posto del Fa (F), e Re maggiore (D) è Sol maggiore (G) con il Do♯ (C♯) al posto del Do (C), quindi ogni passo in senso orario aggiunge un diesis e ogni passo in senso antiorario aggiunge un bemolle. Le sette note di una tonalità maggiore sono sette vicine di fila sul circolo, ed è per questo che le tonalità prossime suonano imparentate."
           }
         }
       ],
@@ -3240,7 +3240,7 @@
           "answer": 2,
           "why": {
             "en": "A fifth is seven half steps, as from C to G.",
-            "it": "Una quinta è sette semitoni, come da Do a Sol."
+            "it": "Una quinta è sette semitoni, come da Do (C) a Sol (G)."
           },
           "traps": [
             {
@@ -3249,7 +3249,7 @@
             },
             {
               "en": "Five half steps is a fourth, which is the step anticlockwise, from C to F.",
-              "it": "Cinque semitoni sono una quarta, che è il passo in senso antiorario, da Do a Fa."
+              "it": "Cinque semitoni sono una quarta, che è il passo in senso antiorario, da Do (C) a Fa (F)."
             },
             null
           ]
@@ -3258,7 +3258,7 @@
           "level": 1,
           "q": {
             "en": "How many notes do C major and G major share?",
-            "it": "Quante note condividono Do maggiore e Sol maggiore?"
+            "it": "Quante note condividono Do maggiore (C) e Sol maggiore (G)?"
           },
           "options": [
             {
@@ -3281,7 +3281,7 @@
           "answer": 2,
           "why": {
             "en": "G major is C major with F♯ instead of F, so six of the seven notes are shared.",
-            "it": "Sol maggiore è Do maggiore con Fa♯ invece di Fa, quindi sei note su sette sono in comune."
+            "it": "Sol maggiore (G) è Do maggiore (C) con Fa♯ (F♯) invece di Fa (F), quindi sei note su sette sono in comune."
           },
           "traps": [
             {
@@ -3290,12 +3290,12 @@
             },
             {
               "en": "Five shared notes is keys two steps apart, such as C and D.",
-              "it": "Cinque note in comune sono tonalità distanti due passi, come Do e Re."
+              "it": "Cinque note in comune sono tonalità distanti due passi, come Do (C) e Re (D)."
             },
             null,
             {
               "en": "Seven would make them the same set of notes; G major replaces F with F♯.",
-              "it": "Sette vorrebbe dire lo stesso insieme di note; Sol maggiore sostituisce il Fa con il Fa♯."
+              "it": "Sette vorrebbe dire lo stesso insieme di note; Sol maggiore (G) sostituisce il Fa (F) con il Fa♯ (F♯)."
             }
           ]
         },
@@ -3303,7 +3303,7 @@
           "level": 1,
           "q": {
             "en": "Starting on C and stepping up by fifths, after how many steps are you back on C?",
-            "it": "Partendo dal Do e salendo per quinte, dopo quanti passi si torna al Do?"
+            "it": "Partendo dal Do (C) e salendo per quinte, dopo quanti passi si torna al Do (C)?"
           },
           "options": [
             "7",
@@ -3313,7 +3313,7 @@
           "answer": 2,
           "why": {
             "en": "Seven and twelve share no factor, so the fifths visit all twelve notes before C comes round again.",
-            "it": "Sette e dodici non hanno fattori in comune, quindi le quinte toccano tutte e dodici le note prima che il Do ritorni."
+            "it": "Sette e dodici non hanno fattori in comune, quindi le quinte toccano tutte e dodici le note prima che il Do (C) ritorni."
           },
           "traps": [
             {
@@ -3331,7 +3331,7 @@
           "level": 2,
           "q": {
             "en": "D major has two sharps. How many does A major, the next key clockwise, have?",
-            "it": "Re maggiore ha due diesis. Quanti ne ha La maggiore, la tonalità successiva in senso orario?"
+            "it": "Re maggiore (D) ha due diesis. Quanti ne ha La maggiore (A), la tonalità successiva in senso orario?"
           },
           "options": [
             {
@@ -3354,21 +3354,21 @@
           "answer": 2,
           "why": {
             "en": "Each step clockwise adds one sharp: A major has F♯, C♯ and G♯.",
-            "it": "Ogni passo in senso orario aggiunge un diesis: La maggiore ha Fa♯, Do♯ e Sol♯."
+            "it": "Ogni passo in senso orario aggiunge un diesis: La maggiore (A) ha Fa♯ (F♯), Do♯ (C♯) e Sol♯ (G♯)."
           },
           "traps": [
             {
               "en": "One sharp is G major, the step anticlockwise from D.",
-              "it": "Un diesis è Sol maggiore, il passo in senso antiorario da Re."
+              "it": "Un diesis è Sol maggiore (G), il passo in senso antiorario da Re (D)."
             },
             {
               "en": "Keeping two sharps would make A major the same notes as D major; one note always changes per step.",
-              "it": "Tenere due diesis renderebbe La maggiore uguale a Re maggiore come note; a ogni passo cambia sempre una nota."
+              "it": "Tenere due diesis renderebbe La maggiore (A) uguale a Re maggiore (D) come note; a ogni passo cambia sempre una nota."
             },
             null,
             {
               "en": "Four sharps is E major, two steps clockwise from D.",
-              "it": "Quattro diesis è Mi maggiore, due passi in senso orario da Re."
+              "it": "Quattro diesis è Mi maggiore (E), due passi in senso orario da Re (D)."
             }
           ]
         },
@@ -3376,36 +3376,36 @@
           "level": 3,
           "q": {
             "en": "A song in C moves for its bridge to another key. Which move will sound the most closely related?",
-            "it": "Un brano in Do passa per il ponte a un'altra tonalità. Quale passaggio suonerà più imparentato?"
+            "it": "Un brano in Do (C) passa per il ponte a un'altra tonalità. Quale passaggio suonerà più imparentato?"
           },
           "options": [
             {
               "en": "To C♯ major",
-              "it": "A Do♯ maggiore"
+              "it": "A Do♯ maggiore (C♯)"
             },
             {
               "en": "To G major",
-              "it": "A Sol maggiore"
+              "it": "A Sol maggiore (G)"
             },
             {
               "en": "To F♯ major",
-              "it": "A Fa♯ maggiore"
+              "it": "A Fa♯ maggiore (F♯)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "G major is next to C on the circle of fifths and shares six of its seven notes.",
-            "it": "Sol maggiore è accanto al Do sul circolo delle quinte e condivide sei delle sue sette note."
+            "it": "Sol maggiore (G) è accanto al Do (C) sul circolo delle quinte e condivide sei delle sue sette note."
           },
           "traps": [
             {
               "en": "C♯ is next to C on the clock of half steps, but as a key it shares only two notes with C major.",
-              "it": "Do♯ è accanto al Do sull'orologio dei semitoni, ma come tonalità condivide solo due note con Do maggiore."
+              "it": "Do♯ (C♯) è accanto al Do (C) sull'orologio dei semitoni, ma come tonalità condivide solo due note con Do maggiore (C)."
             },
             null,
             {
               "en": "F♯ is opposite C on the circle of fifths, and F♯ major shares only two notes with C major, B and F (written E♯).",
-              "it": "Fa♯ è opposto al Do sul circolo delle quinte, e Fa♯ maggiore condivide solo due note con Do maggiore, Si e Fa (scritto Mi♯)."
+              "it": "Fa♯ (F♯) è opposto al Do (C) sul circolo delle quinte, e Fa♯ maggiore (F♯) condivide solo due note con Do maggiore (C): Si (B) e Fa (F), che in Fa♯ maggiore (F♯) si scrive Mi♯ (E♯)."
             }
           ]
         }
@@ -3468,7 +3468,7 @@
         "type": "example",
         "text": {
           "en": "The open E major chord, fretted 0 2 2 1 0 0, rings E, B, E, G♯, B, E: three note names over six strings.",
-          "it": "L'accordo di Mi maggiore (E) a vuoto, con le dita su 0 2 2 1 0 0, suona Mi, Si, Mi, Sol♯, Si, Mi: tre nomi di nota su sei corde."
+          "it": "L'accordo di Mi maggiore (E) a vuoto, con le dita su 0 2 2 1 0 0, suona Mi (E), Si (B), Mi (E), Sol♯ (G♯), Si (B), Mi (E): tre nomi di nota su sei corde."
         }
       },
       "application": {
@@ -3486,17 +3486,17 @@
         },
         {
           "en": "Open E major is E, B, E, G♯, B, E; lifting the finger on G♯ gives E minor.",
-          "it": "Mi maggiore a vuoto è Mi, Si, Mi, Sol♯, Si, Mi; alzando il dito sul Sol♯ si ottiene Mi minore."
+          "it": "Mi maggiore (E) a vuoto è Mi (E), Si (B), Mi (E), Sol♯ (G♯), Si (B), Mi (E); alzando il dito sul Sol♯ (G♯) si ottiene Mi minore (Em)."
         }
       ],
       "explain": {
         "q": {
           "en": "Why does lifting one finger turn E major into E minor?",
-          "it": "Perché alzare un dito trasforma Mi maggiore in Mi minore?"
+          "it": "Perché alzare un dito trasforma Mi maggiore (E) in Mi minore (Em)?"
         },
         "a": {
           "en": "E major is E, G♯ and B, and the finger at fret 1 of the G string plays G♯, the major third. Lifting it lets the open G sound, one half step lower, which is a minor third above E, so the chord becomes E, G and B, which is E minor.",
-          "it": "Mi maggiore è Mi, Sol♯ e Si, e il dito al tasto 1 della corda di Sol (G) suona il Sol♯, la terza maggiore. Alzandolo suona il Sol a vuoto, un semitono più in basso, che è una terza minore sopra il Mi, quindi l'accordo diventa Mi, Sol e Si, cioè Mi minore."
+          "it": "Mi maggiore (E) è Mi (E), Sol♯ (G♯) e Si (B), e il dito al tasto 1 della corda di Sol (G) suona il Sol♯ (G♯), la terza maggiore. Alzandolo suona il Sol (G) a vuoto, un semitono più in basso, che è una terza minore sopra il Mi (E), quindi l'accordo diventa Mi (E), Sol (G) e Si (B), cioè Mi minore (Em)."
         }
       },
       "callbacks": [
@@ -3543,7 +3543,7 @@
             },
             "surprise": {
               "en": "Six strings sound only three note names, and one fret on the G string is all that separates E major from E minor.",
-              "it": "Sei corde fanno sentire solo tre nomi di nota, e un solo tasto sulla corda di Sol (G) separa Mi maggiore da Mi minore."
+              "it": "Sei corde fanno sentire solo tre nomi di nota, e un solo tasto sulla corda di Sol (G) separa Mi maggiore (E) da Mi minore (Em)."
             },
             "predict": {
               "q": {
@@ -3571,7 +3571,7 @@
               "answer": 3,
               "why": {
                 "en": "A major triad has three notes, E, G♯ and B, and the six strings repeat them in different octaves.",
-                "it": "Una triade maggiore ha tre note, Mi, Sol♯ e Si, e le sei corde le ripetono in ottave diverse."
+                "it": "Una triade maggiore ha tre note, Mi (E), Sol♯ (G♯) e Si (B), e le sei corde le ripetono in ottave diverse."
               }
             },
             "controls": [
@@ -3596,7 +3596,7 @@
             ],
             "takeaway": {
               "en": "A <b>major triad</b> is a root, a <b>major third</b> (4 half steps) and a <b>fifth</b> (7); a <b>minor triad</b> lowers the third to 3 half steps. The open E chord rings <b>E, B, E, G♯, B, E</b>, only three names, and lifting the finger on G♯ leaves the open G: <b>E minor</b>.",
-              "it": "Una <b>triade maggiore</b> è una tonica, una <b>terza maggiore</b> (4 semitoni) e una <b>quinta</b> (7); una <b>triade minore</b> abbassa la terza a 3 semitoni. L'accordo di Mi (E) a vuoto suona <b>Mi, Si, Mi, Sol♯, Si, Mi</b>, soltanto tre nomi, e alzando il dito sul Sol♯ resta il Sol a vuoto: <b>Mi minore</b>."
+              "it": "Una <b>triade maggiore</b> è una tonica, una <b>terza maggiore</b> (4 semitoni) e una <b>quinta</b> (7); una <b>triade minore</b> abbassa la terza a 3 semitoni. L'accordo di Mi (E) a vuoto suona <b>Mi (E), Si (B), Mi (E), Sol♯ (G♯), Si (B), Mi (E)</b>, soltanto tre nomi, e alzando il dito sul Sol♯ (G♯) resta il Sol (G) a vuoto: <b>Mi minore (Em)</b>."
             },
             "source": {
               "en": "Chord tones computed live from the intervals (Open Music Theory, Hutchinson); string notes from standard tuning; sound synthesised from each string's frequency in equal temperament.",
@@ -3673,7 +3673,7 @@
           },
           "text": {
             "en": "An open chord on the guitar spreads a triad over the strings and repeats some of its notes. The open E major chord plays E on the low string, then B, E, G♯, B and E, so it holds only E, G♯ and B. The G♯ is the finger at fret 1 of the G string, and lifting it lets the open G sound, a half step lower, which turns the chord into E minor.",
-            "it": "Un accordo a vuoto sulla chitarra distribuisce una triade sulle corde e ripete alcune delle sue note. L'accordo di Mi maggiore (E) a vuoto suona Mi sulla corda bassa, poi Si, Mi, Sol♯, Si e Mi, quindi contiene soltanto Mi, Sol♯ e Si. Il Sol♯ è il dito al tasto 1 della corda di Sol (G), e alzandolo suona il Sol a vuoto, un semitono più in basso, che trasforma l'accordo in Mi minore (Em). Da qui in poi gli accordi si indicano con i loro simboli, come E, Am e G."
+            "it": "Un accordo a vuoto sulla chitarra distribuisce una triade sulle corde e ripete alcune delle sue note. L'accordo di Mi maggiore (E) a vuoto suona Mi (E) sulla corda bassa, poi Si (B), Mi (E), Sol♯ (G♯), Si (B) e Mi (E), quindi contiene soltanto Mi (E), Sol♯ (G♯) e Si (B). Il Sol♯ (G♯) è il dito al tasto 1 della corda di Sol (G), e alzandolo suona il Sol (G) a vuoto, un semitono più in basso, che trasforma l'accordo in Mi minore (Em). Da qui in poi gli accordi si indicano con i loro simboli, come E, Am e G."
           }
         }
       ],
@@ -3765,12 +3765,12 @@
           "options": [
             {
               "en": "E minor",
-              "it": "Mi minore"
+              "it": "Mi minore (Em)"
             },
             "E7",
             {
               "en": "A major",
-              "it": "La maggiore"
+              "it": "La maggiore (A)"
             },
             {
               "en": "a broken chord with no name",
@@ -3780,21 +3780,21 @@
           "answer": 0,
           "why": {
             "en": "That finger plays G♯, the major third; the open G is a half step lower, a minor third, so the chord becomes E G B, E minor.",
-            "it": "Quel dito suona il Sol♯, la terza maggiore; il Sol a vuoto è un semitono più in basso, una terza minore, quindi l'accordo diventa Mi Sol Si, Mi minore."
+            "it": "Quel dito suona il Sol♯ (G♯), la terza maggiore; il Sol (G) a vuoto è un semitono più in basso, una terza minore, quindi l'accordo diventa Mi (E), Sol (G), Si (B), Mi minore (Em)."
           },
           "traps": [
             null,
             {
               "en": "E7 adds D, which needs a finger on the D string or the B string; lifting the G-string finger changes the third instead.",
-              "it": "E7 aggiunge il Re, che richiede un dito sulla corda di Re o su quella di Si; alzare il dito sulla corda di Sol cambia invece la terza."
+              "it": "E7 aggiunge il Re (D), che richiede un dito sulla corda di Re (D) o su quella di Si (B); alzare il dito sulla corda di Sol (G) cambia invece la terza."
             },
             {
               "en": "A major is A, C♯ and E, a different root; the low E string still sounds the root of the chord.",
-              "it": "La maggiore è La, Do♯ e Mi, con un'altra tonica; la corda di Mi (E) bassa continua a suonare la tonica dell'accordo."
+              "it": "La maggiore (A) è La (A), Do♯ (C♯) e Mi (E), con un'altra tonica; la corda di Mi (E) bassa continua a suonare la tonica dell'accordo."
             },
             {
               "en": "The open G is a minor third above E, so the chord is still a complete triad: E minor.",
-              "it": "Il Sol a vuoto è una terza minore sopra il Mi, quindi l'accordo è ancora una triade completa: Mi minore."
+              "it": "Il Sol (G) a vuoto è una terza minore sopra il Mi (E), quindi l'accordo è ancora una triade completa: Mi minore (Em)."
             }
           ]
         },
@@ -3802,44 +3802,44 @@
           "level": 2,
           "q": {
             "en": "Which notes make a C major triad?",
-            "it": "Quali note formano una triade di Do maggiore?"
+            "it": "Quali note formano una triade di Do maggiore (C)?"
           },
           "options": [
             {
               "en": "C E♭ G",
-              "it": "Do Mi♭ Sol"
+              "it": "Do (C), Mi♭ (E♭), Sol (G)"
             },
             {
               "en": "C E G",
-              "it": "Do Mi Sol"
+              "it": "Do (C), Mi (E), Sol (G)"
             },
             {
               "en": "C F A",
-              "it": "Do Fa La"
+              "it": "Do (C), Fa (F), La (A)"
             },
             {
               "en": "C E G♯",
-              "it": "Do Mi Sol♯"
+              "it": "Do (C), Mi (E), Sol♯ (G♯)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "Four half steps above C is E, and seven is G.",
-            "it": "Quattro semitoni sopra il Do c'è il Mi, e sette il Sol."
+            "it": "Quattro semitoni sopra il Do (C) c'è il Mi (E), e sette il Sol (G)."
           },
           "traps": [
             {
               "en": "E♭ is three half steps above C, a minor third, so C E♭ G is C minor.",
-              "it": "Il Mi♭ è tre semitoni sopra il Do, una terza minore, quindi Do Mi♭ Sol è Do minore."
+              "it": "Il Mi♭ (E♭) è tre semitoni sopra il Do (C), una terza minore, quindi Do (C), Mi♭ (E♭), Sol (G) è Do minore (Cm)."
             },
             null,
             {
               "en": "C F A is an F major triad with C at the bottom; its root is F.",
-              "it": "Do Fa La è una triade di Fa maggiore con il Do in basso; la sua tonica è il Fa."
+              "it": "Do (C), Fa (F), La (A) è una triade di Fa maggiore (F) con il Do (C) in basso; la sua tonica è il Fa (F)."
             },
             {
               "en": "G♯ is eight half steps above C, so C E G♯ is augmented.",
-              "it": "Il Sol♯ è otto semitoni sopra il Do, quindi Do Mi Sol♯ è aumentata."
+              "it": "Il Sol♯ (G♯) è otto semitoni sopra il Do (C), quindi Do (C), Mi (E), Sol♯ (G♯) è aumentata."
             }
           ]
         },
@@ -3847,36 +3847,36 @@
           "level": 2,
           "q": {
             "en": "An open A minor chord, x02210, rings A, E, A, C and E. Which note is the third?",
-            "it": "Un accordo di La minore (Am) a vuoto, x02210, suona La, Mi, La, Do e Mi. Quale nota è la terza?"
+            "it": "Un accordo di La minore (Am) a vuoto, x02210, suona La (A), Mi (E), La (A), Do (C) e Mi (E). Quale nota è la terza?"
           },
           "options": [
             {
               "en": "A",
-              "it": "La"
+              "it": "La (A)"
             },
             {
               "en": "C",
-              "it": "Do"
+              "it": "Do (C)"
             },
             {
               "en": "E",
-              "it": "Mi"
+              "it": "Mi (E)"
             }
           ],
           "answer": 1,
           "why": {
             "en": "C is three half steps above A, the minor third; E is seven half steps up, the fifth.",
-            "it": "Il Do sta tre semitoni sopra il La, la terza minore; il Mi sta sette semitoni sopra, la quinta."
+            "it": "Il Do (C) sta tre semitoni sopra il La (A), la terza minore; il Mi (E) sta sette semitoni sopra, la quinta."
           },
           "traps": [
             {
               "en": "A is the root, the note the chord is named after, on the open A string.",
-              "it": "Il La è la tonica, la nota da cui l'accordo prende il nome, sulla corda di La (A) a vuoto."
+              "it": "Il La (A) è la tonica, la nota da cui l'accordo prende il nome, sulla corda di La (A) a vuoto."
             },
             null,
             {
               "en": "E is the fifth, seven half steps above A, and it appears twice.",
-              "it": "Il Mi è la quinta, sette semitoni sopra il La, e compare due volte."
+              "it": "Il Mi (E) è la quinta, sette semitoni sopra il La (A), e compare due volte."
             }
           ]
         },
@@ -3884,44 +3884,44 @@
           "level": 3,
           "q": {
             "en": "A bass player plays G under your open E minor chord. What happens to the chord?",
-            "it": "Un bassista suona il Sol sotto il tuo accordo di Mi minore (Em) a vuoto. Che cosa succede all'accordo?"
+            "it": "Un bassista suona il Sol (G) sotto il tuo accordo di Mi minore (Em) a vuoto. Che cosa succede all'accordo?"
           },
           "options": [
             {
               "en": "It fits: G is already in E minor",
-              "it": "Ci sta: il Sol è già in Mi minore"
+              "it": "Ci sta: il Sol (G) è già in Mi minore (Em)"
             },
             {
               "en": "It turns into E major",
-              "it": "Diventa Mi maggiore"
+              "it": "Diventa Mi maggiore (E)"
             },
             {
               "en": "It turns into G minor",
-              "it": "Diventa Sol minore"
+              "it": "Diventa Sol minore (Gm)"
             },
             {
               "en": "It clashes: G is not in E minor",
-              "it": "Stona: il Sol non è in Mi minore"
+              "it": "Stona: il Sol (G) non è in Mi minore (Em)"
             }
           ],
           "answer": 0,
           "why": {
             "en": "E minor is E, G and B, so the bass G is the chord's own minor third; the chord stays E minor with its third at the bottom, written Em/G.",
-            "it": "Mi minore è Mi, Sol e Si, quindi il Sol del basso è la terza minore dell'accordo; l'accordo resta Mi minore con la terza in basso, e si scrive Em/G."
+            "it": "Mi minore (Em) è Mi (E), Sol (G) e Si (B), quindi il Sol (G) del basso è la terza minore dell'accordo; l'accordo resta Mi minore (Em) con la terza in basso, e si scrive Em/G."
           },
           "traps": [
             null,
             {
               "en": "E major needs G♯; the bass plays G natural, which is the minor third of E.",
-              "it": "Mi maggiore richiede il Sol♯; il basso suona il Sol naturale, che è la terza minore del Mi."
+              "it": "Mi maggiore (E) richiede il Sol♯ (G♯); il basso suona il Sol (G) naturale, che è la terza minore del Mi (E)."
             },
             {
               "en": "G minor needs B♭ and D; the guitar keeps E and B natural, so the chord is still E G B.",
-              "it": "Sol minore richiede Si♭ e Re; la chitarra mantiene Mi e Si naturali, quindi l'accordo è ancora Mi Sol Si."
+              "it": "Sol minore (Gm) richiede Si♭ (B♭) e Re (D); la chitarra mantiene Mi (E) e Si (B) naturali, quindi l'accordo è ancora Mi (E), Sol (G), Si (B)."
             },
             {
               "en": "G is the minor third of E minor, already inside the chord, so it fits rather than clashes.",
-              "it": "Il Sol è la terza minore di Mi minore, già dentro l'accordo, quindi ci sta e non stona."
+              "it": "Il Sol (G) è la terza minore di Mi minore (Em), già dentro l'accordo, quindi ci sta e non stona."
             }
           ]
         }
@@ -3956,7 +3956,7 @@
           "kind": "computer",
           "clue": {
             "en": "pw: the note my altos sing in E major, the one that turns it minor when they drop it. Sharps spelled out, please. C.",
-            "it": "pw: la nota che i miei contralti cantano in Mi maggiore, quella che lo rende minore se la abbassano. Diesis a parole. C."
+            "it": "pw: la nota che i miei contralti cantano in Mi maggiore (E), quella che lo rende minore se la abbassano. Diesis a parole. C."
           },
           "answer": [
             "G sharp",
@@ -3970,7 +3970,7 @@
           "inside": {
             "note": {
               "en": "Cora's rehearsal notes. In every open major shape the lowest string played is the root, and the third is the note to watch: it sits on the G string in E, on the B string in A, and in D on the top string. Lowering it by a fret makes the minor chord, which is why Em, Am and Dm are their major shapes with one note moved.",
-              "it": "Gli appunti di prova di Cora. In ogni forma maggiore a vuoto la corda più bassa suonata è la tonica, e la terza è la nota da tenere d'occhio: sta sulla corda di Sol in Mi, sulla corda di Si in La, e in Re sulla corda più acuta. Abbassarla di un tasto dà l'accordo minore, ed è per questo che Em, Am e Dm sono le loro forme maggiori con una nota spostata."
+              "it": "Gli appunti di prova di Cora. In ogni forma maggiore a vuoto la corda più bassa suonata è la tonica, e la terza è la nota da tenere d'occhio: sta sulla corda di Sol (G) in Mi (E), sulla corda di Si (B) in La (A), e in Re (D) sulla corda più acuta. Abbassarla di un tasto dà l'accordo minore, ed è per questo che Em, Am e Dm sono le loro forme maggiori con una nota spostata."
             },
             "station": "shapes",
             "coins": 15
@@ -4012,12 +4012,12 @@
         "type": "example",
         "text": {
           "en": "G, C, D and Em, the four chords of countless campfire songs, are chords I, IV, V and vi of G major.",
-          "it": "G, C, D ed Em, i quattro accordi di innumerevoli canzoni da falò, sono gli accordi I, IV, V e vi di Sol maggiore."
+          "it": "G, C, D ed Em, i quattro accordi di innumerevoli canzoni da falò, sono gli accordi I, IV, V e vi di Sol maggiore (G)."
         }
       },
       "application": {
         "en": "A guitarist who knows a song is in G can expect the chords G, Am, Bm, C, D and Em, and can play along without a chart.",
-        "it": "Un chitarrista che sa che un brano è in Sol può aspettarsi gli accordi G, Am, Bm, C, D ed Em, e suonare insieme agli altri senza uno spartito."
+        "it": "Un chitarrista che sa che un brano è in Sol (G) può aspettarsi gli accordi G, Am, Bm, C, D ed Em, e suonare insieme agli altri senza uno spartito."
       },
       "remember": [
         {
@@ -4026,17 +4026,17 @@
         },
         {
           "en": "In G major the chords are G, Am, Bm, C, D, Em and F♯dim.",
-          "it": "In Sol maggiore gli accordi sono G, Am, Bm, C, D, Em e F♯dim."
+          "it": "In Sol maggiore (G) gli accordi sono G, Am, Bm, C, D, Em e F♯dim."
         }
       ],
       "explain": {
         "q": {
           "en": "Why is the chord on the second note of C major minor, when the chord on the first is major?",
-          "it": "Perché l'accordo sulla seconda nota di Do maggiore è minore, quando quello sulla prima è maggiore?"
+          "it": "Perché l'accordo sulla seconda nota di Do maggiore (C) è minore, quando quello sulla prima è maggiore?"
         },
         "a": {
           "en": "Both are stacks of thirds made only from the notes of C major. From D the next scale notes are F and A, and F is only three half steps above D, a minor third, so the chord is D minor, while from C the third is E, four half steps up.",
-          "it": "Sono entrambi pile di terze fatte solo con le note di Do maggiore. Da Re le note successive della scala sono Fa e La, e il Fa sta solo tre semitoni sopra il Re, una terza minore, quindi l'accordo è Re minore, mentre da Do la terza è Mi, quattro semitoni sopra."
+          "it": "Sono entrambi pile di terze fatte solo con le note di Do maggiore (C). Da Re (D) le note successive della scala sono Fa (F) e La (A), e il Fa (F) sta solo tre semitoni sopra il Re (D), una terza minore, quindi l'accordo è Re minore (Dm), mentre da Do (C) la terza è Mi (E), quattro semitoni sopra."
         }
       },
       "callbacks": [
@@ -4081,26 +4081,26 @@
             "predict": {
               "q": {
                 "en": "Stack thirds using only the notes of C major, starting on D. The chord is...",
-                "it": "Impila terze usando solo le note di Do maggiore, partendo dal Re. L'accordo è..."
+                "it": "Impila terze usando solo le note di Do maggiore (C), partendo dal Re (D). L'accordo è..."
               },
               "options": [
                 {
                   "en": "D major",
-                  "it": "Re maggiore"
+                  "it": "Re maggiore (D)"
                 },
                 {
                   "en": "D minor",
-                  "it": "Re minore"
+                  "it": "Re minore (Dm)"
                 },
                 {
                   "en": "D diminished",
-                  "it": "Re diminuito"
+                  "it": "Re (D) diminuito"
                 }
               ],
               "answer": 1,
               "why": {
                 "en": "The notes are D, F and A; F is three half steps above D, a minor third, and A seven, a fifth.",
-                "it": "Le note sono Re, Fa e La; il Fa sta tre semitoni sopra il Re, una terza minore, e il La sette, una quinta."
+                "it": "Le note sono Re (D), Fa (F) e La (A); il Fa (F) sta tre semitoni sopra il Re (D), una terza minore, e il La (A) sette, una quinta."
               }
             },
             "controls": [
@@ -4116,12 +4116,12 @@
               },
               {
                 "en": "Play I, V, vi, IV in G.",
-                "it": "Suona I, V, vi, IV in Sol."
+                "it": "Suona I, V, vi, IV in Sol (G)."
               }
             ],
             "takeaway": {
               "en": "Stacking thirds from a major scale gives <b>I, IV and V major</b>, <b>ii, iii and vi minor</b> and vii diminished, in every key. In G that is G, Am, Bm, C, D, Em and F♯dim, and <b>I–V–vi–IV</b> (G, D, Em, C) is a common progression of popular songs.",
-              "it": "Impilare terze da una scala maggiore dà <b>I, IV e V maggiori</b>, <b>ii, iii e vi minori</b> e vii diminuito, in ogni tonalità. In Sol sono G, Am, Bm, C, D, Em e F♯dim, e <b>I–V–vi–IV</b> (G, D, Em, C) è una progressione comune nelle canzoni popolari."
+              "it": "Impilare terze da una scala maggiore dà <b>I, IV e V maggiori</b>, <b>ii, iii e vi minori</b> e vii diminuito, in ogni tonalità. In Sol (G) sono G, Am, Bm, C, D, Em e F♯dim, e <b>I–V–vi–IV</b> (G, D, Em, C) è una progressione comune nelle canzoni popolari."
             },
             "source": {
               "en": "Chords computed live by stacking scale notes (Applied Guitar Theory, Open Music Theory); sound synthesised in equal temperament.",
@@ -4148,7 +4148,7 @@
           },
           "text": {
             "en": "Musicians name these chords by number, in Roman numerals, with capitals for major and small letters for minor: I, ii, iii, IV, V, vi and vii°. A progression written in numbers works in any key, so I–IV–V is G, C and D in G major and A, D and E in A major.",
-            "it": "I musicisti indicano questi accordi con un numero, in cifre romane, con la maiuscola per i maggiori e la minuscola per i minori: I, ii, iii, IV, V, vi e vii°. Una progressione scritta con i numeri funziona in qualsiasi tonalità, quindi I–IV–V è G, C e D in Sol maggiore e A, D ed E in La maggiore."
+            "it": "I musicisti indicano questi accordi con un numero, in cifre romane, con la maiuscola per i maggiori e la minuscola per i minori: I, ii, iii, IV, V, vi e vii°. Una progressione scritta con i numeri funziona in qualsiasi tonalità, quindi I–IV–V è G, C e D in Sol maggiore (G) e A, D ed E in La maggiore (A)."
           }
         }
       ],
@@ -4202,7 +4202,7 @@
           "level": 1,
           "q": {
             "en": "Which of these chords belongs to G major?",
-            "it": "Quale di questi accordi appartiene a Sol maggiore?"
+            "it": "Quale di questi accordi appartiene a Sol maggiore (G)?"
           },
           "options": [
             "F",
@@ -4213,21 +4213,21 @@
           "answer": 2,
           "why": {
             "en": "Em is E, G and B, all notes of G major; it is the key's vi chord.",
-            "it": "Em è Mi, Sol e Si, tutte note di Sol maggiore; è l'accordo vi della tonalità."
+            "it": "Em è Mi (E), Sol (G) e Si (B), tutte note di Sol maggiore (G); è l'accordo vi della tonalità."
           },
           "traps": [
             {
               "en": "F is not a note of G major, which has F♯, so a chord built on F comes from outside the key.",
-              "it": "Il Fa non è una nota di Sol maggiore, che ha il Fa♯, quindi un accordo costruito sul Fa viene da fuori della tonalità."
+              "it": "Il Fa (F) non è una nota di Sol maggiore (G), che ha il Fa♯ (F♯), quindi un accordo costruito sul Fa (F) viene da fuori della tonalità."
             },
             {
               "en": "Cm needs E♭; the IV chord of G is C major, with E natural.",
-              "it": "Cm richiede il Mi♭; l'accordo IV di Sol è Do maggiore, con il Mi naturale."
+              "it": "Cm richiede il Mi♭ (E♭); l'accordo IV di Sol (G) è Do maggiore (C), con il Mi (E) naturale."
             },
             null,
             {
               "en": "B♭ is outside G major, whose chord on B is B minor, B D F♯.",
-              "it": "B♭ è fuori da Sol maggiore, il cui accordo sul Si è Si minore, Si Re Fa♯."
+              "it": "B♭ è fuori da Sol maggiore (G), il cui accordo sul Si (B) è Si minore (Bm), Si (B), Re (D), Fa♯ (F♯)."
             }
           ]
         },
@@ -4235,7 +4235,7 @@
           "level": 2,
           "q": {
             "en": "A song in A major uses I, IV and V. Which chords are they?",
-            "it": "Un brano in La maggiore usa I, IV e V. Quali accordi sono?"
+            "it": "Un brano in La maggiore (A) usa I, IV e V. Quali accordi sono?"
           },
           "options": [
             {
@@ -4258,17 +4258,17 @@
           "answer": 0,
           "why": {
             "en": "The fourth note of A major is D and the fifth is E, and those chords are major.",
-            "it": "La quarta nota di La maggiore è il Re e la quinta il Mi, e quegli accordi sono maggiori."
+            "it": "La quarta nota di La maggiore (A) è il Re (D) e la quinta il Mi (E), e quegli accordi sono maggiori."
           },
           "traps": [
             null,
             {
               "en": "C is not in A major, which has C♯; counting from A by letters without the scale gives the wrong IV and V.",
-              "it": "Il Do non è in La maggiore, che ha il Do♯; contare a partire dal La per nomi senza la scala dà il IV e il V sbagliati."
+              "it": "Il Do (C) non è in La maggiore (A), che ha il Do♯ (C♯); contare a partire dal La (A) per nomi senza la scala dà il IV e il V sbagliati."
             },
             {
               "en": "B and C♯ are notes 2 and 3, whose chords are minor, Bm and C♯m.",
-              "it": "Si e Do♯ sono le note 2 e 3, i cui accordi sono minori, Bm e C♯m."
+              "it": "Si (B) e Do♯ (C♯) sono le note 2 e 3, i cui accordi sono minori, Bm e C♯m."
             },
             {
               "en": "Bm and C♯m are ii and iii; I, IV and V are built on notes 1, 4 and 5.",
@@ -4867,7 +4867,7 @@
       },
       "told": {
         "en": "Guitar music is written an octave higher than it sounds, so the open A string, 110 Hz, is written as the A an octave above it.",
-        "it": "La musica per chitarra si scrive un'ottava più in alto di come suona, quindi la corda di La (A) a vuoto, 110 Hz, si scrive come il La un'ottava sopra."
+        "it": "La musica per chitarra si scrive un'ottava più in alto di come suona, quindi la corda di La (A) a vuoto, 110 Hz, si scrive come il La (A) un'ottava sopra."
       }
     },
     {
@@ -4893,7 +4893,7 @@
       },
       "told": {
         "en": "In Italy and many other countries the notes C, D, E, F, G, A and B are called Do, Re, Mi, Fa, Sol, La and Si.",
-        "it": "Nei paesi anglosassoni le note Do, Re, Mi, Fa, Sol, La e Si si chiamano C, D, E, F, G, A e B."
+        "it": "Nei paesi anglosassoni le note si chiamano con le lettere C, D, E, F, G, A e B, nell'ordine Do (C), Re (D), Mi (E), Fa (F), Sol (G), La (A) e Si (B)."
       }
     },
     {

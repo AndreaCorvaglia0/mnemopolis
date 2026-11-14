@@ -2,7 +2,7 @@
 //   compass  two dials, half steps and fifths, with the seven notes of a major key lit on both;
 //            turn the key one fifth at a time and watch the one note that moves
 import { stage, button, tasks, animate, spring, C, alpha, L } from '../../../engine/src/lab/kit.js';
-import { hz, pc, MAJOR, keyNames, dialGeom, drawDial, nameOf, isIt } from './lib/music.js';
+import { hz, pc, MAJOR, keyNames, dialGeom, drawDial, nameOf, both, bothLabel, pairList, toLetter, isIt } from './lib/music.js';
 import { sound, soundNote } from './lib/sound.js';
 
 async function compass(ctx) {
@@ -31,10 +31,10 @@ async function compass(ctx) {
       if (changed) { const [x, y] = D.at(changed.to); d.circle(x, y, D.r * (0.2 + 0.1 * glow.v), { stroke: C.gold, width: 4, alpha: 0.7 + 0.3 * glow.v }); }
     }
     const sh = names.filter((n) => n.includes('♯')), fl = names.filter((n) => n.includes('♭'));
-    d.text(`${L(`${names[0]} major`, `${names[0]} maggiore`)}: ${names.join(' ')}`, 24, 40, { size: pane.upright ? 21 : 24, weight: 700, color: C.gold, max: pane.W - 48 });
+    d.text(`${L(`${names[0]} major`, `${names[0]} maggiore (${toLetter(names[0])})`)}: ${pane.upright ? names.join(' ') : pairList(names)}`, 24, 40, { size: pane.upright ? 21 : 24, weight: 700, color: C.gold, max: pane.W - 48 });
     const acc = sh.length ? L(`${sh.length} sharp${sh.length > 1 ? 's' : ''}`, `${sh.length} diesis`) : fl.length ? L(`${fl.length} flat${fl.length > 1 ? 's' : ''}`, `${fl.length} bemolle`) : L('no sharps or flats', 'nessun diesis né bemolle');
-    const ch = changed ? `${L('changed', 'cambia')}: ${nameOf(changed.from, fl.length > 0)} → ${names[MAJOR.findIndex((x) => pc(root + x) === changed.to)] || nameOf(changed.to)}` : '';
-    if (pane.upright) { d.text(`${acc}   ·   ${L('steps', 'passi')}: ${steps}`, 24, 68, { size: 17, color: C.muted }); if (ch) d.text(ch, 24, 94, { size: 17, color: C.gold }); }
+    const ch = changed ? `${L('changed', 'cambia')}: ${both(changed.from, fl.length > 0)} → ${bothLabel(names[MAJOR.findIndex((x) => pc(root + x) === changed.to)] || nameOf(changed.to))}` : '';
+    if (pane.upright) { d.text(`${isIt() ? `${names.map(toLetter).join(' ')}   ·   ` : ''}${acc}   ·   ${L('steps', 'passi')}: ${steps}`, 24, 68, { size: 17, color: C.muted }); if (ch) d.text(ch, 24, 94, { size: 17, color: C.gold }); }
     else d.text(`${acc}${ch ? `   ·   ${ch}` : ''}   ·   ${L('steps', 'passi')}: ${steps}`, 24, 68, { size: 17, color: C.muted, max: pane.W - 48 });
   });
   const anim = animate(ctx, (dt) => { const more = glow.step(dt); view.redraw(); return more; });

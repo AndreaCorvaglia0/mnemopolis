@@ -42,7 +42,7 @@ async function circle(ctx) {
     const rx = up ? 24 : 350, ry = up ? 400 : 90;
     d.text(`${both(m)}  ·  ${L('fret', 'tasto')} ${fret}  ·  ${fmtHz(hz(m))} Hz`, rx, ry, { size: up ? 24 : 28, weight: 700, color: C.gold, max: pane.W - rx - 20 });
     d.text(L(`× ${(hz(m) / hz(A2)).toFixed(3)} the open A string (110 Hz)`, `× ${nf(hz(m) / hz(A2), 3)} la corda di La (A) a vuoto (110 Hz)`), rx, ry + 30, { size: 17, color: C.muted, max: pane.W - rx - 20 });
-    d.text(isLetter(m) ? L('a letter name', 'una nota naturale') : L(`a sharp: between ${nameOf(m - 1)} and ${nameOf(m + 1)}`, `un diesis: tra ${nameOf(m - 1)} e ${nameOf(m + 1)}`), rx, ry + 56, { size: 17, color: C.muted, max: pane.W - rx - 20 });
+    d.text(isLetter(m) ? L('a letter name', 'una nota naturale') : L(`a sharp: between ${nameOf(m - 1)} and ${nameOf(m + 1)}`, `un diesis: tra ${both(m - 1)} e ${both(m + 1)}`), rx, ry + 56, { size: 17, color: C.muted, max: pane.W - rx - 20 });
     void y1;
   });
   const anim = animate(ctx, (dt) => { const more = hand.step(dt); view.redraw(); return more; });
@@ -64,7 +64,7 @@ async function circle(ctx) {
 async function fifthfret(ctx) {
   const t = tasks(ctx, [{ select: 'e5' }, { select: 'g4' }]), s = sound(ctx);
   let pick = null;
-  const geo = (pane) => (pane.upright ? neckGeom({ x: 22, y: 120, w: pane.W - 34, h: 260 }, { frets: 7, open: 40 }) : neckGeom({ x: 40, y: 110, w: 740, h: 250 }, { frets: 7, open: 44 }));
+  const geo = (pane) => (pane.upright ? neckGeom({ x: 22, y: 120, w: pane.W - 34, h: 228 }, { frets: 7, open: 40 }) : neckGeom({ x: 40, y: 110, w: 740, h: 220 }, { frets: 7, open: 44 }));
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
     const G = geo(pane); d.clear();
     drawNeck(d, G);
