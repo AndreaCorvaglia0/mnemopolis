@@ -1016,8 +1016,8 @@ advanced station, 15 a memento, 40 a lock, 15 a secret, 20 an obstacle, a game's
 course offers (`full`: the coins of every question once, houses, stations, locks, mementos, about
 eight secrets, the obstacles, the games, the keeper); the thresholds are `passing` at 4.5 % of it
 (never more than half of the first house, so it changes inside the first house), `settling` 22 %,
-`known` 50 %, `home` 90 % plus three days of practice. For chroma: 0, 70, 377, 856, 1601; for the
-pocket demo: 0, 49, 282, 640, 1212 (`__hb.xp.info()`). Tested: the first house crosses the first
+`known` 50 %, `home` 90 % plus three days of practice. For chroma: 0, 53, 377, 856, 1601 (of 1712 offered); for the
+pocket demo: 0, 49, 282, 640, 1212 (of 1280) (`__hb.xp.info()`). Tested: the first house crosses the first
 threshold, the main path alone never reaches `home`, everything plus a week of coming back does, in
 both courses.
 

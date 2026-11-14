@@ -56,4 +56,4 @@ if (errors.length) { console.log(`\n${errors.length} errors in the lab code: not
 out ||= path.join(root, 'engine', 'dist', `${slug}.html`);
 const html = insertPayload(readFileSync(playerPath, 'utf8'), payload);
 writeFileSync(out, html);
-console.log(`${course.title}: ${Object.keys(labs).length} lab files, ${course.concepts.reduce((n, p) => n + (p.lab?.stations || []).filter((s) => s.ready).length, 0)} ready-made stations -> ${path.relative(process.cwd(), out)} (${(html.length / 1024 / 1024).toFixed(2)} MB)`);
+console.log(`${course.title}: ${Object.keys(labs).length} lab files, ${Object.keys(games).length} game files, ${course.concepts.reduce((n, p) => n + (p.lab?.stations || []).filter((s) => s.ready).length, 0)} ready-made stations -> ${path.relative(process.cwd(), out)} (${(html.length / 1024 / 1024).toFixed(2)} MB)`);

@@ -13,7 +13,7 @@
 // openNotebook({ tab, settings, touch }) has the contract of quest/menu.js openMenu: it resolves
 // with 'ending' (see the ending again) or undefined. With "story": false the plain menu stays.
 import { uiSound } from '../../systems/sound/index.js';
-import { XP_ON, tierNow, tierWord, marginLine, toldList, xpNow, TIERS, XLINES, trLine, progressNow } from '../experience/active.js';
+import { XP_ON, tierNow, tierWord, marginLine, tierNote, toldList, xpNow, TIERS, XLINES, trLine, progressNow } from '../experience/active.js';
 import { gamesFound } from '../games/active.js';
 import { G_WORDS } from '../games/strings.js';
 import { h } from '../../lab/shell.js';
@@ -131,7 +131,7 @@ const CSS = `
 .nbk-pk li{line-height:34px}
 .nbk-pk button{min-height:44px;margin-left:8px;padding:0 10px;border:0;background:none;color:${RED};font:inherit;text-decoration:underline;cursor:pointer}
 .nbk-tier{display:flex;align-items:center;gap:10px;margin:6px 0 2px}
-.nbk-tier svg{width:44px;height:44px;flex:none}
+.nbk-tier svg{width:56px;height:56px;flex:none}
 .nbk-tier .w{font-size:1.15em}
 .nbk-tier .lb{color:${PENCIL};font-size:.85em;display:block}
 .nbk-margin{color:${PENCIL};transform:rotate(-2.5deg);margin:2px 0 6px 18px;font-size:.92em}
@@ -196,7 +196,9 @@ function journey(onEnding, turn) {
   if (XP_ON) {
     const t = tierNow();
     L.push(h('div', { class: 'nbk-tier', 'data-tier': t }, svg(tierMark(TIERS.indexOf(t), progressNow())), h('span', {}, h('span', { class: 'lb' }, trLine(XLINES.clues.tier)), h('span', { class: 'w' }, tierWord(t)))));
-    const m = marginLine(); if (m) L.push(h('p', { class: 'nbk-margin' }, m));
+    // the line written when the tier changed (kept a day), else a pencilled note now and then
+    const last = (state.xp?.notes || []).slice(-1)[0], m = last && Date.now() - last.at < 864e5 ? tierNote(last.tier) : marginLine();
+    if (m) L.push(h('p', { class: 'nbk-margin' }, m));
   }
   L.push(h('div', { class: 'sp' }));
   const li = rows.map((r) => {

@@ -44,12 +44,14 @@ export async function announceTier(ui, scene) {
   const name = who?.n.def.name || NPCS.find((n) => n.id === 'guide')?.name || '';
   who?.n.faceToward?.(pl.tx, pl.ty);
   uiSound('tier');
-  await ui.say([tierUpLine(t)], { name });
+  ui.announcing = t; // read by the play-through bot
+  try { await ui.say([tierUpLine(t)], { name }); } finally { ui.announcing = null; }
   who?.n.face?.(who.n.home);
   return true;
 }
 // called often (UI.refreshQuest): keeps the save in step and announces when the town is idle
-let last = 0, announcing = false;
+let last = 0, announcing = false, lastInput = Date.now();
+if (typeof window !== 'undefined') for (const ev of ['keydown', 'pointerdown']) window.addEventListener(ev, () => { lastInput = Date.now(); }, true);
 export function xpTick(ui) {
   if (!XP_ON) return;
   const now = Date.now();
@@ -57,6 +59,7 @@ export function xpTick(ui) {
   last = now;
   syncNow(now);
   if (!state.xp?.announce || announcing || ui.busy) return;
+  if (now - lastInput < 2500) return; // only once the player has stopped for a moment: never in the middle of a gesture
   const town = ui.scene.get('Town');
   if (!town || !ui.scene.isActive('Town') || town.locked || town.player?.moving) return;
   announcing = true;
