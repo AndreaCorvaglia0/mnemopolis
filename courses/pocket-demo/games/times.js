@@ -7,7 +7,7 @@ export default {
     const show = h('div', { class: 'gm-txt', style: 'font-size:26px' });
     const row = h('div', { class: 'gm-row' });
     g.stage.append(show, row);
-    const names = (n) => (n === 1 ? L('the same', 'uguale') : `${n.toLocaleString(lang)}×`);
+    const names = (n) => (n === 1 ? L('the same', 'uguale') : `${n.toLocaleString(lang())}×`);
     g.onRound((n, level) => {
       // harder rounds: bigger steps (up to 40 dB apart)
       const steps = 1 + Math.floor(g.rng() * (1 + Math.round(level * 3))), a = 30 + 10 * Math.floor(g.rng() * 5), b = a + 10 * steps;
