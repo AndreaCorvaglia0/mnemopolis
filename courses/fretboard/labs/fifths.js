@@ -2,7 +2,7 @@
 //   compass  two dials, half steps and fifths, with the seven notes of a major key lit on both;
 //            turn the key one fifth at a time and watch the one note that moves
 import { stage, button, tasks, animate, spring, C, alpha, L } from '../../../engine/src/lab/kit.js';
-import { hz, pc, MAJOR, keyNames, dialGeom, drawDial, nameOf } from './lib/music.js';
+import { hz, pc, MAJOR, keyNames, dialGeom, drawDial, nameOf, isIt } from './lib/music.js';
 import { sound, soundNote } from './lib/sound.js';
 
 async function compass(ctx) {
@@ -27,7 +27,7 @@ async function compass(ctx) {
       // the key's notes joined in dial order: an irregular shape on one, an arc of seven on the other
       const order = [...ks].sort((a, b) => D.idx(a) - D.idx(b)).map((p) => D.at(p, D.r * 0.8));
       d.line([...order, order[0]], { color: alpha(C.acc, 0.6), width: 2 });
-      d.text(title, D.cx, D.cy - D.r * 1.18 - 12, { size: 17, color: C.muted, align: 'center' });
+      d.text(title, D.cx, D.cy - D.r * (isIt() ? 1.3 : 1.18) - 12, { size: 17, color: C.muted, align: 'center' });
       if (changed) { const [x, y] = D.at(changed.to); d.circle(x, y, D.r * (0.2 + 0.1 * glow.v), { stroke: C.gold, width: 4, alpha: 0.7 + 0.3 * glow.v }); }
     }
     const sh = names.filter((n) => n.includes('♯')), fl = names.filter((n) => n.includes('♭'));

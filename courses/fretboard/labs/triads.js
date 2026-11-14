@@ -26,7 +26,7 @@ function chordPicture(d, G, fs, root, third, { strummed = -1, names = true }) {
 async function stack(ctx) {
   const t = tasks(ctx, [{ select: 'major' }, { select: 'minor' }, { select: 'gstring' }]), s = sound(ctx);
   let third = 4, strummed = -1, heard = null, flash = null; const R = 40; // E2
-  const GFLASH = L('The G string: fret 1 (G♯) lifted to the open G, a half step lower.', 'Corda di Sol (G): il tasto 1 (Sol♯) alzato lascia il Sol a vuoto, un semitono più in basso.');
+  const GFLASH = L('The G string: fret 1 (G♯) lifted to the open G, a half step lower.', 'Corda di Sol: il Sol♯ del tasto 1 diventa Sol a vuoto.');
   const fs = () => (third === 4 ? frets('022100') : frets('022000'));
   const strum = () => {
     s.stopAll(); const f = fs();
