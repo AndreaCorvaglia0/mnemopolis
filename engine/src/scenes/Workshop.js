@@ -8,6 +8,7 @@ import { drawText, textWidth } from '../art/buildings.js';
 import { LABS } from '../course/labs.js';
 import { PLACE, MASTERS } from '../data/content.js';
 import { houseDuel, challengeLabel, houseQuestions } from '../mechanics/duel/index.js';
+import { ownerTalk } from '../mechanics/experience/owner.js';
 
 // A workshop is the room of a PROCESS: the stations of its lab are machines on one conveyor belt,
 // in order. The belt runs left to right along the top, then back along the bottom. Up to 8 stations.
@@ -141,7 +142,9 @@ export class Workshop extends Phaser.Scene {
     const m = MASTERS[this.id], ui = this.ui;
     this.guide.faceToward(this.player.tx, this.player.ty);
     sfx.select();
-    await ui.converse(m.name, { root: { say: m.hi, options: [
+    const o = await ownerTalk(ui, this.id, m.name, m.hi);
+    await ui.converse(m.name, { root: { say: o.say, options: [
+      ...o.options,
       { label: w('room.machine1'), do: async () => { await ui.lab(this.id, 0); return 'end'; } },
       { label: w('room.showPage'), do: async () => { await ui.reading(this.id); return 'end'; } },
       // the host can be challenged as in any house (src/mechanics/duel/)

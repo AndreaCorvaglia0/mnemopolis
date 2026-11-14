@@ -82,11 +82,26 @@ export const foggy = (fog = {}, now) => Object.keys(fog).filter((id) => fogDue(f
 export const FOG_BARS = { conviction: 2, composure: 2, turns: 3, pass: 2 / 3 };
 
 // Which ending plays when the player boards the ship (finale.js, ENDINGS). One function of the
-// state, so that a happier ending can be chosen from score and completion later (docs/STORY.md,
-// "Endings (planned)": locks opened, upper floors, hidden buildings, secrets, houses kept from the
-// fog). Today it is always the bitter, identical loop.
-export function endingOf(s) {
+// state and of what experience reads from it: `tier` (mechanics/experience: arrival, passing,
+// settling, known, home) and `completion` (0..1, the share of the optional things done). Today it is
+// always the bitter, identical loop; the loop itself acknowledges the tier in two lines (the keeper,
+// the purser). The planned endings and exactly what would trigger them are in docs/STORY.md,
+// "Endings (planned)": ENDING_RULES below states them as data, unused until they are built.
+export const ENDING_RULES = [
+  { ending: 'good', tier: 'home', completion: 0.8, fogCleared: 1 },
+  { ending: 'hope', tier: 'known', completion: 0.5 },
+];
+export const BUILT_ENDINGS = new Set(['loop']);
+const ORDER = ['arrival', 'passing', 'settling', 'known', 'home'];
+// the ending that the rules would choose (planned), whether built or not
+export function plannedEnding(s, { tier = 'arrival', completion = 0 } = {}) {
+  const fog = Object.values(s?.story?.fog || {}).reduce((a, e) => a + (e?.n || 0), 0);
+  for (const r of ENDING_RULES) if (ORDER.indexOf(tier) >= ORDER.indexOf(r.tier) && completion >= r.completion && fog >= (r.fogCleared || 0)) return r.ending;
   return 'loop';
+}
+export function endingOf(s, info = {}) {
+  const e = plannedEnding(s, info);
+  return BUILT_ENDINGS.has(e) ? e : 'loop';
 }
 
 // The notebook's log (notebook.js, the Clues section): what the character has learnt, in the order

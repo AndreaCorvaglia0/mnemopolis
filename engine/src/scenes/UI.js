@@ -1,3 +1,4 @@
+import { xpTick } from '../mechanics/experience/world.js';
 import Phaser from 'phaser';
 import { state, save, scoreAnswer } from '../systems/state.js';
 import { sfx, initAudio, toggleMute, setMusicOn, duckMusic, moodSetting } from '../systems/audio.js';
@@ -54,7 +55,7 @@ export class UI extends Phaser.Scene {
     this.scale.on('resize', () => { this.layout(); this.placeHUD(); });
     window.addEventListener('touchmode', () => { if (this.where) this.setLocation(...this.where); this.placeHUD(); });
     // the main path: the tracker follows the state, whoever changed it (labs, duels, the League)
-    this.time.addEvent({ delay: 400, loop: true, callback: () => this.refreshQuest() });
+    this.time.addEvent({ delay: 400, loop: true, callback: () => { this.refreshQuest(); xpTick(this); } }); // experience: keep it in step, announce a new tier once
     // time played, for the ending card: counted while the page is visible, saved now and then
     let tick = 0;
     setInterval(() => { if (document.visibilityState !== 'visible' || !this.hud?.visible) return; state.played = (state.played || 0) + 5; if (++tick % 6 === 0) save(); }, 5000);

@@ -48,6 +48,19 @@
       "type": "string",
       "description": "Who it is for and what they already know."
     },
+    "pitch": {
+      "type": "string",
+      "description": "Optional. One line for the site's catalogue: what the learner gets, in their terms (about 20 words)."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Up to four short words for the site's catalogue (for example science, colour)."
+    },
+    "level": {
+      "enum": ["introductory", "intermediate", "advanced"],
+      "description": "Optional. Shown in the site's catalogue; introductory when absent."
+    },
     "goals": {
       "type": "array",
       "items": {
@@ -197,6 +210,121 @@
             "description": "Read as: from <type> to. 'requires' means from cannot be understood without to."
           },
           "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "games": {
+      "type": "array",
+      "description": "Optional mini-games: short arcade-like rounds of one skill, started by an interaction in town. Never part of the main path. references/10-games.md; checked by engine/src/mechanics/games/spec.js.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "concepts",
+          "kind"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "title": {
+            "type": "string",
+            "description": "At most 5 words."
+          },
+          "concepts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "The concepts it practises; it opens once each is remembered (or its lab done, with unlock: lab)."
+          },
+          "unlock": {
+            "enum": [
+              "remembered",
+              "lab"
+            ]
+          },
+          "kind": {
+            "enum": [
+              "which",
+              "match-fast",
+              "sort-fast",
+              "odd-one-out",
+              "sequence",
+              "estimate",
+              "custom"
+            ]
+          },
+          "where": {
+            "enum": [
+              "town",
+              "person",
+              "host"
+            ]
+          },
+          "object": {
+            "enum": [
+              "piano",
+              "board",
+              "hat",
+              "box",
+              "bench"
+            ]
+          },
+          "rounds": {
+            "type": "integer",
+            "minimum": 3,
+            "maximum": 20
+          },
+          "learn": {
+            "type": "string",
+            "description": "One line on the result screen, at most 16 words."
+          },
+          "data": {
+            "type": "object",
+            "description": "What the kind needs (references/10-games.md)."
+          }
+        }
+      }
+    },
+    "withheld": {
+      "type": "array",
+      "maxItems": 6,
+      "description": "Optional: things a person starts to tell and stops, told once the player's experience reaches a tier; kept in the notebook's Clues. Optional knowledge only.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "tier",
+          "told"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "by": {
+            "type": "string",
+            "description": "A concept id (that house's owner tells it) or town."
+          },
+          "tier": {
+            "enum": [
+              "passing",
+              "settling",
+              "known",
+              "home"
+            ]
+          },
+          "teaser": {
+            "type": "string"
+          },
+          "told": {
             "type": "string"
           }
         }

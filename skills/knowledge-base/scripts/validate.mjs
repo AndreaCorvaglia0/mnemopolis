@@ -16,7 +16,7 @@ import { checkCourseProse } from './prose.mjs';
 // Returns { errors, warns, summary }.
 export function validateCourse(c, env = {}) {
 // (the body keeps the indentation of the script it was, so that its history stays readable)
-const { EMBLEMS = null, TRADES = null, TEMPERS = null, match = null, tools = null, brief = '', has = () => true, checkReady = null } = env;
+const { EMBLEMS = null, TRADES = null, TEMPERS = null, match = null, tools = null, brief = '', has = () => true, checkReady = null, checkGames = null } = env;
 const errors = [], warns = [];
 const err = (m) => errors.push(m), warn = (m) => warns.push(m);
 const words = (s) => String(s || '').trim().split(/\s+/).filter(Boolean).length;
@@ -30,6 +30,9 @@ const VERBS_WEAK = /^(understand|know|learn|be aware|appreciate|familiar)/i;
 
 // ---- course ----
 need(c, ['id', 'language', 'title', 'subject', 'bigIdea', 'themes', 'concepts', 'relations', 'finalCheck'], 'course');
+if (c.pitch !== undefined) max(c.pitch, 30, 'pitch');
+if (c.tags !== undefined && (!Array.isArray(c.tags) || c.tags.length > 4)) err('tags: an array of at most 4 short words');
+if (c.level !== undefined && !['introductory', 'intermediate', 'advanced'].includes(c.level)) err('level: introductory, intermediate or advanced');
 if (c.version !== 1) err('course: "version" must be 1');
 if (c.id && !/^[a-z][a-z0-9-]*$/.test(c.id)) err('course: "id" must be a lowercase slug');
 max(c.bigIdea, 28, 'bigIdea');
@@ -223,6 +226,10 @@ if (f.size > pool) err(`finalCheck asks for ${f.size} questions but the core con
   r.errors.forEach(err); r.warns.forEach(warn);
 }
 
+// ---- mini-games and withheld lines (references/10-games.md; engine/src/mechanics/games/spec.js) ----
+if (checkGames) { const r = checkGames(c, { hasCode: (id) => has(`games/${id}.js`) }); r.errors.forEach(err); r.warns.forEach(warn); }
+else if (c.games || c.withheld) warn('games and withheld lines were not checked (the engine is not beside the skill)');
+
 // ---- the register of expository text (references/9-prose.md): warnings, never errors ----
 checkCourseProse(c).forEach((w) => warn(`prose: ${w}`));
 
@@ -244,7 +251,7 @@ if (core.length && coreMin > 60) warn(`the core path is about ${Math.round(coreM
 const stations = concepts.reduce((s, p) => s + (p.lab?.stations?.length || 0), 0);
 const summary = [`${c.title || 'course'}: ${themes.length} themes, ${concepts.length} concepts${extra.length ? ` (${core.length} core, ${extra.length} extra)` : ''}, ${stations} lab stations, ${rememberTotal} lines to remember`,
   `core path about ${playMinutes(core, true)} min; everything about ${playMinutes(concepts, true)} min`];
-return { errors, warns, summary };
+return { errors, warns, summary, stats: { coreMinutes: playMinutes(core, true), allMinutes: playMinutes(concepts, true), houses: concepts.length, coreHouses: core.length, stations } }; // stats: for the site's catalogue
 }
 
 // ---- the command line ----
@@ -269,6 +276,7 @@ async function main() {
     match: await load('mechanics/riddles/match.js', (m) => m),
     tools: await load('mechanics/obstacles/kinds.js', (m) => Object.keys(m.TOOLS)),
     checkReady: await load('lab/patterns/specs.js', (m) => m.checkReady),
+    checkGames: await load('mechanics/games/spec.js', (m) => m.checkGames),
     brief: existsSync(path.join(dir, 'knowledge', 'brief.md')) ? readFileSync(path.join(dir, 'knowledge', 'brief.md'), 'utf8') : '',
     has: (k) => existsSync(path.join(dir, k)),
   };

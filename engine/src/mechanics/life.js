@@ -1,5 +1,6 @@
 // The scene side shared by the town and the rooms: the saved state of the layer, thinking aloud,
 // finding a secret, the counts. Uses Phaser only through the scenes it is given.
+import { musingLine } from './experience/active.js';
 import { state, save } from '../systems/state.js';
 import { sfx } from '../systems/audio.js';
 import { touch } from '../systems/view.js';
@@ -40,6 +41,7 @@ export const gameFacts = (here = null, inside = null) => ({ step: Q.nextStep({ .
 export function thinkAbout(scene, kind, { here = null, inside = null, hint = false, lines = null } = {}) {
   let text;
   if (lines) text = deck.draw(`lines:${lines[0]}`, lines);
+  else if (kind && Math.random() < 0.06 && (text = musingLine())) { /* experience: a rare thought about oneself */ }
   else text = musing(kind, { lang: LANG, count: count++, deck, game: gameFacts(here, inside), hint }).text;
   say(scene, text);
   return text;

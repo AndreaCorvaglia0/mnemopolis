@@ -6,6 +6,9 @@
   "title": "Chroma Town",
   "subject": "How colour works",
   "bigIdea": "Colour is three numbers: three lights on a screen, three signals in the eye.",
+  "pitch": "Mix light, read a colour with three dials, and see why the same colour can fool you.",
+  "tags": ["science", "colour", "screens"],
+  "level": "introductory",
   "learner": "A curious adult with no background in colour science who uses screens and printers every day.",
   "goals": [
     "Predict the result of mixing coloured lights.",
@@ -1437,5 +1440,191 @@
     "name": "Colour League",
     "size": 8,
     "pass": 0.7
-  }
+  },
+  "games": [
+    {
+      "id": "lighter",
+      "title": "Which is lighter?",
+      "concepts": [
+        "wheel"
+      ],
+      "kind": "which",
+      "where": "town",
+      "object": "board",
+      "rounds": 10,
+      "learn": "Lightness is how close a colour is to white or black.",
+      "data": {
+        "ask": "Which swatch is lighter?",
+        "pick": "max",
+        "make": {
+          "kind": "hsl",
+          "vary": "l",
+          "h": [
+            0,
+            360
+          ],
+          "s": 0.7,
+          "from": 0.2,
+          "to": 0.8,
+          "gap": [
+            0.3,
+            0.04
+          ]
+        }
+      }
+    },
+    {
+      "id": "triplets",
+      "title": "Name that triplet",
+      "concepts": [
+        "lamps"
+      ],
+      "kind": "match-fast",
+      "where": "person",
+      "rounds": 3,
+      "learn": "A pixel is three numbers: how strongly each lamp shines.",
+      "data": {
+        "ask": "Match each triplet to its colour.",
+        "per": 4,
+        "time": [
+          30,
+          14
+        ],
+        "pairs": [
+          [
+            "255, 0, 0",
+            {
+              "colour": "#ff0000",
+              "label": "red"
+            }
+          ],
+          [
+            "0, 255, 0",
+            {
+              "colour": "#00ff00",
+              "label": "green"
+            }
+          ],
+          [
+            "0, 0, 255",
+            {
+              "colour": "#0000ff",
+              "label": "blue"
+            }
+          ],
+          [
+            "255, 255, 0",
+            {
+              "colour": "#ffff00",
+              "label": "yellow"
+            }
+          ],
+          [
+            "0, 255, 255",
+            {
+              "colour": "#00ffff",
+              "label": "cyan"
+            }
+          ],
+          [
+            "255, 0, 255",
+            {
+              "colour": "#ff00ff",
+              "label": "magenta"
+            }
+          ],
+          [
+            "255, 255, 255",
+            {
+              "colour": "#ffffff",
+              "label": "white"
+            }
+          ],
+          [
+            "0, 0, 0",
+            {
+              "colour": "#000000",
+              "label": "black"
+            }
+          ],
+          [
+            "128, 128, 128",
+            {
+              "colour": "#808080",
+              "label": "grey"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "hue",
+      "title": "Find the hue",
+      "concepts": [
+        "wheel"
+      ],
+      "kind": "estimate",
+      "where": "host",
+      "rounds": 6,
+      "learn": "Hue is the angle on the colour wheel.",
+      "data": {
+        "ask": "Where is this colour on the wheel of hues?",
+        "scale": {
+          "from": 0,
+          "to": 360,
+          "wrap": true,
+          "paint": "hue",
+          "unit": "°",
+          "marks": [
+            0,
+            60,
+            120,
+            180,
+            240,
+            300,
+            360
+          ]
+        },
+        "make": {
+          "kind": "hue",
+          "from": 0,
+          "to": 360,
+          "s": 0.85,
+          "l": 0.52
+        },
+        "close": [
+          0.1,
+          0.04
+        ]
+      }
+    },
+    {
+      "id": "odd-primary",
+      "title": "The odd one",
+      "concepts": [
+        "lamps",
+        "print"
+      ],
+      "kind": "odd-one-out",
+      "where": "town",
+      "object": "box",
+      "rounds": 6,
+      "data": {
+        "ask": "Which one does not belong?",
+        "groups": {
+          "a primary of light": [
+            "red",
+            "green",
+            "blue"
+          ],
+          "an ink of the printer": [
+            "cyan",
+            "magenta",
+            "yellow"
+          ]
+        },
+        "why": "{odd} is {oddGroup}; the others are each {group}."
+      }
+    }
+  ]
 }

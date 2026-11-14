@@ -224,8 +224,11 @@ test('packing chroma and the demo needs no change to their lab files; a station 
     const dir = path.join(root, 'courses', slug), labs = {};
     for (const f of readdirSync(path.join(dir, 'labs'))) labs[f.slice(0, -3)] = readFileSync(path.join(dir, 'labs', f), 'utf8');
     const anims = existsSync(path.join(dir, 'anims.js')) ? readFileSync(path.join(dir, 'anims.js'), 'utf8') : null;
-    const r = makePayload({ course: json(`courses/${slug}/course.json`), labs, anims, slug });
+    const games = {};
+    if (existsSync(path.join(dir, 'games'))) for (const f of readdirSync(path.join(dir, 'games'))) games[f.slice(0, -3)] = readFileSync(path.join(dir, 'games', f), 'utf8');
+    const r = makePayload({ course: json(`courses/${slug}/course.json`), labs, anims, slug, games });
     assert.deepEqual(r.errors, [], slug);
+    for (const id of Object.keys(games)) assert.match(r.payload.games[id], /globalThis\.__mnemoKit/, `games/${id}.js rewritten to the kit`);
   }
   const c = json('courses/chroma/course.json'), labs = { lamps: readFileSync(path.join(root, 'courses', 'chroma', 'labs', 'lamps.js'), 'utf8') };
   assert.match(makePayload({ course: c, labs }).errors.join(), /no code and no "ready" pattern: .*wheel\.dials/);

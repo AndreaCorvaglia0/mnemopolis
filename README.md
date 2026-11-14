@@ -6,6 +6,10 @@
   A template for building learning games as memory towns: every building is a concept, every lab is a place to get your hands on it.
 </p>
 
+**Play, no install, on a phone or a computer** (about an hour each): [Chroma Town](https://andreacorvaglia0.github.io/mnemopolis/chroma/) (how colour works) · [How Sound Works](https://andreacorvaglia0.github.io/mnemopolis/pocket-demo/) · [all the games](https://andreacorvaglia0.github.io/mnemopolis/)
+
+<p align="center"><a href="https://andreacorvaglia0.github.io/mnemopolis/chroma/"><img src="assets/screenshot-town.webp" alt="Chroma Town at night: lit windows, a river, a lighthouse" width="70%"></a></p>
+
 Turn any subject into a small game you learn by playing: a pixel-art town where every house is
 one concept and holds a lab to handle it. Built on recognised active-learning techniques
 (retrieval practice, spacing, prediction, self-explanation, method of loci), not on points and
@@ -52,7 +56,7 @@ small one made the low-token way (labs designed for their concepts, everything e
 Early, and not yet play-tested with learners. The whole path works on the example course: design,
 validation, build, publication. Feedback and issues are welcome.
 
-Play the example, on a computer or a phone: https://andreacorvaglia0.github.io/mnemopolis/chroma/
+The front page of the site is built from the courses by `scripts/build-site.mjs` (see [docs/SITE.md](docs/SITE.md)).
 See [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 The research behind the method: [skills/knowledge-base/references/evidence.md](skills/knowledge-base/references/evidence.md).

@@ -8,6 +8,7 @@ import { C, alpha } from './draw.js';
 import { stage, tasks, animate, spring, shuffle, hit, button } from './author.js';
 import { LANG } from '../shell.js';
 import { sfx } from '../../systems/audio.js';
+import { hand, setQuiet } from '../hands.js';
 
 const WORDS = {
   en: { run: 'Run the sequence', again: 'Run it again', first: (a, b) => `“${a}” cannot happen yet: “${b}” has to come first.`, ok: 'Every step in its place.' },
@@ -91,7 +92,7 @@ export function order(ctx, data, whens = ctx.station?.when) {
       let best = -1, bd = Infinity;
       slots.forEach((_, i) => { const [px, py] = posOf(L, i), dd = Math.hypot(px + L.w / 2 - cx, py + L.h / 2 - cy); if (dd < bd) { bd = dd; best = i; } });
       const from = slots.indexOf(s);
-      if (best >= 0 && best !== from && bd < Math.max(L.w, L.h)) { [slots[from], slots[best]] = [slots[best], slots[from]]; sfx.plop?.(); broke = -1; lit = -1; msg = ''; t.state(slots.map((q) => q.id).join(',')).check(); }
+      if (best >= 0 && best !== from && bd < Math.max(L.w, L.h)) { [slots[from], slots[best]] = [slots[best], slots[from]]; hand('snap'); broke = -1; lit = -1; msg = ''; t.state(slots.map((q) => q.id).join(',')).check(); }
       place(); anim.kick();
     }
   });

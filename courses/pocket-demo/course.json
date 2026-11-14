@@ -6,6 +6,9 @@
   "title": "How Sound Works",
   "subject": "Sound: what travels, what sets the pitch, what loudness measures, and what sound needs to travel",
   "bigIdea": "Sound is a squeeze passed from molecule to molecule: its rate is the pitch, its strength the loudness, and it needs matter to travel.",
+  "pitch": "Squeeze the air, set a pitch, and find out why sound needs something to travel through.",
+  "tags": ["physics", "sound"],
+  "level": "introductory",
   "learner": "Curious adults and secondary-school students with no physics beyond everyday experience.",
   "goals": [
     "Explain why the air does not travel from a speaker to your ear.",
@@ -1063,5 +1066,188 @@
     "name": "The Sound League",
     "size": 6,
     "pass": 0.67
-  }
+  },
+  "games": [
+    {
+      "id": "higher",
+      "title": "Higher or lower?",
+      "concepts": [
+        "pitch"
+      ],
+      "kind": "which",
+      "where": "town",
+      "object": "piano",
+      "rounds": 8,
+      "learn": "More squeezes per second: a higher note.",
+      "data": {
+        "ask": "Which tone is higher?",
+        "pick": "max",
+        "make": {
+          "kind": "tone",
+          "from": 220,
+          "to": 880,
+          "gap": [
+            7,
+            0.5
+          ],
+          "unit": "semitones"
+        }
+      }
+    },
+    {
+      "id": "guess-hz",
+      "title": "Guess the frequency",
+      "concepts": [
+        "pitch"
+      ],
+      "kind": "estimate",
+      "where": "person",
+      "rounds": 6,
+      "learn": "Twice the frequency is the same note an octave higher.",
+      "data": {
+        "ask": "How many hertz is this tone?",
+        "scale": {
+          "from": 100,
+          "to": 3200,
+          "log": true,
+          "unit": "Hz",
+          "marks": [
+            100,
+            200,
+            400,
+            800,
+            1600,
+            3200
+          ]
+        },
+        "make": {
+          "kind": "tone",
+          "from": 120,
+          "to": 3000
+        },
+        "close": [
+          0.2,
+          0.07
+        ]
+      }
+    },
+    {
+      "id": "echo",
+      "title": "Echo the tones",
+      "concepts": [
+        "pitch"
+      ],
+      "kind": "sequence",
+      "where": "town",
+      "object": "hat",
+      "rounds": 8,
+      "learn": "Each pad is a frequency: higher pads, higher pitch.",
+      "data": {
+        "ask": "Listen, then play it back.",
+        "start": 3,
+        "longest": 8,
+        "pads": [
+          {
+            "label": "220 Hz",
+            "sound": {
+              "hz": 220,
+              "voice": "pluck"
+            },
+            "colour": "#6f93e0"
+          },
+          {
+            "label": "330 Hz",
+            "sound": {
+              "hz": 330,
+              "voice": "pluck"
+            },
+            "colour": "#4fd1c5"
+          },
+          {
+            "label": "440 Hz",
+            "sound": {
+              "hz": 440,
+              "voice": "pluck"
+            },
+            "colour": "#ffcf5a"
+          },
+          {
+            "label": "660 Hz",
+            "sound": {
+              "hz": 660,
+              "voice": "pluck"
+            },
+            "colour": "#ff7a6b"
+          }
+        ]
+      }
+    },
+    {
+      "id": "travels",
+      "title": "Does sound get through?",
+      "concepts": [
+        "medium"
+      ],
+      "kind": "sort-fast",
+      "where": "host",
+      "rounds": 8,
+      "learn": "Sound needs matter: none in a vacuum.",
+      "data": {
+        "ask": "Can sound travel through it?",
+        "bins": [
+          "it travels",
+          "no sound"
+        ],
+        "time": [
+          6,
+          2.5
+        ],
+        "cards": [
+          {
+            "text": "air",
+            "bin": 0
+          },
+          {
+            "text": "water",
+            "bin": 0
+          },
+          {
+            "text": "steel",
+            "bin": 0
+          },
+          {
+            "text": "wood",
+            "bin": 0
+          },
+          {
+            "text": "the ground",
+            "bin": 0
+          },
+          {
+            "text": "outer space",
+            "bin": 1
+          },
+          {
+            "text": "a perfect vacuum",
+            "bin": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "times",
+      "title": "How many times?",
+      "concepts": [
+        "loudness"
+      ],
+      "kind": "custom",
+      "where": "town",
+      "object": "box",
+      "rounds": 6,
+      "learn": "Every 10 decibels more is ten times the intensity.",
+      "data": {
+        "ask": "How many times as intense?"
+      }
+    }
+  ]
 }

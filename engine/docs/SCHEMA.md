@@ -152,3 +152,51 @@ A code panel whose values are controls (see `lab/code.js`): export its specifica
 `<stationId>Code` next to the mount.
 
 `npm run check` fails if a station in `course.json` has no code.
+
+## Mini-games, withheld lines, experience: `games`, `withheld`
+
+All optional; the complete reference for authors, with examples that `npm test` validates, is
+`skills/knowledge-base/references/10-games.md`. The engine side: `ENGINE.md`, "Experience",
+"Mini-games", "Sound for labs and interactions".
+
+| Field | Where | Meaning |
+|---|---|---|
+| `games` | top level of `course.json`, an array | short arcade-like games started by an interaction; never part of the main path |
+| `withheld` | top level, an array (at most 6) | things a person starts to tell and stops; told at an experience tier, then kept in the notebook's Clues |
+
+A game:
+
+```json
+{ "id": "higher", "title": "Higher or lower?", "concepts": ["pitch"], "kind": "which",
+  "where": "town", "object": "piano", "rounds": 8, "learn": "More squeezes per second: a higher note.",
+  "data": { "ask": "Which note is higher?", "pick": "max",
+            "make": { "kind": "tone", "from": 220, "to": 880, "gap": [7, 0.5], "unit": "semitones" } } }
+```
+
+| Key | |
+|---|---|
+| `id`, `title` | unique id (lowercase, digits, dashes); a title of at most 5 words |
+| `concepts` | the concepts it practises; it opens when each is remembered (`"unlock": "lab"`: when their labs are done) |
+| `kind` | `which`, `match-fast`, `sort-fast`, `odd-one-out`, `sequence`, `estimate`, `custom` |
+| `where` | `town` (default: an object on a spot placed by the engine), `person` (a townsperson offers it), `host` (the owner of the first concept's house offers it) |
+| `object` | `town` only: `piano`, `board`, `hat`, `box`, `bench` |
+| `rounds` | 3 to 20, default 8 (`match-fast`: boards, default 3) |
+| `learn` | one line for the result screen |
+| `data` | what the kind needs: `references/10-games.md` |
+
+A custom game: `courses/<slug>/games/<id>.js`, `export default { mount(g) { ... } }`, importing
+only the lab modules (`lab/kit.js`, `lab/shell.js`, `lab/patterns/index.js`, `systems/audio.js`),
+so it packs into the prebuilt player like a lab file.
+
+A withheld line: `{ "id", "by": "<conceptId>" | "town", "tier": "passing" | "settling" | "known" | "home", "teaser", "told" }`.
+
+`world.json`: `"games": false` hides every game; `"experience": false` switches off experience, the
+people's remarks about it, withheld lines and the door that knows you (the town as before).
+
+## Sound in a station
+
+`sound(ctx)` from `lab/kit.js`: tones, a plucked string, a soft piano, a bell, chords (equal or just),
+beats, sustained tones for sliders, a scope to draw what sounds. Stopped when the station closes;
+the ambient music ducks while it plays. The kit's controls click and tick by themselves;
+`stage(ctx, { wide, tall, quiet: true }, draw)` or `ctx.quiet()` silences them. Details and an example:
+`references/10-games.md`, "Sound for labs and games".

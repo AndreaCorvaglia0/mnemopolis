@@ -24,6 +24,8 @@ engine/                    how to play one
   src/mechanics/           game dynamics: ambient life (thoughts, animals, secrets, obstacles); later coins and a shop
     riddles/               locks with free answers: matching, close-ups, the thought that says where to look
     floors/                upper floors: stairs, keys, the advanced bench, the split of ground and advanced stations
+  src/mechanics/experience/ experience (one number, tiers), the commenting world, withheld lines, canEnter
+  src/mechanics/games/     mini-games: the frame, the ready kinds, scoring, placement in town
   src/mechanics/quest/     the main path: core and extra, nextStep (one source for every hint), the
                            tracker's words, the menu (Journey, Map, Mysteries), the ending card
   tests/                   Node tests (npm test): rooms, homes, the course format, the main path, ambient life
@@ -52,6 +54,8 @@ home) and a course may override them later in a separate file.
 | A new field in the course | the schema, the validator, the example, then the engine | |
 | A new kind of lab interaction | a helper in `engine/src/lab/`, a row in `references/5-labs.md` | scenes |
 | Game dynamics (points to spend, shops, quests, streaks) | `engine/src/mechanics/`, reading progress from `systems/state.js`; its first resident is the ambient-life layer | the course format: dynamics are a property of the game, not of the knowledge |
+| A mini-game kind | `engine/src/mechanics/games/kinds/<kind>.js` (a mount on the frame's context), its rounds in `gen.js`, its checks in `spec.js`, an example in `references/10-games.md` (the test validates it) | the course: a course that needs a one-off game writes it in `games/<id>.js` |
+| Something experience should change | a line in `experience/lines.js`, or an entry in `ENTRY_NEEDS` (`canEnter`), or a rule in `ENDING_RULES` | the main path: experience never gates learning |
 | Coins, a shop, tools that open obstacles | `engine/src/mechanics/`: the obstacles and `canPass(obstacle, state)` are there (`obstacles/kinds.js`), reading `state.tools`; a shop only has to write that | the course, and anything the course needs: an obstacle never stands in the way of learning |
 | Art: buildings, landmarks, landscapes, characters | `engine/src/art/`, registered in `engine/src/world/` | lab code |
 | A room zone, an expert's trade, a room plan, a furniture piece | one entry in the registry of `engine/src/gen/interior/` (`zones.js`, `trades.js`, `plans.js`, `pieces.js`); `npm test` checks it | the composition and the rules |
@@ -73,3 +77,5 @@ the atmosphere opens while learning is on screen.
   the map of the town cannot drift apart.
 - **One page.** The build is a single HTML file with no network access at run time.
 - **Limits are enforced by code**, in the validator, not left to good intentions.
+- **Sounds are samples computed by pure code** (`systems/sound/synth.js`): what the player hears in
+  a lab or a game is what the tests measure in Node.

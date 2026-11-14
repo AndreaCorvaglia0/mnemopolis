@@ -87,6 +87,21 @@
   lamp and the arrivals register, the loop back to the first shot, the theme, the returning fog's
   schedule.
 
+- Experience and a world that notices (`engine/docs/ENGINE.md`, "Experience"): one number that never
+  goes down, five tiers that scale with the course, people who remark on how long you have stayed
+  and what you just did (by tier and by the story's stage, English and Italian), withheld lines told
+  at their tier and kept in the notebook, the tier drawn in the notebook, a tier change announced
+  once, `canEnter` with one real door, `endingOf` reading tier and completion (the planned endings'
+  triggers written down), the keeper's comment on a return after the ending.
+- Mini-games (`engine/docs/ENGINE.md`, "Mini-games"; `references/10-games.md`): a frame, six ready
+  kinds (`which`, `match-fast`, `sort-fast`, `odd-one-out`, `sequence`, `estimate`), custom games in
+  `games/<id>.js` that pack into the player, objects placed in town by seed, people and owners who
+  offer them, a staircase of difficulty, saved bests; games in both example courses.
+- Sound that answers the hands (`engine/docs/ENGINE.md`, "Sound for labs and interactions"): a
+  designed set of interaction sounds in the course's key, kit controls that sound by themselves, a
+  sound API for labs and games (tuned pluck, piano, bell, beats, chords equal or just, glides, a
+  scope), all measured in Node.
+
 ## Next
 
 1. Play-testing with real learners, and a second example course that uses the layouts and
@@ -112,10 +127,13 @@
   quay again with the town forgotten, the tally on the cover one higher, and something carried
   over (the name in the register, a page that stays). Not designed.
 
-- Endings by score and completion (`docs/STORY.md`, "Endings (planned)"): the bitter loop stays the
-  ending of the main path alone; side missions (locks, upper floors, hidden buildings, secrets,
-  houses kept from the fog) could earn happier ones (the notebook kept, the purser's line changed,
-  the crossing remembered). Not designed yet; `endingOf` in `story/logic.js` is where it plugs in.
+- Endings by experience and completion (`docs/STORY.md`, "Endings (planned)"): the triggers are
+  fixed and tested as data (`ENDING_RULES`: hope at `known` and half the optional things, good at
+  `home`, 80 % and a house kept from the fog); the sequences are not built.
+- Experience made real, once play-testing says the perception works: more doors and places through
+  `canEnter`, people who give real help at higher tiers, the shop priced in coins while experience
+  stays untouched by spending. Mini-games: a duel-like "challenge" between two kinds, games in rooms as
+  furniture, a per-course leaderboard of days, games read aloud.
 
 - Locks, left out on purpose: locks in the town (a door on a hidden nook's gate, a safe in an
   institution's hall); more kinds (a chest with a letter padlock, a diary with a clasp); a lock that
