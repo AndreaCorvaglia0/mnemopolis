@@ -43,6 +43,8 @@ in both, so nothing done in one is lost in the other.
 - **Free study**: the course without the game around it, for a class or an institution. No
   story, no film, no fights; every floor, lock and game is open from the first minute; the theory,
   the labs and the mini-games are all there, and the only thing left to pass is the final test.
+  The map names every house, marks where the mini-games are, and takes the player to the place
+  chosen at once ("Go here").
 
 A course can fix the way for everyone with `"mode": "free"` in `world.json` (no choice is shown);
 `?mode=free` or `?mode=story` in the address does it for one visit. Code: `engine/src/systems/mode.js`.

@@ -2,7 +2,13 @@
 // plazas, footprints) at a few pixels per tile. Houses visited: number and name; core houses not
 // visited yet: number only; extras: "?" once the player has walked near them (state.seen), nothing
 // before. Tapping a visited house recalls its one-line idea. Drawn once when the tab opens.
+// In free study (systems/mode.js) nothing is hidden: every house is named, the mini-games are marked
+// (a diamond), and the place chosen can be gone to at once ("Go here": onGo({ x, y, dir })).
+export const FREE_MAP = { go: { en: 'Go here', it: 'Vai qui' }, game: { en: 'Game', it: 'Gioco' }, with: { en: 'with {name}', it: 'da {name}' }, inside: { en: 'inside {place}', it: 'dentro {place}' }, tap: { en: 'Tap a place or a game, then "Go here".', it: 'Tocca un luogo o un gioco, poi «Vai qui».' }, games: { en: 'Games', it: 'Giochi' } };
 import { STORY } from '../story/config.js';
+import { FREE } from '../../systems/mode.js';
+import { GAMES, townGames, gamesOfPeople, hostGames } from '../games/active.js';
+import { NPCS } from '../../world/townMap.js';
 import { h } from '../../lab/shell.js';
 import { TOWN } from '../../world/townMap.js';
 import { PLACE, DISTRICTS, COURSE } from '../../data/content.js';
@@ -33,12 +39,13 @@ export function markSeen(x, y, s = state, town = TOWN) {
 export function knownAs(b, s = state) {
   if (b.league) return 'league';
   if (b.home) return 'home';
-  if (s.visited?.[b.id]) return 'visited';
+  if (s.visited?.[b.id] || (FREE && s === state)) return 'visited';   // free study: every house is known
   if (isCorePlace(b.id)) return 'core';
   return s.seen?.[b.id] ? 'mystery' : 'hidden';
 }
 
-export function townMapView() {
+export function townMapView({ onGo = null } = {}) {
+  const go = FREE && onGo ? onGo : null;
   const { TERRAIN, BUILDINGS, HUB } = TOWN;
   // the window drawn: lanes, water, plazas and houses, with a margin; not the forest that rings the town
   let x0 = TOWN.W, y0 = TOWN.H, x1 = 0, y1 = 0;
@@ -53,7 +60,11 @@ export function townMapView() {
   const ctx = cv.getContext('2d');
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { ctx.fillStyle = GROUND[TERRAIN[y + y0][x + x0]] || GROUND.g; ctx.fillRect(x * s, y * s, s, s); }
   const nextId = (() => { const st = Q.nextStep({ ...state, seenIntro: true }); return st.place?.id || (st.kind === 'league' || st.kind === 'ending' ? 'league' : null); })();
-  const marks = [], byId = {}, caption = h('p', { class: 'qt-cap', role: 'status' }, tr(touch.on ? Q_WORDS.map.tap : Q_WORDS.map.tapKeys));
+  const marks = [], byId = {}, caption = h('p', { class: 'qt-cap', role: 'status' }, go ? tr(FREE_MAP.tap) : tr(touch.on ? Q_WORDS.map.tap : Q_WORDS.map.tapKeys));
+  // choosing a mark: its line, and in free study the button that takes the player there
+  const goBox = h('div', { class: 'qt-go' });
+  const choose = (m, text, to) => { for (const o of marks) o.classList.remove('on'); m.classList.add('on'); caption.textContent = text; goBox.replaceChildren(...(go && to ? [h('button', { type: 'button', class: 'qt-gobtn', onclick: () => go(to) }, tr(FREE_MAP.go))] : [])); };
+  const doorOf = (b) => (b.doors?.[0] ? { x: b.doors[0][0], y: b.doors[0][1] + 1, dir: 'up' } : null);
   for (const b of BUILDINGS) {
     const k = knownAs(b);
     if (k === 'hidden') continue;
@@ -70,7 +81,7 @@ export function townMapView() {
     const text = k === 'visited' ? `${b.order} · ${p.name}: ${p.idea}` : k === 'core' ? `${b.order} · ${p.name}. ${tr(Q_WORDS.map.unknown)}` : k === 'league' ? (STORY.on ? tr(Q_WORDS.map.league) : `${COURSE.league.name}`) : tr(Q_WORDS.map.mystery);
     const col = k === 'visited' ? `;border-color:${DCOL[di % DCOL.length]}` : '';
     const m = h('button', { type: 'button', class: `qt-mk ${k}${b.id === nextId ? ' next' : ''}`, style: `left:${cx}px;top:${cy}px${col}`, 'aria-label': text, title: text }, h('b', {}, label));
-    m.onclick = () => { for (const o of marks) o.classList.remove('on'); m.classList.add('on'); caption.textContent = text; };
+    m.onclick = () => choose(m, text, doorOf(b));
     marks.push(m); byId[b.id] = m;
   }
   // the town gate at the end of the road out of town: the champion waits there (the ring when the League is next)
@@ -83,6 +94,25 @@ export function townMapView() {
     marks.push(m);
     byId.league?.classList.remove('next');
   }
+  // free study: where the mini-games are (in town, with a person, inside a house)
+  const gameRows = [];
+  if (go && GAMES.length) {
+    const title = (g) => `${tr(FREE_MAP.game)}: ${tr(g.title)}`;
+    const mark = (g, x, y, text, to) => {
+      const m = h('button', { type: 'button', class: 'qt-mk game', style: `left:${(x - x0 + 0.5) * s}px;top:${(y - y0 + 0.5) * s}px`, 'aria-label': text, title: text }, h('b', {}, '◆'));
+      m.onclick = () => choose(m, text, to); marks.push(m); gameRows.push({ g, m });
+    };
+    const placed = new Set();
+    for (const p of townGames()) { const g = GAMES.find((x) => x.id === p.id); if (g) { placed.add(g.id); mark(g, p.x, p.y, title(g), { x: p.stand[0], y: p.stand[1], dir: p.y < p.stand[1] ? 'up' : p.y > p.stand[1] ? 'down' : p.x < p.stand[0] ? 'left' : 'right' }); } }
+    const who = gamesOfPeople();
+    for (const g of GAMES) {
+      if (placed.has(g.id)) continue;
+      const n = NPCS.find((x) => x.id === who[g.id]);
+      if (n) { mark(g, n.x, n.y - 1, `${title(g)} (${tr(FREE_MAP.with).replace('{name}', n.name)})`, { x: n.x, y: n.y + 1, dir: 'up' }); continue; }
+      const b = g.where === 'host' && BUILDINGS.find((x) => x.id === g.concepts?.[0]);
+      if (b && hostGames(b.id).includes(g)) gameRows.push({ g, m: null, text: `${title(g)} (${tr(FREE_MAP.inside).replace('{place}', PLACE[b.id]?.name || '')})`, to: doorOf(b), house: b.id });
+    }
+  }
   const sq = h('span', { class: 'qt-sq', style: `left:${(HUB.x - x0 + 0.5) * s}px;top:${(HUB.y - y0 + 3.4) * s}px` }, tr(Q_WORDS.map.square));
   const pos = state.pos || TOWN.START;
   const me = h('span', { class: 'qt-me', style: `left:${(pos.x - x0 + 0.5) * s}px;top:${(pos.y - y0 + 0.5) * s}px`, title: tr(Q_WORDS.map.you) });
@@ -90,7 +120,9 @@ export function townMapView() {
   // visited houses as a short legend (names stay readable on a phone, where the map is small)
   const known = BUILDINGS.filter((b) => knownAs(b) === 'visited').sort((a, b) => a.order - b.order);
   const legend = known.length ? h('div', { class: 'qt-leg' }, known.map((b) => h('button', { type: 'button', onclick: () => byId[b.id]?.click() }, h('b', {}, String(b.order)), PLACE[b.id].name))) : null;
-  return h('div', { class: 'qt' }, stage, caption, legend);
+  // the games as a list too: a game inside a house has no mark of its own, its row lights the house
+  const games = gameRows.length ? h('div', { class: 'qt-leg' }, h('span', { class: 'qt-legt' }, tr(FREE_MAP.games)), gameRows.map((r) => h('button', { type: 'button', onclick: () => (r.m ? r.m.click() : byId[r.house] && choose(byId[r.house], r.text, r.to)) }, h('b', {}, '◆'), tr(r.g.title)))) : null;
+  return h('div', { class: 'qt' }, stage, caption, goBox, legend, games);
 }
 
 export const MAP_CSS = `
@@ -117,4 +149,9 @@ export const MAP_CSS = `
 .qt-leg{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:720px}
 .qt-leg button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:22px;background:var(--card);border:1px solid var(--line);cursor:pointer;font-size:16px}
 .qt-leg button b{color:var(--gold)}
+.qt-legt{align-self:center;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.qt-mk.game{min-width:24px;height:24px;padding:0 4px;background:#1c1a12;color:#ffcf5a;border-color:#ffcf5a;font-size:13px}
+.hb-over .qt-mk.game{color:#ffcf5a}
+.qt-go{min-height:48px;display:flex;justify-content:center}
+.qt-gobtn{min-height:48px;padding:0 26px;border-radius:24px;border:0;background:var(--acc);color:#04201d;font-weight:700;font-size:17px;cursor:pointer}
 `;

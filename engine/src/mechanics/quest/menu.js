@@ -100,11 +100,11 @@ function journey(onEnding) {
   return h('div', { class: 'qm-in' }, kids);
 }
 
-function mapTab() {
+function mapTab(onGo) {
   let mind = false;
   const box = h('div', { class: 'qm-in', style: 'max-width:1200px' });
   const draw = () => {
-    box.replaceChildren(h('button', { type: 'button', class: 'qm-btn ghost', onclick: () => { mind = !mind; draw(); } }, tr(mind ? W.map.town : W.map.mind)), mind ? mindMap() : townMapView());
+    box.replaceChildren(h('button', { type: 'button', class: 'qm-btn ghost', onclick: () => { mind = !mind; draw(); } }, tr(mind ? W.map.town : W.map.mind)), mind ? mindMap() : townMapView({ onGo }));
   };
   draw();
   return box;
@@ -161,7 +161,7 @@ export function openMenu({ tab = null, settings = [], touch = false } = {}) {
   function show(t) {
     cur = t;
     btns.forEach((b, i) => b.setAttribute('aria-selected', String(TABS[i] === t)));
-    body.replaceChildren(t === 'journey' ? journey(() => done('ending')) : t === 'map' ? mapTab() : mysteries((v) => { busy = v; }));
+    body.replaceChildren(t === 'journey' ? journey(() => done('ending')) : t === 'map' ? mapTab((to) => done({ teleport: to })) : mysteries((v) => { busy = v; }));
     body.scrollTop = 0;
     root.dataset.tab = t;
   }

@@ -737,6 +737,16 @@ export class UI extends Phaser.Scene {
     const r = await this.page(() => openMenu({ tab, settings, touch: this.touch }));
     this.refreshQuest(true);
     if (r === 'ending') await this.ending();
+    else if (r?.teleport) this.teleport(r.teleport);
+  }
+
+  // free study: go at once to a tile of the town chosen on the map (mechanics/quest/townmap.js)
+  teleport(to) {
+    state.pos = { x: to.x, y: to.y, dir: to.dir || 'down' }; save();
+    sfx.confirm?.();
+    const at = ['Town', 'Interior', 'Workshop', 'Museum'].find((k) => this.scene.isActive(k));
+    if (at === 'Town') this.scene.get('Town').scene.restart();
+    else if (at) this.scene.get(at).scene.start('Town');
   }
 
   // ---------- the ending card (mechanics/quest/ending.js) ----------
