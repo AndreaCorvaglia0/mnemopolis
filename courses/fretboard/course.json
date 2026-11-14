@@ -1409,48 +1409,114 @@
       "id": "twelve",
       "theme": "notes",
       "type": "view",
-      "name": "The twelve notes",
-      "place": "Twelve-Hour Tower",
-      "sign": "TWELVE",
+      "name": {
+        "en": "The twelve notes",
+        "it": "Le dodici note"
+      },
+      "place": {
+        "en": "Twelve-Hour Tower",
+        "it": "Torre delle Dodici Ore"
+      },
+      "sign": {
+        "en": "TWELVE",
+        "it": "DODICI"
+      },
       "emblem": "clock",
-      "objective": "Name the notes along a string and count the distance between two notes in half steps.",
-      "idea": "Each fret raises a note by one half step, the same ratio every time; twelve half steps make an octave and bring the same name round again.",
-      "wrongBelief": "There are seven notes, A to G, evenly spaced, so the next A is eight frets up, as the 'oct' in octave suggests.",
+      "objective": {
+        "en": "Name the notes along a string and count the distance between two notes in half steps.",
+        "it": "Nominare le note lungo una corda e contare la distanza tra due note in semitoni."
+      },
+      "idea": {
+        "en": "Each fret raises a note by one half step, the same ratio every time; twelve half steps make an octave and bring the same name round again.",
+        "it": "Ogni tasto alza la nota di un semitono, sempre con lo stesso rapporto; dodici semitoni fanno un'ottava e riportano lo stesso nome."
+      },
+      "wrongBelief": {
+        "en": "There are seven notes, A to G, evenly spaced, so the next A is eight frets up, as the 'oct' in octave suggests.",
+        "it": "Le note sono sette, da Do a Si, a distanze uguali, quindi il La successivo sta otto tasti più in su, come suggerisce la parola «ottava»."
+      },
       "anchor": {
         "type": "metaphor",
-        "text": "The twelve notes are the hours on a clock face: after twelve steps the hand is back on the same hour.",
-        "limits": "On a clock the same hour is the same time of day, while a note twelve half steps up has the same name but twice the frequency."
+        "text": {
+          "en": "The twelve notes are the hours on a clock face: after twelve steps the hand is back on the same hour.",
+          "it": "Le dodici note sono le ore sul quadrante di un orologio: dopo dodici passi la lancetta è di nuovo sulla stessa ora."
+        },
+        "limits": {
+          "en": "On a clock the same hour is the same time of day, while a note twelve half steps up has the same name but twice the frequency.",
+          "it": "Su un orologio la stessa ora è lo stesso momento del giorno, mentre una nota dodici semitoni più in alto ha lo stesso nome ma una frequenza doppia."
+        }
       },
-      "application": "Every fret on every string is one half step, so counting frets is counting half steps: this is how a guitarist finds any note from the open string.",
+      "application": {
+        "en": "Every fret on every string is one half step, so counting frets is counting half steps: this is how a guitarist finds any note from the open string.",
+        "it": "Ogni tasto di ogni corda è un semitono, quindi contare i tasti vuol dire contare i semitoni: è così che un chitarrista trova una nota qualsiasi a partire dalla corda a vuoto."
+      },
       "remember": [
-        "The twelve notes are A, A♯/B♭, B, C, C♯/D♭, D, D♯/E♭, E, F, F♯/G♭, G, G♯/A♭, and then A again.",
-        "One fret is a half step and two frets a whole step; B to C and E to F are half steps, with no note between them.",
-        "Each fret multiplies the frequency by the same factor, about 1.06, so twelve frets double it."
+        {
+          "en": "The twelve notes are A, A♯/B♭, B, C, C♯/D♭, D, D♯/E♭, E, F, F♯/G♭, G, G♯/A♭, and then A again.",
+          "it": "Le dodici note sono Do, Do♯/Re♭, Re, Re♯/Mi♭, Mi, Fa, Fa♯/Sol♭, Sol, Sol♯/La♭, La, La♯/Si♭, Si, e poi di nuovo Do."
+        },
+        {
+          "en": "One fret is a half step and two frets a whole step; B to C and E to F are half steps, with no note between them.",
+          "it": "Un tasto è un semitono e due tasti un tono; da Mi a Fa e da Si a Do c'è un semitono, senza nessuna nota in mezzo."
+        },
+        {
+          "en": "Each fret multiplies the frequency by the same factor, about 1.06, so twelve frets double it.",
+          "it": "Ogni tasto moltiplica la frequenza per lo stesso fattore, circa 1,06, quindi dodici tasti la raddoppiano."
+        }
       ],
       "explain": {
-        "q": "Why do the frets get closer together towards the body of the guitar?",
-        "a": "Each fret has to raise the frequency by the same factor, about 1.06, which means shortening what is left of the string by the same fraction, about 5.6 percent. The string left is shorter at every fret, so the same fraction of it is a shorter distance, and the frets crowd together."
+        "q": {
+          "en": "Why do the frets get closer together towards the body of the guitar?",
+          "it": "Perché i tasti si avvicinano sempre di più verso la cassa della chitarra?"
+        },
+        "a": {
+          "en": "Each fret has to raise the frequency by the same factor, about 1.06, which means shortening what is left of the string by the same fraction, about 5.6 percent. The string left is shorter at every fret, so the same fraction of it is a shorter distance, and the frets crowd together.",
+          "it": "Ogni tasto deve alzare la frequenza dello stesso fattore, circa 1,06, e questo significa accorciare ciò che resta della corda della stessa frazione, circa il 5,6 per cento. La corda rimasta è più corta a ogni tasto, quindi la stessa frazione corrisponde a una distanza minore e i tasti si infittiscono."
+        }
       },
       "callbacks": [
         {
           "to": "string",
-          "how": "The octave found at the Luthier's House, half the string, is the 12th fret here: twelve equal steps fill the ratio 2 to 1."
+          "how": {
+            "en": "The octave found at the Luthier's House, half the string, is the 12th fret here: twelve equal steps fill the ratio 2 to 1.",
+            "it": "L'ottava trovata nella Casa del Liutaio, metà corda, qui è il 12° tasto: dodici passi uguali riempiono il rapporto 2 a 1."
+          }
         }
       ],
       "lab": {
-        "title": "The circle of twelve",
+        "title": {
+          "en": "The circle of twelve",
+          "it": "Il cerchio dei dodici"
+        },
         "stations": [
           {
             "id": "circle",
-            "tab": "Round the clock",
-            "goal": "An octave holds twelve notes, one per fret: twelve half steps bring the same note name back at twice the frequency.",
+            "tab": {
+              "en": "Round the clock",
+              "it": "Il giro dell'orologio"
+            },
+            "goal": {
+              "en": "An octave holds twelve notes, one per fret: twelve half steps bring the same note name back at twice the frequency.",
+              "it": "Un'ottava contiene dodici note, una per tasto: dodici semitoni riportano lo stesso nome di nota con una frequenza doppia."
+            },
             "beat": "ground",
             "pattern": "linked-analogy",
-            "object": "A dial of the twelve note names, linked to the A string of the neck.",
-            "action": "Turns the dial or taps the frets one by one, hearing each note.",
-            "surprise": "Twelve steps, not eight, bring A back, at twice the frequency; and between B and C, and between E and F, there is no note.",
+            "object": {
+              "en": "A dial of the twelve note names, linked to the A string of the neck.",
+              "it": "Un quadrante con i nomi delle dodici note, collegato alla corda di La (A) del manico."
+            },
+            "action": {
+              "en": "Turns the dial or taps the frets one by one, hearing each note.",
+              "it": "Gira il quadrante o tocca i tasti uno per uno, ascoltando ogni nota."
+            },
+            "surprise": {
+              "en": "Twelve steps, not eight, bring A back, at twice the frequency; and between B and C, and between E and F, there is no note.",
+              "it": "Servono dodici passi, non otto, per tornare al La, con una frequenza doppia; e tra Si e Do, e tra Mi e Fa, non c'è nessuna nota."
+            },
             "predict": {
-              "q": "Walking up the A string one fret at a time, how many frets until you reach A again?",
+              "q": {
+                "en": "Walking up the A string one fret at a time, how many frets until you reach A again?",
+                "it": "Salendo sulla corda di La (A) un tasto alla volta, quanti tasti servono per arrivare di nuovo al La?"
+              },
               "options": [
                 "7",
                 "8",
@@ -1458,65 +1524,146 @@
                 "14"
               ],
               "answer": 2,
-              "why": "An octave holds twelve different notes, one per fret; the letters A to G name only seven of them."
+              "why": {
+                "en": "An octave holds twelve different notes, one per fret; the letters A to G name only seven of them.",
+                "it": "Un'ottava contiene dodici note diverse, una per tasto; i nomi da Do a Si ne indicano soltanto sette."
+              }
             },
             "controls": [],
             "tries": [
-              "Walk up the A string fret by fret until the dial shows A again.",
-              "Find C on the A string and count its half steps above A."
+              {
+                "en": "Walk up the A string fret by fret until the dial shows A again.",
+                "it": "Sali sulla corda di La (A) tasto per tasto finché il quadrante mostra di nuovo La."
+              },
+              {
+                "en": "Find C on the A string and count its half steps above A.",
+                "it": "Trova il Do sulla corda di La (A) e conta quanti semitoni sopra il La si trova."
+              }
             ],
-            "takeaway": "An octave holds <b>twelve</b> notes, one per fret, and each fret multiplies the frequency by <b>1.0595</b>, the twelfth root of two, so twelve frets double it. Seven notes have letter names; the five between them are sharps or flats, except at <b>B–C</b> and <b>E–F</b>, which are already a half step apart.",
-            "source": "Frequencies computed live in equal temperament from A4 = 440 Hz (UNSW Music Acoustics); fret positions computed from the twelfth root of two for a 650 mm string."
+            "takeaway": {
+              "en": "An octave holds <b>twelve</b> notes, one per fret, and each fret multiplies the frequency by <b>1.0595</b>, the twelfth root of two, so twelve frets double it. Seven notes have letter names; the five between them are sharps or flats, except at <b>B–C</b> and <b>E–F</b>, which are already a half step apart.",
+              "it": "Un'ottava contiene <b>dodici</b> note, una per tasto, e ogni tasto moltiplica la frequenza per <b>1,0595</b>, la radice dodicesima di due, quindi dodici tasti la raddoppiano. Sette note hanno un nome proprio; le cinque tra di esse sono diesis o bemolli, tranne tra <b>Mi–Fa</b> e <b>Si–Do</b>, che distano già un semitono."
+            },
+            "source": {
+              "en": "Frequencies computed live in equal temperament from A4 = 440 Hz (UNSW Music Acoustics); fret positions computed from the twelfth root of two for a 650 mm string.",
+              "it": "Frequenze calcolate in tempo reale in temperamento equabile a partire da La4 = 440 Hz (UNSW Music Acoustics); posizioni dei tasti calcolate dalla radice dodicesima di due per una corda di 650 mm."
+            }
           },
           {
             "id": "fifthfret",
-            "tab": "The fifth-fret rule",
+            "tab": {
+              "en": "The fifth-fret rule",
+              "it": "La regola del quinto tasto"
+            },
             "advanced": true,
-            "goal": "Neighbouring strings are five half steps apart, except G and B, four apart: so fret 5 gives the next open string, and fret 4 on G.",
+            "goal": {
+              "en": "Neighbouring strings are five half steps apart, except G and B, four apart: so fret 5 gives the next open string, and fret 4 on G.",
+              "it": "Le corde vicine distano cinque semitoni, tranne Sol e Si, che ne distano quattro: perciò il tasto 5 dà la corda a vuoto successiva, e il tasto 4 sulla corda di Sol."
+            },
             "beat": "rule",
             "pattern": "puzzle",
-            "object": "The six strings of the neck in standard tuning, each with its note names along it.",
-            "action": "Taps a fret on one string and the open string above it, and compares the names.",
-            "surprise": "Fret 5 matches the next open string everywhere except on the G string, where the match is at fret 4.",
+            "object": {
+              "en": "The six strings of the neck in standard tuning, each with its note names along it.",
+              "it": "Le sei corde del manico in accordatura standard, ciascuna con i nomi delle note lungo di essa."
+            },
+            "action": {
+              "en": "Taps a fret on one string and the open string above it, and compares the names.",
+              "it": "Tocca un tasto su una corda e la corda a vuoto successiva, e confronta i nomi."
+            },
+            "surprise": {
+              "en": "Fret 5 matches the next open string everywhere except on the G string, where the match is at fret 4.",
+              "it": "Il tasto 5 coincide con la corda a vuoto successiva ovunque tranne che sulla corda di Sol (G), dove la coincidenza è al tasto 4."
+            },
             "predict": {
-              "q": "Fret 5 on each string gives the note of the next open string. Which pair breaks the rule?",
+              "q": {
+                "en": "Fret 5 on each string gives the note of the next open string. Which pair breaks the rule?",
+                "it": "Il tasto 5 di ogni corda dà la nota della corda a vuoto successiva. Quale coppia non rispetta la regola?"
+              },
               "options": [
-                "low E to A",
-                "D to G",
-                "G to B",
-                "B to high E"
+                {
+                  "en": "low E to A",
+                  "it": "Mi (E) basso - La (A)"
+                },
+                {
+                  "en": "D to G",
+                  "it": "Re (D) - Sol (G)"
+                },
+                {
+                  "en": "G to B",
+                  "it": "Sol (G) - Si (B)"
+                },
+                {
+                  "en": "B to high E",
+                  "it": "Si (B) - Mi (E) alto"
+                }
               ],
               "answer": 2,
-              "why": "Standard tuning puts five half steps between neighbouring strings except between G and B, which are four apart."
+              "why": {
+                "en": "Standard tuning puts five half steps between neighbouring strings except between G and B, which are four apart.",
+                "it": "L'accordatura standard mette cinque semitoni tra le corde vicine, tranne tra Sol e Si, che ne distano quattro."
+              }
             },
             "controls": [],
             "tries": [
-              "Find the fret on the low E string that gives the note of the open A.",
-              "Find the fret on the G string that gives the note of the open B."
+              {
+                "en": "Find the fret on the low E string that gives the note of the open A.",
+                "it": "Trova il tasto della corda di Mi (E) basso che dà la nota del La a vuoto."
+              },
+              {
+                "en": "Find the fret on the G string that gives the note of the open B.",
+                "it": "Trova il tasto della corda di Sol (G) che dà la nota del Si a vuoto."
+              }
             ],
-            "takeaway": "Standard tuning, <b>E A D G B E</b>, puts <b>five half steps</b> between neighbouring strings and <b>four</b> between G and B. That is why fret 5 gives the next open string and fret 4 on the G string gives the open B, and why chord and scale shapes bend when they cross from G to B.",
-            "source": "Standard tuning E2 A2 D3 G3 B3 E4; note names and frequencies computed live in equal temperament from A4 = 440 Hz."
+            "takeaway": {
+              "en": "Standard tuning, <b>E A D G B E</b>, puts <b>five half steps</b> between neighbouring strings and <b>four</b> between G and B. That is why fret 5 gives the next open string and fret 4 on the G string gives the open B, and why chord and scale shapes bend when they cross from G to B.",
+              "it": "L'accordatura standard, <b>Mi La Re Sol Si Mi</b> (E A D G B E), mette <b>cinque semitoni</b> tra le corde vicine e <b>quattro</b> tra Sol e Si. Ecco perché il tasto 5 dà la corda a vuoto successiva e il tasto 4 sulla corda di Sol dà il Si a vuoto, ed ecco perché le forme di accordi e scale si piegano quando passano dal Sol al Si."
+            },
+            "source": {
+              "en": "Standard tuning E2 A2 D3 G3 B3 E4; note names and frequencies computed live in equal temperament from A4 = 440 Hz.",
+              "it": "Accordatura standard E2 A2 D3 G3 B3 E4 (Mi2 La2 Re3 Sol3 Si3 Mi4); nomi delle note e frequenze calcolati in tempo reale in temperamento equabile da La4 = 440 Hz."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "Twelve notes in an octave",
-          "text": "Western music divides the octave into twelve notes. Seven of them carry the letter names A to G, and the other five sit between letters and are named with a sharp (♯, a half step up) or a flat (♭, a half step down), so the note between A and B is called A♯ or B♭. Two pairs of letters have no note between them, B and C, and E and F, because they are already a half step apart. Readers who learnt the Italian names will know C, D, E, F, G, A and B as Do, Re, Mi, Fa, Sol, La and Si."
+          "title": {
+            "en": "Twelve notes in an octave",
+            "it": "Dodici note in un'ottava"
+          },
+          "text": {
+            "en": "Western music divides the octave into twelve notes. Seven of them carry the letter names A to G, and the other five sit between letters and are named with a sharp (♯, a half step up) or a flat (♭, a half step down), so the note between A and B is called A♯ or B♭. Two pairs of letters have no note between them, B and C, and E and F, because they are already a half step apart. Readers who learnt the Italian names will know C, D, E, F, G, A and B as Do, Re, Mi, Fa, Sol, La and Si.",
+            "it": "La musica occidentale divide l'ottava in dodici note. Sette di esse hanno i nomi Do, Re, Mi, Fa, Sol, La e Si, e le altre cinque stanno tra un nome e l'altro e si indicano con un diesis (♯, un semitono sopra) o con un bemolle (♭, un semitono sotto), così la nota tra La e Si si chiama La♯ oppure Si♭. Due coppie di nomi non hanno nessuna nota in mezzo, Mi e Fa, e Si e Do, perché distano già un semitono. Sui manici, negli accordi scritti e sugli accordatori i chitarristi incontrano però le lettere dell'alfabeto anglosassone, e la corrispondenza è questa: Do = C, Re = D, Mi = E, Fa = F, Sol = G, La = A, Si = B. Nel resto del corso i nomi italiani vengono usati nel testo e le lettere accanto, dove servono sul manico e per gli accordi."
+          }
         },
         {
-          "title": "The fretboard is a ruler of half steps",
-          "text": "On a guitar every fret raises the note by one half step, on every string, so the distance between two notes on the same string is the number of frets between them. Two frets make a whole step. From the open A string, fret 2 is B, fret 3 is C, fret 5 is D, fret 7 is E and fret 12 is A again, an octave higher."
+          "title": {
+            "en": "The fretboard is a ruler of half steps",
+            "it": "Il manico è un righello di semitoni"
+          },
+          "text": {
+            "en": "On a guitar every fret raises the note by one half step, on every string, so the distance between two notes on the same string is the number of frets between them. Two frets make a whole step. From the open A string, fret 2 is B, fret 3 is C, fret 5 is D, fret 7 is E and fret 12 is A again, an octave higher.",
+            "it": "Su una chitarra ogni tasto alza la nota di un semitono, su ogni corda, quindi la distanza tra due note della stessa corda è il numero di tasti che le separa. Due tasti fanno un tono. Partendo dalla corda di La (A) a vuoto, il tasto 2 è Si, il tasto 3 è Do, il tasto 5 è Re, il tasto 7 è Mi e il tasto 12 è di nuovo La, un'ottava più in alto."
+          }
         },
         {
-          "title": "Equal steps are equal ratios",
-          "text": "A half step does not add a fixed number of hertz; it multiplies the frequency by the twelfth root of two, about 1.0595, so that twelve of them multiply it by exactly two. This is why the frets are not evenly spaced: each one cuts the same fraction, about 5.6 percent, from the string that remains, and the remaining string is shorter at every fret."
+          "title": {
+            "en": "Equal steps are equal ratios",
+            "it": "Passi uguali sono rapporti uguali"
+          },
+          "text": {
+            "en": "A half step does not add a fixed number of hertz; it multiplies the frequency by the twelfth root of two, about 1.0595, so that twelve of them multiply it by exactly two. This is why the frets are not evenly spaced: each one cuts the same fraction, about 5.6 percent, from the string that remains, and the remaining string is shorter at every fret.",
+            "it": "Un semitono non aggiunge un numero fisso di hertz; moltiplica la frequenza per la radice dodicesima di due, circa 1,0595, in modo che dodici semitoni la moltiplichino esattamente per due. Per questo i tasti non sono equidistanti: ciascuno toglie la stessa frazione, circa il 5,6 per cento, dalla corda che rimane, e la corda rimasta è più corta a ogni tasto."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "How many different notes are there in one octave?",
+          "q": {
+            "en": "How many different notes are there in one octave?",
+            "it": "Quante note diverse ci sono in un'ottava?"
+          },
           "options": [
             "7",
             "8",
@@ -1524,71 +1671,164 @@
             "13"
           ],
           "answer": 2,
-          "why": "The octave is divided into twelve half steps, and each step lands on a different note before the thirteenth step repeats the first name.",
+          "why": {
+            "en": "The octave is divided into twelve half steps, and each step lands on a different note before the thirteenth step repeats the first name.",
+            "it": "L'ottava è divisa in dodici semitoni, e ogni passo cade su una nota diversa prima che il tredicesimo ripeta il primo nome."
+          },
           "traps": [
-            "Seven is the number of letter names, but five more notes, the sharps and flats, sit between them.",
-            "Eight comes from the word octave, which counts the notes of a scale including both ends; the octave itself holds twelve different notes.",
+            {
+              "en": "Seven is the number of letter names, but five more notes, the sharps and flats, sit between them.",
+              "it": "Sette è il numero dei nomi di nota, ma altre cinque note, i diesis e i bemolli, stanno tra di essi."
+            },
+            {
+              "en": "Eight comes from the word octave, which counts the notes of a scale including both ends; the octave itself holds twelve different notes.",
+              "it": "Otto viene dalla parola ottava, che conta le note di una scala compresi i due estremi; l'ottava stessa contiene dodici note diverse."
+            },
             null,
-            "Thirteen counts the starting note twice; the thirteenth note is the first one again, an octave higher."
+            {
+              "en": "Thirteen counts the starting note twice; the thirteenth note is the first one again, an octave higher.",
+              "it": "Tredici conta due volte la nota di partenza; la tredicesima nota è di nuovo la prima, un'ottava più in alto."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Which two letter names have no note between them?",
+          "q": {
+            "en": "Which two letter names have no note between them?",
+            "it": "Quali due nomi di nota non hanno nessuna nota in mezzo?"
+          },
           "options": [
-            "A and B",
-            "B and C",
-            "C and D",
-            "G and A"
+            {
+              "en": "A and B",
+              "it": "La e Si"
+            },
+            {
+              "en": "B and C",
+              "it": "Si e Do"
+            },
+            {
+              "en": "C and D",
+              "it": "Do e Re"
+            },
+            {
+              "en": "G and A",
+              "it": "Sol e La"
+            }
           ],
           "answer": 1,
-          "why": "B to C and E to F are half steps, one fret apart, so no sharp or flat fits between them.",
+          "why": {
+            "en": "B to C and E to F are half steps, one fret apart, so no sharp or flat fits between them.",
+            "it": "Da Si a Do e da Mi a Fa c'è un semitono, cioè un tasto, quindi in mezzo non entra nessun diesis o bemolle."
+          },
           "traps": [
-            "A and B are a whole step apart, with A♯ or B♭ between them.",
+            {
+              "en": "A and B are a whole step apart, with A♯ or B♭ between them.",
+              "it": "La e Si distano un tono, con La♯ o Si♭ in mezzo."
+            },
             null,
-            "C and D are two frets apart, with C♯ or D♭ between them.",
-            "G and A are a whole step apart, with G♯ or A♭ between them."
+            {
+              "en": "C and D are two frets apart, with C♯ or D♭ between them.",
+              "it": "Do e Re distano due tasti, con Do♯ o Re♭ in mezzo."
+            },
+            {
+              "en": "G and A are a whole step apart, with G♯ or A♭ between them.",
+              "it": "Sol e La distano un tono, con Sol♯ o La♭ in mezzo."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Moving a finger up one fret multiplies the frequency by about...",
+          "q": {
+            "en": "Moving a finger up one fret multiplies the frequency by about...",
+            "it": "Spostando un dito di un tasto più in alto la frequenza si moltiplica per circa..."
+          },
           "options": [
-            "1.06",
-            "1.5",
+            {
+              "en": "1.06",
+              "it": "1,06"
+            },
+            {
+              "en": "1.5",
+              "it": "1,5"
+            },
             "2",
-            "1.12"
+            {
+              "en": "1.12",
+              "it": "1,12"
+            }
           ],
           "answer": 0,
-          "why": "One half step is the twelfth root of two, about 1.0595, so that twelve of them double the frequency.",
+          "why": {
+            "en": "One half step is the twelfth root of two, about 1.0595, so that twelve of them double the frequency.",
+            "it": "Un semitono è la radice dodicesima di due, circa 1,0595, in modo che dodici semitoni raddoppino la frequenza."
+          },
           "traps": [
             null,
-            "1.5 is the fifth, seven frets up, where the harmonics of the two notes meet.",
-            "Doubling is the octave, which takes twelve frets, not one.",
-            "1.12 is a whole step, two frets, because 1.06 times 1.06 is about 1.12."
+            {
+              "en": "1.5 is the fifth, seven frets up, where the harmonics of the two notes meet.",
+              "it": "1,5 è la quinta, sette tasti più su, dove si incontrano le armoniche delle due note."
+            },
+            {
+              "en": "Doubling is the octave, which takes twelve frets, not one.",
+              "it": "Il raddoppio è l'ottava, che richiede dodici tasti e non uno."
+            },
+            {
+              "en": "1.12 is a whole step, two frets, because 1.06 times 1.06 is about 1.12.",
+              "it": "1,12 è un tono, due tasti, perché 1,06 per 1,06 fa circa 1,12."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "On the low E string, which note is at fret 3?",
+          "q": {
+            "en": "On the low E string, which note is at fret 3?",
+            "it": "Sulla corda di Mi (E) bassa, quale nota si trova al tasto 3?"
+          },
           "options": [
-            "F",
-            "F♯",
-            "G",
-            "G♯"
+            {
+              "en": "F",
+              "it": "Fa"
+            },
+            {
+              "en": "F♯",
+              "it": "Fa♯"
+            },
+            {
+              "en": "G",
+              "it": "Sol"
+            },
+            {
+              "en": "G♯",
+              "it": "Sol♯"
+            }
           ],
           "answer": 2,
-          "why": "From E, fret 1 is F (E to F is a half step), fret 2 is F♯ and fret 3 is G.",
+          "why": {
+            "en": "From E, fret 1 is F (E to F is a half step), fret 2 is F♯ and fret 3 is G.",
+            "it": "Partendo da Mi, il tasto 1 è Fa (da Mi a Fa c'è un semitono), il tasto 2 è Fa♯ e il tasto 3 è Sol."
+          },
           "traps": [
-            "F is at fret 1, because E to F is only a half step.",
-            "F♯ is at fret 2; one more fret reaches G.",
+            {
+              "en": "F is at fret 1, because E to F is only a half step.",
+              "it": "Il Fa sta al tasto 1, perché da Mi a Fa c'è un solo semitono."
+            },
+            {
+              "en": "F♯ is at fret 2; one more fret reaches G.",
+              "it": "Il Fa♯ sta al tasto 2; un tasto più su si arriva al Sol."
+            },
             null,
-            "G♯ is at fret 4, one fret past G; counting a whole step from E to F is the usual slip here."
+            {
+              "en": "G♯ is at fret 4, one fret past G; counting a whole step from E to F is the usual slip here.",
+              "it": "Il Sol♯ sta al tasto 4, un tasto oltre il Sol; contare da Mi a Fa come un tono intero è lo scivolone più comune."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "How many half steps are there from C up to the next E?",
+          "q": {
+            "en": "How many half steps are there from C up to the next E?",
+            "it": "Quanti semitoni ci sono da un Do al Mi successivo?"
+          },
           "options": [
             "2",
             "3",
@@ -1596,30 +1836,69 @@
             "5"
           ],
           "answer": 2,
-          "why": "C, C♯, D, D♯, E: four steps of one fret each.",
+          "why": {
+            "en": "C, C♯, D, D♯, E: four steps of one fret each.",
+            "it": "Do, Do♯, Re, Re♯, Mi: quattro passi di un tasto ciascuno."
+          },
           "traps": [
-            "Two is the number of letters skipped from C to E; each letter step here is a whole step, so the distance is four half steps.",
-            "Three half steps reach D♯ or E♭, one fret short of E.",
+            {
+              "en": "Two is the number of letters skipped from C to E; each letter step here is a whole step, so the distance is four half steps.",
+              "it": "Due è il numero di nomi saltati da Do a Mi; qui ogni passo tra nomi vicini è un tono, quindi la distanza è di quattro semitoni."
+            },
+            {
+              "en": "Three half steps reach D♯ or E♭, one fret short of E.",
+              "it": "Tre semitoni arrivano al Re♯ o Mi♭, un tasto prima del Mi."
+            },
             null,
-            "Five half steps go one fret past E, to F, because E to F is a half step."
+            {
+              "en": "Five half steps go one fret past E, to F, because E to F is a half step.",
+              "it": "Cinque semitoni superano il Mi di un tasto, fino al Fa, perché da Mi a Fa c'è un semitono."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A bass player tunes a string to 55 Hz, one octave below the guitar's A string. Where on that string is the A at 110 Hz?",
+          "q": {
+            "en": "A bass player tunes a string to 55 Hz, one octave below the guitar's A string. Where on that string is the A at 110 Hz?",
+            "it": "Un bassista accorda una corda a 55 Hz, un'ottava sotto la corda di La (A) della chitarra. Dove si trova su quella corda il La a 110 Hz?"
+          },
           "options": [
-            "Fret 5",
-            "Fret 7",
-            "Fret 12",
-            "Fret 24"
+            {
+              "en": "Fret 5",
+              "it": "Tasto 5"
+            },
+            {
+              "en": "Fret 7",
+              "it": "Tasto 7"
+            },
+            {
+              "en": "Fret 12",
+              "it": "Tasto 12"
+            },
+            {
+              "en": "Fret 24",
+              "it": "Tasto 24"
+            }
           ],
           "answer": 2,
-          "why": "110 Hz is twice 55 Hz, an octave, which is twelve half steps on any string, so it is at fret 12, in the middle of the string.",
+          "why": {
+            "en": "110 Hz is twice 55 Hz, an octave, which is twelve half steps on any string, so it is at fret 12, in the middle of the string.",
+            "it": "110 Hz è il doppio di 55 Hz, un'ottava, che su qualsiasi corda sono dodici semitoni, quindi sta al tasto 12, a metà della corda."
+          },
           "traps": [
-            "Fret 5 is five half steps up, a fourth, which multiplies the frequency by about 1.33, not 2.",
-            "Fret 7 is seven half steps, a fifth, about 1.5 times the frequency.",
+            {
+              "en": "Fret 5 is five half steps up, a fourth, which multiplies the frequency by about 1.33, not 2.",
+              "it": "Il tasto 5 è cinque semitoni più su, una quarta, che moltiplica la frequenza per circa 1,33 e non per 2."
+            },
+            {
+              "en": "Fret 7 is seven half steps, a fifth, about 1.5 times the frequency.",
+              "it": "Il tasto 7 è sette semitoni, una quinta, circa 1,5 volte la frequenza."
+            },
             null,
-            "Fret 24 is two octaves, four times the frequency, 220 Hz."
+            {
+              "en": "Fret 24 is two octaves, four times the frequency, 220 Hz.",
+              "it": "Il tasto 24 è due ottave, quattro volte la frequenza, 220 Hz."
+            }
           ]
         }
       ],
@@ -1634,28 +1913,41 @@
         {
           "title": "UNSW Music Acoustics: Note names, MIDI numbers and frequencies",
           "url": "https://newt.phys.unsw.edu.au/jw/notes.html",
-          "why": "A complete table of note names and their frequencies, with the formula behind it."
+          "why": {
+            "en": "A complete table of note names and their frequencies, with the formula behind it.",
+            "it": "Una tabella completa dei nomi delle note con le loro frequenze, e la formula che sta dietro (in inglese)."
+          }
         },
         {
           "title": "JustinGuitar: Practical Music Theory, grade 1",
           "url": "https://justinguitar.com/categories/PMT",
-          "why": "A free guitar course that starts, as this house does, with notes, sharps and flats, and octaves."
+          "why": {
+            "en": "A free guitar course that starts, as this house does, with notes, sharps and flats, and octaves.",
+            "it": "Un corso di chitarra gratuito che inizia, come questa casa, da note, diesis e bemolli e ottave (in inglese)."
+          }
         }
       ],
       "riddles": [
         {
           "id": "tower-pc",
           "kind": "computer",
-          "clue": "pw = the note eight frets up from the open A. One letter, no symbols. The clerk",
+          "clue": {
+            "en": "pw = the note eight frets up from the open A. One letter, no symbols. The clerk",
+            "it": "pw = la nota otto tasti sopra il La a vuoto. Una parola sola, nessun simbolo. L'impiegato"
+          },
           "answer": [
-            "F"
+            "F",
+            "fa"
           ],
           "type": "text",
           "from": {
             "station": "circle"
           },
           "inside": {
-            "note": "The clerk's notes on tuning the strings. The open strings, low to high, are E2 A2 D3 G3 B3 E4, at 82.41, 110, 146.83, 196, 246.94 and 329.63 Hz, and each string is five half steps above the one below it except B, which is four above G. That is why fret 5 gives the next open string, and fret 4 on the G string.",
+            "note": {
+              "en": "The clerk's notes on tuning the strings. The open strings, low to high, are E2 A2 D3 G3 B3 E4, at 82.41, 110, 146.83, 196, 246.94 and 329.63 Hz, and each string is five half steps above the one below it except B, which is four above G. That is why fret 5 gives the next open string, and fret 4 on the G string.",
+              "it": "Gli appunti dell'impiegato sull'accordatura delle corde. Le corde a vuoto, dalla più grave alla più acuta, sono Mi2 La2 Re3 Sol3 Si3 Mi4 (E2 A2 D3 G3 B3 E4), a 82,41, 110, 146,83, 196, 246,94 e 329,63 Hz, e ogni corda sta cinque semitoni sopra la precedente, tranne il Si, che sta quattro sopra il Sol. Per questo il tasto 5 dà la corda a vuoto successiva, e il tasto 4 sulla corda di Sol."
+            },
             "station": "fifthfret",
             "coins": 15
           }
@@ -1666,164 +1958,392 @@
       "id": "scale",
       "theme": "notes",
       "type": "mechanism",
-      "name": "The major scale",
-      "place": "The Step Ladder",
-      "sign": "LADDER",
+      "name": {
+        "en": "The major scale",
+        "it": "La scala maggiore"
+      },
+      "place": {
+        "en": "The Step Ladder",
+        "it": "La Scala a Pioli"
+      },
+      "sign": {
+        "en": "LADDER",
+        "it": "SCALA"
+      },
       "emblem": "key",
-      "objective": "Build a major scale from any note with the pattern of whole and half steps.",
-      "idea": "A major scale is one pattern of steps, whole, whole, half, whole, whole, whole, half, which gives a major scale from whichever note it starts.",
-      "wrongBelief": "Each key has its own list of seven notes to memorise, C major is the normal one, and other scales are C major with odd exceptions.",
+      "objective": {
+        "en": "Build a major scale from any note with the pattern of whole and half steps.",
+        "it": "Costruire una scala maggiore da una nota qualsiasi con lo schema di toni e semitoni."
+      },
+      "idea": {
+        "en": "A major scale is one pattern of steps, whole, whole, half, whole, whole, whole, half, which gives a major scale from whichever note it starts.",
+        "it": "Una scala maggiore è un solo schema di passi, tono, tono, semitono, tono, tono, tono, semitono, che dà una scala maggiore da qualunque nota si parta."
+      },
+      "wrongBelief": {
+        "en": "Each key has its own list of seven notes to memorise, C major is the normal one, and other scales are C major with odd exceptions.",
+        "it": "Ogni tonalità ha una sua lista di sette note da memorizzare, Do maggiore è quella normale e le altre scale sono Do maggiore con qualche eccezione strana."
+      },
       "anchor": {
         "type": "example",
-        "text": "Do, re, mi, fa, sol, la, ti, do, sung from any starting pitch, is a major scale every time: the singer keeps the pattern of steps, not the notes."
+        "text": {
+          "en": "Do, re, mi, fa, sol, la, ti, do, sung from any starting pitch, is a major scale every time: the singer keeps the pattern of steps, not the notes.",
+          "it": "La sequenza «do re mi fa sol la si do», cantata a partire da un'altezza qualsiasi (con il do mobile, come si usa in molte scuole di canto), è ogni volta una scala maggiore: chi canta mantiene lo schema dei passi e non le note."
+        }
       },
-      "application": "A guitarist who knows the pattern can play a major scale along any string, or work out the notes of any key for a melody or a solo, without a chart.",
+      "application": {
+        "en": "A guitarist who knows the pattern can play a major scale along any string, or work out the notes of any key for a melody or a solo, without a chart.",
+        "it": "Un chitarrista che conosce lo schema può suonare una scala maggiore lungo qualsiasi corda, o ricavare le note di una tonalità qualsiasi per una melodia o un assolo, senza bisogno di una tabella."
+      },
       "remember": [
-        "The major scale follows whole, whole, half, whole, whole, whole, half: W W H W W W H.",
-        "On one string a whole step is two frets and a half step is one.",
-        "The same pattern from another note gives that note's major scale: started on G it needs F♯."
+        {
+          "en": "The major scale follows whole, whole, half, whole, whole, whole, half: W W H W W W H.",
+          "it": "La scala maggiore segue lo schema tono, tono, semitono, tono, tono, tono, semitono: T T S T T T S."
+        },
+        {
+          "en": "On one string a whole step is two frets and a half step is one.",
+          "it": "Su una corda un tono sono due tasti e un semitono è un tasto."
+        },
+        {
+          "en": "The same pattern from another note gives that note's major scale: started on G it needs F♯.",
+          "it": "Lo stesso schema a partire da un'altra nota dà la scala maggiore di quella nota: partendo da Sol (G) serve il Fa♯."
+        }
       ],
       "explain": {
-        "q": "Why does G major need an F♯ when C major needs no sharps or flats?",
-        "a": "The pattern ends with a half step from the seventh note to the octave. From C the seventh note is B, and B to C is already a half step, but from G the seventh note must be a half step below G, which is F♯ and not F."
+        "q": {
+          "en": "Why does G major need an F♯ when C major needs no sharps or flats?",
+          "it": "Perché Sol maggiore ha bisogno di un Fa♯ mentre Do maggiore non ha né diesis né bemolli?"
+        },
+        "a": {
+          "en": "The pattern ends with a half step from the seventh note to the octave. From C the seventh note is B, and B to C is already a half step, but from G the seventh note must be a half step below G, which is F♯ and not F.",
+          "it": "Lo schema finisce con un semitono dalla settima nota all'ottava. Da Do la settima nota è Si, e da Si a Do c'è già un semitono, ma da Sol la settima nota deve stare un semitono sotto il Sol, cioè Fa♯ e non Fa."
+        }
       },
       "callbacks": [
         {
           "to": "twelve",
-          "how": "The half steps counted at the Twelve-Hour Tower are the steps of the scale: the pattern picks seven of the twelve notes."
+          "how": {
+            "en": "The half steps counted at the Twelve-Hour Tower are the steps of the scale: the pattern picks seven of the twelve notes.",
+            "it": "I semitoni contati nella Torre delle Dodici Ore sono i passi della scala: lo schema sceglie sette note delle dodici."
+          }
         }
       ],
       "lab": {
-        "title": "The stencil",
+        "title": {
+          "en": "The stencil",
+          "it": "La dima"
+        },
         "stations": [
           {
             "id": "stencil",
-            "tab": "One pattern",
-            "goal": "The major scale is a pattern of whole and half steps; moved to another starting note it gives that note's major scale.",
+            "tab": {
+              "en": "One pattern",
+              "it": "Uno schema"
+            },
+            "goal": {
+              "en": "The major scale is a pattern of whole and half steps; moved to another starting note it gives that note's major scale.",
+              "it": "La scala maggiore è uno schema di toni e semitoni; spostato su un'altra nota di partenza dà la scala maggiore di quella nota."
+            },
             "beat": "ground",
             "pattern": "handle",
-            "object": "A stencil with seven holes laid over the circle of twelve notes, and the same scale along one string of the neck.",
-            "action": "Turns the stencil to a new starting note and plays the scale it shows.",
-            "surprise": "Turned to G, the same holes fall on F♯ instead of F: the same pattern needs a sharp.",
+            "object": {
+              "en": "A stencil with seven holes laid over the circle of twelve notes, and the same scale along one string of the neck.",
+              "it": "Una dima con sette fori appoggiata sul cerchio delle dodici note, e la stessa scala lungo una corda del manico."
+            },
+            "action": {
+              "en": "Turns the stencil to a new starting note and plays the scale it shows.",
+              "it": "Ruota la dima su una nuova nota di partenza e suona la scala che mostra."
+            },
+            "surprise": {
+              "en": "Turned to G, the same holes fall on F♯ instead of F: the same pattern needs a sharp.",
+              "it": "Ruotata su Sol, gli stessi fori cadono sul Fa♯ invece che sul Fa: lo stesso schema richiede un diesis."
+            },
             "predict": {
-              "q": "From C, the pattern lands only on letter names, with no sharps. Turn the same stencil to start on G. How many sharps does the scale need?",
+              "q": {
+                "en": "From C, the pattern lands only on letter names, with no sharps. Turn the same stencil to start on G. How many sharps does the scale need?",
+                "it": "Partendo da Do, lo schema cade solo su note senza alterazioni, senza diesis. Ruota la stessa dima per partire da Sol. Quanti diesis servono alla scala?"
+              },
               "options": [
-                "none",
-                "one",
-                "two",
-                "three"
+                {
+                  "en": "none",
+                  "it": "nessuno"
+                },
+                {
+                  "en": "one",
+                  "it": "uno"
+                },
+                {
+                  "en": "two",
+                  "it": "due"
+                },
+                {
+                  "en": "three",
+                  "it": "tre"
+                }
               ],
               "answer": 1,
-              "why": "From G the last step must be a half step below G, which is F♯; every other note of G major is a plain letter name."
+              "why": {
+                "en": "From G the last step must be a half step below G, which is F♯; every other note of G major is a plain letter name.",
+                "it": "Da Sol l'ultimo passo deve essere un semitono sotto il Sol, cioè Fa♯; tutte le altre note di Sol maggiore hanno il loro nome semplice."
+              }
             },
             "controls": [
-              "Play the scale"
+              {
+                "en": "Play the scale",
+                "it": "Suona la scala"
+              }
             ],
             "tries": [
-              "Turn the stencil to start on G and play the scale.",
-              "Tap the note of G major that is not in C major."
+              {
+                "en": "Turn the stencil to start on G and play the scale.",
+                "it": "Ruota la dima per partire da Sol e suona la scala."
+              },
+              {
+                "en": "Tap the note of G major that is not in C major.",
+                "it": "Tocca la nota di Sol maggiore che non c'è in Do maggiore."
+              }
             ],
-            "takeaway": "A major scale is the pattern <b>W W H W W W H</b>, started on any note. From C it lands only on letter names; from G the seventh step must be a half step below G, so F becomes <b>F♯</b>. The pattern, not a list of notes, is what to remember, and on one string it is 2, 2, 1, 2, 2, 2, 1 frets.",
-            "source": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz. The scale is played on one string of the neck (UNSW Music Acoustics, Open Music Theory)."
+            "takeaway": {
+              "en": "A major scale is the pattern <b>W W H W W W H</b>, started on any note. From C it lands only on letter names; from G the seventh step must be a half step below G, so F becomes <b>F♯</b>. The pattern, not a list of notes, is what to remember, and on one string it is 2, 2, 1, 2, 2, 2, 1 frets.",
+              "it": "Una scala maggiore è lo schema <b>T T S T T T S</b>, a partire da una nota qualsiasi. Da Do cade solo su note senza alterazioni; da Sol il settimo passo deve stare un semitono sotto il Sol, quindi il Fa diventa <b>Fa♯</b>. Da ricordare è lo schema, non un elenco di note, e su una corda corrisponde a 2, 2, 1, 2, 2, 2, 1 tasti."
+            },
+            "source": {
+              "en": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz. The scale is played on one string of the neck (UNSW Music Acoustics, Open Music Theory).",
+              "it": "Note calcolate in tempo reale dallo schema; frequenze in temperamento equabile da La4 = 440 Hz. La scala è suonata su una corda del manico (UNSW Music Acoustics, Open Music Theory)."
+            }
           },
           {
             "id": "relative",
-            "tab": "Same notes, from A",
+            "tab": {
+              "en": "Same notes, from A",
+              "it": "Stesse note, da La"
+            },
             "advanced": true,
-            "goal": "Played from its sixth note, a major scale becomes a minor scale with the same notes: A minor uses the notes of C major.",
+            "goal": {
+              "en": "Played from its sixth note, a major scale becomes a minor scale with the same notes: A minor uses the notes of C major.",
+              "it": "Suonata a partire dalla sua sesta nota, una scala maggiore diventa una scala minore con le stesse note: La minore usa le note di Do maggiore."
+            },
             "beat": "twist",
             "pattern": "predict-test",
-            "object": "The stencil of C major with a second marker that chooses where the scale starts.",
-            "action": "Moves the starting marker to A and plays the same seven notes from there.",
-            "surprise": "No note changes, yet the scale sounds minor, because the half steps now fall in different places: W H W W H W W.",
+            "object": {
+              "en": "The stencil of C major with a second marker that chooses where the scale starts.",
+              "it": "La dima di Do maggiore con un secondo segnalino che sceglie da dove parte la scala."
+            },
+            "action": {
+              "en": "Moves the starting marker to A and plays the same seven notes from there.",
+              "it": "Sposta il segnalino di partenza sul La e suona le stesse sette note da lì."
+            },
+            "surprise": {
+              "en": "No note changes, yet the scale sounds minor, because the half steps now fall in different places: W H W W H W W.",
+              "it": "Nessuna nota cambia, eppure la scala suona minore, perché ora i semitoni cadono in posti diversi: T S T T S T T."
+            },
             "predict": {
-              "q": "Play the seven notes of C major, starting and ending on A. You hear...",
+              "q": {
+                "en": "Play the seven notes of C major, starting and ending on A. You hear...",
+                "it": "Suona le sette note di Do maggiore, partendo e finendo sul La. Senti..."
+              },
               "options": [
-                "C major again",
-                "a minor scale",
-                "a scale with a wrong note"
+                {
+                  "en": "C major again",
+                  "it": "di nuovo Do maggiore"
+                },
+                {
+                  "en": "a minor scale",
+                  "it": "una scala minore"
+                },
+                {
+                  "en": "a scale with a wrong note",
+                  "it": "una scala con una nota sbagliata"
+                }
               ],
               "answer": 1,
-              "why": "Starting from A moves the half steps to the second and fifth steps, which is the pattern of the natural minor scale."
+              "why": {
+                "en": "Starting from A moves the half steps to the second and fifth steps, which is the pattern of the natural minor scale.",
+                "it": "Partire dal La sposta i semitoni al secondo e al quinto passo, che è lo schema della scala minore naturale."
+              }
             },
             "controls": [
-              "Play the scale"
+              {
+                "en": "Play the scale",
+                "it": "Suona la scala"
+              }
             ],
             "tries": [
-              "Move the start to A and play the scale.",
-              "Find the first half step of the scale from A."
+              {
+                "en": "Move the start to A and play the scale.",
+                "it": "Sposta la partenza sul La e suona la scala."
+              },
+              {
+                "en": "Find the first half step of the scale from A.",
+                "it": "Trova il primo semitono della scala che parte dal La."
+              }
             ],
-            "takeaway": "The notes of C major, played from <b>A</b>, give <b>A minor</b>: the same notes with the pattern <b>W H W W H W W</b>. Every major key has such a <b>relative minor</b>, which starts on its sixth note.",
-            "source": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz (Open Music Theory)."
+            "takeaway": {
+              "en": "The notes of C major, played from <b>A</b>, give <b>A minor</b>: the same notes with the pattern <b>W H W W H W W</b>. Every major key has such a <b>relative minor</b>, which starts on its sixth note.",
+              "it": "Le note di Do maggiore, suonate a partire dal <b>La</b>, danno <b>La minore</b>: le stesse note con lo schema <b>T S T T S T T</b>. Ogni tonalità maggiore ha una <b>relativa minore</b> di questo tipo, che parte dalla sua sesta nota."
+            },
+            "source": {
+              "en": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz (Open Music Theory).",
+              "it": "Note calcolate in tempo reale dallo schema; frequenze in temperamento equabile da La4 = 440 Hz (Open Music Theory)."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "A pattern of steps",
-          "text": "A major scale is seven notes chosen from the twelve by one pattern of steps: whole, whole, half, whole, whole, whole, half, after which the starting note returns an octave higher. Started on C, the pattern lands only on letter names, C D E F G A B C, because its two half steps fall exactly where the letters have no note between them, at E–F and B–C."
+          "title": {
+            "en": "A pattern of steps",
+            "it": "Uno schema di passi"
+          },
+          "text": {
+            "en": "A major scale is seven notes chosen from the twelve by one pattern of steps: whole, whole, half, whole, whole, whole, half, after which the starting note returns an octave higher. Started on C, the pattern lands only on letter names, C D E F G A B C, because its two half steps fall exactly where the letters have no note between them, at E–F and B–C.",
+            "it": "Una scala maggiore è formata da sette note scelte tra le dodici con un solo schema di passi, tono, tono, semitono, tono, tono, tono, semitono, dopo il quale la nota di partenza ritorna un'ottava più in alto. Partendo da Do, lo schema cade solo su note senza alterazioni, Do Re Mi Fa Sol La Si Do (C D E F G A B C), perché i suoi due semitoni cadono proprio dove i nomi non hanno nessuna nota in mezzo, tra Mi e Fa e tra Si e Do."
+          }
         },
         {
-          "title": "The same pattern from any note",
-          "text": "Because the pattern is a set of distances, it can start on any of the twelve notes, and each start gives a different major scale. Started on G it gives G A B C D E F♯ G, since the last step must be a half step below G. On one string of the guitar the pattern is 2, 2, 1, 2, 2, 2, 1 frets, so the same finger movements play every major scale, only moved along the neck."
+          "title": {
+            "en": "The same pattern from any note",
+            "it": "Lo stesso schema da qualsiasi nota"
+          },
+          "text": {
+            "en": "Because the pattern is a set of distances, it can start on any of the twelve notes, and each start gives a different major scale. Started on G it gives G A B C D E F♯ G, since the last step must be a half step below G. On one string of the guitar the pattern is 2, 2, 1, 2, 2, 2, 1 frets, so the same finger movements play every major scale, only moved along the neck.",
+            "it": "Poiché lo schema è un insieme di distanze, può partire da una qualsiasi delle dodici note, e ogni partenza dà una scala maggiore diversa. Partendo da Sol dà Sol La Si Do Re Mi Fa♯ Sol, perché l'ultimo passo deve essere un semitono sotto il Sol. Su una corda della chitarra lo schema è 2, 2, 1, 2, 2, 2, 1 tasti, quindi gli stessi movimenti delle dita suonano ogni scala maggiore, spostati soltanto lungo il manico."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "The pattern of the major scale is...",
+          "q": {
+            "en": "The pattern of the major scale is...",
+            "it": "Lo schema della scala maggiore è..."
+          },
           "options": [
-            "W W H W W W H",
-            "W H W W H W W",
-            "H W W W H W W",
-            "W W W H W W H"
+            {
+              "en": "W W H W W W H",
+              "it": "T T S T T T S"
+            },
+            {
+              "en": "W H W W H W W",
+              "it": "T S T T S T T"
+            },
+            {
+              "en": "H W W W H W W",
+              "it": "S T T T S T T"
+            },
+            {
+              "en": "W W W H W W H",
+              "it": "T T T S T T S"
+            }
           ],
           "answer": 0,
-          "why": "Whole, whole, half, whole, whole, whole, half: the half steps come after the third and the seventh notes.",
+          "why": {
+            "en": "Whole, whole, half, whole, whole, whole, half: the half steps come after the third and the seventh notes.",
+            "it": "Tono, tono, semitono, tono, tono, tono, semitono: i semitoni vengono dopo la terza e dopo la settima nota."
+          },
           "traps": [
             null,
-            "W H W W H W W is the natural minor scale, the same notes started on the sixth note of the major scale.",
-            "Starting with a half step gives a scale from E with C major's notes, which is neither major nor natural minor.",
-            "Moving the first half step one place to the right gives a scale with a sharpened fourth; in the major scale the first half step is from the third to the fourth note."
+            {
+              "en": "W H W W H W W is the natural minor scale, the same notes started on the sixth note of the major scale.",
+              "it": "T S T T S T T è la scala minore naturale, le stesse note che partono dalla sesta nota della scala maggiore."
+            },
+            {
+              "en": "Starting with a half step gives a scale from E with C major's notes, which is neither major nor natural minor.",
+              "it": "Cominciare con un semitono dà una scala da Mi con le note di Do maggiore, che non è né maggiore né minore naturale."
+            },
+            {
+              "en": "Moving the first half step one place to the right gives a scale with a sharpened fourth; in the major scale the first half step is from the third to the fourth note.",
+              "it": "Spostare di un posto a destra il primo semitono dà una scala con la quarta alzata; nella scala maggiore il primo semitono va dalla terza alla quarta nota."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "On one string, a whole step is...",
+          "q": {
+            "en": "On one string, a whole step is...",
+            "it": "Su una corda, un tono è..."
+          },
           "options": [
-            "one fret",
-            "two frets",
-            "three frets"
+            {
+              "en": "one fret",
+              "it": "un tasto"
+            },
+            {
+              "en": "two frets",
+              "it": "due tasti"
+            },
+            {
+              "en": "three frets",
+              "it": "tre tasti"
+            }
           ],
           "answer": 1,
-          "why": "A half step is one fret, so a whole step, two half steps, is two frets.",
+          "why": {
+            "en": "A half step is one fret, so a whole step, two half steps, is two frets.",
+            "it": "Un semitono è un tasto, quindi un tono, cioè due semitoni, sono due tasti."
+          },
           "traps": [
-            "One fret is a half step, the smallest step on the guitar.",
+            {
+              "en": "One fret is a half step, the smallest step on the guitar.",
+              "it": "Un tasto è un semitono, il passo più piccolo della chitarra."
+            },
             null,
-            "Three frets is a minor third, one and a half steps."
+            {
+              "en": "Three frets is a minor third, one and a half steps.",
+              "it": "Tre tasti sono una terza minore, un tono e mezzo."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "G major contains one note that C major lacks. Which?",
+          "q": {
+            "en": "G major contains one note that C major lacks. Which?",
+            "it": "Sol maggiore contiene una nota che Do maggiore non ha. Quale?"
+          },
           "options": [
-            "F♯",
-            "C♯",
-            "B♭",
-            "G♯"
+            {
+              "en": "F♯",
+              "it": "Fa♯"
+            },
+            {
+              "en": "C♯",
+              "it": "Do♯"
+            },
+            {
+              "en": "B♭",
+              "it": "Si♭"
+            },
+            {
+              "en": "G♯",
+              "it": "Sol♯"
+            }
           ],
           "answer": 0,
-          "why": "The seventh note of G major is a half step below G, which is F♯; all its other notes are in C major too.",
+          "why": {
+            "en": "The seventh note of G major is a half step below G, which is F♯; all its other notes are in C major too.",
+            "it": "La settima nota di Sol maggiore è un semitono sotto il Sol, cioè Fa♯; tutte le altre sue note ci sono anche in Do maggiore."
+          },
           "traps": [
             null,
-            "C♯ appears in D major, two fifths up from C; G major keeps C natural as its fourth note.",
-            "B♭ is the flat that F major needs, the key a fifth below C, not the one above.",
-            "G♯ is a half step above the root and has no place in G major, whose root is G itself."
+            {
+              "en": "C♯ appears in D major, two fifths up from C; G major keeps C natural as its fourth note.",
+              "it": "Il Do♯ compare in Re maggiore, due quinte sopra Do; Sol maggiore tiene il Do naturale come quarta nota."
+            },
+            {
+              "en": "B♭ is the flat that F major needs, the key a fifth below C, not the one above.",
+              "it": "Il Si♭ è il bemolle che serve a Fa maggiore, la tonalità una quinta sotto Do, non a quella una quinta sopra."
+            },
+            {
+              "en": "G♯ is a half step above the root and has no place in G major, whose root is G itself.",
+              "it": "Il Sol♯ è un semitono sopra la tonica e non ha posto in Sol maggiore, la cui tonica è il Sol stesso."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "On one string, from the root at fret 3, at which frets are the notes of the major scale?",
+          "q": {
+            "en": "On one string, from the root at fret 3, at which frets are the notes of the major scale?",
+            "it": "Su una corda, partendo dalla tonica al tasto 3, a quali tasti stanno le note della scala maggiore?"
+          },
           "options": [
             "3 5 7 8 10 12 14 15",
             "3 5 6 8 10 11 13 15",
@@ -1831,48 +2351,114 @@
             "3 5 7 9 10 12 14 15"
           ],
           "answer": 0,
-          "why": "The steps 2, 2, 1, 2, 2, 2, 1 frets from fret 3 give 5, 7, 8, 10, 12, 14 and 15.",
+          "why": {
+            "en": "The steps 2, 2, 1, 2, 2, 2, 1 frets from fret 3 give 5, 7, 8, 10, 12, 14 and 15.",
+            "it": "I passi di 2, 2, 1, 2, 2, 2, 1 tasti a partire dal tasto 3 danno 5, 7, 8, 10, 12, 14 e 15."
+          },
           "traps": [
             null,
-            "Two then one then two is the minor pattern W H W W H W W, which puts the first half step too early.",
-            "Starting with one fret is a half step first, which no major scale has.",
-            "A third whole step before the half step adds a raised fourth; the major scale's first half step comes after two whole steps."
+            {
+              "en": "Two then one then two is the minor pattern W H W W H W W, which puts the first half step too early.",
+              "it": "Due, poi uno, poi due è lo schema minore T S T T S T T, che mette il primo semitono troppo presto."
+            },
+            {
+              "en": "Starting with one fret is a half step first, which no major scale has.",
+              "it": "Partire con un solo tasto vuol dire un semitono per primo, cosa che nessuna scala maggiore ha."
+            },
+            {
+              "en": "A third whole step before the half step adds a raised fourth; the major scale's first half step comes after two whole steps.",
+              "it": "Un terzo tono prima del semitono aggiunge una quarta alzata; il primo semitono della scala maggiore viene dopo due toni."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Build the major scale on D with the pattern. Which notes are sharp?",
+          "q": {
+            "en": "Build the major scale on D with the pattern. Which notes are sharp?",
+            "it": "Costruisci con lo schema la scala maggiore di Re. Quali note sono con il diesis?"
+          },
           "options": [
-            "F♯ only",
-            "F♯ and C♯",
-            "C♯ and G♯",
-            "F♯, C♯ and G♯"
+            {
+              "en": "F♯ only",
+              "it": "solo Fa♯"
+            },
+            {
+              "en": "F♯ and C♯",
+              "it": "Fa♯ e Do♯"
+            },
+            {
+              "en": "C♯ and G♯",
+              "it": "Do♯ e Sol♯"
+            },
+            {
+              "en": "F♯, C♯ and G♯",
+              "it": "Fa♯, Do♯ e Sol♯"
+            }
           ],
           "answer": 1,
-          "why": "Counting the pattern from D gives D, E, F♯, G, A, B, C♯ and D, so the scale needs two sharps, F♯ and C♯, because the steps from E and from B are whole steps.",
+          "why": {
+            "en": "Counting the pattern from D gives D, E, F♯, G, A, B, C♯ and D, so the scale needs two sharps, F♯ and C♯, because the steps from E and from B are whole steps.",
+            "it": "Contando lo schema da Re si ottiene Re, Mi, Fa♯, Sol, La, Si, Do♯ e Re, quindi la scala ha due diesis, Fa♯ e Do♯, perché i passi da Mi e da Si sono toni."
+          },
           "traps": [
-            "F♯ alone is G major; from D the seventh note must also be a half step below D, which is C♯.",
+            {
+              "en": "F♯ alone is G major; from D the seventh note must also be a half step below D, which is C♯.",
+              "it": "Il solo Fa♯ è Sol maggiore; da Re anche la settima nota deve stare un semitono sotto il Re, cioè Do♯."
+            },
             null,
-            "G♯ would be a whole step above F♯, but the step from the third to the fourth note is a half step, which gives G.",
-            "Three sharps belong to A major; in D major the fourth note is G, a half step above F♯."
+            {
+              "en": "G♯ would be a whole step above F♯, but the step from the third to the fourth note is a half step, which gives G.",
+              "it": "Il Sol♯ sarebbe un tono sopra il Fa♯, ma il passo dalla terza alla quarta nota è un semitono, che dà Sol."
+            },
+            {
+              "en": "Three sharps belong to A major; in D major the fourth note is G, a half step above F♯.",
+              "it": "Tre diesis appartengono a La maggiore; in Re maggiore la quarta nota è Sol, un semitono sopra il Fa♯."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A singer starts 'do re mi' on E. What is the third note, 'mi'?",
+          "q": {
+            "en": "A singer starts 'do re mi' on E. What is the third note, 'mi'?",
+            "it": "Un cantante parte da Mi (E) e canta «do re mi» con il do mobile, cioè con il «do» sulla nota di partenza. Qual è la terza nota, il «mi»?"
+          },
           "options": [
-            "G",
-            "G♯",
-            "F♯",
-            "A"
+            {
+              "en": "G",
+              "it": "Sol"
+            },
+            {
+              "en": "G♯",
+              "it": "Sol♯"
+            },
+            {
+              "en": "F♯",
+              "it": "Fa♯"
+            },
+            {
+              "en": "A",
+              "it": "La"
+            }
           ],
           "answer": 1,
-          "why": "Do re mi starts the major scale, so mi is two whole steps above E: E, F♯, G♯.",
+          "why": {
+            "en": "Do re mi starts the major scale, so mi is two whole steps above E: E, F♯, G♯.",
+            "it": "«Do re mi» apre la scala maggiore, quindi il «mi» sta due toni sopra la nota di partenza: Mi, Fa♯, Sol♯."
+          },
           "traps": [
-            "G is three half steps above E, a minor third; the major scale's third note is four half steps up.",
+            {
+              "en": "G is three half steps above E, a minor third; the major scale's third note is four half steps up.",
+              "it": "Il Sol è tre semitoni sopra il Mi, una terza minore; la terza nota della scala maggiore è quattro semitoni più su."
+            },
             null,
-            "F♯ is the second note, re, one whole step above E.",
-            "A is the fourth note, fa, five half steps above E."
+            {
+              "en": "F♯ is the second note, re, one whole step above E.",
+              "it": "Il Fa♯ è la seconda nota, il «re», un tono sopra il Mi."
+            },
+            {
+              "en": "A is the fourth note, fa, five half steps above E.",
+              "it": "Il La è la quarta nota, il «fa», cinque semitoni sopra il Mi."
+            }
           ]
         }
       ],
@@ -1885,28 +2471,42 @@
         {
           "title": "Open Music Theory: Major scales, scale degrees and key signatures",
           "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_(Gotham_et_al.)/01%3A_Fundamentals/1.12%3A_Major_Scales_Scale_Degrees_and_Key_Signatures",
-          "why": "The same pattern written on the staff, with key signatures, for when notation becomes useful."
+          "why": {
+            "en": "The same pattern written on the staff, with key signatures, for when notation becomes useful.",
+            "it": "Lo stesso schema scritto sul pentagramma, con le armature di chiave, per quando la notazione diventa utile (in inglese)."
+          }
         },
         {
           "title": "Applied Guitar Theory: Foundational Theory",
           "url": "https://appliedguitartheory.com/foundational-theory/",
-          "why": "Free lessons that take the major scale from one string to the whole neck."
+          "why": {
+            "en": "Free lessons that take the major scale from one string to the whole neck.",
+            "it": "Lezioni gratuite che portano la scala maggiore da una corda a tutto il manico (in inglese)."
+          }
         }
       ],
       "riddles": [
         {
           "id": "ladder-door",
           "kind": "door",
-          "clue": "A voice behind the hatch: 'Word of the day is the one note G major has and C major hasn't. Letter and sign.'",
+          "clue": {
+            "en": "A voice behind the hatch: 'Word of the day is the one note G major has and C major hasn't. Letter and sign.'",
+            "it": "Una voce dietro lo sportello: «La parola del giorno è l'unica nota che Sol maggiore ha e Do maggiore no. Nome e segno.»"
+          },
           "answer": [
-            "F sharp"
+            "F sharp",
+            "fa diesis",
+            "fa#"
           ],
           "type": "text",
           "from": {
             "station": "stencil"
           },
           "inside": {
-            "note": "Chalked inside the door. Each major key one fifth above another needs one more sharp: C none, G one (F♯), D two (F♯, C♯), A three. The new sharp is always the seventh note, the one a half step below the root. The circle of fifths puts the keys in this order.",
+            "note": {
+              "en": "Chalked inside the door. Each major key one fifth above another needs one more sharp: C none, G one (F♯), D two (F♯, C♯), A three. The new sharp is always the seventh note, the one a half step below the root. The circle of fifths puts the keys in this order.",
+              "it": "Scritto col gesso dentro la porta. Ogni tonalità maggiore una quinta sopra un'altra ha un diesis in più: Do nessuno, Sol uno (Fa♯), Re due (Fa♯, Do♯), La tre. Il nuovo diesis è sempre la settima nota, quella un semitono sotto la tonica. Il circolo delle quinte mette le tonalità in quest'ordine."
+            },
             "station": "relative",
             "coins": 15
           }
