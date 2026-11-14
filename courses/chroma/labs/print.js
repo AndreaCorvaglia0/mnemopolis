@@ -48,7 +48,7 @@ async function compare(ctx) {
     const paint = keys.reduce((a, k) => a.map((v, i) => (v * RGB[k][i]) / 255), [255, 255, 255]);
     g.fillStyle = '#0e1116'; g.fillRect(0, 0, pane.W, pane.H);
     // side by side on a wide stage, one above the other on an upright one
-    const boxes = up ? [[30, 44, 420, 200], [30, 330, 420, 200]] : [[24, 56, 340, 300], [396, 56, 340, 300]];
+    const boxes = up ? [[30, 44, 420, 170], [30, 340, 420, 170]] : [[24, 56, 340, 300], [396, 56, 340, 300]];
     const nm = (k) => L(k, NAME[k]);
     [[light, L('As lights, on a dark wall', 'Come luci, su parete scura'), [L('dark', 'buio'), ...keys.map((k) => `+ ${nm(k)}`)]], [paint, L('As paints, on white paper', 'Come pitture, su bianco'), [L('white', 'bianco'), ...keys.map((k) => L(`− all but ${k}`, `− non ${nm(k)}`))]]].forEach(([c, title, terms], i) => {
       const [x, y, w, hh] = boxes[i];
