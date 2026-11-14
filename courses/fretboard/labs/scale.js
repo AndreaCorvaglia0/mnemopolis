@@ -40,10 +40,10 @@ async function stencil(ctx) {
     d.clear();
     // the stencil: a ring with seven windows, turned by the root
     const r0 = rot.v;
-    d.circle(D.cx, D.cy, D.r * 1.36, { fill: alpha('#c7a76a', 0.18), stroke: '#c7a76a', width: 3 });
+    d.circle(D.cx, D.cy, D.r * (isIt() ? 1.44 : 1.36), { fill: alpha('#c7a76a', 0.18), stroke: '#c7a76a', width: 3 });
     const label = new Array(12).fill(null); ns.forEach((p, i) => (label[p] = names[i]));
     drawDial(d, D, { lit: new Set(ns), gold: new Set([pc(root)]), names: label.map((n, p) => n || nameOf(p)) });
-    for (let j = 0; j < 7; j++) { const a = D.ang(r0 + (MAJOR[j] + (MAJOR[j + 1] ?? 12)) / 2); d.text(stepName(STEPS[j]), D.cx + Math.cos(a) * D.r * 1.28, D.cy + Math.sin(a) * D.r * 1.28 + 6, { size: 17, weight: 700, color: STEPS[j] === 'H' ? C.gold : '#d8c49a', align: 'center' }); }
+    for (let j = 0; j < 7; j++) { const a = D.ang(r0 + (MAJOR[j] + (MAJOR[j + 1] ?? 12)) / 2); d.text(stepName(STEPS[j]), D.cx + Math.cos(a) * D.r * (isIt() ? 1.35 : 1.28), D.cy + Math.sin(a) * D.r * (isIt() ? 1.35 : 1.28) + 6, { size: 17, weight: 700, color: STEPS[j] === 'H' ? C.gold : '#d8c49a', align: 'center' }); }
     d.text(L(`${names[0]} major`, `${names[0]} maggiore`), D.cx, D.cy + 8, { size: 24, weight: 700, color: C.gold, align: 'center' });
     // the same scale on one string: one cell per fret
     const cells = Array.from({ length: 13 }, (_, i) => { const p = pc(root + i), k = ns.indexOf(p); return k >= 0 ? toLetter(names[k]) : letterOf(p, false); });  // the cells are a fretboard: letters
@@ -59,7 +59,7 @@ async function stencil(ctx) {
   const anim = animate(ctx, (dt) => { const more = rot.step(dt); view.redraw(); return more; });
   view.pane.drag((x, y, ph) => {
     if (ph !== 'down') return;
-    const { D } = geo(view.pane), p = Math.hypot(x - D.cx, y - D.cy) < D.r * 1.4 ? D.pick(x, y) : null;
+    const { D } = geo(view.pane), p = Math.hypot(x - D.cx, y - D.cy) < D.r * 1.5 ? D.pick(x, y) : null;
     if (p != null) { setRoot(p); s.pluck(hz(C3 + p), { dur: 0.8 }); return; }
     const c = tapCells.find((b) => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h);
     if (c) { s.pluck(hz(C3 + root + c.i), { dur: 1 }); if (root === 7 && c.i === 11) { t.pick('fs').check(); flash = FSHARP; } view.redraw(); }

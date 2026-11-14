@@ -3,7 +3,7 @@
 //           note and role; strum, move the third down a half step, see which string changed
 //   shapes  (upstairs) the five open shapes, C A G E D, each string labelled root, third or fifth
 import { stage, sliders, button, tasks, C, alpha, L } from '../../../engine/src/lab/kit.js';
-import { TUNING, hz, pc, nameOf, letterOf, both, neckGeom, drawNeck, dot, dialGeom, drawDial } from './lib/music.js';
+import { TUNING, hz, pc, nameOf, letterOf, both, isIt, neckGeom, drawNeck, dot, dialGeom, drawDial } from './lib/music.js';
 import { sound, soundNote, onPhase } from './lib/sound.js';
 
 // open shapes in standard tuning, low E to high E (x = not played)
@@ -46,7 +46,8 @@ async function stack(ctx) {
     d.line([[D.cx, D.cy], pts[0]], { color: C.bad, width: 3 }); d.line([pts[0], pts[1]], { color: C.gold, width: 4 }); d.line([pts[1], pts[2]], { color: C.acc, width: 4 });
     d.text(`${third} + ${7 - third} ${L('half steps', 'semitoni')}`, D.cx, D.cy + D.r * 1.18 + 30, { size: 20, weight: 700, color: C.text, align: 'center' });
     const third_name = nameOf(R + third), third_both = both(R + third);
-    d.text(L(`E ${third === 4 ? 'major' : 'minor'}: E ${third_name} B`, `Mi ${third === 4 ? 'maggiore (E)' : 'minore (Em)'}: Mi ${third_name} Si`), tx, up ? 70 : 52, { size: up ? 22 : 26, weight: 700, color: C.gold, max: pane.W - tx - 16 });
+    d.text(L(`E ${third === 4 ? 'major' : 'minor'}: E ${third_name} B`, `Mi ${third === 4 ? 'maggiore (E)' : 'minore (Em)'}${up ? '' : `: Mi ${third_name} Si`}`), tx, up ? 70 : 52, { size: up ? 22 : 26, weight: 700, color: C.gold, max: pane.W - tx - 16 });
+    if (up && isIt()) d.text(`Mi ${third_name} Si`, tx, 148, { size: 17, color: C.text });
     if (up) { d.text(`${L('third', 'terza')}: ${third_both}`, tx, 100, { size: 17, color: C.muted }); d.text(`${third} ${L('half steps up', 'semitoni sopra')}`, tx, 124, { size: 17, color: C.muted }); }
     else d.text(L(`third: ${third_name}, ${third} half steps up${third === 4 ? ' (major)' : ' (minor)'}`, `terza: ${third_both}, ${third} semitoni sopra${third === 4 ? ' (maggiore)' : ' (minore)'}`), tx, 82, { size: 17, color: C.muted, max: pane.W - tx - 16 });
     drawNeck(d, G, { numbers: true });
@@ -54,7 +55,8 @@ async function stack(ctx) {
     if (heard != null) {
       const f = fs(), names = f.map((k, st) => (k == null ? null : nameOf(TUNING[st] + k))).filter(Boolean), uniq = [...new Set(names)];
       const y = up ? 626 : 438;
-      d.text(L(`six strings: ${names.join(' ')}  →  ${uniq.length} names: ${uniq.join(' ')}`, `sei corde: ${names.join(' ')}  →  ${uniq.length} nomi: ${uniq.join(' ')}`), up ? 20 : tx, y, { size: 18, weight: 600, color: C.text, max: pane.W - (up ? 30 : tx + 10) });
+      d.text(L(`six strings: ${names.join(' ')}  →  ${uniq.length} names: ${uniq.join(' ')}`, up ? `sei corde: ${names.join(' ')}` : `sei corde: ${names.join(' ')}  →  ${uniq.length} nomi: ${uniq.join(' ')}`), up ? 20 : tx, up && isIt() ? y - 26 : y, { size: 18, weight: 600, color: C.text, max: pane.W - (up ? 30 : tx + 10) });
+      if (up && isIt()) d.text(`→ ${uniq.length} nomi: ${uniq.join(' ')}`, 20, y, { size: 18, weight: 600, color: C.text, max: pane.W - 30 });
     }
     if (flash) d.text(flash, up ? 20 : tx, up ? 656 : 466, { size: 17, color: C.ok, max: pane.W - (up ? 30 : tx + 10) });
     d.text(L('root', 'tonica'), up ? 240 : 54, up ? 170 : 440, { size: 16, color: C.bad }); d.text(L('third', 'terza'), up ? L(300, 308) : L(104, 120), up ? 170 : 440, { size: 16, color: C.gold }); d.text(L('fifth', 'quinta'), up ? L(362, 372) : L(162, 180), up ? 170 : 440, { size: 16, color: C.acc });

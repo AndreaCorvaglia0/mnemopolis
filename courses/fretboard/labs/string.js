@@ -38,7 +38,7 @@ function drawString(d, Lay, { k, wave, label = true, touch = null }) {
   d.line([P(Lay, 1, -w), P(Lay, 1, w)], { color: '#eadfca', width: 7, cap: 'butt' });               // saddle
   if (label) {
     for (const m of [5, 7, 12]) { const u = (fretAt(m - 1) + fretAt(m)) / 2; d.text(String(m), ...P(Lay, u, Lay.up ? -w - 18 : w + 22).map((v, i) => v + (i === 1 && Lay.up ? 6 : 0)), { size: 16, color: C.dim, align: 'center' }); }
-    d.text(L('nut', 'capotasto'), ...P(Lay, 0, Lay.up ? -w - 26 : -w - 12).map((v, i) => v + (Lay.up && i === 1 ? 5 : 0)), { size: 16, color: C.dim, align: Lay.up ? 'right' : 'center' });
+    d.text(L('nut', 'capotasto'), ...P(Lay, 0, Lay.up ? L(-w - 26, -w - 6) : -w - 12).map((v, i) => v + (Lay.up && i === 1 ? 5 : 0)), { size: 16, color: C.dim, align: Lay.up ? 'right' : 'center' });
     d.text(L('bridge', 'ponte'), ...P(Lay, 1, Lay.up ? -w - 28 : -w - 24).map((v, i) => v + (Lay.up && i === 1 ? 5 : 0)), { size: 16, color: C.dim, align: Lay.up ? 'right' : 'center' });
   }
   // the dead part (nut to finger) is still; the vibrating part follows wave(u) in slow motion

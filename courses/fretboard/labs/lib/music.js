@@ -124,8 +124,10 @@ export function drawDial(d, D, { lit = new Set(), gold = new Set(), flats = fals
     const label = names ? names[p] : nameOf(p, flats);
     const col = on || g ? '#04201d' : letter ? C.text : C.muted;
     if (it) {
-      d.text(label, x, y + 1, { size: 16, weight: on || g ? 700 : letter ? 600 : 400, color: col, align: 'center' });
-      d.text(toLetter(label), x, y + 17, { size: 16, weight: 400, color: on || g ? '#04201d' : C.dim, align: 'center' });
+      // two lines (name over letter) when the disc holds them at the real text size, else the name alone
+      const sz = d.lineH(16) / 1.25, two = rr >= 1.2 * sz;
+      d.text(label, x, two ? y - 0.1 * sz : y + 0.36 * sz, { size: 16, weight: on || g ? 700 : letter ? 600 : 400, color: col, align: 'center' });
+      if (two) d.text(toLetter(label), x, y + 0.95 * sz, { size: 16, weight: 400, color: on || g ? '#04201d' : C.dim, align: 'center' });
     } else d.text(label, x, y + fs * 0.36, { size: letter ? fs : fs * 0.86, weight: on || g ? 700 : letter ? 600 : 400, color: col, align: 'center' });
   }
 }

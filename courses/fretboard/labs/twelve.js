@@ -75,10 +75,10 @@ async function fifthfret(ctx) {
       if (next != null) dot(d, G, pick.s + 1, 0, { fill: same ? C.ok : C.card2, text: letterOf(next), color: same ? '#04201d' : C.text, r: 15, ring: same ? C.ok : null });
       const nm = both(m), ns = both(TUNING[pick.s]), nx = next != null ? both(next) : '';
       const line = next == null ? L(`${nm} at fret ${pick.k} of the top string`, `${nm} al tasto ${pick.k} della corda più acuta`) : same ? L(`fret ${pick.k} on the ${ns} string is ${nm}, the same note as the open ${nx} string`, `il tasto ${pick.k} sulla corda di ${ns} è ${nm}, la stessa nota della corda di ${nx} a vuoto`) : L(`fret ${pick.k} on the ${ns} string is ${nm}; the open string above is ${nx}`, `il tasto ${pick.k} sulla corda di ${ns} è ${nm}; la corda a vuoto successiva è ${nx}`);
-      d.wrap(line, 24, pane.upright ? 430 : 410, pane.W - 48, { size: 19, weight: 600, color: same ? C.ok : C.text, lines: 3 });
-      d.text(`${fmtHz(hz(m))} Hz${next != null ? `  ${L('against', 'contro')}  ${fmtHz(hz(next))} Hz` : ''}`, 24, pane.upright ? 520 : 460, { size: 17, color: C.muted });
+      const hh = d.wrap(line, 24, pane.upright ? 430 : 410, pane.W - 48, { size: 19, weight: 600, color: same ? C.ok : C.text, lines: 3 });
+      d.text(`${fmtHz(hz(m))} Hz${next != null ? `  ${L('against', 'contro')}  ${fmtHz(hz(next))} Hz` : ''}`, 24, Math.max(pane.upright ? 520 : 460, (pane.upright ? 430 : 410) + hh + 22), { size: 17, color: C.muted });
     } else d.wrap(L('Tap a fret on any string to hear it and compare it with the next string up.', 'Tocca un tasto su una corda qualsiasi per sentirlo e confrontarlo con la corda successiva.'), 24, pane.upright ? 430 : 410, pane.W - 48, { size: 18, color: C.muted });
-    d.text(L('high E at the top, low E at the bottom, as in tablature', 'Mi (E) acuto in alto, Mi (E) basso in basso, come nelle intavolature'), 24, 40, { size: 16, color: C.dim, max: pane.W - 48 });
+    d.text(L('high E at the top, low E at the bottom, as in tablature', 'corda acuta in alto, grave in basso, come nelle intavolature'), 24, 40, { size: 16, color: C.dim, max: pane.W - 48 });
   });
   view.pane.drag((x, y, ph) => {
     if (ph !== 'down') return; const hit = geo(view.pane).at(x, y); if (!hit) return;
