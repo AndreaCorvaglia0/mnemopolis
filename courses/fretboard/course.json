@@ -2518,152 +2518,359 @@
       "core": false,
       "theme": "notes",
       "type": "cases",
-      "name": "The minor pentatonic box",
-      "place": "Bluesman's House",
+      "name": {
+        "en": "The minor pentatonic box",
+        "it": "Il box della pentatonica minore"
+      },
+      "place": {
+        "en": "Bluesman's House",
+        "it": "Casa del Bluesman"
+      },
       "sign": "BLUES",
       "emblem": "moon",
       "expert": {
         "name": "Sam",
-        "trade": "musician",
+        "trade": {
+          "en": "musician",
+          "it": "musicista"
+        },
         "temper": "theatrical",
-        "line": "Five notes, one box, forty years. Slide the box and you're in another key. The box never complained once."
+        "line": {
+          "en": "Five notes, one box, forty years. Slide the box and you're in another key. The box never complained once.",
+          "it": "Cinque note, un box, quarant'anni. Fai scorrere il box e sei in un'altra tonalità. Il box non si è mai lamentato una volta."
+        }
       },
-      "objective": "Place the minor pentatonic box for a given key by its root on the low E string.",
-      "idea": "The minor pentatonic keeps five notes, root, flat third, fourth, fifth and flat seventh; on the guitar they form one box that slides to any key.",
-      "wrongBelief": "The box at the 5th fret is 'the' blues scale, a fixed thing that belongs to A, and every other key needs another shape to learn.",
+      "objective": {
+        "en": "Place the minor pentatonic box for a given key by its root on the low E string.",
+        "it": "Collocare il box della pentatonica minore per una data tonalità partendo dalla sua tonica sulla corda di Mi (E) basso."
+      },
+      "idea": {
+        "en": "The minor pentatonic keeps five notes, root, flat third, fourth, fifth and flat seventh; on the guitar they form one box that slides to any key.",
+        "it": "La pentatonica minore tiene cinque note, tonica, terza minore, quarta, quinta e settima minore; sulla chitarra formano un solo box che scorre in qualsiasi tonalità."
+      },
+      "wrongBelief": {
+        "en": "The box at the 5th fret is 'the' blues scale, a fixed thing that belongs to A, and every other key needs another shape to learn.",
+        "it": "Il box al 5° tasto è «la» scala blues, una cosa fissa che appartiene al La, e ogni altra tonalità richiede un'altra forma da imparare."
+      },
       "anchor": {
         "type": "example",
-        "text": "The first solo shape most guitarists learn, at fret 5 for A minor, played two frets higher, is B minor."
+        "text": {
+          "en": "The first solo shape most guitarists learn, at fret 5 for A minor, played two frets higher, is B minor.",
+          "it": "La prima forma da solista che la maggior parte dei chitarristi impara, al tasto 5 per La minore, suonata due tasti più in alto è Si minore."
+        }
       },
-      "application": "Most rock and blues solos start from this box: a guitarist told that a song is in E minor moves the box until its first finger sits on E, at fret 12, or plays it with open strings.",
+      "application": {
+        "en": "Most rock and blues solos start from this box: a guitarist told that a song is in E minor moves the box until its first finger sits on E, at fret 12, or plays it with open strings.",
+        "it": "La maggior parte degli assoli rock e blues parte da questo box: a un chitarrista che sente dire che un brano è in Mi minore basta spostare il box finché il suo primo dito sta sul Mi, al tasto 12, oppure suonarlo con le corde a vuoto."
+      },
       "remember": [
-        "The minor pentatonic has five notes, 1, ♭3, 4, 5 and ♭7; in A they are A, C, D, E and G.",
-        "The first box starts with the index finger on the root, on the low E string: fret 5 for A.",
-        "A minor pentatonic and C major pentatonic share the same five notes."
+        {
+          "en": "The minor pentatonic has five notes, 1, ♭3, 4, 5 and ♭7; in A they are A, C, D, E and G.",
+          "it": "La pentatonica minore ha cinque note, 1, ♭3, 4, 5 e ♭7; in La sono La, Do, Re, Mi e Sol (A, C, D, E, G)."
+        },
+        {
+          "en": "The first box starts with the index finger on the root, on the low E string: fret 5 for A.",
+          "it": "Il primo box parte con l'indice sulla tonica, sulla corda di Mi (E) basso: tasto 5 per il La."
+        },
+        {
+          "en": "A minor pentatonic and C major pentatonic share the same five notes.",
+          "it": "La pentatonica minore di La e la pentatonica maggiore di Do hanno le stesse cinque note."
+        }
       ],
       "explain": {
-        "q": "Why does one box play in every key?",
-        "a": "Every fret is a half step on every string, so moving the whole box along the neck keeps all the distances between its notes. Only its starting point moves, and the note under the first finger on the low E string is the root, which names the key."
+        "q": {
+          "en": "Why does one box play in every key?",
+          "it": "Perché un solo box suona in tutte le tonalità?"
+        },
+        "a": {
+          "en": "Every fret is a half step on every string, so moving the whole box along the neck keeps all the distances between its notes. Only its starting point moves, and the note under the first finger on the low E string is the root, which names the key.",
+          "it": "Ogni tasto è un semitono su ogni corda, quindi spostando tutto il box lungo il manico si mantengono tutte le distanze tra le sue note. Si sposta soltanto il punto di partenza, e la nota sotto il primo dito sulla corda di Mi (E) basso è la tonica, che dà il nome alla tonalità."
+        }
       },
       "callbacks": [
         {
           "to": "scale",
-          "how": "As at the Step Ladder, a scale is a pattern of distances, not a list of notes: the box is the pattern, the fret is the key."
+          "how": {
+            "en": "As at the Step Ladder, a scale is a pattern of distances, not a list of notes: the box is the pattern, the fret is the key.",
+            "it": "Come nella Scala a Pioli, una scala è uno schema di distanze e non un elenco di note: il box è lo schema, il tasto è la tonalità."
+          }
         }
       ],
       "lab": {
-        "title": "The box",
+        "title": {
+          "en": "The box",
+          "it": "Il box"
+        },
         "stations": [
           {
             "id": "box",
-            "tab": "Slide the box",
-            "goal": "The minor pentatonic box is movable: wherever its first finger sits on the low E string, that note is the key.",
+            "tab": {
+              "en": "Slide the box",
+              "it": "Fai scorrere il box"
+            },
+            "goal": {
+              "en": "The minor pentatonic box is movable: wherever its first finger sits on the low E string, that note is the key.",
+              "it": "Il box della pentatonica minore è mobile: ovunque stia il suo primo dito sulla corda di Mi (E) basso, quella nota è la tonalità."
+            },
             "beat": "ground",
             "pattern": "puzzle",
-            "object": "The six strings of the neck with the box of twelve dots, its roots marked, and a low drone note of the key.",
-            "action": "Slides the box along the neck and plays it over the drone.",
-            "surprise": "The shape never changes: at fret 3 it is G minor, at fret 12 E minor, and its five note names follow it.",
+            "object": {
+              "en": "The six strings of the neck with the box of twelve dots, its roots marked, and a low drone note of the key.",
+              "it": "Le sei corde del manico con il box di dodici punti, le toniche segnate e una nota grave di bordone della tonalità."
+            },
+            "action": {
+              "en": "Slides the box along the neck and plays it over the drone.",
+              "it": "Fa scorrere il box lungo il manico e lo suona sopra il bordone."
+            },
+            "surprise": {
+              "en": "The shape never changes: at fret 3 it is G minor, at fret 12 E minor, and its five note names follow it.",
+              "it": "La forma non cambia mai: al tasto 3 è Sol minore, al tasto 12 Mi minore, e i nomi delle sue cinque note la seguono."
+            },
             "predict": {
-              "q": "The A minor box starts at fret 5. Where does the E minor box start?",
+              "q": {
+                "en": "The A minor box starts at fret 5. Where does the E minor box start?",
+                "it": "Il box di La minore parte dal tasto 5. Da dove parte il box di Mi minore?"
+              },
               "options": [
-                "fret 7, because E comes after A",
-                "fret 12, or fret 0 with open strings",
-                "nowhere: E minor needs another shape"
+                {
+                  "en": "fret 7, because E comes after A",
+                  "it": "dal tasto 7, perché il Mi viene dopo il La"
+                },
+                {
+                  "en": "fret 12, or fret 0 with open strings",
+                  "it": "dal tasto 12, oppure dal tasto 0 con le corde a vuoto"
+                },
+                {
+                  "en": "nowhere: E minor needs another shape",
+                  "it": "da nessuna parte: Mi minore richiede un'altra forma"
+                }
               ],
               "answer": 1,
-              "why": "The first finger sits on the root on the low E string, and the note E is the open low E string and fret 12."
+              "why": {
+                "en": "The first finger sits on the root on the low E string, and the note E is the open low E string and fret 12.",
+                "it": "Il primo dito sta sulla tonica sulla corda di Mi (E) basso, e la nota Mi è la corda di Mi (E) basso a vuoto e il tasto 12."
+              }
             },
             "controls": [
-              "Play the box"
+              {
+                "en": "Play the box",
+                "it": "Suona il box"
+              }
             ],
             "tries": [
-              "Play the box at fret 5, A minor, and listen over the drone.",
-              "Slide the box to E minor and play it."
+              {
+                "en": "Play the box at fret 5, A minor, and listen over the drone.",
+                "it": "Suona il box al tasto 5, La minore, e ascoltalo sopra il bordone."
+              },
+              {
+                "en": "Slide the box to E minor and play it.",
+                "it": "Fai scorrere il box su Mi minore e suonalo."
+              }
             ],
-            "takeaway": "The minor pentatonic box is <b>movable</b>: its first finger sits on the <b>root on the low E string</b>, so fret 5 gives A minor, fret 3 G minor and fret 12, or the open strings, E minor. The shape holds <b>1, ♭3, 4, 5, ♭7</b> in every key.",
-            "source": "Box shape: the root-position minor pentatonic (Premier Guitar). Notes and frequencies computed live in equal temperament from A4 = 440 Hz."
+            "takeaway": {
+              "en": "The minor pentatonic box is <b>movable</b>: its first finger sits on the <b>root on the low E string</b>, so fret 5 gives A minor, fret 3 G minor and fret 12, or the open strings, E minor. The shape holds <b>1, ♭3, 4, 5, ♭7</b> in every key.",
+              "it": "Il box della pentatonica minore è <b>mobile</b>: il suo primo dito sta sulla <b>tonica sulla corda di Mi (E) basso</b>, quindi il tasto 5 dà La minore, il tasto 3 Sol minore e il tasto 12, o le corde a vuoto, Mi minore. La forma contiene <b>1, ♭3, 4, 5, ♭7</b> in ogni tonalità."
+            },
+            "source": {
+              "en": "Box shape: the root-position minor pentatonic (Premier Guitar). Notes and frequencies computed live in equal temperament from A4 = 440 Hz.",
+              "it": "Forma del box: la pentatonica minore in posizione di tonica (Premier Guitar). Note e frequenze calcolate in tempo reale in temperamento equabile da La4 = 440 Hz."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "Five notes",
-          "text": "The minor pentatonic scale keeps five notes from the twelve: the root, the flat third (three half steps up), the fourth (five), the fifth (seven) and the flat seventh (ten). In A they are A, C, D, E and G. Between neighbouring notes of the scale the distance is always three or two half steps, never one."
+          "title": {
+            "en": "Five notes",
+            "it": "Cinque note"
+          },
+          "text": {
+            "en": "The minor pentatonic scale keeps five notes from the twelve: the root, the flat third (three half steps up), the fourth (five), the fifth (seven) and the flat seventh (ten). In A they are A, C, D, E and G. Between neighbouring notes of the scale the distance is always three or two half steps, never one.",
+            "it": "La scala pentatonica minore tiene cinque note delle dodici: la tonica, la terza minore (tre semitoni sopra), la quarta (cinque), la quinta (sette) e la settima minore (dieci). In La sono La, Do, Re, Mi e Sol. Tra due note vicine della scala la distanza è sempre di tre o di due semitoni, mai di uno."
+          }
         },
         {
-          "title": "One box in every key",
-          "text": "On the guitar these five notes fit under one hand as a box of two notes per string. The box starts with the index finger on the root on the low E string, so its key is the note under that finger: fret 5 is A, fret 3 is G, fret 7 is B. The same five notes, started from C, are the C major pentatonic, which is why one box serves A minor and C major alike."
+          "title": {
+            "en": "One box in every key",
+            "it": "Un box in ogni tonalità"
+          },
+          "text": {
+            "en": "On the guitar these five notes fit under one hand as a box of two notes per string. The box starts with the index finger on the root on the low E string, so its key is the note under that finger: fret 5 is A, fret 3 is G, fret 7 is B. The same five notes, started from C, are the C major pentatonic, which is why one box serves A minor and C major alike.",
+            "it": "Sulla chitarra queste cinque note stanno sotto una mano come un box di due note per corda. Il box parte con l'indice sulla tonica sulla corda di Mi (E) basso, quindi la sua tonalità è la nota sotto quel dito: il tasto 5 è La, il tasto 3 è Sol, il tasto 7 è Si. Le stesse cinque note, partendo dal Do, sono la pentatonica maggiore di Do, ed è per questo che un solo box serve sia per La minore sia per Do maggiore."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "The notes of A minor pentatonic are...",
+          "q": {
+            "en": "The notes of A minor pentatonic are...",
+            "it": "Le note della pentatonica minore di La sono..."
+          },
           "options": [
-            "A B C D E",
-            "A C D E G",
-            "A C♯ E F♯ G",
-            "A B D E F"
+            {
+              "en": "A B C D E",
+              "it": "La Si Do Re Mi"
+            },
+            {
+              "en": "A C D E G",
+              "it": "La Do Re Mi Sol"
+            },
+            {
+              "en": "A C♯ E F♯ G",
+              "it": "La Do♯ Mi Fa♯ Sol"
+            },
+            {
+              "en": "A B D E F",
+              "it": "La Si Re Mi Fa"
+            }
           ],
           "answer": 1,
-          "why": "1, ♭3, 4, 5 and ♭7 from A are A, C, D, E and G.",
+          "why": {
+            "en": "1, ♭3, 4, 5 and ♭7 from A are A, C, D, E and G.",
+            "it": "1, ♭3, 4, 5 e ♭7 a partire dal La sono La, Do, Re, Mi e Sol."
+          },
           "traps": [
-            "Five neighbouring notes of the scale include the second, B, which the pentatonic leaves out; it keeps 1, ♭3, 4, 5, ♭7.",
+            {
+              "en": "Five neighbouring notes of the scale include the second, B, which the pentatonic leaves out; it keeps 1, ♭3, 4, 5, ♭7.",
+              "it": "Cinque note vicine della scala comprendono la seconda, il Si, che la pentatonica lascia fuori; tiene 1, ♭3, 4, 5, ♭7."
+            },
             null,
-            "C♯ and F♯ are the major third and the major sixth, which belong to A major, not to A minor pentatonic.",
-            "B and F are the second and the flat sixth, the two notes the minor pentatonic leaves out of A minor."
+            {
+              "en": "C♯ and F♯ are the major third and the major sixth, which belong to A major, not to A minor pentatonic.",
+              "it": "Do♯ e Fa♯ sono la terza e la sesta maggiori, che appartengono a La maggiore e non alla pentatonica minore di La."
+            },
+            {
+              "en": "B and F are the second and the flat sixth, the two notes the minor pentatonic leaves out of A minor.",
+              "it": "Si e Fa sono la seconda e la sesta minore, le due note che la pentatonica minore lascia fuori da La minore."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Where does the first finger sit for the G minor box?",
+          "q": {
+            "en": "Where does the first finger sit for the G minor box?",
+            "it": "Dove sta il primo dito per il box di Sol minore?"
+          },
           "options": [
-            "On G on the low E string, fret 3",
-            "On G on the G string, open",
-            "At fret 5, as for every key",
-            "At fret 7"
+            {
+              "en": "On G on the low E string, fret 3",
+              "it": "Sul Sol della corda di Mi (E) basso, tasto 3"
+            },
+            {
+              "en": "On G on the G string, open",
+              "it": "Sul Sol della corda di Sol (G), a vuoto"
+            },
+            {
+              "en": "At fret 5, as for every key",
+              "it": "Al tasto 5, come per ogni tonalità"
+            },
+            {
+              "en": "At fret 7",
+              "it": "Al tasto 7"
+            }
           ],
           "answer": 0,
-          "why": "The box starts with the index finger on the root on the low E string, and G is at fret 3 there.",
+          "why": {
+            "en": "The box starts with the index finger on the root on the low E string, and G is at fret 3 there.",
+            "it": "Il box parte con l'indice sulla tonica sulla corda di Mi (E) basso, e lì il Sol sta al tasto 3."
+          },
           "traps": [
             null,
-            "The open G string is a G, but the box is placed by the root on the low E string, which carries the shape's lowest note.",
-            "Fret 5 is A on the low E string; leaving the box there plays A minor, whatever the song's key.",
-            "Fret 7 on the low E string is B, so the box there plays B minor."
+            {
+              "en": "The open G string is a G, but the box is placed by the root on the low E string, which carries the shape's lowest note.",
+              "it": "La corda di Sol (G) a vuoto è un Sol, ma il box si colloca con la tonica sulla corda di Mi (E) basso, che porta la nota più bassa della forma."
+            },
+            {
+              "en": "Fret 5 is A on the low E string; leaving the box there plays A minor, whatever the song's key.",
+              "it": "Il tasto 5 sulla corda di Mi (E) basso è La; lasciare il box lì suona La minore, qualunque sia la tonalità del brano."
+            },
+            {
+              "en": "Fret 7 on the low E string is B, so the box there plays B minor.",
+              "it": "Il tasto 7 sulla corda di Mi (E) basso è Si, quindi il box lì suona Si minore."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "A minor pentatonic shares its five notes with...",
+          "q": {
+            "en": "A minor pentatonic shares its five notes with...",
+            "it": "La pentatonica minore di La ha le stesse cinque note di..."
+          },
           "options": [
-            "A major pentatonic",
-            "C major pentatonic",
-            "E minor pentatonic"
+            {
+              "en": "A major pentatonic",
+              "it": "la pentatonica maggiore di La"
+            },
+            {
+              "en": "C major pentatonic",
+              "it": "la pentatonica maggiore di Do"
+            },
+            {
+              "en": "E minor pentatonic",
+              "it": "la pentatonica minore di Mi"
+            }
           ],
           "answer": 1,
-          "why": "C major pentatonic, C D E G A, is the same five notes as A C D E G started from C.",
+          "why": {
+            "en": "C major pentatonic, C D E G A, is the same five notes as A C D E G started from C.",
+            "it": "La pentatonica maggiore di Do, Do Re Mi Sol La, ha le stesse cinque note di La Do Re Mi Sol partendo dal Do."
+          },
           "traps": [
-            "A major pentatonic has C♯ and F♯, the major third and sixth, so it shares the root but not the notes.",
+            {
+              "en": "A major pentatonic has C♯ and F♯, the major third and sixth, so it shares the root but not the notes.",
+              "it": "La pentatonica maggiore di La ha Do♯ e Fa♯, la terza e la sesta maggiori, quindi condivide la tonica ma non le note."
+            },
             null,
-            "E minor pentatonic, E G A B D, has B where A minor has C, so the two share four notes, not five."
+            {
+              "en": "E minor pentatonic, E G A B D, has B where A minor has C, so the two share four notes, not five.",
+              "it": "La pentatonica minore di Mi, Mi Sol La Si Re, ha il Si dove La minore ha il Do, quindi le due condividono quattro note e non cinque."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "A song is in B minor. Where do you put the box?",
+          "q": {
+            "en": "A song is in B minor. Where do you put the box?",
+            "it": "Un brano è in Si minore. Dove metti il box?"
+          },
           "options": [
-            "Fret 2",
-            "Fret 5",
-            "Fret 7",
-            "Fret 9"
+            {
+              "en": "Fret 2",
+              "it": "Tasto 2"
+            },
+            {
+              "en": "Fret 5",
+              "it": "Tasto 5"
+            },
+            {
+              "en": "Fret 7",
+              "it": "Tasto 7"
+            },
+            {
+              "en": "Fret 9",
+              "it": "Tasto 9"
+            }
           ],
           "answer": 2,
-          "why": "B is at fret 7 on the low E string (E, F, F♯, G, G♯, A, A♯, B), and the box is placed by its root there.",
+          "why": {
+            "en": "B is at fret 7 on the low E string (E, F, F♯, G, G♯, A, A♯, B), and the box is placed by its root there.",
+            "it": "Il Si sta al tasto 7 sulla corda di Mi (E) basso (Mi, Fa, Fa♯, Sol, Sol♯, La, La♯, Si), e il box si colloca con la sua tonica lì."
+          },
           "traps": [
-            "Fret 2 on the low E string is F♯, so the box there plays F♯ minor.",
-            "Fret 5 is A, so the box there stays in A minor.",
+            {
+              "en": "Fret 2 on the low E string is F♯, so the box there plays F♯ minor.",
+              "it": "Il tasto 2 sulla corda di Mi (E) basso è Fa♯, quindi il box lì suona Fa♯ minore."
+            },
+            {
+              "en": "Fret 5 is A, so the box there stays in A minor.",
+              "it": "Il tasto 5 è La, quindi il box lì resta in La minore."
+            },
             null,
-            "Fret 9 is C♯; counting E to F as a whole step lands two frets too high."
+            {
+              "en": "Fret 9 is C♯; counting E to F as a whole step lands two frets too high.",
+              "it": "Il tasto 9 è Do♯; contare da Mi a Fa come un tono intero porta due tasti troppo in alto."
+            }
           ]
         }
       ],
@@ -2675,21 +2882,30 @@
         {
           "title": "Premier Guitar: Cram Session, Pentatonic Power",
           "url": "https://www.premierguitar.com/articles/24030-cram-session-pentatonic-power",
-          "why": "The five pentatonic shapes and how they join up along the neck."
+          "why": {
+            "en": "The five pentatonic shapes and how they join up along the neck.",
+            "it": "Le cinque forme della pentatonica e come si collegano lungo il manico (in inglese)."
+          }
         }
       ],
       "riddles": [
         {
           "id": "sam-door",
           "kind": "door",
-          "clue": "Sam, through the door: 'Tonight we play in G minor. Tell me the fret, and you can come in.'",
+          "clue": {
+            "en": "Sam, through the door: 'Tonight we play in G minor. Tell me the fret, and you can come in.'",
+            "it": "Sam, attraverso la porta: «Stasera suoniamo in Sol minore. Dimmi il tasto e puoi entrare.»"
+          },
           "answer": 3,
           "type": "number",
           "from": {
             "station": "box"
           },
           "inside": {
-            "note": "Sam's set list on the back of an envelope. The same box, placed at fret 3, also plays in B flat major, because G minor pentatonic and B flat major pentatonic have the same five notes. Next to learn: the four other shapes that join this box up and down the neck.",
+            "note": {
+              "en": "Sam's set list on the back of an envelope. The same box, placed at fret 3, also plays in B flat major, because G minor pentatonic and B flat major pentatonic have the same five notes. Next to learn: the four other shapes that join this box up and down the neck.",
+              "it": "La scaletta di Sam sul retro di una busta. Lo stesso box, messo al tasto 3, suona anche in Si♭ maggiore, perché la pentatonica minore di Sol e la pentatonica maggiore di Si♭ hanno le stesse cinque note. Da imparare dopo: le altre quattro forme che collegano questo box in alto e in basso sul manico."
+            },
             "coins": 15
           }
         }
@@ -2700,163 +2916,376 @@
       "core": false,
       "theme": "notes",
       "type": "view",
-      "name": "The circle of fifths",
-      "place": "Fifths Compass",
-      "sign": "COMPASS",
+      "name": {
+        "en": "The circle of fifths",
+        "it": "Il circolo delle quinte"
+      },
+      "place": {
+        "en": "Fifths Compass",
+        "it": "La Bussola delle Quinte"
+      },
+      "sign": {
+        "en": "COMPASS",
+        "it": "BUSSOLA"
+      },
       "emblem": "sun",
-      "objective": "Predict which major keys share the most notes from their places on the circle of fifths.",
-      "idea": "Stepping up a fifth, seven half steps, twelve times visits every note; neighbouring keys on that circle share six of seven notes and differ by one sharp.",
-      "wrongBelief": "The circle of fifths is a chart of key signatures to memorise, unrelated to the twelve-note circle and to how keys sound.",
+      "objective": {
+        "en": "Predict which major keys share the most notes from their places on the circle of fifths.",
+        "it": "Prevedere quali tonalità maggiori condividono più note dalla loro posizione sul circolo delle quinte."
+      },
+      "idea": {
+        "en": "Stepping up a fifth, seven half steps, twelve times visits every note; neighbouring keys on that circle share six of seven notes and differ by one sharp.",
+        "it": "Salire di una quinta, sette semitoni, per dodici volte tocca tutte le note; le tonalità vicine su quel circolo condividono sei note su sette e differiscono per un diesis."
+      },
+      "wrongBelief": {
+        "en": "The circle of fifths is a chart of key signatures to memorise, unrelated to the twelve-note circle and to how keys sound.",
+        "it": "Il circolo delle quinte è una tabella di armature di chiave da memorizzare, senza relazione con il cerchio delle dodici note e con il suono delle tonalità."
+      },
       "anchor": {
         "type": "contrast",
-        "text": "The clock of half steps puts C next to C♯, which share almost no scale notes; the circle of fifths puts C next to G, which share six of their seven.",
-        "limits": "Both circles hold the same twelve notes; only the order differs, by steps of one half step or of seven."
+        "text": {
+          "en": "The clock of half steps puts C next to C♯, which share almost no scale notes; the circle of fifths puts C next to G, which share six of their seven.",
+          "it": "L'orologio dei semitoni mette il Do accanto al Do♯, che condividono quasi nessuna nota della scala; il circolo delle quinte mette il Do accanto al Sol, che ne condividono sei su sette."
+        },
+        "limits": {
+          "en": "Both circles hold the same twelve notes; only the order differs, by steps of one half step or of seven.",
+          "it": "I due circoli contengono le stesse dodici note; cambia solo l'ordine, con passi di un semitono o di sette."
+        }
       },
-      "application": "Songs move most smoothly to keys next door on the circle, and the IV and V chords of a key are the keys on either side of it.",
+      "application": {
+        "en": "Songs move most smoothly to keys next door on the circle, and the IV and V chords of a key are the keys on either side of it.",
+        "it": "I brani passano più dolcemente alle tonalità vicine sul circolo, e il IV e il V grado di una tonalità sono le tonalità ai suoi due lati."
+      },
       "remember": [
-        "Each step clockwise on the circle of fifths goes up seven half steps and adds one sharp to the key.",
-        "Neighbouring keys on the circle share six of their seven notes.",
-        "Twelve steps of a fifth visit all twelve notes and come back to the start."
+        {
+          "en": "Each step clockwise on the circle of fifths goes up seven half steps and adds one sharp to the key.",
+          "it": "Ogni passo in senso orario sul circolo delle quinte sale di sette semitoni e aggiunge un diesis alla tonalità."
+        },
+        {
+          "en": "Neighbouring keys on the circle share six of their seven notes.",
+          "it": "Le tonalità vicine sul circolo condividono sei delle loro sette note."
+        },
+        {
+          "en": "Twelve steps of a fifth visit all twelve notes and come back to the start.",
+          "it": "Dodici passi di quinta toccano tutte e dodici le note e tornano al punto di partenza."
+        }
       ],
       "explain": {
-        "q": "Why does stepping by fifths reach all twelve notes, when stepping by four half steps would not?",
-        "a": "Seven and twelve have no common factor, so adding seven half steps again and again lands on a new note each time until all twelve have been visited. Four divides into twelve, so steps of four half steps return to the start after three notes."
+        "q": {
+          "en": "Why does stepping by fifths reach all twelve notes, when stepping by four half steps would not?",
+          "it": "Perché procedere per quinte raggiunge tutte le dodici note, mentre procedere per quattro semitoni no?"
+        },
+        "a": {
+          "en": "Seven and twelve have no common factor, so adding seven half steps again and again lands on a new note each time until all twelve have been visited. Four divides into twelve, so steps of four half steps return to the start after three notes.",
+          "it": "Sette e dodici non hanno fattori in comune, quindi sommando sette semitoni più volte si cade ogni volta su una nota nuova finché tutte e dodici sono state toccate. Quattro divide dodici, quindi con passi di quattro semitoni si torna al punto di partenza dopo tre note."
+        }
       },
       "callbacks": [
         {
           "to": "scale",
-          "how": "The sharp that appears when the stencil of the Step Ladder moves from C to G is the one note that changes at each step round this circle."
+          "how": {
+            "en": "The sharp that appears when the stencil of the Step Ladder moves from C to G is the one note that changes at each step round this circle.",
+            "it": "Il diesis che compare quando la dima della Scala a Pioli passa dal Do al Sol è l'unica nota che cambia a ogni passo lungo questo circolo."
+          }
         },
         {
           "to": "beats",
-          "how": "The fifth that orders this circle is the 3:2 of the Tuner's House, the smoothest pair after the octave."
+          "how": {
+            "en": "The fifth that orders this circle is the 3:2 of the Tuner's House, the smoothest pair after the octave.",
+            "it": "La quinta che ordina questo circolo è il 3:2 della Casa dell'Accordatore, la coppia più liscia dopo l'ottava."
+          }
         }
       ],
       "lab": {
-        "title": "Two circles",
+        "title": {
+          "en": "Two circles",
+          "it": "Due circoli"
+        },
         "stations": [
           {
             "id": "compass",
-            "tab": "One fifth at a time",
-            "goal": "Each step of a fifth round the circle changes exactly one note of the major key, by a half step.",
+            "tab": {
+              "en": "One fifth at a time",
+              "it": "Una quinta alla volta"
+            },
+            "goal": {
+              "en": "Each step of a fifth round the circle changes exactly one note of the major key, by a half step.",
+              "it": "Ogni passo di quinta lungo il circolo cambia esattamente una nota della tonalità maggiore, di un semitono."
+            },
             "beat": "ground",
             "pattern": "linked-analogy",
-            "object": "Two dials, the circle of half steps and the circle of fifths, with the seven notes of a major key lit on both.",
-            "action": "Turns the key one fifth at a time and watches which note moves.",
-            "surprise": "Each step moves one single note by a half step, F to F♯, then C to C♯, while the lit shape on the circle of fifths only rotates.",
+            "object": {
+              "en": "Two dials, the circle of half steps and the circle of fifths, with the seven notes of a major key lit on both.",
+              "it": "Due quadranti, il circolo dei semitoni e il circolo delle quinte, con le sette note di una tonalità maggiore accese su entrambi."
+            },
+            "action": {
+              "en": "Turns the key one fifth at a time and watches which note moves.",
+              "it": "Gira la tonalità una quinta alla volta e osserva quale nota si sposta."
+            },
+            "surprise": {
+              "en": "Each step moves one single note by a half step, F to F♯, then C to C♯, while the lit shape on the circle of fifths only rotates.",
+              "it": "Ogni passo sposta una sola nota di un semitono, da Fa a Fa♯, poi da Do a Do♯, mentre la figura accesa sul circolo delle quinte si limita a ruotare."
+            },
             "predict": {
-              "q": "From C major to G major, one step round the circle of fifths, how many notes of the key change?",
+              "q": {
+                "en": "From C major to G major, one step round the circle of fifths, how many notes of the key change?",
+                "it": "Da Do maggiore a Sol maggiore, un passo lungo il circolo delle quinte, quante note della tonalità cambiano?"
+              },
               "options": [
-                "one",
-                "three",
-                "all seven"
+                {
+                  "en": "one",
+                  "it": "una"
+                },
+                {
+                  "en": "three",
+                  "it": "tre"
+                },
+                {
+                  "en": "all seven",
+                  "it": "tutte e sette"
+                }
               ],
               "answer": 0,
-              "why": "G major is C major with F raised to F♯; every other note is shared."
+              "why": {
+                "en": "G major is C major with F raised to F♯; every other note is shared.",
+                "it": "Sol maggiore è Do maggiore con il Fa alzato a Fa♯; tutte le altre note sono in comune."
+              }
             },
             "controls": [],
             "tries": [
-              "Turn the key from C to G and find the note that changed.",
-              "Keep turning until the circle brings you back to C."
+              {
+                "en": "Turn the key from C to G and find the note that changed.",
+                "it": "Gira la tonalità da Do a Sol e trova la nota che è cambiata."
+              },
+              {
+                "en": "Keep turning until the circle brings you back to C.",
+                "it": "Continua a girare finché il circolo ti riporta al Do."
+              }
             ],
-            "takeaway": "Going up a <b>fifth</b>, seven half steps, changes <b>one note</b> of a major key by a half step and adds one sharp. On the circle of fifths a key's seven notes are seven <b>neighbours in a row</b>, so close keys sit side by side, and after <b>twelve</b> steps the circle closes.",
-            "source": "Keys computed live from the major-scale pattern and from steps of seven half steps (Wikipedia, Circle of fifths; Schmidt-Jones)."
+            "takeaway": {
+              "en": "Going up a <b>fifth</b>, seven half steps, changes <b>one note</b> of a major key by a half step and adds one sharp. On the circle of fifths a key's seven notes are seven <b>neighbours in a row</b>, so close keys sit side by side, and after <b>twelve</b> steps the circle closes.",
+              "it": "Salire di una <b>quinta</b>, sette semitoni, cambia <b>una nota</b> di una tonalità maggiore di un semitono e aggiunge un diesis. Sul circolo delle quinte le sette note di una tonalità sono sette <b>vicine di fila</b>, quindi le tonalità prossime stanno una accanto all'altra, e dopo <b>dodici</b> passi il circolo si chiude."
+            },
+            "source": {
+              "en": "Keys computed live from the major-scale pattern and from steps of seven half steps (Wikipedia, Circle of fifths; Schmidt-Jones).",
+              "it": "Tonalità calcolate in tempo reale dallo schema della scala maggiore e da passi di sette semitoni (Wikipedia, Circle of fifths; Schmidt-Jones)."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "A second circle",
-          "text": "The twelve notes can be put on a circle in a second order, by fifths instead of half steps: C, G, D, A, E, B, F♯, C♯, G♯, D♯, A♯, F, and C again. Seven half steps and twelve have no common factor, so the steps of a fifth visit every note once before coming home, after seven octaves."
+          "title": {
+            "en": "A second circle",
+            "it": "Un secondo circolo"
+          },
+          "text": {
+            "en": "The twelve notes can be put on a circle in a second order, by fifths instead of half steps: C, G, D, A, E, B, F♯, C♯, G♯, D♯, A♯, F, and C again. Seven half steps and twelve have no common factor, so the steps of a fifth visit every note once before coming home, after seven octaves.",
+            "it": "Le dodici note si possono disporre su un cerchio in un secondo ordine, per quinte invece che per semitoni: Do, Sol, Re, La, Mi, Si, Fa♯, Do♯, Sol♯, Re♯, La♯, Fa, e di nuovo Do. Sette semitoni e dodici non hanno fattori in comune, quindi i passi di quinta toccano ogni nota una volta sola prima di tornare a casa, dopo sette ottave."
+          }
         },
         {
-          "title": "Neighbours share notes",
-          "text": "Keys next to each other on this circle differ by one note. G major is C major with F♯ in place of F, and D major is G major with C♯ in place of C, so each step clockwise adds a sharp and each step anticlockwise adds a flat. The seven notes of any major key are seven neighbours in a row on the circle, which is why nearby keys sound related."
+          "title": {
+            "en": "Neighbours share notes",
+            "it": "Le vicine condividono note"
+          },
+          "text": {
+            "en": "Keys next to each other on this circle differ by one note. G major is C major with F♯ in place of F, and D major is G major with C♯ in place of C, so each step clockwise adds a sharp and each step anticlockwise adds a flat. The seven notes of any major key are seven neighbours in a row on the circle, which is why nearby keys sound related.",
+            "it": "Le tonalità vicine su questo circolo differiscono per una nota. Sol maggiore è Do maggiore con il Fa♯ al posto del Fa, e Re maggiore è Sol maggiore con il Do♯ al posto del Do, quindi ogni passo in senso orario aggiunge un diesis e ogni passo in senso antiorario aggiunge un bemolle. Le sette note di una tonalità maggiore sono sette vicine di fila sul circolo, ed è per questo che le tonalità prossime suonano imparentate."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "One step clockwise on the circle of fifths moves up by...",
+          "q": {
+            "en": "One step clockwise on the circle of fifths moves up by...",
+            "it": "Un passo in senso orario sul circolo delle quinte sale di..."
+          },
           "options": [
-            "one half step",
-            "five half steps",
-            "seven half steps"
+            {
+              "en": "one half step",
+              "it": "un semitono"
+            },
+            {
+              "en": "five half steps",
+              "it": "cinque semitoni"
+            },
+            {
+              "en": "seven half steps",
+              "it": "sette semitoni"
+            }
           ],
           "answer": 2,
-          "why": "A fifth is seven half steps, as from C to G.",
+          "why": {
+            "en": "A fifth is seven half steps, as from C to G.",
+            "it": "Una quinta è sette semitoni, come da Do a Sol."
+          },
           "traps": [
-            "One half step is the order of the other circle, the clock of the twelve notes.",
-            "Five half steps is a fourth, which is the step anticlockwise, from C to F.",
+            {
+              "en": "One half step is the order of the other circle, the clock of the twelve notes.",
+              "it": "Un semitono è l'ordine dell'altro circolo, l'orologio delle dodici note."
+            },
+            {
+              "en": "Five half steps is a fourth, which is the step anticlockwise, from C to F.",
+              "it": "Cinque semitoni sono una quarta, che è il passo in senso antiorario, da Do a Fa."
+            },
             null
           ]
         },
         {
           "level": 1,
-          "q": "How many notes do C major and G major share?",
+          "q": {
+            "en": "How many notes do C major and G major share?",
+            "it": "Quante note condividono Do maggiore e Sol maggiore?"
+          },
           "options": [
-            "Four",
-            "Five",
-            "Six",
-            "Seven"
+            {
+              "en": "Four",
+              "it": "Quattro"
+            },
+            {
+              "en": "Five",
+              "it": "Cinque"
+            },
+            {
+              "en": "Six",
+              "it": "Sei"
+            },
+            {
+              "en": "Seven",
+              "it": "Sette"
+            }
           ],
           "answer": 2,
-          "why": "G major is C major with F♯ instead of F, so six of the seven notes are shared.",
+          "why": {
+            "en": "G major is C major with F♯ instead of F, so six of the seven notes are shared.",
+            "it": "Sol maggiore è Do maggiore con Fa♯ invece di Fa, quindi sei note su sette sono in comune."
+          },
           "traps": [
-            "Four would be keys three steps apart on the circle; neighbours share almost everything.",
-            "Five shared notes is keys two steps apart, such as C and D.",
+            {
+              "en": "Four would be keys three steps apart on the circle; neighbours share almost everything.",
+              "it": "Quattro sarebbero tonalità distanti tre passi sul circolo; le vicine condividono quasi tutto."
+            },
+            {
+              "en": "Five shared notes is keys two steps apart, such as C and D.",
+              "it": "Cinque note in comune sono tonalità distanti due passi, come Do e Re."
+            },
             null,
-            "Seven would make them the same set of notes; G major replaces F with F♯."
+            {
+              "en": "Seven would make them the same set of notes; G major replaces F with F♯.",
+              "it": "Sette vorrebbe dire lo stesso insieme di note; Sol maggiore sostituisce il Fa con il Fa♯."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Starting on C and stepping up by fifths, after how many steps are you back on C?",
+          "q": {
+            "en": "Starting on C and stepping up by fifths, after how many steps are you back on C?",
+            "it": "Partendo dal Do e salendo per quinte, dopo quanti passi si torna al Do?"
+          },
           "options": [
             "7",
             "8",
             "12"
           ],
           "answer": 2,
-          "why": "Seven and twelve share no factor, so the fifths visit all twelve notes before C comes round again.",
+          "why": {
+            "en": "Seven and twelve share no factor, so the fifths visit all twelve notes before C comes round again.",
+            "it": "Sette e dodici non hanno fattori in comune, quindi le quinte toccano tutte e dodici le note prima che il Do ritorni."
+          },
           "traps": [
-            "Seven is the size of each step in half steps, not the number of steps round the circle.",
-            "Eight counts the notes of a scale, octave included; the circle of fifths runs through all twelve notes.",
+            {
+              "en": "Seven is the size of each step in half steps, not the number of steps round the circle.",
+              "it": "Sette è la misura di ogni passo in semitoni, non il numero di passi lungo il circolo."
+            },
+            {
+              "en": "Eight counts the notes of a scale, octave included; the circle of fifths runs through all twelve notes.",
+              "it": "Otto conta le note di una scala, ottava compresa; il circolo delle quinte attraversa tutte e dodici le note."
+            },
             null
           ]
         },
         {
           "level": 2,
-          "q": "D major has two sharps. How many does A major, the next key clockwise, have?",
+          "q": {
+            "en": "D major has two sharps. How many does A major, the next key clockwise, have?",
+            "it": "Re maggiore ha due diesis. Quanti ne ha La maggiore, la tonalità successiva in senso orario?"
+          },
           "options": [
-            "One",
-            "Two",
-            "Three",
-            "Four"
+            {
+              "en": "One",
+              "it": "Uno"
+            },
+            {
+              "en": "Two",
+              "it": "Due"
+            },
+            {
+              "en": "Three",
+              "it": "Tre"
+            },
+            {
+              "en": "Four",
+              "it": "Quattro"
+            }
           ],
           "answer": 2,
-          "why": "Each step clockwise adds one sharp: A major has F♯, C♯ and G♯.",
+          "why": {
+            "en": "Each step clockwise adds one sharp: A major has F♯, C♯ and G♯.",
+            "it": "Ogni passo in senso orario aggiunge un diesis: La maggiore ha Fa♯, Do♯ e Sol♯."
+          },
           "traps": [
-            "One sharp is G major, the step anticlockwise from D.",
-            "Keeping two sharps would make A major the same notes as D major; one note always changes per step.",
+            {
+              "en": "One sharp is G major, the step anticlockwise from D.",
+              "it": "Un diesis è Sol maggiore, il passo in senso antiorario da Re."
+            },
+            {
+              "en": "Keeping two sharps would make A major the same notes as D major; one note always changes per step.",
+              "it": "Tenere due diesis renderebbe La maggiore uguale a Re maggiore come note; a ogni passo cambia sempre una nota."
+            },
             null,
-            "Four sharps is E major, two steps clockwise from D."
+            {
+              "en": "Four sharps is E major, two steps clockwise from D.",
+              "it": "Quattro diesis è Mi maggiore, due passi in senso orario da Re."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A song in C moves for its bridge to another key. Which move will sound the most closely related?",
+          "q": {
+            "en": "A song in C moves for its bridge to another key. Which move will sound the most closely related?",
+            "it": "Un brano in Do passa per il ponte a un'altra tonalità. Quale passaggio suonerà più imparentato?"
+          },
           "options": [
-            "To C♯ major",
-            "To G major",
-            "To F♯ major"
+            {
+              "en": "To C♯ major",
+              "it": "A Do♯ maggiore"
+            },
+            {
+              "en": "To G major",
+              "it": "A Sol maggiore"
+            },
+            {
+              "en": "To F♯ major",
+              "it": "A Fa♯ maggiore"
+            }
           ],
           "answer": 1,
-          "why": "G major is next to C on the circle of fifths and shares six of its seven notes.",
+          "why": {
+            "en": "G major is next to C on the circle of fifths and shares six of its seven notes.",
+            "it": "Sol maggiore è accanto al Do sul circolo delle quinte e condivide sei delle sue sette note."
+          },
           "traps": [
-            "C♯ is next to C on the clock of half steps, but as a key it shares only two notes with C major.",
+            {
+              "en": "C♯ is next to C on the clock of half steps, but as a key it shares only two notes with C major.",
+              "it": "Do♯ è accanto al Do sull'orologio dei semitoni, ma come tonalità condivide solo due note con Do maggiore."
+            },
             null,
-            "F♯ is opposite C on the circle of fifths, and F♯ major shares only two notes with C major, B and F (written E♯)."
+            {
+              "en": "F♯ is opposite C on the circle of fifths, and F♯ major shares only two notes with C major, B and F (written E♯).",
+              "it": "Fa♯ è opposto al Do sul circolo delle quinte, e Fa♯ maggiore condivide solo due note con Do maggiore, Si e Fa (scritto Mi♯)."
+            }
           ]
         }
       ],
@@ -2869,7 +3298,10 @@
         {
           "title": "Schmidt-Jones: The circle of fifths",
           "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Understanding_Basic_Music_Theory_(Schmidt-Jones)/06%3A_Notes_and_Scales/6.07%3A_The_Circle_of_Fifths",
-          "why": "The circle with its key signatures and relative minors."
+          "why": {
+            "en": "The circle with its key signatures and relative minors.",
+            "it": "Il circolo con le sue armature di chiave e le relative minori (in inglese)."
+          }
         }
       ]
     },
