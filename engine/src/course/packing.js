@@ -9,6 +9,8 @@
 // globalThis.__mnemoKit, which holds exactly the modules in KIT_MODULES. Anything else is refused
 // with a message that names the file and the line.
 
+import { localise } from './localise.js';
+
 // The import surface of lab code in a packed game: the path after engine/src/ -> what it is.
 export const KIT_MODULES = {
   'lab/shell.js': 'the lab frame\'s controls: h, seg, slider, readout, predict, TEXT, LANG',
@@ -17,6 +19,9 @@ export const KIT_MODULES = {
   'systems/audio.js': 'sfx: short sounds (tick, plop, chime, reveal, thud...)',
 };
 export const MARK = 'mnemo-course';
+const textOf = (v, lang) => (v && typeof v === 'object' ? localise(v, lang, lang) : v);
+// the title in the course's own language, for the page head and the messages of the tools
+export const titleOf = (course) => textOf(course?.title, String(course?.language || 'en').slice(0, 2));
 const EMPTY = `<script type="application/json" id="${MARK}"></script>`;
 
 const lineOf = (src, i) => src.slice(0, i).split('\n').length;
@@ -159,9 +164,10 @@ export function isPlayer(html) { return html.includes(EMPTY); }
 export function insertPayload(player, payload) {
   const n = player.split(EMPTY).length - 1;
   if (n !== 1) throw new Error(n ? 'the player holds the course placeholder more than once' : 'this file is not an empty player (no course placeholder): rebuild it with npm run build:player');
-  const lang = String(payload.course.language || 'en').slice(0, 2);
+  // the head carries the course's own language and title (the engine sets the active ones at start-up)
+  const lang = String(payload.course.language || 'en').slice(0, 2), title = textOf(payload.course.title, lang);
   // the title and the language are set in the head only, before the engine's code
   const cut = player.indexOf('<script'), head = player.slice(0, cut), rest = player.slice(cut);
-  return head.replace(/<title>[^<]*<\/title>/, () => `<title>${esc(payload.course.title || 'Mnemopolis')}</title>`).replace(/<html lang="[^"]*"/, () => `<html lang="${esc(lang)}"`)
+  return head.replace(/<title>[^<]*<\/title>/, () => `<title>${esc(title || 'Mnemopolis')}</title>`).replace(/<html lang="[^"]*"/, () => `<html lang="${esc(lang)}"`)
     + rest.replace(EMPTY, () => `<script type="application/json" id="${MARK}">${safeJson(payload)}</script>`);
 }

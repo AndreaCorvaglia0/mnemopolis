@@ -1,4 +1,8 @@
 import { xpDebug } from './mechanics/experience/debug.js';
+import { DATA, LANG, LANGUAGES } from './course/_data.js';
+// the page speaks the active language (the title too, when the course has more than one)
+document.documentElement.lang = LANG;
+if (LANGUAGES.length > 1) document.title = DATA.title;
 import Phaser from 'phaser';
 import '@fontsource/pixelify-sans/latin-400.css';
 import '@fontsource/pixelify-sans/latin-600.css';
