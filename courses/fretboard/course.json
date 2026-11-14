@@ -40,7 +40,7 @@
   "level": "introductory",
   "bigIdea": {
     "en": "Notes are frequencies: halving a string doubles its frequency, twelve equal steps fill that octave, and scales and chords are patterns of those steps on the fretboard.",
-    "it": "Le note sono frequenze: dimezzare una corda ne raddoppia la frequenza, dodici passi uguali riempiono quell'ottava, e le scale e gli accordi sono schemi di quei passi sul manico."
+    "it": "Le note sono frequenze: dimezzare una corda ne raddoppia la frequenza, dodici passi uguali riempiono l'ottava, e scale e accordi sono schemi di quei passi sul manico."
   },
   "learner": {
     "en": "A guitarist who strums a few open chords and songs but does not know why the chords work. No notation, no physics and no theory are assumed.",
@@ -101,119 +101,170 @@
       "title": "J. Wolfe, UNSW Music Acoustics: Strings, standing waves and harmonics",
       "url": "https://newt.phys.unsw.edu.au/jw/strings.html",
       "tier": "A",
-      "note": "University physics-of-music pages: f = v/2L, v = (tension/mass per length)^1/2, harmonics at n times the fundamental, touching at 1/n isolates the nth harmonic, the 12th fret at the middle, why harmonic tuning goes wrong."
+      "note": {
+        "en": "University physics-of-music pages: f = v/2L, v = (tension/mass per length)^1/2, harmonics at n times the fundamental, touching at 1/n isolates the nth harmonic, the 12th fret at the middle, why harmonic tuning goes wrong.",
+        "it": "Pagine universitarie di fisica della musica: f = v/2L, v = (tensione/massa per unità di lunghezza)^1/2, armoniche a n volte la fondamentale, il tocco a 1/n isola l'n-esima armonica, il 12° tasto a metà, perché l'accordatura per armonici sbaglia."
+      }
     },
     {
       "id": "S2",
       "title": "J. Wolfe, UNSW Music Acoustics: How does a guitar work?",
       "url": "https://newt.phys.unsw.edu.au/~jw/guitarintro.html",
       "tier": "A",
-      "note": "Shorter string, higher pitch; the A string at 110 Hz; the 5th fret of the top string at 440 Hz; the lowest note E at about 83 Hz."
+      "note": {
+        "en": "Shorter string, higher pitch; the A string at 110 Hz; the 5th fret of the top string at 440 Hz; the lowest note E at about 83 Hz.",
+        "it": "Corda più corta, altezza maggiore; la corda di La a 110 Hz; il 5° tasto della corda più acuta a 440 Hz; la nota più bassa, il Mi, a circa 83 Hz."
+      }
     },
     {
       "id": "S3",
       "title": "OpenStax, University Physics vol. 1, 17.6 Beats",
       "url": "https://openstax.org/books/university-physics-volume-1/pages/17-6-beats",
       "tier": "A",
-      "note": "f_beat = |f2 - f1|; beats slow down as two frequencies approach; used by piano tuners."
+      "note": {
+        "en": "f_beat = |f2 - f1|; beats slow down as two frequencies approach; used by piano tuners.",
+        "it": "f_battimento = |f2 − f1|; i battimenti rallentano quando due frequenze si avvicinano; usati dagli accordatori di pianoforti."
+      }
     },
     {
       "id": "S4",
       "title": "J. Wolfe, UNSW Music Acoustics: Frequently asked questions (temperament, just intonation)",
       "url": "https://newt.phys.unsw.edu.au/jw/musFAQ.html",
       "tier": "A",
-      "note": "Fifth 3:2 and major third 5:4 in just intonation; equal temperament with the twelfth root of two; the equal-tempered third (about 1.260) is not close to 5:4; near-coinciding harmonics beat slowly."
+      "note": {
+        "en": "Fifth 3:2 and major third 5:4 in just intonation; equal temperament with the twelfth root of two; the equal-tempered third (about 1.260) is not close to 5:4; near-coinciding harmonics beat slowly.",
+        "it": "Quinta 3:2 e terza maggiore 5:4 nell'intonazione naturale; temperamento equabile con la radice dodicesima di due; la terza equabile (circa 1,260) non è vicina a 5:4; armoniche quasi coincidenti battono lentamente."
+      }
     },
     {
       "id": "S5",
       "title": "J. Wolfe, UNSW Music Acoustics: Note names, MIDI numbers and frequencies",
       "url": "https://newt.phys.unsw.edu.au/jw/notes.html",
       "tier": "A",
-      "note": "A4 = 440 Hz by convention; f = 440 x 2^(n/12) for n half steps from A4. All frequencies in the course are computed from this formula."
+      "note": {
+        "en": "A4 = 440 Hz by convention; f = 440 x 2^(n/12) for n half steps from A4. All frequencies in the course are computed from this formula.",
+        "it": "La4 = 440 Hz per convenzione; f = 440 × 2^(n/12) per n semitoni da La4. Tutte le frequenze del corso sono calcolate con questa formula."
+      }
     },
     {
       "id": "S6",
       "title": "Wikipedia, Guitar tunings (standard tuning)",
       "url": "https://en.wikipedia.org/wiki/Guitar_tunings",
       "tier": "B",
-      "note": "E2 A2 D3 G3 B3 E4 at 82.41, 110, 146.83, 196, 246.94, 329.63 Hz; guitar music is written an octave higher than it sounds. Checked against S5's formula."
+      "note": {
+        "en": "E2 A2 D3 G3 B3 E4 at 82.41, 110, 146.83, 196, 246.94, 329.63 Hz; guitar music is written an octave higher than it sounds. Checked against S5's formula.",
+        "it": "E2 A2 D3 G3 B3 E4 a 82,41, 110, 146,83, 196, 246,94, 329,63 Hz; la musica per chitarra si scrive un'ottava più in alto di come suona. Verificato con la formula di S5."
+      }
     },
     {
       "id": "S7",
       "title": "R. M. Mottola, Was the Rule of 18 Good Enough? (luthier's article)",
       "url": "https://liutaiomottola.com/PrevPubs/RuleOf18/RuleOf18.htm",
       "tier": "B",
-      "note": "Frets are placed by the twelfth root of two; the divisor 17.817 applied to the remaining length; the older rule of 18."
+      "note": {
+        "en": "Frets are placed by the twelfth root of two; the divisor 17.817 applied to the remaining length; the older rule of 18.",
+        "it": "I tasti sono collocati con la radice dodicesima di due; il divisore 17,817 applicato alla lunghezza rimasta; la vecchia regola del 18."
+      }
     },
     {
       "id": "S8",
       "title": "Gotham et al., Open Music Theory 2e: Major scales; Triads",
       "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_(Gotham_et_al.)/01%3A_Fundamentals",
       "tier": "A",
-      "note": "W-W-H-W-W-W-H from any note; triads stacked in thirds, major with a major third and perfect fifth, minor with a minor third and perfect fifth."
+      "note": {
+        "en": "W-W-H-W-W-W-H from any note; triads stacked in thirds, major with a major third and perfect fifth, minor with a minor third and perfect fifth.",
+        "it": "T-T-S-T-T-T-S da una nota qualsiasi; triadi impilate per terze, la maggiore con terza maggiore e quinta giusta, la minore con terza minore e quinta giusta."
+      }
     },
     {
       "id": "S9",
       "title": "Hutchinson, Music Theory for the 21st-Century Classroom, 5.2 (intervals)",
       "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Music_Theory_for_the_21st-Century_Classroom_(Hutchinson)/05%3A_Intervals/5.02%3A_How_to_Identify_Perfect_Major_and_Minor_Intervals",
       "tier": "A",
-      "note": "Half steps per interval: m3 3, M3 4, P4 5, P5 7, P8 12."
+      "note": {
+        "en": "Half steps per interval: m3 3, M3 4, P4 5, P5 7, P8 12.",
+        "it": "Semitoni per intervallo: 3m 3, 3M 4, 4G 5, 5G 7, 8G 12."
+      }
     },
     {
       "id": "S10",
       "title": "Wikipedia, Circle of fifths",
       "url": "https://en.wikipedia.org/wiki/Circle_of_fifths",
       "tier": "B",
-      "note": "Twelve fifths visit all twelve notes and close at seven octaves in equal temperament; adjacent keys differ by one sharp or flat; twelve pure fifths overshoot by the Pythagorean comma."
+      "note": {
+        "en": "Twelve fifths visit all twelve notes and close at seven octaves in equal temperament; adjacent keys differ by one sharp or flat; twelve pure fifths overshoot by the Pythagorean comma.",
+        "it": "Dodici quinte toccano tutte le dodici note e si chiudono a sette ottave nel temperamento equabile; tonalità adiacenti differiscono per un diesis o un bemolle; dodici quinte pure superano le sette ottave di un comma pitagorico."
+      }
     },
     {
       "id": "S11",
       "title": "Schmidt-Jones, Understanding Basic Music Theory, 6.7 The Circle of Fifths",
       "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Understanding_Basic_Music_Theory_(Schmidt-Jones)/06%3A_Notes_and_Scales/6.07%3A_The_Circle_of_Fifths",
       "tier": "A",
-      "note": "Clockwise adds a sharp (a fifth up), counter-clockwise a flat."
+      "note": {
+        "en": "Clockwise adds a sharp (a fifth up), counter-clockwise a flat.",
+        "it": "In senso orario si aggiunge un diesis (una quinta sopra), in senso antiorario un bemolle."
+      }
     },
     {
       "id": "S12",
       "title": "Applied Guitar Theory, Major scale chords",
       "url": "https://appliedguitartheory.com/lessons/major-scale-chords/",
       "tier": "B",
-      "note": "Major, minor, minor, major, major, minor, diminished; G major: G Am Bm C D Em F#dim."
+      "note": {
+        "en": "Major, minor, minor, major, major, minor, diminished; G major: G Am Bm C D Em F#dim.",
+        "it": "Maggiore, minore, minore, maggiore, maggiore, minore, diminuito; Sol maggiore: G Am Bm C D Em F♯dim."
+      }
     },
     {
       "id": "S13",
       "title": "Premier Guitar, Cram Session: Pentatonic Power",
       "url": "https://www.premierguitar.com/articles/24030-cram-session-pentatonic-power",
       "tier": "B",
-      "note": "Minor pentatonic 1-b3-4-5-b7; A minor pentatonic A C D E G; root-position box in 5th position; same notes as C major pentatonic."
+      "note": {
+        "en": "Minor pentatonic 1-b3-4-5-b7; A minor pentatonic A C D E G; root-position box in 5th position; same notes as C major pentatonic.",
+        "it": "Pentatonica minore 1-♭3-4-5-♭7; La minore pentatonica La Do Re Mi Sol; box in posizione di tonica alla 5ª posizione; stesse note della pentatonica maggiore di Do."
+      }
     },
     {
       "id": "S14",
       "title": "McDermott, Schultz, Undurraga and Godoy (2016), Indifference to dissonance in native Amazonians reveals cultural variation in music perception, Nature 535",
       "url": "https://pubmed.ncbi.nlm.nih.gov/27409816/",
       "tier": "A",
-      "note": "Tsimane' listeners rated consonant and dissonant chords as equally pleasant: preference for consonance depends strongly on musical culture."
+      "note": {
+        "en": "Tsimane' listeners rated consonant and dissonant chords as equally pleasant: preference for consonance depends strongly on musical culture.",
+        "it": "Gli ascoltatori Tsimane' hanno giudicato ugualmente gradevoli accordi consonanti e dissonanti: la preferenza per la consonanza dipende molto dalla cultura musicale."
+      }
     },
     {
       "id": "S15",
       "title": "Plomp and Levelt (1965), Tonal consonance and critical bandwidth, JASA 38",
       "url": "https://www.mpi.nl/publications/item66382/tonal-consonance-and-critical-bandwidth",
       "tier": "A",
-      "note": "Roughness from beating of close partials (after Helmholtz); for complex tones, intervals with simple ratios have fewer close partials."
+      "note": {
+        "en": "Roughness from beating of close partials (after Helmholtz); for complex tones, intervals with simple ratios have fewer close partials.",
+        "it": "Asprezza dovuta ai battimenti di parziali vicine (da Helmholtz); per i suoni complessi, gli intervalli con rapporti semplici hanno meno parziali vicine."
+      }
     },
     {
       "id": "S16",
       "title": "JustinGuitar, Practical Music Theory (course outline); Applied Guitar Theory, Foundational Theory",
       "url": "https://justinguitar.com/categories/PMT",
       "tier": "B",
-      "note": "Order of topics for guitarists; open chord shapes and the fretboard as the language. See knowledge/syllabi.md."
+      "note": {
+        "en": "Order of topics for guitarists; open chord shapes and the fretboard as the language. See knowledge/syllabi.md.",
+        "it": "Ordine degli argomenti per chitarristi; forme di accordi a vuoto e manico come linguaggio. Vedi knowledge/syllabi.md."
+      }
     },
     {
       "id": "S17",
       "title": "Wikipedia, Solmization (fixed do)",
       "url": "https://en.wikipedia.org/wiki/Solmization",
       "tier": "B",
-      "note": "Do Re Mi Fa Sol La Si as fixed names for C D E F G A B in Italian and other languages."
+      "note": {
+        "en": "Do Re Mi Fa Sol La Si as fixed names for C D E F G A B in Italian and other languages.",
+        "it": "Do Re Mi Fa Sol La Si come nomi fissi per C D E F G A B in italiano e in altre lingue."
+      }
     }
   ],
   "themes": [
@@ -225,7 +276,7 @@
       },
       "idea": {
         "en": "A note is a frequency: a string sets it by its length, and simple ratios make notes agree.",
-        "it": "Una nota è una frequenza: una corda la fissa con la sua lunghezza, e i rapporti semplici fanno andare d'accordo le note."
+        "it": "Una nota è una frequenza, fissata dalla lunghezza della corda, e i rapporti semplici accordano le note."
       },
       "cue": {
         "landscape": "shore",
@@ -291,14 +342,11 @@
       "emblem": "wave",
       "expert": {
         "name": "Aldo",
-        "trade": {
-          "en": "luthier",
-          "it": "liutaio"
-        },
+        "trade": "luthier",
         "temper": "craftsman",
         "line": {
           "en": "I measure every fret from the nut. The twelfth always lands in the middle of the string, and the note there is the open note again, one floor up.",
-          "it": "Misuro ogni tasto a partire dal capotasto. Il dodicesimo cade sempre a metà della corda, e la nota che esce lì è di nuovo quella a vuoto, un piano più su."
+          "it": "Misuro ogni tasto dal capotasto. Il dodicesimo cade sempre a metà della corda, e la nota che esce lì è di nuovo quella a vuoto, un piano più su."
         }
       },
       "objective": {
@@ -307,7 +355,7 @@
       },
       "idea": {
         "en": "A plucked string vibrates a fixed number of times per second; a shorter or tighter string vibrates faster, and half the length gives twice the frequency.",
-        "it": "Una corda pizzicata vibra un numero fisso di volte al secondo; una corda più corta o più tesa vibra più in fretta, e a metà lunghezza la frequenza raddoppia."
+        "it": "Una corda pizzicata vibra un certo numero di volte al secondo; più corta o più tesa vibra più in fretta, e a metà lunghezza la frequenza raddoppia."
       },
       "wrongBelief": {
         "en": "Halving the string gives some note a little higher, not twice the frequency; and the octave is a different note eight steps up, not the same note again.",
@@ -740,7 +788,7 @@
             null,
             {
               "en": "Pressing a fret does raise the note, but tuning sets the open string, which nothing presses.",
-              "it": "Premere un tasto alza davvero la nota, ma l'accordatura regola la corda a vuoto, che nessun dito preme."
+              "it": "Premere un tasto alza la nota, ma l'accordatura regola la corda a vuoto, che nessun dito preme."
             },
             {
               "en": "Plucking harder makes the note louder because the string swings wider, while the number of swings per second stays almost the same.",
@@ -868,10 +916,7 @@
       "emblem": "heart",
       "expert": {
         "name": "Ilse",
-        "trade": {
-          "en": "tuner",
-          "it": "accordatrice"
-        },
+        "trade": "tuner",
         "temper": "absent",
         "line": {
           "en": "Two strings that nearly agree pulse against each other, wah, wah, wah. I turn the pin until the pulse slows down and stops. Where was I?",
@@ -1637,7 +1682,7 @@
             "advanced": true,
             "goal": {
               "en": "Neighbouring strings are five half steps apart, except G and B, four apart: so fret 5 gives the next open string, and fret 4 on G.",
-              "it": "Le corde vicine distano cinque semitoni, tranne Sol e Si, che ne distano quattro: perciò il tasto 5 dà la corda a vuoto successiva, e il tasto 4 sulla corda di Sol."
+              "it": "Le corde vicine distano cinque semitoni, tranne Sol e Si che ne distano quattro: il tasto 5 dà la corda successiva, il tasto 4 sul Sol."
             },
             "beat": "rule",
             "pattern": "puzzle",
@@ -2609,10 +2654,7 @@
       "emblem": "moon",
       "expert": {
         "name": "Sam",
-        "trade": {
-          "en": "musician",
-          "it": "musicista"
-        },
+        "trade": "musician",
         "temper": "theatrical",
         "line": {
           "en": "Five notes, one box, forty years. Slide the box and you're in another key. The box never complained once.",
@@ -3014,7 +3056,7 @@
       },
       "idea": {
         "en": "Stepping up a fifth, seven half steps, twelve times visits every note; neighbouring keys on that circle share six of seven notes and differ by one sharp.",
-        "it": "Salire di una quinta, sette semitoni, per dodici volte tocca tutte le note; le tonalità vicine su quel circolo condividono sei note su sette e differiscono per un diesis."
+        "it": "Salire di una quinta, sette semitoni, dodici volte tocca tutte le note; le tonalità vicine sul circolo condividono sei note su sette e differiscono per un diesis."
       },
       "wrongBelief": {
         "en": "The circle of fifths is a chart of key signatures to memorise, unrelated to the twelve-note circle and to how keys sound.",
@@ -3403,10 +3445,7 @@
       "emblem": "note",
       "expert": {
         "name": "Cora",
-        "trade": {
-          "en": "musician",
-          "it": "musicista"
-        },
+        "trade": "musician",
         "temper": "smitten",
         "line": {
           "en": "Three voices, each a third above the last. Ask the middle one to sing a half step lower and the whole chord turns minor.",
@@ -3419,7 +3458,7 @@
       },
       "idea": {
         "en": "A triad stacks two thirds on a root: major is four then three half steps, minor three then four. An open chord repeats those three notes.",
-        "it": "Una triade impila due terze su una tonica: la maggiore è quattro e poi tre semitoni, la minore tre e poi quattro. Un accordo a vuoto ripete queste tre note."
+        "it": "Una triade impila due terze su una tonica: la maggiore è quattro poi tre semitoni, la minore tre poi quattro. Un accordo a vuoto ripete queste tre note."
       },
       "wrongBelief": {
         "en": "A six-string chord is six different notes, and major and minor chords are unrelated shapes to learn one by one.",
@@ -3573,7 +3612,7 @@
             "advanced": true,
             "goal": {
               "en": "Every open chord shape, C, A, G, E and D, holds only three note names, and its lowest string played is its root.",
-              "it": "Ogni forma di accordo a vuoto, C, A, G, E e D, contiene solo tre nomi di nota, e la corda più bassa suonata è la sua tonica."
+              "it": "Ogni forma a vuoto, C, A, G, E e D, contiene solo tre nomi di nota, e la corda più bassa suonata è la tonica."
             },
             "beat": "sandbox",
             "pattern": "sandbox",
@@ -3917,7 +3956,7 @@
           "kind": "computer",
           "clue": {
             "en": "pw: the note my altos sing in E major, the one that turns it minor when they drop it. Sharps spelled out, please. C.",
-            "it": "pw: la nota che i miei contralti cantano in Mi maggiore, quella che lo rende minore quando la abbassano. I diesis a parole, per favore. C."
+            "it": "pw: la nota che i miei contralti cantano in Mi maggiore, quella che lo rende minore se la abbassano. Diesis a parole. C."
           },
           "answer": [
             "G sharp",
@@ -3963,7 +4002,7 @@
       },
       "idea": {
         "en": "Thirds stacked on each note of a major scale, with only its notes, give the key's chords: I, IV and V major, ii, iii and vi minor.",
-        "it": "Le terze impilate su ogni nota di una scala maggiore, usando solo le sue note, danno gli accordi della tonalità: I, IV e V maggiori, ii, iii e vi minori."
+        "it": "Impilando terze sulle note di una scala maggiore si ottengono gli accordi della tonalità: I, IV e V maggiori, ii, iii e vi minori."
       },
       "wrongBelief": {
         "en": "Songs combine chords at random, or chord families are rules invented by teachers rather than a consequence of the scale.",
@@ -4023,7 +4062,7 @@
             },
             "goal": {
               "en": "With only a major scale's notes, the stack of thirds on each note comes out major on 1, 4, 5 and minor on 2, 3, 6.",
-              "it": "Con le sole note di una scala maggiore, la pila di terze su ogni nota viene maggiore sulla 1, 4, 5 e minore sulla 2, 3, 6."
+              "it": "Con le sole note della scala maggiore, la pila di terze è maggiore sulla 1, 4, 5 e minore sulla 2, 3, 6."
             },
             "beat": "ground",
             "pattern": "puzzle",
@@ -4388,7 +4427,7 @@
       "rounds": 10,
       "learn": {
         "en": "A higher frequency is a higher note; the gap shrinks as you get better.",
-        "it": "Una frequenza più alta è una nota più acuta; la differenza tra le due note si riduce man mano che migliori."
+        "it": "Più alta la frequenza, più acuta la nota; la differenza si riduce mentre migliori."
       },
       "data": {
         "ask": {
