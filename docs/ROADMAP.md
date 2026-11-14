@@ -121,6 +121,12 @@
    (`needs`), `canPass` and the saved `state.tools` / `state.opened` exist (`engine/src/mechanics/obstacles/`);
    what waits behind them is a placeholder listed as "sealed".
 
+5. **The world branch** (`docs/WORLD.md`): a study aid for children that builds its own small towns
+   from inside a Claude artifact (material, photos and a few questions in; a town of two or three
+   houses out), a sea chart joining the towns, a children's register (fights, points, a very clear
+   progression), the model used only for concepts, questions and labs. Starts with a technical trial.
+   Beside it, the catalogue of finished courses, which may open to contributed courses.
+
 ## Later
 
 - New game plus: "Another round" today keeps the save. A true second round would start on the
