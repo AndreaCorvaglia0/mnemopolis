@@ -6,6 +6,9 @@
   "title": "How Sound Works",
   "subject": "Sound: what travels, what sets the pitch, what loudness measures, and what sound needs to travel",
   "bigIdea": "Sound is a squeeze passed from molecule to molecule: its rate is the pitch, its strength the loudness, and it needs matter to travel.",
+  "pitch": "Squeeze the air, set a pitch, and find out why sound needs something to travel through.",
+  "tags": ["physics", "sound"],
+  "level": "introductory",
   "learner": "Curious adults and secondary-school students with no physics beyond everyday experience.",
   "goals": [
     "Explain why the air does not travel from a speaker to your ear.",
