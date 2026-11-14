@@ -24,6 +24,10 @@ export const TRADES = {
   potter: { zones: ['pottery', 'wheel', 'kitchenTable', 'sitting'], signature: 'urn', decor: ['plate'], look: 'maker', exterior: { shapes: ['workshop', 'cottage'], sign: 'pot' }, suits: ['process', 'mechanism'] },
   weaver: { zones: ['loom', 'dryingRack', 'sitting', 'kitchenTable'], signature: 'tapestry', decor: ['cloth'], look: 'weaver', exterior: { shapes: ['cottage', 'workshop', 'cabin'], sign: 'spool' }, suits: ['parts', 'process', 'story'] },
   printer: { zones: ['typeWall', 'readingTable', 'library', 'study'], signature: 'bigpress', decor: ['poster'], look: 'tech', exterior: { shapes: ['workshop', 'townhouse'], sign: 'book' }, suits: ['process', 'parts'] },
+  // a maker of stringed instruments: a workbench with its drawers of parts, and instruments hung up
+  luthier: { zones: ['clockBench', 'strings', 'drawersWall', 'sitting'], signature: 'bigharp', decor: ['sheet'], look: 'maker', exterior: { shapes: ['workshop', 'narrow'], sign: 'note' }, suits: ['mechanism', 'parts'] },
+  // a piano tuner: the piano first, then the bench where tools and pins are kept
+  tuner: { zones: ['piano', 'clockBench', 'sitting', 'library'], signature: 'bigharp', decor: ['sheet'], look: 'maker', exterior: { shapes: ['townhouse', 'narrow'], sign: 'note' }, suits: ['mechanism', 'cases'] },
   // the fallback: a trade named in the course that is not above, or none
   home: { zones: ['sitting', 'library', 'kitchenTable', 'study'], signature: 'tree', decor: ['landscape'], look: 'keeper', exterior: { shapes: ['cottage', 'townhouse', 'narrow'], sign: null }, suits: [] },
 };

@@ -242,3 +242,20 @@ test('the course is inserted once, safely, into the player', () => {
   assert.equal(out.split('</script>').length - 1, 2, 'no early end of a script: < is escaped in the data');
   assert.throws(() => insertPayload(out, { course: {} }), /not an empty player/);
 });
+
+test('packing: a course may share its own modules in labs/lib/ between lab files and games', () => {
+  const kit = "import { C } from '../../../../engine/src/lab/kit.js';\nexport const red = C.bad;\n";
+  const libs = { music: "import { red } from './colours.js';\nexport const hz = (m) => 440 * 2 ** ((m - 69) / 12);\nexport const tint = red;\n", colours: kit };
+  const lab = "import { hz } from './lib/music.js';\nimport { stage } from '../../../engine/src/lab/kit.js';\nexport default { a: () => hz(69) };\n";
+  const game = "import * as M from '../labs/lib/music.js';\nexport default { mount() { return M.hz(69); } };\n";
+  const course = { id: 'x', concepts: [{ id: 'p', lab: { stations: [{ id: 'a' }] } }] };
+  const r = makePayload({ course, labs: { p: lab }, games: { g: game }, libs });
+  assert.deepEqual(r.errors, []);
+  assert.deepEqual(r.payload.libs.map(([n]) => n), ['colours', 'music']); // each after what it imports
+  assert.match(r.payload.labs.p, /globalThis\.__mnemoLib\["music"\]/);
+  assert.match(r.payload.games.g, /const M = globalThis\.__mnemoLib\["music"\]/);
+  const bad = makePayload({ course, labs: { p: "import { x } from './lib/nope.js';\nexport default { a() {} };\n" }, libs: {} });
+  assert.match(bad.errors.join(' '), /labs\/lib\/nope\.js/);
+  const loop = makePayload({ course, labs: { p: lab }, libs: { a: "import { b } from './b.js';\nexport const a = 1;\n", b: "import { a } from './a.js';\nexport const b = 1;\n" } });
+  assert.match(loop.errors.join(' '), /circle/);
+});

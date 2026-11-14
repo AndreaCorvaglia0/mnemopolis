@@ -6,7 +6,7 @@
 //   normText(s)                the normal form of a text answer (shown in tests and the validator)
 //
 // The rules (engine/docs/ENGINE.md, "Locks"):
-//   text    case, accents, punctuation and extra spaces do not count; a leading article (English
+//   text    case, accents, punctuation and extra spaces do not count (# and ♯ read as "sharp", ♭ as "flat"); a leading article (English
 //           or Italian) is dropped; a final plural "s" on the last word is tolerated (on words of 4
 //           letters or more before the "s", not "ss"); ONE typo (an insertion, a deletion, a substitution or two letters swapped) is
 //           tolerated in one word of 6 letters or more; the words may be typed without spaces.
@@ -19,7 +19,8 @@
 const ARTICLES = new Set(['the', 'a', 'an', 'il', 'lo', 'la', 'i', 'gli', 'le', 'l', 'un', 'uno', 'una']);
 
 export function normText(s) {
-  let t = String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  // musical signs are words, not punctuation: "F#" is "f sharp", "B♭" is "b flat"
+  let t = String(s ?? '').replace(/[#♯]/g, ' sharp ').replace(/♭/g, ' flat ').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
   t = t.replace(/[’'`]/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim();
   const w = t.split(' ').filter(Boolean);
   if (w.length > 1 && ARTICLES.has(w[0])) w.shift();

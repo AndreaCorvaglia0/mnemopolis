@@ -173,3 +173,11 @@ test('the validator accepts good riddles and rejects bad ones', () => {
   warned((c, P) => { P('print').riddles = [{ id: 'p1', kind: 'safe', clue: 'x', answer: 1, from: { page: true }, inside: { coins: 1 } }]; }, /no upper floor/);
   assert.ok(check(() => {}, { care: 'light' }).warns.some((w) => /care "light"/.test(w)));
 });
+
+test('musical signs in lock answers: # and ♯ read as sharp, ♭ as flat', () => {
+  const r = { answer: ['G sharp'] };
+  assert.ok(matches(r, 'G#') && matches(r, 'g♯') && matches(r, 'Gsharp'));
+  assert.ok(!matches(r, 'G'));
+  assert.ok(matches({ answer: ['B flat'] }, 'B♭'));
+  assert.ok(!matches({ answer: ['F'] }, 'F#'));
+});

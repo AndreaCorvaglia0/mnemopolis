@@ -245,7 +245,7 @@ the potter's kiln and wheel, the weaver's loom, the printer's type cases). The l
 door, glowing and labelled LAB.
 
 **Trades** (`src/gen/interior/trades.js`): cartographer, dyer, cook, musician, gardener,
-clockmaker, doctor, painter, scholar, potter, weaver, printer, and `home` for any other word. Each
+clockmaker, doctor, painter, scholar, potter, weaver, printer, luthier, tuner, and `home` for any other word. Each
 gives its zones (most typical first), its signature object, its pictures, the host's look and its
 exterior shapes and sign.
 

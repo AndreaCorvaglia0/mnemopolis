@@ -44,10 +44,12 @@ if (v.errors.length) { console.log(`\n${v.errors.length} errors in course.json: 
 const labsDir = path.join(dir, 'labs'), labs = {};
 if (existsSync(labsDir)) for (const f of readdirSync(labsDir)) if (f.endsWith('.js') && statSync(path.join(labsDir, f)).isFile()) labs[f.slice(0, -3)] = readFileSync(path.join(labsDir, f), 'utf8');
 const anims = existsSync(path.join(dir, 'anims.js')) ? read('anims.js') : null;
+const libDir = path.join(dir, 'labs', 'lib'), libs = {};
+if (existsSync(libDir)) for (const f of readdirSync(libDir)) if (f.endsWith('.js')) libs[f.slice(0, -3)] = readFileSync(path.join(libDir, f), 'utf8');
 const gamesDir = path.join(dir, 'games'), games = {};
 if (existsSync(gamesDir)) for (const f of readdirSync(gamesDir)) if (f.endsWith('.js')) games[f.slice(0, -3)] = readFileSync(path.join(gamesDir, f), 'utf8');
 const slug = path.basename(path.resolve(dir));
-const { payload, errors, warnings } = makePayload({ course, world, labs, anims, slug, games });
+const { payload, errors, warnings } = makePayload({ course, world, labs, anims, slug, games, libs });
 warnings.forEach((w) => console.log(`warning  ${w}`));
 errors.forEach((e) => console.log(`ERROR    ${e}`));
 if (errors.length) { console.log(`\n${errors.length} errors in the lab code: not packed.`); process.exit(1); }

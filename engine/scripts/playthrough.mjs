@@ -366,6 +366,39 @@ const RECIPES = {
   'piano:rampa': async () => { await setSlider(0, 4); },
   'carrucola:paranco': async () => { await clickEl('.lx .lab-seg button', null, 0); await clickEl('.lx .lab-seg button', null, 1); },
 };
+// Port Octave (courses/fretboard): its stations name their tappable places in pane.items (c: a name)
+const tapItem = async (c) => {
+  const it = await ev((c) => (document.querySelector('.lx .lab-view') || document.querySelector('.lab-view')).__pane.items.find((o) => o.c === c), c);
+  if (!it) throw new Error(`no place "${c}" on the picture`);
+  await tap(...(await paneAt(it.x, it.y)));
+};
+const labBtn = (label) => clickEl('.lx .lab-ctl button', label);
+// a slider brought to a value with the station's fine buttons (steps: [big, small]), as a finger would
+async function fine(target, [big, small]) {
+  await until(() => !!document.querySelector('.lx input[type=range]'), 'the slider of the station');
+  for (let n = 0; n < 80; n++) {
+    const v = await ev(() => +document.querySelector('.lx input[type=range]').value), d = target - v;
+    if (Math.abs(d) < small / 2) return;
+    const st = Math.abs(d) >= big ? big : small;
+    await labBtn(`${d > 0 ? '+' : '−'}${st}`);
+  }
+}
+Object.assign(RECIPES, {
+  'string:pluck': async () => { await tapItem('fret0'); await tapItem('pluck'); await tapItem('fret12'); await tapItem('pluck'); await setSlider(0, 75); },
+  'string:harmonics': async () => { for (const m of [12, 7, 5]) { await tapItem(`touch${m}`); await tapItem('pluck'); } },
+  'beats:wobble': async () => { await fine(110, [1, 0.1]); await fine(165, [1, 0.1]); },
+  'beats:third': async () => { await segBtn('Guitar'); await labBtn('Play A and'); await segBtn('Pure'); await labBtn('Play A and'); },
+  'beats:tuneup': async () => { await fine(2.7, [0.5, 0.05]); await sleep(1500); },
+  'twelve:circle': async () => { for (let k = 0; k < 12; k++) await labBtn('One fret up'); await tapItem('fret3'); },
+  'twelve:fifthfret': async () => { await tapItem('e5'); await tapItem('g4'); },
+  'scale:stencil': async () => { await tapItem('dial7'); await labBtn('Play the scale'); await tapItem('cell11'); },
+  'scale:relative': async () => { await tapItem('start5'); await labBtn('Play the scale'); await tapItem('step1'); },
+  'pentatonic:box': async () => { await labBtn('Play the box'); await tapItem('low12'); await labBtn('Play the box'); },
+  'fifths:compass': async () => { for (let k = 0; k < 12; k++) await labBtn('One fifth up'); },
+  'triads:stack': async () => { await labBtn('Strum'); await tapItem('minor3'); await labBtn('Strum'); await tapItem('gstring'); },
+  'triads:shapes': async () => { for (const sh of ['C', 'A', 'G', 'D']) { await clickEl('.lx .lab-seg button', sh); await sleep(200); await labBtn('Strum'); } },
+  'keys:family': async () => { for (let j = 0; j < 7; j++) await tapItem(`col${j}`); await segBtn('G major'); await labBtn('Play I'); },
+});
 // context:grey, written plainly: drag the second square onto the first, then the plain wall
 RECIPES['context:grey'] = async () => {
   const P = await items(), [a, b] = P.items;
@@ -522,6 +555,9 @@ async function useLock(r) {
 async function doStationUpper(id, sid) {
   const def = PLACE[id].lab.stations.find((s) => s.id === sid);
   log(`   station ${id}:${sid} "${def.tab}" (upstairs)`);
+  // the bench may open on another station (one already done): go to this one by its step in the header
+  const step = await ev((tab) => { const b = [...document.querySelectorAll('.lx-steps button')].find((e) => (e.getAttribute('aria-label') || e.textContent || '').includes(tab)); if (!b || b.getAttribute('aria-current') === 'step') return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, def.tab);
+  if (step) { await tap(...step); await until(() => document.querySelector('.lx')?.dataset.ready === '1', 'the station'); await sleep(400); }
   if (def.predict) { await clickEl('.lx .lx-choice', null, def.predict.answer); await sleep(500); }
   const recipe = RECIPES[`${id}:${sid}`];
   if (!recipe) { fail(`no recipe for ${id}:${sid}`); return false; }

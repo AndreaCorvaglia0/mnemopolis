@@ -128,7 +128,12 @@ or the `/play/` page). In a packed game a lab file may import only from:
 
 Written as relative paths (`'../../../engine/src/lab/kit.js'`). Static `import { a, b as c }`,
 `import * as K` and default imports work; dynamic `import()`, `export ... from`, CDNs and other
-files are refused with the file and line. A lab file stays one self-contained module.
+files are refused with the file and line. A lab file stays one module, with one exception: code that
+several lab files (or a custom game) share lives in the course's own `labs/lib/<name>.js` and is
+imported as `'./lib/<name>.js'` from a lab file, `'../labs/lib/<name>.js'` from a game and
+`'./<name>.js'` from another lib file (`courses/fretboard/labs/lib/` holds a fretboard, a dial and a
+sound helper used by eight files). Lib files follow the same rules; packing loads them first, each
+after the libs it imports.
 
 ## The tries vocabulary
 

@@ -25,6 +25,7 @@
     "shots:ready": "node scripts/readyshots.mjs",
     "build:play": "vite build --config vite.play.config.js",
     "sound": "node scripts/use-course.mjs && node scripts/soundcheck.mjs",
+    "shots:course": "node scripts/courseshots.mjs",
     "sound:ui": "node scripts/soundui.mjs",
     "shots:world": "COURSE=chroma npm run build && node scripts/worldshots.mjs; COURSE=pocket-demo npm run build && node scripts/worldshots.mjs; node scripts/use-course.mjs chroma"
   },

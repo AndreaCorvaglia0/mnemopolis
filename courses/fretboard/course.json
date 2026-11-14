@@ -1,0 +1,2516 @@
+{
+  "$schema": "../../skills/knowledge-base/schema/course.schema.json",
+  "version": 1,
+  "id": "fretboard",
+  "language": "en",
+  "title": "Port Octave",
+  "subject": "Music theory for guitarists, from the vibrating string to the open chord",
+  "pitch": "Pluck a string, hear two notes beat, and find out why the twelfth fret, the major scale and an open E chord work.",
+  "tags": [
+    "music",
+    "guitar",
+    "sound",
+    "physics"
+  ],
+  "level": "introductory",
+  "bigIdea": "Notes are frequencies: halving a string doubles its frequency, twelve equal steps fill that octave, and scales and chords are patterns of those steps on the fretboard.",
+  "learner": "A guitarist who strums a few open chords and songs but does not know why the chords work. No notation, no physics and no theory are assumed.",
+  "goals": [
+    "Predict how the pitch of a string changes when it is fretted, and find the octave at half its length.",
+    "Explain why two close notes beat, and why notes in a simple frequency ratio sound smooth together.",
+    "Name the notes along a string and count the distance between them in half steps.",
+    "Build a major scale from any note with the pattern of whole and half steps.",
+    "Build major and minor triads and find their notes inside an open chord shape.",
+    {
+      "text": "Place the minor pentatonic box for any key.",
+      "concepts": [
+        "pentatonic"
+      ]
+    },
+    {
+      "text": "Use the circle of fifths to tell which keys share the most notes.",
+      "concepts": [
+        "fifths"
+      ]
+    },
+    {
+      "text": "Name the major and minor chords that belong to a key.",
+      "concepts": [
+        "keys"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "J. Wolfe, UNSW Music Acoustics: Strings, standing waves and harmonics",
+      "url": "https://newt.phys.unsw.edu.au/jw/strings.html",
+      "tier": "A",
+      "note": "University physics-of-music pages: f = v/2L, v = (tension/mass per length)^1/2, harmonics at n times the fundamental, touching at 1/n isolates the nth harmonic, the 12th fret at the middle, why harmonic tuning goes wrong."
+    },
+    {
+      "id": "S2",
+      "title": "J. Wolfe, UNSW Music Acoustics: How does a guitar work?",
+      "url": "https://newt.phys.unsw.edu.au/~jw/guitarintro.html",
+      "tier": "A",
+      "note": "Shorter string, higher pitch; the A string at 110 Hz; the 5th fret of the top string at 440 Hz; the lowest note E at about 83 Hz."
+    },
+    {
+      "id": "S3",
+      "title": "OpenStax, University Physics vol. 1, 17.6 Beats",
+      "url": "https://openstax.org/books/university-physics-volume-1/pages/17-6-beats",
+      "tier": "A",
+      "note": "f_beat = |f2 - f1|; beats slow down as two frequencies approach; used by piano tuners."
+    },
+    {
+      "id": "S4",
+      "title": "J. Wolfe, UNSW Music Acoustics: Frequently asked questions (temperament, just intonation)",
+      "url": "https://newt.phys.unsw.edu.au/jw/musFAQ.html",
+      "tier": "A",
+      "note": "Fifth 3:2 and major third 5:4 in just intonation; equal temperament with the twelfth root of two; the equal-tempered third (about 1.260) is not close to 5:4; near-coinciding harmonics beat slowly."
+    },
+    {
+      "id": "S5",
+      "title": "J. Wolfe, UNSW Music Acoustics: Note names, MIDI numbers and frequencies",
+      "url": "https://newt.phys.unsw.edu.au/jw/notes.html",
+      "tier": "A",
+      "note": "A4 = 440 Hz by convention; f = 440 x 2^(n/12) for n half steps from A4. All frequencies in the course are computed from this formula."
+    },
+    {
+      "id": "S6",
+      "title": "Wikipedia, Guitar tunings (standard tuning)",
+      "url": "https://en.wikipedia.org/wiki/Guitar_tunings",
+      "tier": "B",
+      "note": "E2 A2 D3 G3 B3 E4 at 82.41, 110, 146.83, 196, 246.94, 329.63 Hz; guitar music is written an octave higher than it sounds. Checked against S5's formula."
+    },
+    {
+      "id": "S7",
+      "title": "R. M. Mottola, Was the Rule of 18 Good Enough? (luthier's article)",
+      "url": "https://liutaiomottola.com/PrevPubs/RuleOf18/RuleOf18.htm",
+      "tier": "B",
+      "note": "Frets are placed by the twelfth root of two; the divisor 17.817 applied to the remaining length; the older rule of 18."
+    },
+    {
+      "id": "S8",
+      "title": "Gotham et al., Open Music Theory 2e: Major scales; Triads",
+      "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_(Gotham_et_al.)/01%3A_Fundamentals",
+      "tier": "A",
+      "note": "W-W-H-W-W-W-H from any note; triads stacked in thirds, major with a major third and perfect fifth, minor with a minor third and perfect fifth."
+    },
+    {
+      "id": "S9",
+      "title": "Hutchinson, Music Theory for the 21st-Century Classroom, 5.2 (intervals)",
+      "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Music_Theory_for_the_21st-Century_Classroom_(Hutchinson)/05%3A_Intervals/5.02%3A_How_to_Identify_Perfect_Major_and_Minor_Intervals",
+      "tier": "A",
+      "note": "Half steps per interval: m3 3, M3 4, P4 5, P5 7, P8 12."
+    },
+    {
+      "id": "S10",
+      "title": "Wikipedia, Circle of fifths",
+      "url": "https://en.wikipedia.org/wiki/Circle_of_fifths",
+      "tier": "B",
+      "note": "Twelve fifths visit all twelve notes and close at seven octaves in equal temperament; adjacent keys differ by one sharp or flat; twelve pure fifths overshoot by the Pythagorean comma."
+    },
+    {
+      "id": "S11",
+      "title": "Schmidt-Jones, Understanding Basic Music Theory, 6.7 The Circle of Fifths",
+      "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Understanding_Basic_Music_Theory_(Schmidt-Jones)/06%3A_Notes_and_Scales/6.07%3A_The_Circle_of_Fifths",
+      "tier": "A",
+      "note": "Clockwise adds a sharp (a fifth up), counter-clockwise a flat."
+    },
+    {
+      "id": "S12",
+      "title": "Applied Guitar Theory, Major scale chords",
+      "url": "https://appliedguitartheory.com/lessons/major-scale-chords/",
+      "tier": "B",
+      "note": "Major, minor, minor, major, major, minor, diminished; G major: G Am Bm C D Em F#dim."
+    },
+    {
+      "id": "S13",
+      "title": "Premier Guitar, Cram Session: Pentatonic Power",
+      "url": "https://www.premierguitar.com/articles/24030-cram-session-pentatonic-power",
+      "tier": "B",
+      "note": "Minor pentatonic 1-b3-4-5-b7; A minor pentatonic A C D E G; root-position box in 5th position; same notes as C major pentatonic."
+    },
+    {
+      "id": "S14",
+      "title": "McDermott, Schultz, Undurraga and Godoy (2016), Indifference to dissonance in native Amazonians reveals cultural variation in music perception, Nature 535",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27409816/",
+      "tier": "A",
+      "note": "Tsimane' listeners rated consonant and dissonant chords as equally pleasant: preference for consonance depends strongly on musical culture."
+    },
+    {
+      "id": "S15",
+      "title": "Plomp and Levelt (1965), Tonal consonance and critical bandwidth, JASA 38",
+      "url": "https://www.mpi.nl/publications/item66382/tonal-consonance-and-critical-bandwidth",
+      "tier": "A",
+      "note": "Roughness from beating of close partials (after Helmholtz); for complex tones, intervals with simple ratios have fewer close partials."
+    },
+    {
+      "id": "S16",
+      "title": "JustinGuitar, Practical Music Theory (course outline); Applied Guitar Theory, Foundational Theory",
+      "url": "https://justinguitar.com/categories/PMT",
+      "tier": "B",
+      "note": "Order of topics for guitarists; open chord shapes and the fretboard as the language. See knowledge/syllabi.md."
+    },
+    {
+      "id": "S17",
+      "title": "Wikipedia, Solmization (fixed do)",
+      "url": "https://en.wikipedia.org/wiki/Solmization",
+      "tier": "B",
+      "note": "Do Re Mi Fa Sol La Si as fixed names for C D E F G A B in Italian and other languages."
+    }
+  ],
+  "themes": [
+    {
+      "id": "sound",
+      "name": "String Quay",
+      "idea": "A note is a frequency: a string sets it by its length, and simple ratios make notes agree.",
+      "cue": {
+        "landscape": "shore",
+        "landmark": "bell",
+        "why": "A bell on the quay: a note is something that vibrates."
+      }
+    },
+    {
+      "id": "notes",
+      "name": "Twelve Steps",
+      "idea": "Twelve equal half steps fill the octave, and a scale is a fixed pattern of those steps.",
+      "cue": {
+        "landscape": "meadow",
+        "landmark": "obelisk",
+        "why": "An obelisk is a sundial's hand: the twelve notes come round like the hours."
+      }
+    },
+    {
+      "id": "chords",
+      "name": "Chord Hill",
+      "idea": "A chord stacks thirds taken from a scale, and a key is a family of such chords.",
+      "cue": {
+        "landscape": "hill",
+        "landmark": "arch"
+      }
+    }
+  ],
+  "concepts": [
+    {
+      "id": "string",
+      "theme": "sound",
+      "type": "mechanism",
+      "name": "A string and its pitch",
+      "place": "Luthier's House",
+      "sign": "LUTHIER",
+      "emblem": "wave",
+      "expert": {
+        "name": "Aldo",
+        "trade": "luthier",
+        "temper": "craftsman",
+        "line": "I measure every fret from the nut. The twelfth always lands in the middle of the string, and the note there is the open note again, one floor up."
+      },
+      "objective": "Predict how the pitch of a string changes when it is shortened or tightened, and find the octave.",
+      "idea": "A plucked string vibrates a fixed number of times per second; a shorter or tighter string vibrates faster, and half the length gives twice the frequency.",
+      "wrongBelief": "Halving the string gives some note a little higher, not twice the frequency; and the octave is a different note eight steps up, not the same note again.",
+      "anchor": {
+        "type": "example",
+        "text": "The 12th fret, the one with two dots on most guitars, sits exactly halfway between the nut and the bridge."
+      },
+      "application": "Every note a guitar plays comes from these two quantities: the tuning pegs change the tension of each string, and the frets change its vibrating length.",
+      "remember": [
+        "Frequency is the number of vibrations per second, in hertz; a higher frequency is a higher note.",
+        "A shorter, tighter or lighter string vibrates faster and sounds higher.",
+        "Half the length gives twice the frequency: the octave, which sounds like the same note higher and has the same name."
+      ],
+      "explain": {
+        "q": "Why is the 12th fret in the middle of the string, and not at the end of the neck?",
+        "a": "The 12th fret gives the octave, which is twice the frequency of the open string. A string's frequency doubles when its vibrating length is halved, so the fret that gives the octave has to sit halfway between the nut and the bridge."
+      },
+      "lab": {
+        "title": "The string",
+        "stations": [
+          {
+            "id": "pluck",
+            "tab": "Half a string",
+            "goal": "A shorter string vibrates faster: half the length gives twice the frequency, the same note an octave higher.",
+            "beat": "ground",
+            "pattern": "cause-effect",
+            "object": "One guitar string from the nut to the bridge, a fretting finger and a tuning peg.",
+            "action": "Plucks the string, slides the finger along it and turns the peg.",
+            "surprise": "With the finger at the exact middle the read-out shows twice the open frequency, and the note sounds like the open note, higher.",
+            "predict": {
+              "q": "Press this string at exactly half its length and pluck it. Its frequency becomes...",
+              "options": [
+                "a little higher, about 1.1 times",
+                "one and a half times",
+                "twice",
+                "four times"
+              ],
+              "answer": 2,
+              "why": "The frequency of a string is inversely proportional to its vibrating length, so half the length vibrates twice as fast."
+            },
+            "controls": [
+              "Tension of the string, turned with the tuning peg"
+            ],
+            "tries": [
+              "Pluck the open string, then press it at the middle of its length and pluck again.",
+              "Turn the peg until the open string reads 110 Hz, the A of standard tuning."
+            ],
+            "takeaway": "A string sounds higher when it is <b>shorter</b>, <b>tighter</b> or lighter. <b>Half the length gives twice the frequency</b>, which is the octave: it sounds like the same note higher and has the same name, so the 12th fret sits in the middle of the string.",
+            "source": "The frequency is computed live from the vibrating length and the tension with the standard formula for a stretched string (UNSW Music Acoustics), for a 650 mm string. The tone is synthesised from the string's harmonics. The drawing shows the vibration slowed down about a hundred times."
+          },
+          {
+            "id": "harmonics",
+            "tab": "Touch, don't press",
+            "advanced": true,
+            "goal": "A string vibrates in halves, thirds and quarters at once; touching it at 1/2, 1/3 or 1/4 keeps only one of those vibrations.",
+            "beat": "twist",
+            "pattern": "predict-test",
+            "object": "The same string, drawn with its first four ways of vibrating, and a fingertip that touches without pressing.",
+            "action": "Touches the string lightly at a point and plucks.",
+            "surprise": "Touching above fret 7 does not give the fret-7 note: it gives three times the open frequency, an octave and a fifth up.",
+            "predict": {
+              "q": "Touch the string lightly above fret 7, about a third of its length, and pluck. You hear...",
+              "options": [
+                "the note of fret 7, as if pressed",
+                "three times the open frequency, an octave and a fifth up",
+                "nothing, the touch stops the string"
+              ],
+              "answer": 1,
+              "why": "A light touch makes a still point there, and only the vibrations with a still point at a third of the length survive: the third harmonic, at three times the frequency."
+            },
+            "controls": [],
+            "tries": [
+              "Touch the string above fret 12 and pluck.",
+              "Touch above fret 7 and read the frequency of what is left.",
+              "Find the harmonic above fret 5."
+            ],
+            "takeaway": "A plucked string vibrates as a whole and in 2, 3, 4… parts at once, sounding its <b>harmonics</b> at 2, 3, 4… times the open frequency. Touching it at 1/2, 1/3 or 1/4 of its length keeps only the harmonics with a still point there: above <b>fret 12</b> the 2nd, above <b>fret 7</b> the 3rd, above <b>fret 5</b> the 4th.",
+            "source": "Harmonic frequencies computed live as whole multiples of the open frequency (UNSW Music Acoustics). Frets 7 and 5 lie within half a millimetre of a third and a quarter of the string, so the touch points are drawn at the frets."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "A note is a number of vibrations per second",
+          "text": "When a string is plucked it swings back and forth many times each second, and each swing pushes the air, which carries the push to the ear. The number of swings per second is the frequency, measured in hertz (Hz), and the ear hears a higher frequency as a higher note. The open A string of a guitar vibrates 110 times per second, and the A that orchestras tune to vibrates 440 times."
+        },
+        {
+          "title": "Length, tension and weight",
+          "text": "Three things set the frequency of a string. A shorter string vibrates faster, which is why pressing a fret raises the note; a tighter string vibrates faster, which is what the tuning peg changes; and a heavier string vibrates more slowly, which is why the low strings are thick. Frequency grows with the square root of the tension, so a string must be pulled four times as hard to sound twice as high, while halving its length is enough to do the same."
+        },
+        {
+          "title": "The octave",
+          "text": "Halving the vibrating length doubles the frequency, and two notes whose frequencies are in the ratio 2 to 1 sound so alike that music gives them the same name. This interval is the octave, and on a guitar it lies at the 12th fret, in the middle of the string. Guitar music is written an octave higher than it sounds, so the open A string sounds at 110 Hz, an octave below the note written for it."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "A string vibrates 196 times per second. Its frequency is...",
+          "options": [
+            "196 Hz",
+            "196 seconds",
+            "1/196 Hz"
+          ],
+          "answer": 0,
+          "why": "Frequency counts vibrations per second, and one vibration per second is one hertz.",
+          "traps": [
+            null,
+            "Seconds measure how long something lasts; the number of vibrations in each second is a rate, which is counted in hertz.",
+            "One over the frequency is the time of one vibration, measured in seconds; the frequency itself is the count per second, 196 Hz."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Which change makes a string sound higher?",
+          "options": [
+            "A longer vibrating length",
+            "A heavier string",
+            "Less tension",
+            "More tension"
+          ],
+          "answer": 3,
+          "why": "A tighter string pulls back harder when it is bent, so it swings faster and its frequency rises.",
+          "traps": [
+            "A longer string has further to travel in each swing, so it vibrates more slowly and sounds lower, as the open string does compared with a fretted one.",
+            "Heavier strings are the thick bass strings, because extra mass slows the vibration and lowers the note.",
+            "Loosening the peg is how a string is tuned down, since less tension lets it swing more slowly.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Pressing a string exactly at the middle of its length gives...",
+          "options": [
+            "half the frequency",
+            "the same note an octave higher",
+            "a note one fret higher",
+            "a note one and a half times higher"
+          ],
+          "answer": 1,
+          "why": "Half the length vibrates twice as fast, and a frequency twice as high is the octave, the same note name one octave up.",
+          "traps": [
+            "Halving the string might seem to halve everything, but a shorter string vibrates faster, so the frequency doubles instead.",
+            null,
+            "One fret is a small step near the nut; the middle of the string is twelve frets up, at the 12th fret.",
+            "One and a half times the frequency is a fifth, which needs two thirds of the string, at fret 7, not half of it."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "The open D string sounds 146.83 Hz. What does it sound at the 12th fret?",
+          "options": [
+            "73.4 Hz",
+            "158.8 Hz",
+            "293.7 Hz",
+            "587.3 Hz"
+          ],
+          "answer": 2,
+          "why": "The 12th fret halves the vibrating length, which doubles the frequency: 2 × 146.83 Hz is about 293.7 Hz.",
+          "traps": [
+            "Halving the frequency would need twice the length, which a fret cannot give; pressing a fret always shortens the string and raises the note.",
+            "Adding twelve hertz confuses twelve frets with twelve hertz; each fret multiplies the frequency, and twelve of them double it.",
+            null,
+            "Four times the frequency is two octaves, at a quarter of the length, which is beyond the end of most fretboards."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A guitarist tunes a string up from 104 Hz to 110 Hz. What did they change?",
+          "options": [
+            "They tightened the string with the peg",
+            "They pressed a fret",
+            "They plucked harder",
+            "They loosened the string with the peg"
+          ],
+          "answer": 0,
+          "why": "Tuning changes the tension of the open string; more tension makes it vibrate faster, so the frequency rises from 104 to 110 Hz.",
+          "traps": [
+            null,
+            "Pressing a fret does raise the note, but tuning sets the open string, which nothing presses.",
+            "Plucking harder makes the note louder because the string swings wider, while the number of swings per second stays almost the same.",
+            "Loosening lets the string vibrate more slowly, which would lower it below 104 Hz instead of raising it."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A ukulele string is 35 cm long and a guitar string 65 cm. Why do the guitar's frets sit further apart?",
+          "options": [
+            "Guitar notes are more widely spaced in pitch",
+            "Each fret removes the same fraction of the string, and the guitar's string is longer",
+            "Guitar frets are spaced by equal distances, ukulele frets are not",
+            "The ukulele uses a different set of twelve notes"
+          ],
+          "answer": 1,
+          "why": "A half step always multiplies the frequency by the same factor, so each fret shortens the string by the same fraction of what is left; the same fraction of a longer string is a longer distance.",
+          "traps": [
+            "Both instruments step by the same half step per fret, so the pitch steps are identical and only the string lengths differ.",
+            null,
+            "On both instruments the frets get closer towards the body, because each removes a fixed fraction, never a fixed distance.",
+            "Both use the same twelve notes; what makes the spacing different is only the length of the string being divided."
+          ]
+        }
+      ],
+      "sources": [
+        "S1",
+        "S2",
+        "S5",
+        "S6",
+        "S7"
+      ],
+      "further": [
+        {
+          "title": "UNSW Music Acoustics: Strings, standing waves and harmonics",
+          "url": "https://newt.phys.unsw.edu.au/jw/strings.html",
+          "why": "The physics of a vibrating string, with animations of its harmonics."
+        },
+        {
+          "title": "UNSW Music Acoustics: How does a guitar work?",
+          "url": "https://newt.phys.unsw.edu.au/~jw/guitarintro.html",
+          "why": "How the string, the bridge and the body turn a vibration into the sound of a guitar."
+        }
+      ],
+      "riddles": [
+        {
+          "id": "aldo-safe",
+          "kind": "safe",
+          "clue": "Safe code: what the A string sings at the fret with two dots. In Hz. Don't write it on the door again. A.",
+          "answer": 220,
+          "type": "number",
+          "tolerance": 1,
+          "unit": "Hz",
+          "from": {
+            "station": "pluck"
+          },
+          "inside": {
+            "note": "Aldo's fret rule, pencilled inside the door. Each fret shortens the remaining string by the same fraction, which is why the frets crowd together towards the body. The old makers divided the remaining length by 18; the exact divisor, from the twelfth root of two, is 17.817, so the first fret of a 650 mm string sits 36.5 mm from the nut and the 12th at 325 mm.",
+            "station": "harmonics",
+            "coins": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "beats",
+      "theme": "sound",
+      "type": "mechanism",
+      "name": "Two notes together",
+      "place": "Tuner's House",
+      "sign": "TUNER",
+      "emblem": "heart",
+      "expert": {
+        "name": "Ilse",
+        "trade": "tuner",
+        "temper": "absent",
+        "line": "Two strings that nearly agree pulse against each other, wah, wah, wah. I turn the pin until the pulse slows down and stops. Where was I?"
+      },
+      "objective": "Explain why two close notes beat, and why notes in a simple frequency ratio sound smooth together.",
+      "idea": "Two close frequencies beat at their difference; the beating stops when the frequencies match, or when the strings' harmonics match, as at the octave 2:1 and fifth 3:2.",
+      "wrongBelief": "Two notes played together sit side by side without affecting each other, and whether a pair sounds smooth or rough is only a matter of taste, unrelated to their frequencies.",
+      "anchor": {
+        "type": "analogy",
+        "text": "Two people walking side by side with slightly different strides: their steps fall together, drift apart and fall together again, at a rate set by the difference between their paces.",
+        "limits": "Footsteps are separate events, while two sound waves add up continuously into one wave, so what the ear hears is one tone whose loudness swells and fades."
+      },
+      "application": "Guitarists and piano tuners tune by ear this way: they play two notes that should agree and turn the peg until the beating slows down and stops.",
+      "remember": [
+        "Two notes a few hertz apart beat: the sound swells and fades as many times per second as their difference in hertz.",
+        "A plucked string also sounds its harmonics, at 2, 3, 4 and more times its frequency.",
+        "At simple ratios such as 2:1 and 3:2 some harmonics of the two notes coincide, so they stop beating and the pair sounds smooth."
+      ],
+      "explain": {
+        "q": "A friend tunes the A string against the 5th fret of the low E and hears a wah-wah-wah that slows down as they turn the peg. What is happening, and when should they stop?",
+        "a": "The fretted note and the open A are two slightly different frequencies, so their waves add up into one sound that swells and fades at the difference between them. As the peg brings the two closer the difference shrinks and the beats slow down, and when the beats stop the two frequencies are equal."
+      },
+      "callbacks": [
+        {
+          "to": "string",
+          "how": "As at the Luthier's House the octave is twice the frequency; here it is also the ratio at which the harmonics of two strings line up and stop beating."
+        }
+      ],
+      "lab": {
+        "title": "Two strings",
+        "stations": [
+          {
+            "id": "wobble",
+            "tab": "The wobble",
+            "goal": "Two close notes beat at the difference of their frequencies; the beating stops when they match, and again where their harmonics match.",
+            "beat": "ground",
+            "pattern": "predict-test",
+            "object": "Two strings sounding together: the wave they make together, and a ruler of harmonics for each string.",
+            "action": "Slides the frequency of the second string, first close to the first one, then far above it.",
+            "surprise": "The beating slows down and stops at unison, and stops again far away, at one and a half times the frequency, where the third harmonic of one string meets the second harmonic of the other.",
+            "predict": {
+              "q": "String B sounds 3 Hz above string A, which is at 110 Hz. Played together you hear...",
+              "options": [
+                "two separate notes side by side",
+                "one note that swells and fades three times a second",
+                "one steady note, slightly louder"
+              ],
+              "answer": 1,
+              "why": "The two waves fall into step and out of step three times a second, so their sum grows loud and soft at the difference of the two frequencies."
+            },
+            "controls": [
+              "Frequency of string B, with fine steps of a tenth of a hertz"
+            ],
+            "tries": [
+              "Bring string B down to string A until the beating stops.",
+              "Slide string B far above A and find the place where the wave becomes steady again."
+            ],
+            "takeaway": "Two notes add into one wave whose loudness <b>beats</b> at the <b>difference</b> of their frequencies. A string also sounds its <b>harmonics</b>, at 2, 3, 4… times its frequency, and when two notes stand in a <b>simple ratio</b> such as 2:1 or 3:2 some of those harmonics coincide, so the beating stops and the pair sounds <b>smooth</b>.",
+            "source": "Computed live: each string is drawn and heard as the sum of its first six harmonics; the beat rate shown is the difference between the closest pair of harmonics. The ratio 3:2 is exact here; a guitar's fifth is very slightly narrower (upstairs)."
+          },
+          {
+            "id": "third",
+            "tab": "The guitar's third",
+            "advanced": true,
+            "goal": "A guitar's major third is wider than the pure ratio 5:4, so its harmonics miss each other and beat about nine times a second.",
+            "beat": "twist",
+            "pattern": "contrast",
+            "object": "The notes A and C♯ sounding together, with their 5th and 4th harmonics side by side.",
+            "action": "Switches the third between the pure ratio 5:4 and the guitar's equal-tempered third.",
+            "surprise": "The pure third is smooth, while the third every guitar plays beats quickly: about nine beats a second at this pitch.",
+            "predict": {
+              "q": "The guitar's major third from A (220 Hz) to C♯, compared with the pure ratio 5:4, is...",
+              "options": [
+                "exactly 5:4",
+                "a little wider, so it beats",
+                "a little narrower, so it beats"
+              ],
+              "answer": 1,
+              "why": "Four equal half steps multiply the frequency by 1.260, slightly more than 1.25, so the guitar's C♯ is 277.2 Hz instead of 275 Hz."
+            },
+            "controls": [
+              "Tuning of the third: pure 5:4 or equal-tempered"
+            ],
+            "tries": [
+              "Play the guitar's third and read the beats between the two harmonics.",
+              "Switch to the pure 5:4 third and compare."
+            ],
+            "takeaway": "Twelve equal half steps make the guitar's fifth almost exactly 3:2 (1.498), but its major third <b>1.260</b> instead of <b>1.25</b>. At A3 the 5th harmonic of A and the 4th of C♯ then differ by about 9 Hz and beat. This compromise, <b>equal temperament</b>, gives up pure thirds so that every key sounds the same and any fret works in any key.",
+            "source": "Frequencies computed live: A3 = 220 Hz, the pure third 275 Hz, the equal-tempered C♯4 277.18 Hz (UNSW Music Acoustics). Each note is the sum of its first six harmonics."
+          },
+          {
+            "id": "tuneup",
+            "tab": "Tune by ear",
+            "advanced": true,
+            "goal": "Tuning by ear means removing beats: turn the peg until the wobble between two notes that should agree slows down and stops.",
+            "beat": "sandbox",
+            "pattern": "match",
+            "object": "The low E string pressed at fret 5 and the open A string, slightly out of tune.",
+            "action": "Turns the peg of the A string while both notes sound.",
+            "surprise": "The ear finds the right spot without any number: the beats get slower and slower and stop.",
+            "controls": [
+              "The peg of the A string"
+            ],
+            "tries": [
+              "Turn the peg until the two notes beat less than once a second."
+            ],
+            "takeaway": "The fifth fret of each string gives the note of the next open string (four frets on the G string), so a guitarist can tune <b>by beats</b>: play both, listen for the wobble and turn the peg until it <b>stops</b>, without a tuner.",
+            "source": "Computed live: the fretted E-string note is 110 Hz, the A string starts a few hertz away, and the beat rate shown is the difference between the two frequencies."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Two waves become one",
+          "text": "Two strings sounding together do not reach the ear as two separate vibrations: their pushes on the air add up, so the ear receives one wave. When the two frequencies are close, the waves drift in and out of step, and the sum grows loud when they agree and soft when they cancel. This slow swelling is called beating, and it happens as many times per second as the difference between the two frequencies, so 110 Hz and 113 Hz beat three times a second."
+        },
+        {
+          "title": "Harmonics and smooth pairs",
+          "text": "A plucked string vibrates as a whole and in halves, thirds and quarters at the same time, so it sounds a set of harmonics at two, three, four and more times its frequency. When two notes are in a simple ratio, such as 2 to 1 or 3 to 2, some of their harmonics fall on the same frequency, which is why they stop beating and the pair sounds smooth. When the ratio is slightly off, those near-coinciding harmonics beat slowly, and this is the wobble that tuners listen for."
+        },
+        {
+          "title": "Physics and taste",
+          "text": "The beating of close harmonics is physics, and it explains why the octave and the fifth sound clean on any instrument with harmonics. Whether a pair sounds pleasant is also learnt, because listeners who grew up far from Western music have rated smooth and rough chords as equally pleasant. The ratios explain which pairs are smooth, while musical culture decides how much people like them."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "Two strings sound 220 Hz and 224 Hz together. How many beats a second do you hear?",
+          "options": [
+            "2",
+            "4",
+            "224",
+            "444"
+          ],
+          "answer": 1,
+          "why": "The beat rate is the difference of the two frequencies: 224 − 220 = 4 beats per second.",
+          "traps": [
+            "Halving the difference is a common slip; each time the two waves fall back into step there is one beat, and that happens four times a second here.",
+            null,
+            "224 Hz is the pitch of one of the strings, while beats are the slow swelling of the sum, at the difference between the two.",
+            "Adding the frequencies gives a number of no musical use here; the waves fall in and out of step at their difference, 4 Hz."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "A plucked string at 100 Hz also sounds harmonics at...",
+          "options": [
+            "50, 25 and 12.5 Hz",
+            "101, 102 and 103 Hz",
+            "200, 300 and 400 Hz"
+          ],
+          "answer": 2,
+          "why": "The string vibrates in halves, thirds and quarters as well as whole, which gives whole multiples of its frequency: 200, 300, 400 Hz and more.",
+          "traps": [
+            "Halving the frequency again and again would need a longer string; the parts of a vibrating string are shorter than the string, so they vibrate faster.",
+            "Steps of one hertz would be almost the same note; the harmonics are whole multiples, two, three and four times 100 Hz.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Why do a note and its octave sound so smooth together?",
+          "options": [
+            "The ear hears only the lower one",
+            "Their harmonics coincide",
+            "Their frequencies are almost equal",
+            "They are played more quietly"
+          ],
+          "answer": 1,
+          "why": "At 2:1 the harmonics of the upper note (2f, 4f, 6f…) all fall on harmonics of the lower note, so no pair of close harmonics is left to beat.",
+          "traps": [
+            "The upper note is clearly audible; it blends because its harmonics land exactly on the lower note's harmonics.",
+            null,
+            "An octave is twice the frequency, far from equal; the smoothness comes from the harmonics coinciding, not from the notes being close.",
+            "Loudness has nothing to do with it; an octave played loud sounds just as smooth, because its harmonics still coincide."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Tuning the A string against the low E at fret 5, you hear beats getting faster as you tighten the peg. What should you do?",
+          "options": [
+            "Keep tightening until the beats are very fast",
+            "Loosen the peg until the beats slow down and stop",
+            "Pluck harder so the beats disappear",
+            "Stop now: fast beats mean nearly in tune"
+          ],
+          "answer": 1,
+          "why": "Faster beats mean a larger difference between the frequencies, so tightening is moving the A string away from the fretted note; loosening brings it back until the difference, and the beating, is zero.",
+          "traps": [
+            "Very fast beats are a large difference in frequency, so the string is moving further out of tune, not closer.",
+            null,
+            "Plucking harder changes the loudness, while the beat rate depends only on the difference between the frequencies.",
+            "Fast beats mean a big gap between the two notes; in tune is where the beats slow down and vanish."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Notes at 200 Hz and 300 Hz sound together. Which of their harmonics coincide first?",
+          "options": [
+            "The 2nd harmonic of the lower and the 1st of the upper",
+            "The 3rd harmonic of the lower and the 2nd of the upper",
+            "None, the ratio is not 2:1",
+            "The 4th harmonic of the lower and the 3rd of the upper"
+          ],
+          "answer": 1,
+          "why": "The ratio is 3:2, so 3 × 200 Hz and 2 × 300 Hz both give 600 Hz, the first shared harmonic.",
+          "traps": [
+            "The 2nd harmonic of 200 Hz is 400 Hz, which does not match 300 Hz; that pairing belongs to the octave.",
+            null,
+            "Harmonics can coincide at any simple ratio, and 3:2 makes them meet at 600 Hz.",
+            "Four times 200 is 800 and three times 300 is 900, which differ; the first meeting is at 600 Hz."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "People raised far from Western music rated rough and smooth chords as equally pleasant. What does this show about the ratios?",
+          "options": [
+            "Simple ratios do not make harmonics coincide for them",
+            "Beats are heard only by trained Western ears",
+            "Simple ratios make chords smoother for everyone, but liking smoothness is partly learnt",
+            "Consonance has nothing to do with frequency"
+          ],
+          "answer": 2,
+          "why": "The coinciding harmonics are physics and happen for every listener, but the preference for smooth pairs depends strongly on the music people grew up with.",
+          "traps": [
+            "Harmonics coincide in the air, before any ear hears them, so the physics is the same for every listener.",
+            "Beating is a property of the sound wave, which anyone with normal hearing can detect; what differs is how pleasant it is judged.",
+            null,
+            "Smooth and rough pairs differ physically by their ratios; the study shows only that the liking for smoothness is learnt."
+          ]
+        }
+      ],
+      "sources": [
+        "S1",
+        "S3",
+        "S4",
+        "S14",
+        "S15"
+      ],
+      "further": [
+        {
+          "title": "OpenStax University Physics: 17.6 Beats",
+          "url": "https://openstax.org/books/university-physics-volume-1/pages/17-6-beats",
+          "why": "The textbook derivation of beats, with the tuning-fork example."
+        },
+        {
+          "title": "UNSW Music Acoustics: temperament and just intonation",
+          "url": "https://newt.phys.unsw.edu.au/jw/musFAQ.html",
+          "why": "Why equal temperament favours the fifth and sacrifices the third, explained by a physicist who plays."
+        },
+        {
+          "title": "McDermott et al. (2016) in Nature",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27409816/",
+          "why": "The study showing that preferring consonance depends on musical culture."
+        }
+      ],
+      "riddles": [
+        {
+          "id": "ilse-safe",
+          "kind": "safe",
+          "clue": "Note to self: where string B goes quiet again, far above my 110. In Hz, no decimals. I.",
+          "answer": 165,
+          "type": "number",
+          "tolerance": 1,
+          "unit": "Hz",
+          "from": {
+            "station": "wobble"
+          },
+          "inside": {
+            "note": "Ilse's tuning card. The pure fifth above A 110 is 165 Hz, but the E string of a tuned guitar is 164.81 Hz, a hair narrower, because the guitar divides the octave into twelve equal steps. Its fifth beats about once every three seconds, too slowly to bother anyone; the guitar's major third is another matter.",
+            "station": "third",
+            "coins": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "twelve",
+      "theme": "notes",
+      "type": "view",
+      "name": "The twelve notes",
+      "place": "Twelve-Hour Tower",
+      "sign": "TWELVE",
+      "emblem": "clock",
+      "objective": "Name the notes along a string and count the distance between two notes in half steps.",
+      "idea": "Each fret raises a note by one half step, the same ratio every time; twelve half steps make an octave and bring the same name round again.",
+      "wrongBelief": "There are seven notes, A to G, evenly spaced, so the next A is eight frets up, as the 'oct' in octave suggests.",
+      "anchor": {
+        "type": "metaphor",
+        "text": "The twelve notes are the hours on a clock face: after twelve steps the hand is back on the same hour.",
+        "limits": "On a clock the same hour is the same time of day, while a note twelve half steps up has the same name but twice the frequency."
+      },
+      "application": "Every fret on every string is one half step, so counting frets is counting half steps: this is how a guitarist finds any note from the open string.",
+      "remember": [
+        "The twelve notes are A, A♯/B♭, B, C, C♯/D♭, D, D♯/E♭, E, F, F♯/G♭, G, G♯/A♭, and then A again.",
+        "One fret is a half step and two frets a whole step; B to C and E to F are half steps, with no note between them.",
+        "Each fret multiplies the frequency by the same factor, about 1.06, so twelve frets double it."
+      ],
+      "explain": {
+        "q": "Why do the frets get closer together towards the body of the guitar?",
+        "a": "Each fret has to raise the frequency by the same factor, about 1.06, which means shortening what is left of the string by the same fraction, about 5.6 percent. The string left is shorter at every fret, so the same fraction of it is a shorter distance, and the frets crowd together."
+      },
+      "callbacks": [
+        {
+          "to": "string",
+          "how": "The octave found at the Luthier's House, half the string, is the 12th fret here: twelve equal steps fill the ratio 2 to 1."
+        }
+      ],
+      "lab": {
+        "title": "The circle of twelve",
+        "stations": [
+          {
+            "id": "circle",
+            "tab": "Round the clock",
+            "goal": "An octave holds twelve notes, one per fret: twelve half steps bring the same note name back at twice the frequency.",
+            "beat": "ground",
+            "pattern": "linked-analogy",
+            "object": "A dial of the twelve note names, linked to the A string of the neck.",
+            "action": "Turns the dial or taps the frets one by one, hearing each note.",
+            "surprise": "Twelve steps, not eight, bring A back, at twice the frequency; and between B and C, and between E and F, there is no note.",
+            "predict": {
+              "q": "Walking up the A string one fret at a time, how many frets until you reach A again?",
+              "options": [
+                "7",
+                "8",
+                "12",
+                "14"
+              ],
+              "answer": 2,
+              "why": "An octave holds twelve different notes, one per fret; the letters A to G name only seven of them."
+            },
+            "controls": [],
+            "tries": [
+              "Walk up the A string fret by fret until the dial shows A again.",
+              "Find C on the A string and count its half steps above A."
+            ],
+            "takeaway": "An octave holds <b>twelve</b> notes, one per fret, and each fret multiplies the frequency by <b>1.0595</b>, the twelfth root of two, so twelve frets double it. Seven notes have letter names; the five between them are sharps or flats, except at <b>B–C</b> and <b>E–F</b>, which are already a half step apart.",
+            "source": "Frequencies computed live in equal temperament from A4 = 440 Hz (UNSW Music Acoustics); fret positions computed from the twelfth root of two for a 650 mm string."
+          },
+          {
+            "id": "fifthfret",
+            "tab": "The fifth-fret rule",
+            "advanced": true,
+            "goal": "Neighbouring strings are five half steps apart, except G and B, four apart: so fret 5 gives the next open string, and fret 4 on G.",
+            "beat": "rule",
+            "pattern": "puzzle",
+            "object": "The six strings of the neck in standard tuning, each with its note names along it.",
+            "action": "Taps a fret on one string and the open string above it, and compares the names.",
+            "surprise": "Fret 5 matches the next open string everywhere except on the G string, where the match is at fret 4.",
+            "predict": {
+              "q": "Fret 5 on each string gives the note of the next open string. Which pair breaks the rule?",
+              "options": [
+                "low E to A",
+                "D to G",
+                "G to B",
+                "B to high E"
+              ],
+              "answer": 2,
+              "why": "Standard tuning puts five half steps between neighbouring strings except between G and B, which are four apart."
+            },
+            "controls": [],
+            "tries": [
+              "Find the fret on the low E string that gives the note of the open A.",
+              "Find the fret on the G string that gives the note of the open B."
+            ],
+            "takeaway": "Standard tuning, <b>E A D G B E</b>, puts <b>five half steps</b> between neighbouring strings and <b>four</b> between G and B. That is why fret 5 gives the next open string and fret 4 on the G string gives the open B, and why chord and scale shapes bend when they cross from G to B.",
+            "source": "Standard tuning E2 A2 D3 G3 B3 E4; note names and frequencies computed live in equal temperament from A4 = 440 Hz."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Twelve notes in an octave",
+          "text": "Western music divides the octave into twelve notes. Seven of them carry the letter names A to G, and the other five sit between letters and are named with a sharp (♯, a half step up) or a flat (♭, a half step down), so the note between A and B is called A♯ or B♭. Two pairs of letters have no note between them, B and C, and E and F, because they are already a half step apart. Readers who learnt the Italian names will know C, D, E, F, G, A and B as Do, Re, Mi, Fa, Sol, La and Si."
+        },
+        {
+          "title": "The fretboard is a ruler of half steps",
+          "text": "On a guitar every fret raises the note by one half step, on every string, so the distance between two notes on the same string is the number of frets between them. Two frets make a whole step. From the open A string, fret 2 is B, fret 3 is C, fret 5 is D, fret 7 is E and fret 12 is A again, an octave higher."
+        },
+        {
+          "title": "Equal steps are equal ratios",
+          "text": "A half step does not add a fixed number of hertz; it multiplies the frequency by the twelfth root of two, about 1.0595, so that twelve of them multiply it by exactly two. This is why the frets are not evenly spaced: each one cuts the same fraction, about 5.6 percent, from the string that remains, and the remaining string is shorter at every fret."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "How many different notes are there in one octave?",
+          "options": [
+            "7",
+            "8",
+            "12",
+            "13"
+          ],
+          "answer": 2,
+          "why": "The octave is divided into twelve half steps, and each step lands on a different note before the thirteenth step repeats the first name.",
+          "traps": [
+            "Seven is the number of letter names, but five more notes, the sharps and flats, sit between them.",
+            "Eight comes from the word octave, which counts the notes of a scale including both ends; the octave itself holds twelve different notes.",
+            null,
+            "Thirteen counts the starting note twice; the thirteenth note is the first one again, an octave higher."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Which two letter names have no note between them?",
+          "options": [
+            "A and B",
+            "B and C",
+            "C and D",
+            "G and A"
+          ],
+          "answer": 1,
+          "why": "B to C and E to F are half steps, one fret apart, so no sharp or flat fits between them.",
+          "traps": [
+            "A and B are a whole step apart, with A♯ or B♭ between them.",
+            null,
+            "C and D are two frets apart, with C♯ or D♭ between them.",
+            "G and A are a whole step apart, with G♯ or A♭ between them."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Moving a finger up one fret multiplies the frequency by about...",
+          "options": [
+            "1.06",
+            "1.5",
+            "2",
+            "1.12"
+          ],
+          "answer": 0,
+          "why": "One half step is the twelfth root of two, about 1.0595, so that twelve of them double the frequency.",
+          "traps": [
+            null,
+            "1.5 is the fifth, seven frets up, where the harmonics of the two notes meet.",
+            "Doubling is the octave, which takes twelve frets, not one.",
+            "1.12 is a whole step, two frets, because 1.06 times 1.06 is about 1.12."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "On the low E string, which note is at fret 3?",
+          "options": [
+            "F",
+            "F♯",
+            "G",
+            "G♯"
+          ],
+          "answer": 2,
+          "why": "From E, fret 1 is F (E to F is a half step), fret 2 is F♯ and fret 3 is G.",
+          "traps": [
+            "F is at fret 1, because E to F is only a half step.",
+            "F♯ is at fret 2; one more fret reaches G.",
+            null,
+            "G♯ is at fret 4, one fret past G; counting a whole step from E to F is the usual slip here."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "How many half steps are there from C up to the next E?",
+          "options": [
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "answer": 2,
+          "why": "C, C♯, D, D♯, E: four steps of one fret each.",
+          "traps": [
+            "Two is the number of letters skipped from C to E; each letter step here is a whole step, so the distance is four half steps.",
+            "Three half steps reach D♯ or E♭, one fret short of E.",
+            null,
+            "Five half steps go one fret past E, to F, because E to F is a half step."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A bass player tunes a string to 55 Hz, one octave below the guitar's A string. Where on that string is the A at 110 Hz?",
+          "options": [
+            "Fret 5",
+            "Fret 7",
+            "Fret 12",
+            "Fret 24"
+          ],
+          "answer": 2,
+          "why": "110 Hz is twice 55 Hz, an octave, which is twelve half steps on any string, so it is at fret 12, in the middle of the string.",
+          "traps": [
+            "Fret 5 is five half steps up, a fourth, which multiplies the frequency by about 1.33, not 2.",
+            "Fret 7 is seven half steps, a fifth, about 1.5 times the frequency.",
+            null,
+            "Fret 24 is two octaves, four times the frequency, 220 Hz."
+          ]
+        }
+      ],
+      "sources": [
+        "S5",
+        "S6",
+        "S7",
+        "S9",
+        "S17"
+      ],
+      "further": [
+        {
+          "title": "UNSW Music Acoustics: Note names, MIDI numbers and frequencies",
+          "url": "https://newt.phys.unsw.edu.au/jw/notes.html",
+          "why": "A complete table of note names and their frequencies, with the formula behind it."
+        },
+        {
+          "title": "JustinGuitar: Practical Music Theory, grade 1",
+          "url": "https://justinguitar.com/categories/PMT",
+          "why": "A free guitar course that starts, as this house does, with notes, sharps and flats, and octaves."
+        }
+      ],
+      "riddles": [
+        {
+          "id": "tower-pc",
+          "kind": "computer",
+          "clue": "pw = the note eight frets up from the open A. One letter, no symbols. The clerk",
+          "answer": [
+            "F"
+          ],
+          "type": "text",
+          "from": {
+            "station": "circle"
+          },
+          "inside": {
+            "note": "The clerk's notes on tuning the strings. The open strings, low to high, are E2 A2 D3 G3 B3 E4, at 82.41, 110, 146.83, 196, 246.94 and 329.63 Hz, and each string is five half steps above the one below it except B, which is four above G. That is why fret 5 gives the next open string, and fret 4 on the G string.",
+            "station": "fifthfret",
+            "coins": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "scale",
+      "theme": "notes",
+      "type": "mechanism",
+      "name": "The major scale",
+      "place": "The Step Ladder",
+      "sign": "LADDER",
+      "emblem": "key",
+      "objective": "Build a major scale from any note with the pattern of whole and half steps.",
+      "idea": "A major scale is one pattern of steps, whole, whole, half, whole, whole, whole, half, which gives a major scale from whichever note it starts.",
+      "wrongBelief": "Each key has its own list of seven notes to memorise, C major is the normal one, and other scales are C major with odd exceptions.",
+      "anchor": {
+        "type": "example",
+        "text": "Do, re, mi, fa, sol, la, ti, do, sung from any starting pitch, is a major scale every time: the singer keeps the pattern of steps, not the notes."
+      },
+      "application": "A guitarist who knows the pattern can play a major scale along any string, or work out the notes of any key for a melody or a solo, without a chart.",
+      "remember": [
+        "The major scale follows whole, whole, half, whole, whole, whole, half: W W H W W W H.",
+        "On one string a whole step is two frets and a half step is one.",
+        "The same pattern from another note gives that note's major scale: started on G it needs F♯."
+      ],
+      "explain": {
+        "q": "Why does G major need an F♯ when C major needs no sharps or flats?",
+        "a": "The pattern ends with a half step from the seventh note to the octave. From C the seventh note is B, and B to C is already a half step, but from G the seventh note must be a half step below G, which is F♯ and not F."
+      },
+      "callbacks": [
+        {
+          "to": "twelve",
+          "how": "The half steps counted at the Twelve-Hour Tower are the steps of the scale: the pattern picks seven of the twelve notes."
+        }
+      ],
+      "lab": {
+        "title": "The stencil",
+        "stations": [
+          {
+            "id": "stencil",
+            "tab": "One pattern",
+            "goal": "The major scale is a pattern of whole and half steps; moved to another starting note it gives that note's major scale.",
+            "beat": "ground",
+            "pattern": "handle",
+            "object": "A stencil with seven holes laid over the circle of twelve notes, and the same scale along one string of the neck.",
+            "action": "Turns the stencil to a new starting note and plays the scale it shows.",
+            "surprise": "Turned to G, the same holes fall on F♯ instead of F: the same pattern needs a sharp.",
+            "predict": {
+              "q": "From C, the pattern lands only on letter names, with no sharps. Turn the same stencil to start on G. How many sharps does the scale need?",
+              "options": [
+                "none",
+                "one",
+                "two",
+                "three"
+              ],
+              "answer": 1,
+              "why": "From G the last step must be a half step below G, which is F♯; every other note of G major is a plain letter name."
+            },
+            "controls": [
+              "Play the scale"
+            ],
+            "tries": [
+              "Turn the stencil to start on G and play the scale.",
+              "Tap the note of G major that is not in C major."
+            ],
+            "takeaway": "A major scale is the pattern <b>W W H W W W H</b>, started on any note. From C it lands only on letter names; from G the seventh step must be a half step below G, so F becomes <b>F♯</b>. The pattern, not a list of notes, is what to remember, and on one string it is 2, 2, 1, 2, 2, 2, 1 frets.",
+            "source": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz. The scale is played on one string of the neck (UNSW Music Acoustics, Open Music Theory)."
+          },
+          {
+            "id": "relative",
+            "tab": "Same notes, from A",
+            "advanced": true,
+            "goal": "Played from its sixth note, a major scale becomes a minor scale with the same notes: A minor uses the notes of C major.",
+            "beat": "twist",
+            "pattern": "predict-test",
+            "object": "The stencil of C major with a second marker that chooses where the scale starts.",
+            "action": "Moves the starting marker to A and plays the same seven notes from there.",
+            "surprise": "No note changes, yet the scale sounds minor, because the half steps now fall in different places: W H W W H W W.",
+            "predict": {
+              "q": "Play the seven notes of C major, starting and ending on A. You hear...",
+              "options": [
+                "C major again",
+                "a minor scale",
+                "a scale with a wrong note"
+              ],
+              "answer": 1,
+              "why": "Starting from A moves the half steps to the second and fifth steps, which is the pattern of the natural minor scale."
+            },
+            "controls": [
+              "Play the scale"
+            ],
+            "tries": [
+              "Move the start to A and play the scale.",
+              "Find the first half step of the scale from A."
+            ],
+            "takeaway": "The notes of C major, played from <b>A</b>, give <b>A minor</b>: the same notes with the pattern <b>W H W W H W W</b>. Every major key has such a <b>relative minor</b>, which starts on its sixth note.",
+            "source": "Notes computed live from the pattern; frequencies in equal temperament from A4 = 440 Hz (Open Music Theory)."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "A pattern of steps",
+          "text": "A major scale is seven notes chosen from the twelve by one pattern of steps: whole, whole, half, whole, whole, whole, half, after which the starting note returns an octave higher. Started on C, the pattern lands only on letter names, C D E F G A B C, because its two half steps fall exactly where the letters have no note between them, at E–F and B–C."
+        },
+        {
+          "title": "The same pattern from any note",
+          "text": "Because the pattern is a set of distances, it can start on any of the twelve notes, and each start gives a different major scale. Started on G it gives G A B C D E F♯ G, since the last step must be a half step below G. On one string of the guitar the pattern is 2, 2, 1, 2, 2, 2, 1 frets, so the same finger movements play every major scale, only moved along the neck."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "The pattern of the major scale is...",
+          "options": [
+            "W W H W W W H",
+            "W H W W H W W",
+            "H W W W H W W",
+            "W W W H W W H"
+          ],
+          "answer": 0,
+          "why": "Whole, whole, half, whole, whole, whole, half: the half steps come after the third and the seventh notes.",
+          "traps": [
+            null,
+            "W H W W H W W is the natural minor scale, the same notes started on the sixth note of the major scale.",
+            "Starting with a half step gives a scale from E with C major's notes, which is neither major nor natural minor.",
+            "Moving the first half step one place to the right gives a scale with a sharpened fourth; in the major scale the first half step is from the third to the fourth note."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "On one string, a whole step is...",
+          "options": [
+            "one fret",
+            "two frets",
+            "three frets"
+          ],
+          "answer": 1,
+          "why": "A half step is one fret, so a whole step, two half steps, is two frets.",
+          "traps": [
+            "One fret is a half step, the smallest step on the guitar.",
+            null,
+            "Three frets is a minor third, one and a half steps."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "G major contains one note that C major lacks. Which?",
+          "options": [
+            "F♯",
+            "C♯",
+            "B♭",
+            "G♯"
+          ],
+          "answer": 0,
+          "why": "The seventh note of G major is a half step below G, which is F♯; all its other notes are in C major too.",
+          "traps": [
+            null,
+            "C♯ appears in D major, two fifths up from C; G major keeps C natural as its fourth note.",
+            "B♭ is the flat that F major needs, the key a fifth below C, not the one above.",
+            "G♯ is a half step above the root and has no place in G major, whose root is G itself."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "On one string, from the root at fret 3, at which frets are the notes of the major scale?",
+          "options": [
+            "3 5 7 8 10 12 14 15",
+            "3 5 6 8 10 11 13 15",
+            "3 4 6 8 9 11 13 15",
+            "3 5 7 9 10 12 14 15"
+          ],
+          "answer": 0,
+          "why": "The steps 2, 2, 1, 2, 2, 2, 1 frets from fret 3 give 5, 7, 8, 10, 12, 14 and 15.",
+          "traps": [
+            null,
+            "Two then one then two is the minor pattern W H W W H W W, which puts the first half step too early.",
+            "Starting with one fret is a half step first, which no major scale has.",
+            "A third whole step before the half step adds a raised fourth; the major scale's first half step comes after two whole steps."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Build the major scale on D with the pattern. Which notes are sharp?",
+          "options": [
+            "F♯ only",
+            "F♯ and C♯",
+            "C♯ and G♯",
+            "F♯, C♯ and G♯"
+          ],
+          "answer": 1,
+          "why": "Counting the pattern from D gives D, E, F♯, G, A, B, C♯ and D, so the scale needs two sharps, F♯ and C♯, because the steps from E and from B are whole steps.",
+          "traps": [
+            "F♯ alone is G major; from D the seventh note must also be a half step below D, which is C♯.",
+            null,
+            "G♯ would be a whole step above F♯, but the step from the third to the fourth note is a half step, which gives G.",
+            "Three sharps belong to A major; in D major the fourth note is G, a half step above F♯."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A singer starts 'do re mi' on E. What is the third note, 'mi'?",
+          "options": [
+            "G",
+            "G♯",
+            "F♯",
+            "A"
+          ],
+          "answer": 1,
+          "why": "Do re mi starts the major scale, so mi is two whole steps above E: E, F♯, G♯.",
+          "traps": [
+            "G is three half steps above E, a minor third; the major scale's third note is four half steps up.",
+            null,
+            "F♯ is the second note, re, one whole step above E.",
+            "A is the fourth note, fa, five half steps above E."
+          ]
+        }
+      ],
+      "sources": [
+        "S5",
+        "S8",
+        "S16"
+      ],
+      "further": [
+        {
+          "title": "Open Music Theory: Major scales, scale degrees and key signatures",
+          "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_(Gotham_et_al.)/01%3A_Fundamentals/1.12%3A_Major_Scales_Scale_Degrees_and_Key_Signatures",
+          "why": "The same pattern written on the staff, with key signatures, for when notation becomes useful."
+        },
+        {
+          "title": "Applied Guitar Theory: Foundational Theory",
+          "url": "https://appliedguitartheory.com/foundational-theory/",
+          "why": "Free lessons that take the major scale from one string to the whole neck."
+        }
+      ],
+      "riddles": [
+        {
+          "id": "ladder-door",
+          "kind": "door",
+          "clue": "A voice behind the hatch: 'Word of the day is the one note G major has and C major hasn't. Letter and sign.'",
+          "answer": [
+            "F sharp"
+          ],
+          "type": "text",
+          "from": {
+            "station": "stencil"
+          },
+          "inside": {
+            "note": "Chalked inside the door. Each major key one fifth above another needs one more sharp: C none, G one (F♯), D two (F♯, C♯), A three. The new sharp is always the seventh note, the one a half step below the root. The circle of fifths puts the keys in this order.",
+            "station": "relative",
+            "coins": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "pentatonic",
+      "core": false,
+      "theme": "notes",
+      "type": "cases",
+      "name": "The minor pentatonic box",
+      "place": "Bluesman's House",
+      "sign": "BLUES",
+      "emblem": "moon",
+      "expert": {
+        "name": "Sam",
+        "trade": "musician",
+        "temper": "theatrical",
+        "line": "Five notes, one box, forty years. Slide the box and you're in another key. The box never complained once."
+      },
+      "objective": "Place the minor pentatonic box for a given key by its root on the low E string.",
+      "idea": "The minor pentatonic keeps five notes, root, flat third, fourth, fifth and flat seventh; on the guitar they form one box that slides to any key.",
+      "wrongBelief": "The box at the 5th fret is 'the' blues scale, a fixed thing that belongs to A, and every other key needs another shape to learn.",
+      "anchor": {
+        "type": "example",
+        "text": "The first solo shape most guitarists learn, at fret 5 for A minor, played two frets higher, is B minor."
+      },
+      "application": "Most rock and blues solos start from this box: a guitarist told that a song is in E minor moves the box until its first finger sits on E, at fret 12, or plays it with open strings.",
+      "remember": [
+        "The minor pentatonic has five notes, 1, ♭3, 4, 5 and ♭7; in A they are A, C, D, E and G.",
+        "The first box starts with the index finger on the root, on the low E string: fret 5 for A.",
+        "A minor pentatonic and C major pentatonic share the same five notes."
+      ],
+      "explain": {
+        "q": "Why does one box play in every key?",
+        "a": "Every fret is a half step on every string, so moving the whole box along the neck keeps all the distances between its notes. Only its starting point moves, and the note under the first finger on the low E string is the root, which names the key."
+      },
+      "callbacks": [
+        {
+          "to": "scale",
+          "how": "As at the Step Ladder, a scale is a pattern of distances, not a list of notes: the box is the pattern, the fret is the key."
+        }
+      ],
+      "lab": {
+        "title": "The box",
+        "stations": [
+          {
+            "id": "box",
+            "tab": "Slide the box",
+            "goal": "The minor pentatonic box is movable: wherever its first finger sits on the low E string, that note is the key.",
+            "beat": "ground",
+            "pattern": "puzzle",
+            "object": "The six strings of the neck with the box of twelve dots, its roots marked, and a low drone note of the key.",
+            "action": "Slides the box along the neck and plays it over the drone.",
+            "surprise": "The shape never changes: at fret 3 it is G minor, at fret 12 E minor, and its five note names follow it.",
+            "predict": {
+              "q": "The A minor box starts at fret 5. Where does the E minor box start?",
+              "options": [
+                "fret 7, because E comes after A",
+                "fret 12, or fret 0 with open strings",
+                "nowhere: E minor needs another shape"
+              ],
+              "answer": 1,
+              "why": "The first finger sits on the root on the low E string, and the note E is the open low E string and fret 12."
+            },
+            "controls": [
+              "Play the box"
+            ],
+            "tries": [
+              "Play the box at fret 5, A minor, and listen over the drone.",
+              "Slide the box to E minor and play it."
+            ],
+            "takeaway": "The minor pentatonic box is <b>movable</b>: its first finger sits on the <b>root on the low E string</b>, so fret 5 gives A minor, fret 3 G minor and fret 12, or the open strings, E minor. The shape holds <b>1, ♭3, 4, 5, ♭7</b> in every key.",
+            "source": "Box shape: the root-position minor pentatonic (Premier Guitar). Notes and frequencies computed live in equal temperament from A4 = 440 Hz."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Five notes",
+          "text": "The minor pentatonic scale keeps five notes from the twelve: the root, the flat third (three half steps up), the fourth (five), the fifth (seven) and the flat seventh (ten). In A they are A, C, D, E and G. Between neighbouring notes of the scale the distance is always three or two half steps, never one."
+        },
+        {
+          "title": "One box in every key",
+          "text": "On the guitar these five notes fit under one hand as a box of two notes per string. The box starts with the index finger on the root on the low E string, so its key is the note under that finger: fret 5 is A, fret 3 is G, fret 7 is B. The same five notes, started from C, are the C major pentatonic, which is why one box serves A minor and C major alike."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "The notes of A minor pentatonic are...",
+          "options": [
+            "A B C D E",
+            "A C D E G",
+            "A C♯ E F♯ G",
+            "A B D E F"
+          ],
+          "answer": 1,
+          "why": "1, ♭3, 4, 5 and ♭7 from A are A, C, D, E and G.",
+          "traps": [
+            "Five neighbouring notes of the scale include the second, B, which the pentatonic leaves out; it keeps 1, ♭3, 4, 5, ♭7.",
+            null,
+            "C♯ and F♯ are the major third and the major sixth, which belong to A major, not to A minor pentatonic.",
+            "B and F are the second and the flat sixth, the two notes the minor pentatonic leaves out of A minor."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Where does the first finger sit for the G minor box?",
+          "options": [
+            "On G on the low E string, fret 3",
+            "On G on the G string, open",
+            "At fret 5, as for every key",
+            "At fret 7"
+          ],
+          "answer": 0,
+          "why": "The box starts with the index finger on the root on the low E string, and G is at fret 3 there.",
+          "traps": [
+            null,
+            "The open G string is a G, but the box is placed by the root on the low E string, which carries the shape's lowest note.",
+            "Fret 5 is A on the low E string; leaving the box there plays A minor, whatever the song's key.",
+            "Fret 7 on the low E string is B, so the box there plays B minor."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "A minor pentatonic shares its five notes with...",
+          "options": [
+            "A major pentatonic",
+            "C major pentatonic",
+            "E minor pentatonic"
+          ],
+          "answer": 1,
+          "why": "C major pentatonic, C D E G A, is the same five notes as A C D E G started from C.",
+          "traps": [
+            "A major pentatonic has C♯ and F♯, the major third and sixth, so it shares the root but not the notes.",
+            null,
+            "E minor pentatonic, E G A B D, has B where A minor has C, so the two share four notes, not five."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A song is in B minor. Where do you put the box?",
+          "options": [
+            "Fret 2",
+            "Fret 5",
+            "Fret 7",
+            "Fret 9"
+          ],
+          "answer": 2,
+          "why": "B is at fret 7 on the low E string (E, F, F♯, G, G♯, A, A♯, B), and the box is placed by its root there.",
+          "traps": [
+            "Fret 2 on the low E string is F♯, so the box there plays F♯ minor.",
+            "Fret 5 is A, so the box there stays in A minor.",
+            null,
+            "Fret 9 is C♯; counting E to F as a whole step lands two frets too high."
+          ]
+        }
+      ],
+      "sources": [
+        "S13",
+        "S16"
+      ],
+      "further": [
+        {
+          "title": "Premier Guitar: Cram Session, Pentatonic Power",
+          "url": "https://www.premierguitar.com/articles/24030-cram-session-pentatonic-power",
+          "why": "The five pentatonic shapes and how they join up along the neck."
+        }
+      ],
+      "riddles": [
+        {
+          "id": "sam-door",
+          "kind": "door",
+          "clue": "Sam, through the door: 'Tonight we play in G minor. Tell me the fret, and you can come in.'",
+          "answer": 3,
+          "type": "number",
+          "from": {
+            "station": "box"
+          },
+          "inside": {
+            "note": "Sam's set list on the back of an envelope. The same box, placed at fret 3, also plays in B flat major, because G minor pentatonic and B flat major pentatonic have the same five notes. Next to learn: the four other shapes that join this box up and down the neck.",
+            "coins": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "fifths",
+      "core": false,
+      "theme": "notes",
+      "type": "view",
+      "name": "The circle of fifths",
+      "place": "Fifths Compass",
+      "sign": "COMPASS",
+      "emblem": "sun",
+      "objective": "Predict which major keys share the most notes from their places on the circle of fifths.",
+      "idea": "Stepping up a fifth, seven half steps, twelve times visits every note; neighbouring keys on that circle share six of seven notes and differ by one sharp.",
+      "wrongBelief": "The circle of fifths is a chart of key signatures to memorise, unrelated to the twelve-note circle and to how keys sound.",
+      "anchor": {
+        "type": "contrast",
+        "text": "The clock of half steps puts C next to C♯, which share almost no scale notes; the circle of fifths puts C next to G, which share six of their seven.",
+        "limits": "Both circles hold the same twelve notes; only the order differs, by steps of one half step or of seven."
+      },
+      "application": "Songs move most smoothly to keys next door on the circle, and the IV and V chords of a key are the keys on either side of it.",
+      "remember": [
+        "Each step clockwise on the circle of fifths goes up seven half steps and adds one sharp to the key.",
+        "Neighbouring keys on the circle share six of their seven notes.",
+        "Twelve steps of a fifth visit all twelve notes and come back to the start."
+      ],
+      "explain": {
+        "q": "Why does stepping by fifths reach all twelve notes, when stepping by four half steps would not?",
+        "a": "Seven and twelve have no common factor, so adding seven half steps again and again lands on a new note each time until all twelve have been visited. Four divides into twelve, so steps of four half steps return to the start after three notes."
+      },
+      "callbacks": [
+        {
+          "to": "scale",
+          "how": "The sharp that appears when the stencil of the Step Ladder moves from C to G is the one note that changes at each step round this circle."
+        },
+        {
+          "to": "beats",
+          "how": "The fifth that orders this circle is the 3:2 of the Tuner's House, the smoothest pair after the octave."
+        }
+      ],
+      "lab": {
+        "title": "Two circles",
+        "stations": [
+          {
+            "id": "compass",
+            "tab": "One fifth at a time",
+            "goal": "Each step of a fifth round the circle changes exactly one note of the major key, by a half step.",
+            "beat": "ground",
+            "pattern": "linked-analogy",
+            "object": "Two dials, the circle of half steps and the circle of fifths, with the seven notes of a major key lit on both.",
+            "action": "Turns the key one fifth at a time and watches which note moves.",
+            "surprise": "Each step moves one single note by a half step, F to F♯, then C to C♯, while the lit shape on the circle of fifths only rotates.",
+            "predict": {
+              "q": "From C major to G major, one step round the circle of fifths, how many notes of the key change?",
+              "options": [
+                "one",
+                "three",
+                "all seven"
+              ],
+              "answer": 0,
+              "why": "G major is C major with F raised to F♯; every other note is shared."
+            },
+            "controls": [],
+            "tries": [
+              "Turn the key from C to G and find the note that changed.",
+              "Keep turning until the circle brings you back to C."
+            ],
+            "takeaway": "Going up a <b>fifth</b>, seven half steps, changes <b>one note</b> of a major key by a half step and adds one sharp. On the circle of fifths a key's seven notes are seven <b>neighbours in a row</b>, so close keys sit side by side, and after <b>twelve</b> steps the circle closes.",
+            "source": "Keys computed live from the major-scale pattern and from steps of seven half steps (Wikipedia, Circle of fifths; Schmidt-Jones)."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "A second circle",
+          "text": "The twelve notes can be put on a circle in a second order, by fifths instead of half steps: C, G, D, A, E, B, F♯, C♯, G♯, D♯, A♯, F, and C again. Seven half steps and twelve have no common factor, so the steps of a fifth visit every note once before coming home, after seven octaves."
+        },
+        {
+          "title": "Neighbours share notes",
+          "text": "Keys next to each other on this circle differ by one note. G major is C major with F♯ in place of F, and D major is G major with C♯ in place of C, so each step clockwise adds a sharp and each step anticlockwise adds a flat. The seven notes of any major key are seven neighbours in a row on the circle, which is why nearby keys sound related."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "One step clockwise on the circle of fifths moves up by...",
+          "options": [
+            "one half step",
+            "five half steps",
+            "seven half steps"
+          ],
+          "answer": 2,
+          "why": "A fifth is seven half steps, as from C to G.",
+          "traps": [
+            "One half step is the order of the other circle, the clock of the twelve notes.",
+            "Five half steps is a fourth, which is the step anticlockwise, from C to F.",
+            null
+          ]
+        },
+        {
+          "level": 1,
+          "q": "How many notes do C major and G major share?",
+          "options": [
+            "Four",
+            "Five",
+            "Six",
+            "Seven"
+          ],
+          "answer": 2,
+          "why": "G major is C major with F♯ instead of F, so six of the seven notes are shared.",
+          "traps": [
+            "Four would be keys three steps apart on the circle; neighbours share almost everything.",
+            "Five shared notes is keys two steps apart, such as C and D.",
+            null,
+            "Seven would make them the same set of notes; G major replaces F with F♯."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Starting on C and stepping up by fifths, after how many steps are you back on C?",
+          "options": [
+            "7",
+            "8",
+            "12"
+          ],
+          "answer": 2,
+          "why": "Seven and twelve share no factor, so the fifths visit all twelve notes before C comes round again.",
+          "traps": [
+            "Seven is the size of each step in half steps, not the number of steps round the circle.",
+            "Eight counts the notes of a scale, octave included; the circle of fifths runs through all twelve notes.",
+            null
+          ]
+        },
+        {
+          "level": 2,
+          "q": "D major has two sharps. How many does A major, the next key clockwise, have?",
+          "options": [
+            "One",
+            "Two",
+            "Three",
+            "Four"
+          ],
+          "answer": 2,
+          "why": "Each step clockwise adds one sharp: A major has F♯, C♯ and G♯.",
+          "traps": [
+            "One sharp is G major, the step anticlockwise from D.",
+            "Keeping two sharps would make A major the same notes as D major; one note always changes per step.",
+            null,
+            "Four sharps is E major, two steps clockwise from D."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A song in C moves for its bridge to another key. Which move will sound the most closely related?",
+          "options": [
+            "To C♯ major",
+            "To G major",
+            "To F♯ major"
+          ],
+          "answer": 1,
+          "why": "G major is next to C on the circle of fifths and shares six of its seven notes.",
+          "traps": [
+            "C♯ is next to C on the clock of half steps, but as a key it shares only two notes with C major.",
+            null,
+            "F♯ is opposite C on the circle of fifths, and F♯ major shares only two notes with C major, B and F (written E♯)."
+          ]
+        }
+      ],
+      "sources": [
+        "S10",
+        "S11",
+        "S8"
+      ],
+      "further": [
+        {
+          "title": "Schmidt-Jones: The circle of fifths",
+          "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Understanding_Basic_Music_Theory_(Schmidt-Jones)/06%3A_Notes_and_Scales/6.07%3A_The_Circle_of_Fifths",
+          "why": "The circle with its key signatures and relative minors."
+        }
+      ]
+    },
+    {
+      "id": "triads",
+      "theme": "chords",
+      "type": "parts",
+      "name": "Major and minor triads",
+      "place": "Choir House",
+      "sign": "CHOIR",
+      "emblem": "note",
+      "expert": {
+        "name": "Cora",
+        "trade": "musician",
+        "temper": "smitten",
+        "line": "Three voices, each a third above the last. Ask the middle one to sing a half step lower and the whole chord turns minor."
+      },
+      "objective": "Build major and minor triads from a root and find their notes inside an open chord shape.",
+      "idea": "A triad stacks two thirds on a root: major is four then three half steps, minor three then four. An open chord repeats those three notes.",
+      "wrongBelief": "A six-string chord is six different notes, and major and minor chords are unrelated shapes to learn one by one.",
+      "anchor": {
+        "type": "example",
+        "text": "The open E major chord, fretted 0 2 2 1 0 0, rings E, B, E, G♯, B, E: three note names over six strings."
+      },
+      "application": "Knowing which strings carry the root, the third and the fifth tells a guitarist which finger turns a chord minor, and which notes can be dropped from a crowded chord.",
+      "remember": [
+        "A triad is a root, a third and a fifth; the fifth is seven half steps above the root.",
+        "Major is root, then four half steps, then three more; minor is root, then three, then four.",
+        "Open E major is E, B, E, G♯, B, E; lifting the finger on G♯ gives E minor."
+      ],
+      "explain": {
+        "q": "Why does lifting one finger turn E major into E minor?",
+        "a": "E major is E, G♯ and B, and the finger at fret 1 of the G string plays G♯, the major third. Lifting it lets the open G sound, one half step lower, which is a minor third above E, so the chord becomes E, G and B, which is E minor."
+      },
+      "callbacks": [
+        {
+          "to": "scale",
+          "how": "The third and the fifth are the third and fifth notes of the major scale built at the Step Ladder."
+        },
+        {
+          "to": "beats",
+          "how": "The fifth inside every triad is the 3:2 of the Tuner's House, which is why it sounds so stable."
+        }
+      ],
+      "lab": {
+        "title": "Stack the thirds",
+        "stations": [
+          {
+            "id": "stack",
+            "tab": "Three notes, six strings",
+            "goal": "A chord is a root, a third and a fifth, repeated over six strings; lowering the third a half step turns major into minor.",
+            "beat": "ground",
+            "pattern": "handle",
+            "object": "The circle of twelve notes with a root and two thirds stacked on it, linked to the open E chord on the neck.",
+            "action": "Strums the open E chord, then moves the middle note of the stack down or up by a half step.",
+            "surprise": "Six strings sound only three note names, and one fret on the G string is all that separates E major from E minor.",
+            "predict": {
+              "q": "An open E major chord rings all six strings. How many different note names does it contain?",
+              "options": [
+                "six",
+                "five",
+                "four",
+                "three"
+              ],
+              "answer": 3,
+              "why": "A major triad has three notes, E, G♯ and B, and the six strings repeat them in different octaves."
+            },
+            "controls": [
+              "Strum the chord"
+            ],
+            "tries": [
+              "Strum the open E chord and look at the names of its six notes.",
+              "Lower the third by one half step and strum again.",
+              "Find the string whose note changed."
+            ],
+            "takeaway": "A <b>major triad</b> is a root, a <b>major third</b> (4 half steps) and a <b>fifth</b> (7); a <b>minor triad</b> lowers the third to 3 half steps. The open E chord rings <b>E, B, E, G♯, B, E</b>, only three names, and lifting the finger on G♯ leaves the open G: <b>E minor</b>.",
+            "source": "Chord tones computed live from the intervals (Open Music Theory, Hutchinson); string notes from standard tuning; sound synthesised from each string's frequency in equal temperament."
+          },
+          {
+            "id": "shapes",
+            "tab": "Five open shapes",
+            "advanced": true,
+            "goal": "Every open chord shape, C, A, G, E and D, holds only three note names, and its lowest string played is its root.",
+            "beat": "sandbox",
+            "pattern": "sandbox",
+            "object": "The neck with the five open major chord shapes, each string labelled root, third or fifth.",
+            "action": "Picks a shape, strums it and reads which strings carry the root, the third and the fifth.",
+            "surprise": "Every shape, however different under the fingers, holds the same three roles, and the lowest string played is always the root.",
+            "controls": [
+              "Choose the shape"
+            ],
+            "tries": [
+              "Strum three different open shapes and read their roles.",
+              "Find the shape whose root is the open D string."
+            ],
+            "takeaway": "The open shapes <b>C, A, G, E and D</b> each hold only a root, a third and a fifth, spread over four to six strings, and the lowest string played is the root. These are the five shapes that the <b>CAGED</b> system later moves up the neck.",
+            "source": "Shapes in standard tuning: C x32010, A x02220, G 320003, E 022100, D xx0232; note roles computed live."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Stacked thirds",
+          "text": "A triad is three notes stacked in thirds: a root, a third above it and a fifth above the root. A major triad has a major third, four half steps above the root, and then three more half steps to the fifth; a minor triad has a minor third, three half steps, and then four more. Both have the same fifth, seven half steps up, and the third alone decides whether the chord is major or minor."
+        },
+        {
+          "title": "Six strings, three notes",
+          "text": "An open chord on the guitar spreads a triad over the strings and repeats some of its notes. The open E major chord plays E on the low string, then B, E, G♯, B and E, so it holds only E, G♯ and B. The G♯ is the finger at fret 1 of the G string, and lifting it lets the open G sound, a half step lower, which turns the chord into E minor."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "A triad is made of...",
+          "options": [
+            "a root, a third and a fifth",
+            "any three notes played together",
+            "three notes a half step apart",
+            "a root and its octave"
+          ],
+          "answer": 0,
+          "why": "A triad stacks two thirds: root, third above it, and fifth above the root.",
+          "traps": [
+            null,
+            "Any three notes make a sound, but a triad is a particular stack: two thirds on a root.",
+            "Three notes a half step apart make a cluster that beats; the notes of a triad are three or four half steps apart.",
+            "Root and octave are two notes with the same name; a triad needs three different names."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "A major triad, counted in half steps from the root, is...",
+          "options": [
+            "0, 3, 7",
+            "0, 4, 7",
+            "0, 4, 8",
+            "0, 5, 7"
+          ],
+          "answer": 1,
+          "why": "The major third is four half steps above the root and the fifth seven.",
+          "traps": [
+            "0, 3, 7 has a minor third, three half steps, which makes the minor triad.",
+            null,
+            "0, 4, 8 raises the fifth to eight half steps, which is an augmented triad, not a major one.",
+            "0, 5, 7 replaces the third with the fourth, a suspended chord, which is neither major nor minor."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Lifting the finger at fret 1 of the G string in an open E major chord gives...",
+          "options": [
+            "E minor",
+            "E7",
+            "A major",
+            "a broken chord with no name"
+          ],
+          "answer": 0,
+          "why": "That finger plays G♯, the major third; the open G is a half step lower, a minor third, so the chord becomes E G B, E minor.",
+          "traps": [
+            null,
+            "E7 adds D, which needs a finger on the D string or the B string; lifting the G-string finger changes the third instead.",
+            "A major is A, C♯ and E, a different root; the low E string still sounds the root of the chord.",
+            "The open G is a minor third above E, so the chord is still a complete triad: E minor."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "Which notes make a C major triad?",
+          "options": [
+            "C E♭ G",
+            "C E G",
+            "C F A",
+            "C E G♯"
+          ],
+          "answer": 1,
+          "why": "Four half steps above C is E, and seven is G.",
+          "traps": [
+            "E♭ is three half steps above C, a minor third, so C E♭ G is C minor.",
+            null,
+            "C F A is an F major triad with C at the bottom; its root is F.",
+            "G♯ is eight half steps above C, so C E G♯ is augmented."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "An open A minor chord, x02210, rings A, E, A, C and E. Which note is the third?",
+          "options": [
+            "A",
+            "C",
+            "E"
+          ],
+          "answer": 1,
+          "why": "C is three half steps above A, the minor third; E is seven half steps up, the fifth.",
+          "traps": [
+            "A is the root, the note the chord is named after, on the open A string.",
+            null,
+            "E is the fifth, seven half steps above A, and it appears twice."
+          ]
+        },
+        {
+          "level": 3,
+          "q": "A bass player plays G under your open E minor chord. What happens to the chord?",
+          "options": [
+            "It fits: G is already in E minor",
+            "It turns into E major",
+            "It turns into G minor",
+            "It clashes: G is not in E minor"
+          ],
+          "answer": 0,
+          "why": "E minor is E, G and B, so the bass G is the chord's own minor third; the chord stays E minor with its third at the bottom, written Em/G.",
+          "traps": [
+            null,
+            "E major needs G♯; the bass plays G natural, which is the minor third of E.",
+            "G minor needs B♭ and D; the guitar keeps E and B natural, so the chord is still E G B.",
+            "G is the minor third of E minor, already inside the chord, so it fits rather than clashes."
+          ]
+        }
+      ],
+      "sources": [
+        "S6",
+        "S8",
+        "S9",
+        "S16"
+      ],
+      "further": [
+        {
+          "title": "Open Music Theory: Triads",
+          "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_(Gotham_et_al.)/01%3A_Fundamentals/1.16%3A_Triads",
+          "why": "Triads on the staff, with the four qualities and their names."
+        },
+        {
+          "title": "JustinGuitar: Practical Music Theory, grade 4",
+          "url": "https://justinguitar.com/categories/PMT",
+          "why": "Triad theory and chords in keys, taught on the guitar."
+        }
+      ],
+      "riddles": [
+        {
+          "id": "cora-pc",
+          "kind": "computer",
+          "clue": "pw: the note my altos sing in E major, the one that turns it minor when they drop it. Sharps spelled out, please. C.",
+          "answer": [
+            "G sharp"
+          ],
+          "type": "text",
+          "from": {
+            "station": "stack"
+          },
+          "inside": {
+            "note": "Cora's rehearsal notes. In every open major shape the lowest string played is the root, and the third is the note to watch: it sits on the G string in E, on the B string in A, and in D on the top string. Lowering it by a fret makes the minor chord, which is why Em, Am and Dm are their major shapes with one note moved.",
+            "station": "shapes",
+            "coins": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "keys",
+      "core": false,
+      "theme": "chords",
+      "type": "choice",
+      "name": "The chords of a key",
+      "place": "Hall of Keys",
+      "sign": "KEYS",
+      "emblem": "book",
+      "objective": "Choose the chords that belong to a key by stacking thirds on each note of its major scale.",
+      "idea": "Thirds stacked on each note of a major scale, with only its notes, give the key's chords: I, IV and V major, ii, iii and vi minor.",
+      "wrongBelief": "Songs combine chords at random, or chord families are rules invented by teachers rather than a consequence of the scale.",
+      "anchor": {
+        "type": "example",
+        "text": "G, C, D and Em, the four chords of countless campfire songs, are chords I, IV, V and vi of G major."
+      },
+      "application": "A guitarist who knows a song is in G can expect the chords G, Am, Bm, C, D and Em, and can play along without a chart.",
+      "remember": [
+        "In a major key the chords on notes 1, 4 and 5 are major, on 2, 3 and 6 minor, and on 7 diminished.",
+        "In G major the chords are G, Am, Bm, C, D, Em and F♯dim."
+      ],
+      "explain": {
+        "q": "Why is the chord on the second note of C major minor, when the chord on the first is major?",
+        "a": "Both are stacks of thirds made only from the notes of C major. From D the next scale notes are F and A, and F is only three half steps above D, a minor third, so the chord is D minor, while from C the third is E, four half steps up."
+      },
+      "callbacks": [
+        {
+          "to": "triads",
+          "how": "Each chord is a triad from the Choir House, with its third chosen by the scale instead of by the player."
+        }
+      ],
+      "lab": {
+        "title": "A family of chords",
+        "stations": [
+          {
+            "id": "family",
+            "tab": "Seven chords",
+            "goal": "With only a major scale's notes, the stack of thirds on each note comes out major on 1, 4, 5 and minor on 2, 3, 6.",
+            "beat": "ground",
+            "pattern": "puzzle",
+            "object": "The seven notes of a major key, each with a triad stacked from the scale, and a strip of chord buttons.",
+            "action": "Builds the chord on each note of the scale and plays a progression from the family.",
+            "surprise": "Nobody chooses major or minor: the scale decides it, and the pattern is the same in every key.",
+            "predict": {
+              "q": "Stack thirds using only the notes of C major, starting on D. The chord is...",
+              "options": [
+                "D major",
+                "D minor",
+                "D diminished"
+              ],
+              "answer": 1,
+              "why": "The notes are D, F and A; F is three half steps above D, a minor third, and A seven, a fifth."
+            },
+            "controls": [
+              "Play a progression"
+            ],
+            "tries": [
+              "Build the chord on each of the seven notes of the scale.",
+              "Play I, V, vi, IV in G."
+            ],
+            "takeaway": "Stacking thirds from a major scale gives <b>I, IV and V major</b>, <b>ii, iii and vi minor</b> and vii diminished, in every key. In G that is G, Am, Bm, C, D, Em and F♯dim, and <b>I–V–vi–IV</b> (G, D, Em, C) is a common progression of popular songs.",
+            "source": "Chords computed live by stacking scale notes (Applied Guitar Theory, Open Music Theory); sound synthesised in equal temperament."
+          }
+        ]
+      },
+      "page": [
+        {
+          "title": "Chords from the scale",
+          "text": "The chords of a key are triads built only from the notes of its scale, one on each scale note. Because the scale is uneven, with half steps in two places, some of these stacks have a major third and some a minor one. In every major key the pattern is the same: major chords on notes 1, 4 and 5, minor chords on 2, 3 and 6, and a diminished chord on 7."
+        },
+        {
+          "title": "Numbers instead of names",
+          "text": "Musicians name these chords by number, in Roman numerals, with capitals for major and small letters for minor: I, ii, iii, IV, V, vi and vii°. A progression written in numbers works in any key, so I–IV–V is G, C and D in G major and A, D and E in A major."
+        }
+      ],
+      "questions": [
+        {
+          "level": 1,
+          "q": "In a major key, which chords are major?",
+          "options": [
+            "I, II and III",
+            "I, IV and V",
+            "I, III and VI",
+            "All seven"
+          ],
+          "answer": 1,
+          "why": "Stacking thirds from the scale gives major triads on notes 1, 4 and 5.",
+          "traps": [
+            "The chords on 2 and 3 get minor thirds from the scale, so they are minor.",
+            null,
+            "The chords on 3 and 6 are minor; their third is three half steps above the root.",
+            "Only the notes of the scale are used, so some thirds come out minor and one fifth diminished."
+          ]
+        },
+        {
+          "level": 1,
+          "q": "Which of these chords belongs to G major?",
+          "options": [
+            "F",
+            "Cm",
+            "Em",
+            "B♭"
+          ],
+          "answer": 2,
+          "why": "Em is E, G and B, all notes of G major; it is the key's vi chord.",
+          "traps": [
+            "F is not a note of G major, which has F♯, so a chord built on F comes from outside the key.",
+            "Cm needs E♭; the IV chord of G is C major, with E natural.",
+            null,
+            "B♭ is outside G major, whose chord on B is B minor, B D F♯."
+          ]
+        },
+        {
+          "level": 2,
+          "q": "A song in A major uses I, IV and V. Which chords are they?",
+          "options": [
+            "A, D and E",
+            "A, C and D",
+            "A, B and C♯",
+            "A, Bm and C♯m"
+          ],
+          "answer": 0,
+          "why": "The fourth note of A major is D and the fifth is E, and those chords are major.",
+          "traps": [
+            null,
+            "C is not in A major, which has C♯; counting from A by letters without the scale gives the wrong IV and V.",
+            "B and C♯ are notes 2 and 3, whose chords are minor, Bm and C♯m.",
+            "Bm and C♯m are ii and iii; I, IV and V are built on notes 1, 4 and 5."
+          ]
+        }
+      ],
+      "sources": [
+        "S12",
+        "S8"
+      ],
+      "further": [
+        {
+          "title": "Applied Guitar Theory: Major scale chords",
+          "url": "https://appliedguitartheory.com/lessons/major-scale-chords/",
+          "why": "The chord family of a key worked out on the guitar."
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "beats",
+      "to": "string",
+      "type": "requires",
+      "note": "Beats and ratios compare frequencies, which the string sets."
+    },
+    {
+      "from": "twelve",
+      "to": "string",
+      "type": "requires",
+      "note": "The twelve half steps divide the octave found at half the string."
+    },
+    {
+      "from": "scale",
+      "to": "twelve",
+      "type": "requires",
+      "note": "The scale is a pattern of the half steps."
+    },
+    {
+      "from": "pentatonic",
+      "to": "scale",
+      "type": "requires",
+      "note": "The pentatonic is named by scale degrees and is a pattern of distances like the scale."
+    },
+    {
+      "from": "fifths",
+      "to": "scale",
+      "type": "requires",
+      "note": "Keys are major scales; the circle orders them."
+    },
+    {
+      "from": "fifths",
+      "to": "twelve",
+      "type": "same-structure",
+      "note": "Two circles of the same twelve notes, by steps of one or seven half steps."
+    },
+    {
+      "from": "triads",
+      "to": "scale",
+      "type": "requires",
+      "note": "The third and fifth are notes 3 and 5 of the major scale."
+    },
+    {
+      "from": "beats",
+      "to": "triads",
+      "type": "used-in",
+      "note": "The fifth of every triad is the smooth 3:2."
+    },
+    {
+      "from": "keys",
+      "to": "triads",
+      "type": "requires",
+      "note": "The chords of a key are triads."
+    },
+    {
+      "from": "keys",
+      "to": "scale",
+      "type": "requires",
+      "note": "Their notes come from the scale."
+    },
+    {
+      "from": "fifths",
+      "to": "keys",
+      "type": "used-in",
+      "note": "IV and V are the neighbours of I on the circle of fifths."
+    },
+    {
+      "from": "twelve",
+      "to": "beats",
+      "type": "contrasts",
+      "note": "Equal half steps give a nearly pure fifth but an impure third."
+    }
+  ],
+  "finalCheck": {
+    "name": "Keeper's Test",
+    "size": 8,
+    "pass": 0.7
+  },
+  "games": [
+    {
+      "id": "higher",
+      "title": "Higher or lower?",
+      "concepts": [
+        "string"
+      ],
+      "kind": "which",
+      "where": "town",
+      "object": "hat",
+      "rounds": 10,
+      "learn": "A higher frequency is a higher note; the gap shrinks as you get better.",
+      "data": {
+        "ask": "Which string is higher?",
+        "pick": "max",
+        "make": {
+          "kind": "tone",
+          "from": 110,
+          "to": 440,
+          "gap": [
+            4,
+            0.25
+          ],
+          "unit": "semitones",
+          "voice": "pluck"
+        }
+      }
+    },
+    {
+      "id": "intervals",
+      "title": "Name the interval",
+      "concepts": [
+        "beats"
+      ],
+      "kind": "sort-fast",
+      "where": "person",
+      "rounds": 10,
+      "learn": "Octave 2:1, fifth 3:2, fourth 4:3: the smooth pairs by ear.",
+      "data": {
+        "ask": "Two notes, one after the other. Which interval?",
+        "bins": [
+          "octave, 2:1",
+          "fifth, 3:2",
+          "fourth, 4:3"
+        ],
+        "time": [
+          9,
+          5
+        ],
+        "cards": [
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "A3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "E2",
+                "E3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "D4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "G4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "E3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "E2",
+                "B2"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "A3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "D4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "C3",
+                "G3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "E2",
+                "A2"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "D3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "G3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          },
+          {
+            "sound": {
+              "notes": [
+                "B3",
+                "E4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "majmin",
+      "title": "Major or minor?",
+      "concepts": [
+        "triads"
+      ],
+      "kind": "sort-fast",
+      "where": "host",
+      "rounds": 10,
+      "learn": "The third decides: four half steps major, three minor.",
+      "data": {
+        "ask": "Is this chord major or minor?",
+        "bins": [
+          "major",
+          "minor"
+        ],
+        "time": [
+          7,
+          3.5
+        ],
+        "cards": [
+          {
+            "sound": {
+              "notes": [
+                "C3",
+                "E3",
+                "G3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "C3",
+                "D#3",
+                "G3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "F#3",
+                "A3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "F3",
+                "A3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "E3",
+                "G#3",
+                "B3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "E3",
+                "G3",
+                "B3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "F3",
+                "A3",
+                "C4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "F3",
+                "G#3",
+                "C4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "B3",
+                "D4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "A#3",
+                "D4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "C#3",
+                "E3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "C3",
+                "E3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          }
+        ]
+      }
+    }
+  ],
+  "withheld": [
+    {
+      "id": "written-octave",
+      "by": "string",
+      "tier": "passing",
+      "teaser": "The notes you read for guitar are not quite the notes it—",
+      "told": "Guitar music is written an octave higher than it sounds, so the open A string, 110 Hz, is written as the A an octave above it."
+    },
+    {
+      "id": "harmonic-tuning",
+      "by": "beats",
+      "tier": "settling",
+      "teaser": "Some people tune with the harmonics at frets 5 and 7. It works, except—",
+      "told": "The harmonic above fret 7 is a pure fifth of the string, slightly wider than the guitar's equal-tempered fifth, so tuning every string by harmonics leaves small errors that add up across the strings."
+    },
+    {
+      "id": "do-re-mi",
+      "by": "town",
+      "tier": "passing",
+      "teaser": "Down south they give the notes other names. Something like—",
+      "told": "In Italy and many other countries the notes C, D, E, F, G, A and B are called Do, Re, Mi, Fa, Sol, La and Si."
+    },
+    {
+      "id": "caged",
+      "by": "triads",
+      "tier": "known",
+      "teaser": "Five shapes, and they spell a word if you—",
+      "told": "The open shapes C, A, G, E and D can each be moved up the neck with a barre, and together they cover the whole fretboard: guitarists call this the CAGED system."
+    }
+  ]
+}
