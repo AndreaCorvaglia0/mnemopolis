@@ -30,7 +30,7 @@ course (music theory for guitarists, with real sound).
 - **Lock answers with musical signs were silently wrong.** `normText` stripped `#`, so "G#"
   matched "G" and a lock whose answer is G♯ opened on G. Fixed in
   `engine/src/mechanics/riddles/match.js`: `#` and `♯` read as "sharp", `♭` as "flat" (and the
-  doc line updated). Worth a test in `riddles.test.mjs`.
+  doc line updated). Tested in `riddles.test.mjs`.
 - **Trades.** No trade fitted a luthier or a piano tuner, and a generic home loses the point of an
   expert. Added `luthier` (bench, drawers, harp corner) and `tuner` (piano, bench) to
   `gen/interior/trades.js`, using existing zones; `npm test` passes. The trade list in
@@ -86,11 +86,25 @@ course (music theory for guitarists, with real sound).
 
 ## Mini-games
 
-- The ready kinds covered three of the four games with data only (`which` with generated plucked
-  pairs, `sort-fast` with sounding cards for intervals and for major or minor). The fourth, "Find
-  the note", is custom and reuses the course's neck from `labs/lib/`, which needed the lib support.
+- The ready kinds covered all three games with data only (`which` with generated plucked pairs,
+  `sort-fast` with sounding cards for intervals and for major or minor). A fourth, custom game
+  ("Find the note", the course's neck from `labs/lib/`) was written and pictured, then removed when
+  the course was closed at three games; it is in the git history (commit b5b587e).
 - **A custom game that draws on a canvas gets a stage with no height** (`.gm-stage` is a centred
   column), and the lab's CSS is not on that screen; the game sets its own box and styles. *Proposal:*
   a `g.canvas(w, h)` that returns a pane sized like a lab's.
 - **`g.bot` must be written by hand** for `worldshots` to play a custom game; without it the script
   waits for the timer and then times out on the next game. Worth a line in `10-games.md`.
+
+## Left for later
+
+- "Find the note" against the clock: custom game, written and working (git history), dropped to keep three games.
+- `ctx.onPhase(fn)` in the lab frame, instead of polling `ctx.phase()` (here `onPhase` in `labs/lib/sound.js`).
+- A picture that keeps its height on a phone when the result sheet opens (the done state squeezes text).
+- `hold(f, { harmonics })` in the sound API; `fundamental()` renamed and a period-based one added.
+- `g.canvas(w, h)` for custom games that draw; a line in `10-games.md` that `g.bot` is needed for the pictures.
+- Ignore colons between digits (2:1) in `prose.mjs`; say in `9-prose.md` that digits count as words.
+- A "minutes left" line in the validator's summary, and the station budget of a five-house core in the skill.
+- The Twelve-Hour Tower's question shows a neck with twelve frets: a careful learner can count them before answering.
+- A second listening pass by a person: nobody has heard the course; levels were set by numbers only.
+- The live Web Audio chain (lab bus, limiter, ducking, analyser) measured in a browser.

@@ -2303,21 +2303,6 @@
       }
     },
     {
-      "id": "findnote",
-      "title": "Find the note",
-      "concepts": [
-        "twelve"
-      ],
-      "kind": "custom",
-      "where": "town",
-      "object": "box",
-      "rounds": 10,
-      "learn": "One fret is one half step: count from the open string.",
-      "data": {
-        "ask": "Tap the note on the neck."
-      }
-    },
-    {
       "id": "majmin",
       "title": "Major or minor?",
       "concepts": [

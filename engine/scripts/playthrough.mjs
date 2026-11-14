@@ -396,7 +396,7 @@ Object.assign(RECIPES, {
   'pentatonic:box': async () => { await labBtn('Play the box'); await tapItem('low12'); await labBtn('Play the box'); },
   'fifths:compass': async () => { for (let k = 0; k < 12; k++) await labBtn('One fifth up'); },
   'triads:stack': async () => { await labBtn('Strum'); await tapItem('minor3'); await labBtn('Strum'); await tapItem('gstring'); },
-  'triads:shapes': async () => { for (const sh of ['C', 'A', 'G', 'D']) { await clickEl('.lx .lab-seg button', null, ['C', 'A', 'G', 'E', 'D'].indexOf(sh)); await labBtn('Strum'); } },
+  'triads:shapes': async () => { for (const sh of ['C', 'A', 'G', 'D']) { await clickEl('.lx .lab-seg button', sh); await sleep(200); await labBtn('Strum'); } },
   'keys:family': async () => { for (let j = 0; j < 7; j++) await tapItem(`col${j}`); await segBtn('G major'); await labBtn('Play I'); },
 });
 // context:grey, written plainly: drag the second square onto the first, then the plain wall
