@@ -39,7 +39,7 @@ async function inks(ctx) {
 }
 
 async function compare(ctx) {
-  const pane = canvasPane(ctx.stage, 760, 440, '', { portrait: [480, 600] });
+  const pane = canvasPane(ctx.stage, 760, 440, '', { portrait: [480, 640] });
   const on = { red: false, green: false, blue: false }, RGB = { red: [255, 0, 0], green: [0, 255, 0], blue: [0, 0, 255] };
   const seen = new Set();
   const draw = () => {
