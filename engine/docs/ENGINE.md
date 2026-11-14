@@ -324,20 +324,28 @@ for a test, `STORY=0` in the environment for scripts in Node. Everything is in
 src/mechanics/story/
   config.js    STORY (on, ship, word), now() for the fog (?days=N), ?arrived (skip the arrival)
   logic.js     pure: stage and rain from progress, the order of the mementos, the pages, the word
-               at the lighthouse door, the fog's schedule (tests/story.test.mjs)
+               at the lighthouse door, the fog's schedule, the notebook's log (notesOf), which
+               ending plays (endingOf) (tests/story.test.mjs)
   words.js     every word of the story, English and Italian: S_WORDS (captions, people, mementos,
-               notebook, lighthouse, turn, fog), Q_STORY (laid over the main path's words),
+               notebook (nb), lighthouse, lamp, register, loop, fog), Q_STORY (laid over the main path's words),
                REMEMBER (the duel's screen), R_TEMPERS and KEEPER (the owners' lines)
   cinema.js    the cinematic moments: bars, caption, camera, skip
-  opening.js   the arrival: the ship in the rain on its own canvas, the purser's register
-  art.js       the steamship (and its lit layer), the lighthouse, rain tiles, the notebook, the hooded keeper
+  paint.js     the illustrated register's toolkit: gradients, glow, soft blur, grain, vignette, rain,
+               a handwriting stack, paper; view() runs a painter full screen (DPR-aware, slow push-in)
+  scenes/      the painters: ship.js (the steamship), harbour.js (the quay, the ship, the headland),
+               objects.js (each memento and the notebook on a table), ending.js (the lamp room, the
+               register, the pages on the quay, the gangway), index.js (by name)
+  opening.js   the arrival: the harbour painted, the purser's register, the title
+  finale.js    the lamp and the register (playLamp), the loop (playEnding, ENDINGS by endingOf)
+  art.js       the pixel register: the steamship and the lighthouse in town, rain tiles, the notebook on the quay
   town.js      the story in the town: the ship at the quay, the notebook, the harbour master, rain,
                windows, people by stage, the lamp; begin() and returned(id) play the outdoor moments
   stages.js    how much the town remembers; greetings and curt answers by stage
   weather.js   the rain overlay and its place sound
-  mementos.js  the mementos' close-ups (the locks' painters), remember.js the moment of finding one
-  notebook.js  the Journey tab drawn as the notebook; the mementos in the Mysteries tab
-  lighthouse.js the door (the word), the climb, the keeper; turn.js the turn, leaving, the last choice
+  remember.js  the moment of finding a memento (its illustrated close-up, the page restored)
+  mementos.js  the older pixel close-ups of the mementos (kept, unused by the story's moments)
+  notebook.js  the menu as the notebook: Journey, Map, Clues on paper, in hand (openNotebook)
+  lighthouse.js the door (the word), the climb, the keeper
   room.js      in a house: the memento upstairs, the owner when the fog returns, keys of old saves
   fog.js       the returning fog, kept in the save
   debug.js     __hb.story: jump between moments (the pictures of npm run shots:story)
@@ -388,19 +396,39 @@ The League opens when every core house is remembered and its memento found.
 **Mementos** (`logic.js` `mementoOrder`): page, ticket, flower, photograph, drawing, letter, watch,
 card, escalating; with fewer houses always the first, the photograph and the card, then the ticket,
 the watch, the letter, the drawing, the flower as houses allow; more houses than kinds: more pages.
-Each close-up is drawn in code at 160 x 120 with the locks' painters: the photograph puts the house's
-own facade in grey with four people and one face scratched out; the watch stops at the hour of the
+Each close-up is an illustrated painting (`scenes/objects.js`) on a table under a lamp: the
+photograph puts a house of the town's shape in sepia with four people and one face violently
+scratched out (the first thing one sees); the child's drawing is in crayon; the watch stops at the hour of the
 arrival; the ticket and the flower carry the arrival's date in another year; the card carries the
 name given to the purser as real text. Finding one restores a page of the notebook: the concept's
 `idea`. The last page plays the pages in order, the big idea, and the lighthouse with its word; back
 in town the camera lifts to the dark tower.
 
-**The turn** (`turn.js`): the hooded keeper (the player's own sheet under a hood, `art.js`
-`hoodedSheet`) lowers the hood: the player's face; the card; two lines. Then in town: the lamp lights
-and its beam sweeps (the observatory's beam painter), the rain stops, `state.ended` lights every
-window, the camera goes to the ship, its lights come on, the horn (`sfx.horn`), the whole theme. The
-ending card (its heading "You remember.", the big idea as the last page, the numbers), then
-"Leave the notebook on the quay" (`state.story.left`, purely poetic: it lies there afterwards).
+**The lamp and the register** (`finale.js` `playLamp`, after the keeper is won): the lamp room
+painted, the keeper hooded (never a face), the lamp lit; two lines; the arrivals register on the
+desk (`registerPainter`: the course's town name, the player's name handwritten down the page with
+dates going back, the last line empty); "That is my signature." Then in town: the lamp lights and
+its beam sweeps, the rain stops, every window lit; people say goodbye, the harbour master "Same
+berth as always.", the tracker says the ship.
+
+**The loop** (`playEnding`, at "Board the ship" or the pier's end): `endingOf(state)` picks the
+sequence in `ENDINGS`; today always `loop`: the pages scattered on the quay and the first stretch
+of the lane (a figure stooping, the harbour master pocketing one), the cover with one more tally
+mark, the purser at the gangway ("Another round, <name>?"), the ship's lights going out as at the
+arrival, then the first shot again (cross-dissolve), the rain beginning, the first caption, the
+title, the ending card ("Another round.", "What you carry this time", the numbers), "Back to town".
+The save is kept (`state.story.rounds` counts the rounds). Cuts are cross-dissolves (`cut`).
+
+**The notebook (the menu)** (`notebook.js`): `quest/menu.js` `openMenu` hands over to
+`openNotebook` when the story is on. A dark backdrop, a leather cover, paper pages (a fibre tile
+painted once per session, ruled lines in CSS): a spread on a desktop, one page and "Next page" on a
+phone (under 760 px). Ribbon tabs for the sections, plain Settings and Close buttons in the corner
+(44 px targets). Handwriting: system handwriting faces upright where present, else an italic serif
+(`font-synthesis: none`), 17 px and over. The Journey's latest entry comes from `nextStep` in the
+character's words (`S_WORDS.nb.next`); the Map is drawn on a canvas from the town data (lane
+edges in jittered ink, water hatched, houses outlined, the ship sketched, numbers as buttons); the
+Clues' log is `notesOf(state, coreProgress)`, derived from the state (old saves show it too); the
+mementos are thumbnails painted once from their close-up painters and cropped.
 
 **After the ending** (`fog.js`, `logic.js`): per house `{ at, n }` in `state.story.fog`, started at
 the ending (later for houses remembered afterwards). After 1, 3, 7, 16 days (then 16) the house's
@@ -412,12 +440,14 @@ interval. The tracker never nags about it. `?days=3` in the address moves the cl
 
 **State.** `state.story`: `name`, `arrived`, `arrivedAt`, `notebook`, `mementos` (id -> kind),
 `lit` (windows shown lighting), `understood` (1: the lighthouse pan pending; 2: done), `door`,
-`turned`, `left`, `fog`. Old saves load: a house with a badge and no key gets the key in the story.
+`turned`, `left`, `rounds`, `fog`. Old saves load: a house with a badge and no key gets the key in the story.
 
 **Pictures**: `npm run shots:story` (`scripts/storyshots.mjs`) plays the arrival for real, then
-jumps with `__hb.story` (`at(n)`, `memento(id)`, `window(id)`, `understood()`, `door()`, `turn()`,
+jumps with `__hb.story` (`at(n)`, `memento(id)`, `window(id)`, `understood()`, `door()`, `lamp()`, `ending()`, `paint(name, params)`,
 `fog(id)`, `where(what)`), desktop 1440 x 800 then a phone 390 x 844, into `/tmp/story-*.png` and
-`/tmp/story-phone-*.png`. The older picture scripts add `?arrived` (the story on, the arrival
+`/tmp/story-phone-*.png`; the notebook's three sections at the start, mid-game and after the
+ending are `story-nb-*.png`. One painter alone: `node scripts/paintshot.mjs harbour '{"dock":1}'
+/tmp/x.png [w h dpr]`. The older picture scripts add `?arrived` (the story on, the arrival
 skipped), except `spineshots.mjs` and the play-through bot (`npm run play`), which show and play the
 plain town's main path (`?story=0`).
 
@@ -873,7 +903,7 @@ keeps a question open until the ending.
   close that comes home on the root), on a music-box voice (`box`) over a soft triangle bed, at
   `LEVELS.theme` 0.1 (a little above the sparse notes, 0.08). `sfx.theme('fragment')` (the motif,
   about 4 s: a memento, a window), `'opening'` (two phrases: the arrival, the notebook), `'full'`
-  (all four, then the ending's cadence: the turn, leaving). Never over a lab, a page or a duel (it
+  (all four, then the ending's cadence: the first shot again, at the loop). Never over a lab, a page or a duel (it
   returns 0 then); without music, the old chime. `sfx.horn()`: the ship's horn, the foghorn's saws,
   near. Tested for determinism, the motif first, every note in the scale, lengths and levels.
 - **Rain** (the story): a place sound, a band of noise low-passed at 3.4 kHz with a slow swell,

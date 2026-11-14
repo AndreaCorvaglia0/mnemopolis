@@ -7,7 +7,7 @@ what comes next, and how they know they have won. The reasons are in the wiki
 The fiction that carries all this is in `STORY.md` (on by default; `"story": false` in
 `world.json` gives the plain town described here): the duel is played as **helping an owner
 remember**, the League is a dark **lighthouse** and its champion a **keeper**, the guide is the
-harbour master, the ending is the turn and the leaving by ship. The rules below hold in both.
+harbour master, the ending is the lamp, the register and the loop by ship, and the menu is the notebook. The rules below hold in both.
 
 ## One sentence
 
@@ -70,7 +70,7 @@ afterwards: the town stays open for exploring and practising, without limit
   better than you: houses 4 and 6."). The League hall on the square has a note on its door that
   sends the player to the gate.
 - **Ending.** (In the story the same road ends at a quay where the ship is moored, and the ending is
-  the lighthouse, the turn and the leaving: `STORY.md`. What follows is the plain town.) The road
+  the lighthouse, the register and the loop: `STORY.md`. What follows is the plain town.) The road
   out of town is real: a straight lane, two tiles wide, runs from the square to
   the edge of the map and ends in a **town gate**, with the League's champion standing before it.
   The gate is shut until the League is won (walking into it, or talking to the champion, is the

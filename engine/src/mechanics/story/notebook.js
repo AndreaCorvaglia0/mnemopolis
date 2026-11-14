@@ -278,7 +278,7 @@ function townSketch(maxW, maxH) {
     marks.push(h('button', { type: 'button', class: `nbk-mk ${k}${b.id === nextId ? ' next' : ''}`, style: `left:${X + w / 2}px;top:${Y + hh / 2}px`, 'aria-label': text, 'data-text': text }, k === 'mystery' ? '?' : String(b.order)));
   }
   if (sh) labels.push(h('span', { class: 'nbk-lab', style: `left:${(sh.cx - x0) * s}px;top:${(sh.bottom - y0) * s + 12}px` }, tr(N.ship)));
-  labels.push(h('span', { class: 'nbk-lab', style: `left:${(HUB.x - x0 + 0.5) * s}px;top:${(HUB.y - y0 + 3.4) * s}px` }, tr(N.square)));
+  labels.push(h('span', { class: 'nbk-lab', style: `left:${(HUB.x - x0 + 0.5) * s}px;top:${(HUB.y - y0 + 4.6) * s}px` }, tr(N.square)));
   const pos = state.pos || TOWN.START;
   labels.push(h('span', { class: 'nbk-me', style: `left:${(pos.x - x0 + 0.5) * s}px;top:${(pos.y - y0 + 0.5) * s}px` }, '×', h('i', {}, tr(N.me))));
   const cap = h('p', { class: 'nbk-cap', role: 'status' }, tr(N.tapHouse));

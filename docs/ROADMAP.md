@@ -80,10 +80,12 @@
 
 - The story, first version (`docs/STORY.md`, `engine/docs/ENGINE.md` "The story", on by default):
   arrival by steamship in the rain with a purser's register, a harbour at the end of the road in
-  every town, cinematic moments, the notebook as the Journey tab, remembering in place of the duel
+  every town, cinematic moments in an illustrated register, the notebook as the whole menu (in
+  hand, clues written as they are learnt), remembering in place of the duel
   (and no confidence bet anywhere), mementos upstairs, rain and dark windows that answer progress,
   people by stage, the lighthouse as the hidden League with a word at its door, the keeper, the
-  turn, the leaving, the theme, the returning fog's schedule.
+  lamp and the arrivals register, the loop back to the first shot, the theme, the returning fog's
+  schedule.
 
 ## Next
 
@@ -105,6 +107,10 @@
    what waits behind them is a placeholder listed as "sealed".
 
 ## Later
+
+- New game plus: "Another round" today keeps the save. A true second round would start on the
+  quay again with the town forgotten, the tally on the cover one higher, and something carried
+  over (the name in the register, a page that stays). Not designed.
 
 - Endings by score and completion (`docs/STORY.md`, "Endings (planned)"): the bitter loop stays the
   ending of the main path alone; side missions (locks, upper floors, hidden buildings, secrets,

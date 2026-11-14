@@ -1,4 +1,5 @@
-// look at one painted scene: node scripts/_ps.mjs name '{"dock":1}' out.png [w h dpr]
+// One painted scene of the story alone (story/scenes/), for looking at it while drawing:
+//   node scripts/paintshot.mjs harbour '{"dock":1}' /tmp/x.png [w h dpr]   (needs npm run build first)
 import puppeteer from 'puppeteer-core';
 const [name, params = '{}', out = '/tmp/ps.png', w = '1440', hh = '800', d = '1'] = process.argv.slice(2);
 const b = await puppeteer.launch({ executablePath: '/usr/bin/google-chrome', headless: 'new', protocolTimeout: 200000, args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
