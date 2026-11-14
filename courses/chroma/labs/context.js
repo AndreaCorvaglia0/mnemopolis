@@ -1,6 +1,6 @@
 // Dyer's House: perceived colour depends on the surround.
 import { seg, readout } from '../../../engine/src/lab/shell.js';
-import { canvasPane, draggable } from '../../../engine/src/lab/kit.js';
+import { canvasPane, draggable, L } from '../../../engine/src/lab/kit.js';
 
 async function grey(ctx) {
   // the wall runs from dark to light along the long side of the stage
@@ -17,12 +17,12 @@ async function grey(ctx) {
     g.fillRect(0, 0, W, H);
     if (bg === 'plain') { g.strokeStyle = '#6a6a6a'; g.lineWidth = 1; sq.forEach((s) => g.strokeRect(s.x - 44.5, s.y - 44.5, 90, 90)); }
     g.fillStyle = '#808080'; sq.forEach((s) => g.fillRect(s.x - 45, s.y - 45, 90, 90));
-    if (Math.abs(sq[0].x - sq[1].x) < 115 && Math.abs(sq[0].y - sq[1].y) < 115) { ctx.did(0); out.innerHTML = 'Both squares are <b>128, 128, 128</b>. They always were.'; out.hidden = false; }
+    if (Math.abs(sq[0].x - sq[1].x) < 115 && Math.abs(sq[0].y - sq[1].y) < 115) { ctx.did(0); out.innerHTML = L('Both squares are <b>128, 128, 128</b>. They always were.', 'Entrambi i quadrati sono <b>128, 128, 128</b>. Lo sono sempre stati.'); out.hidden = false; }
     if (bg === 'plain') ctx.did(1);
   };
   pane.onResize(() => { if (up() !== shape) { shape = up(); home().forEach(([x, y], i) => Object.assign(sq[i], { x, y })); } draw(); });
   draggable(pane, sq, draw, { radius: () => 64, bounds: () => [50, 50, pane.W - 50, pane.H - 50] });
-  const wall = seg([['gradient', 'Dark-to-light wall'], ['plain', 'Plain wall']], 'gradient', (v) => { bg = v; draw(); });
+  const wall = seg([['gradient', L('Dark-to-light wall', 'Parete sfumata')], ['plain', L('Plain wall', 'Parete uniforme')]], 'gradient', (v) => { bg = v; draw(); });
   ctx.controls.append(wall, out);
   ctx.hint?.((k) => (k === 0 ? [sq[1].x, sq[1].y] : wall));
   draw();
@@ -42,7 +42,7 @@ async function tint(ctx) {
     else if (covered) ctx.did(1);
   };
   pane.onResize(draw);
-  const walls = seg([['off', 'Coloured walls'], ['on', 'Cover the walls']], 'off', (v) => { cover = v; draw(); });
+  const walls = seg([['off', L('Coloured walls', 'Pareti colorate')], ['on', L('Cover the walls', 'Copri le pareti')]], 'off', (v) => { cover = v; draw(); });
   ctx.controls.append(walls);
   ctx.hint?.(() => walls);
   draw();

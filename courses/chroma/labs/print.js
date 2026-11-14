@@ -1,19 +1,22 @@
 // Print Works (a workshop: three machines on one belt): subtractive mixing.
 import { h, seg, slider } from '../../../engine/src/lab/shell.js';
-import { canvasPane, draggable, rgbCss } from '../../../engine/src/lab/kit.js';
+import { canvasPane, draggable, rgbCss, L } from '../../../engine/src/lab/kit.js';
+
+// Italian names of the three lights (the keys of `on` stay English).
+const NAME = { red: 'rosso', green: 'verde', blue: 'blu' };
 
 function refit(items, from, to) { items.forEach((it) => { it.x *= to.W / from.W; it.y *= to.H / from.H; it.r = to.r; }); }
 
 async function inks(ctx) {
-  const pane = canvasPane(ctx.stage, 720, 480, 'White paper and three transparent inks. Drag them.', { portrait: [480, 530] });
+  const pane = canvasPane(ctx.stage, 720, 480, L('White paper and three transparent inks. Drag them.', 'Carta bianca e tre inchiostri trasparenti. Trascinali.'), { portrait: [480, 530] });
   const layout = () => (pane.W < pane.H ? { W: 480, H: 530, r: 88, at: [[135, 160], [345, 160], [240, 370]] } : { W: 720, H: 480, r: 105, at: [[190, 170], [530, 170], [360, 340]] });
-  let L = layout();
-  const dots = [['#00ffff', 'cyan'], ['#ff00ff', 'magenta'], ['#ffff00', 'yellow']].map(([c, n], i) => ({ x: L.at[i][0], y: L.at[i][1], r: L.r, c, n }));
+  let LY = layout();
+  const dots = [['#00ffff', 'cyan'], ['#ff00ff', 'magenta'], ['#ffff00', 'yellow']].map(([c, n], i) => ({ x: LY.at[i][0], y: LY.at[i][1], r: LY.r, c, n }));
   let told = false;
   const read = (x, y) => {
     if (x < 0 || y < 0 || x >= pane.W || y >= pane.H) return null;
-    const [r, g, b] = pane.g.getImageData(x, y, 1, 1).data, t = (v) => (v > 127 ? '<b>comes back</b>' : '<span style="color:#ff9a8d">absorbed</span>');
-    return `Red light: ${t(r)}<br>Green light: ${t(g)}<br>Blue light: ${t(b)}`;
+    const [r, g, b] = pane.g.getImageData(x, y, 1, 1).data, t = (v) => (v > 127 ? `<b>${L('comes back', 'torna indietro')}</b>` : `<span style="color:#ff9a8d">${L('absorbed', 'assorbita')}</span>`);
+    return L(`Red light: ${t(r)}<br>Green light: ${t(g)}<br>Blue light: ${t(b)}`, `Luce rossa: ${t(r)}<br>Luce verde: ${t(g)}<br>Luce blu: ${t(b)}`);
   };
   const draw = () => {
     const g = pane.g;
@@ -21,14 +24,14 @@ async function inks(ctx) {
     g.globalCompositeOperation = 'multiply'; // each ink removes light
     dots.forEach((l) => { g.fillStyle = l.c; g.beginPath(); g.arc(l.x, l.y, l.r, 0, 7); g.fill(); });
     g.globalCompositeOperation = 'source-over';
-    const by = (n) => dots.find((d) => d.n === n), d = (a, b) => Math.hypot(by(a).x - by(b).x, by(a).y - by(b).y) / (L.r / 105);
+    const by = (n) => dots.find((d) => d.n === n), d = (a, b) => Math.hypot(by(a).x - by(b).x, by(a).y - by(b).y) / (LY.r / 105);
     if (d('cyan', 'yellow') < 150) {
       ctx.did(0);
-      if (!told) { told = true; ctx.nudge?.('Point at the overlap, or touch it, to see which light comes back.', 9000); }
+      if (!told) { told = true; ctx.nudge?.(L('Point at the overlap, or touch it, to see which light comes back.', 'Punta la sovrapposizione, o toccala, per vedere quale luce torna indietro.'), 9000); }
     }
     if (d('cyan', 'magenta') < 120 && d('magenta', 'yellow') < 120 && d('cyan', 'yellow') < 120) ctx.did(1);
   };
-  pane.onResize(() => { const L2 = layout(); if (L2.W !== L.W) refit(dots, L, L2); L = L2; draw(); });
+  pane.onResize(() => { const L2 = layout(); if (L2.W !== LY.W) refit(dots, LY, L2); LY = L2; draw(); });
   draggable(pane, dots, draw, { bounds: () => [50, 50, pane.W - 50, pane.H - 50] });
   pane.tip(read);
   pane.hint((k) => { const d = dots.find((o) => o.n === (k === 0 ? 'cyan' : 'magenta')); return [d.x, d.y]; });
@@ -36,7 +39,7 @@ async function inks(ctx) {
 }
 
 async function compare(ctx) {
-  const pane = canvasPane(ctx.stage, 760, 440, '', { portrait: [480, 600] });
+  const pane = canvasPane(ctx.stage, 760, 440, '', { portrait: [480, 640] });
   const on = { red: false, green: false, blue: false }, RGB = { red: [255, 0, 0], green: [0, 255, 0], blue: [0, 0, 255] };
   const seen = new Set();
   const draw = () => {
@@ -45,21 +48,26 @@ async function compare(ctx) {
     const paint = keys.reduce((a, k) => a.map((v, i) => (v * RGB[k][i]) / 255), [255, 255, 255]);
     g.fillStyle = '#0e1116'; g.fillRect(0, 0, pane.W, pane.H);
     // side by side on a wide stage, one above the other on an upright one
-    const boxes = up ? [[30, 44, 420, 200], [30, 330, 420, 200]] : [[24, 56, 340, 300], [396, 56, 340, 300]];
-    [[light, 'As lights, on a dark wall', `dark ${keys.map((k) => `+ ${k}`).join(' ')}`], [paint, 'As paints, on white paper', `white ${keys.map((k) => `− all but ${k}`).join(' ')}`]].forEach(([c, title, formula], i) => {
+    const boxes = up ? [[30, 44, 420, 170], [30, 340, 420, 170]] : [[24, 56, 340, 300], [396, 56, 340, 300]];
+    const nm = (k) => L(k, NAME[k]);
+    [[light, L('As lights, on a dark wall', 'Come luci, su parete scura'), [L('dark', 'buio'), ...keys.map((k) => `+ ${nm(k)}`)]], [paint, L('As paints, on white paper', 'Come pitture, su bianco'), [L('white', 'bianco'), ...keys.map((k) => L(`− all but ${k}`, `− non ${nm(k)}`))]]].forEach(([c, title, terms], i) => {
       const [x, y, w, hh] = boxes[i];
       g.fillStyle = rgbCss(c); g.fillRect(x, y, w, hh); g.strokeStyle = '#3a4659'; g.lineWidth = 2; g.strokeRect(x, y, w, hh);
       g.fillStyle = '#e8eaf0'; g.font = pane.font(20, 600); g.fillText(title, x, y - 14);
-      g.fillStyle = '#c9cfdd'; g.font = pane.font(19); g.fillText(formula, x, y + hh + 30);
+      // the formula wraps between terms when it is wider than its box (the longer the language, the likelier)
+      g.fillStyle = '#c9cfdd'; g.font = pane.font(19);
+      let line = '', ly = y + hh + 30;
+      terms.forEach((t) => { const next = line ? `${line} ${t}` : t; if (line && g.measureText(next).width > w) { g.fillText(line, x, ly); ly += Math.max(26, pane.px(22)); line = t; } else line = next; });
+      g.fillText(line, x, ly);
     });
     seen.add(keys.length);
     if (keys.length === 3) ctx.did(0);
     if (seen.has(0) && seen.has(2)) ctx.did(1);
   };
   pane.onResize(draw);
-  const row = h('div', { style: 'display:flex;gap:8px', role: 'group', 'aria-label': 'Colours' });
-  Object.keys(on).forEach((k) => { const b = h('button', { type: 'button', class: 'lab-btn', style: 'flex:1', 'aria-pressed': 'false', onclick: () => { on[k] = !on[k]; b.setAttribute('aria-pressed', String(on[k])); draw(); } }, k); row.append(b); });
-  ctx.controls.append(h('div', { class: 'lab-k' }, 'Switch colours on and off'), row);
+  const row = h('div', { style: 'display:flex;gap:8px', role: 'group', 'aria-label': L('Colours', 'Colori') });
+  Object.keys(on).forEach((k) => { const b = h('button', { type: 'button', class: 'lab-btn', style: 'flex:1', 'aria-pressed': 'false', onclick: () => { on[k] = !on[k]; b.setAttribute('aria-pressed', String(on[k])); draw(); } }, NAME[k] ? L(k, NAME[k]) : k); row.append(b); });
+  ctx.controls.append(h('div', { class: 'lab-k' }, L('Switch colours on and off', 'Accendi e spegni i colori')), row);
   ctx.hint?.(() => row);
   draw();
 }
@@ -76,13 +84,13 @@ async function dotsStation(ctx) {
     g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
     if (st.view === 'tone') { const im = g.createImageData(W, H); for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const t = tone(U(x), V(y)) * 255, i = (y * W + x) * 4; im.data[i] = im.data[i + 1] = im.data[i + 2] = t; im.data[i + 3] = 255; } g.putImageData(im, 0, 0); }
     else { g.fillStyle = '#111'; for (let y = cell / 2; y < H + cell; y += cell) for (let x = cell / 2; x < W + cell; x += cell) { const t = tone(U(x), V(y)), rad = Math.sqrt((1 - t) / Math.PI) * cell * 1.05; if (rad > 0.2) { g.beginPath(); g.arc(x, y, rad, 0, 7); g.fill(); } } }
-    pane.caption(st.view === 'tone' ? 'The original tones' : z < 2 ? 'A printed photo at reading distance' : `The same print, ${z}× closer`);
+    pane.caption(st.view === 'tone' ? L('The original tones', 'I toni originali') : z < 2 ? L('A printed photo at reading distance', 'Una foto stampata a distanza di lettura') : L(`The same print, ${z}× closer`, `La stessa stampa, ${z}× più vicina`));
     if (z >= 8 && st.view === 'dots') ctx.did(0);
     if (st.view === 'tone') ctx.did(1);
   };
   pane.onResize(draw);
-  const closer = slider('Step closer', 1, 12, 1, (v) => { st.zoom = v; draw(); }, { fmt: (v) => `${v}×` });
-  const view = seg([['dots', 'The print'], ['tone', 'The original tones']], 'dots', (v) => { st.view = v; draw(); });
+  const closer = slider(L('Step closer', 'Avvicinati'), 1, 12, 1, (v) => { st.zoom = v; draw(); }, { fmt: (v) => `${v}×` });
+  const view = seg([['dots', L('The print', 'La stampa')], ['tone', L('The original tones', 'I toni originali')]], 'dots', (v) => { st.view = v; draw(); });
   ctx.controls.append(closer, view);
   ctx.hint?.((k) => (k === 0 ? closer : view));
   draw();
