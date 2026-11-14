@@ -1326,7 +1326,10 @@
                       "color": "grey"
                     },
                     {
-                      "text": "{db:0} dB",
+                      "text": {
+                        "en": "{db:0} dB",
+                        "it": "{db:0} dB"
+                      },
                       "at": [
                         50,
                         88
