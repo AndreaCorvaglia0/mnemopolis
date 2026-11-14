@@ -404,8 +404,8 @@ async function fine(target, [big, small]) {
     await labBtn(`${d > 0 ? '+' : '−'}${st}`);
   }
 }
-// the labels of Port Octave's buttons in the language of the address (Q='&lang=it')
-const IT = /lang=it/.test(process.env.Q || ''), T = (en, it) => (IT ? it : en);
+// the labels of Port Octave's buttons in the language played (LANG=it, or Q='&lang=it')
+const IT = process.env.LANG === 'it' || /lang=it/.test(process.env.Q || ''), T = (en, it) => (IT ? it : en);
 Object.assign(RECIPES, {
   'string:pluck': async () => { await tapItem('fret0'); await tapItem('pluck'); await tapItem('fret12'); await tapItem('pluck'); await setSlider(0, 75); },
   'string:harmonics': async () => { for (const m of [12, 7, 5]) { await tapItem(`touch${m}`); await tapItem('pluck'); } },
