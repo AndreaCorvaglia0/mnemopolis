@@ -46,7 +46,7 @@ crafts and judgement ("a dyer knows that colours change next to each other"). Ke
 (lab, archive, observatory...) for mechanisms and reference material, and mix the two: two or
 three homes in a town are enough. Choose a trade from `engine/src/gen/interior/trades.js`
 (cartographer, dyer, cook, musician, gardener, clockmaker, doctor, painter, scholar, potter,
-weaver, printer); another word gives a generic home. Pick a trade with an honest link to the
+weaver, printer, luthier, tuner); another word gives a generic home. Pick a trade with an honest link to the
 concept, write the line so that it carries the concept's idea, and keep it true: the expert is a
 character, not a source. The name fits a name plate (8 characters). Give the place a name that
 says whose house it is ("Painter's House").
