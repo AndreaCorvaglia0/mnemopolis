@@ -67,6 +67,37 @@ does not suit a nine-year-old doing homework:
 To decide when designing: whether the children's register is a `world.json` profile of the same
 game (story off, new strings, new duel skin) or a separate set of mechanics. First guess: a profile.
 
+## Where it lives: a branch of the project, in the same repository
+
+One repository, two products, one shared engine:
+
+```
+engine/     the game engine, shared
+skills/     the method for catalogue courses
+courses/    catalogue courses, curated by the owner (Chroma Town, Port Octave, ...)
+world/      the children's world: one more entry of the catalogue, but alive
+  format/   what a small town is, its validator
+  towns/    towns made by hand (the golden examples and fixtures)
+  builder/  the builder that runs inside the artifact
+  app/      the artifact page
+  docs/     its own plan, design pages, results of the trials
+spikes/     throw-away technical trials
+```
+
+- **Not a fork.** A fork copies the engine, and from that day every fix must be made twice; the
+  two games would drift apart within weeks.
+- **Not a long-lived git branch** either: it rots against `main`. Work happens in short branches
+  merged into `main`; the separation is by folder and by a switch, not by history.
+- **Separate where it counts**: `world/` has its own docs, roadmap, tests and CI job; nothing
+  under `courses/` or `skills/` depends on it; what it needs from the engine (the children's
+  profile, the chart, the store) sits in the engine behind `profile: "kids"`, off for every
+  catalogue course.
+- **A door left open**: if `world/` grows into its own product, it can be moved to its own
+  repository that takes the engine as a dependency. The folder boundary above is what makes that
+  a move and not a rewrite. Not before the engine's interface has stopped changing.
+- On the site, the world appears in the catalogue as one card ("build your own islands"), which
+  opens the artifact instead of a game.
+
 ## Compartments (who knows what)
 
 Seven parts, each with one job and a written contract. The rule that keeps it from becoming one
@@ -74,32 +105,43 @@ lump: **the builder and the engine never import each other; they meet only in th
 
 | Part | Job | Knows about | Lives in |
 |---|---|---|---|
-| 1. Town format | What a small town is: a strict subset of `course.json`, its schema, the validator's "kids" rules | nothing else | `skills/knowledge-base/schema`, `scripts/` |
+| 1. Town format | What a small town is: a strict subset of `course.json`, its schema, the validator's "kids" rules | nothing else | `world/format/` |
 | 2. Player | Plays one town | the format | `engine/` (as today) |
 | 3. Children's profile | Companion, friendly fights, points, the progression always on screen; the catalogue's story off | the player's state contract | `engine/src/mechanics/kids/`, switched by `world.json` (`profile: "kids"`) |
 | 4. World | The sea chart, routes, changing town, what is shared between towns (companion, coins, seals, the fog coming back) | player, store | `engine/src/atlas/` |
 | 5. Store | Save and load towns and progress, behind one interface | nothing else | `engine/src/store/`: one implementation on the browser's storage (development, public player), one on the artifact's store |
-| 6. Builder | The conversation, the prompts, the model's tools, the adult's check; gives back a town that passes the validator | the format, the validator, the catalogue of lab patterns; the model only through an `ask()` interface with two implementations (the artifact's, and a recorded one for tests) | `builder/` (its own folder and tests, not part of the engine) |
-| 7. Artifact shell | Wires builder, store and player; declares what the page may do | everything; as thin as possible | `apps/world/` |
+| 6. Builder | The conversation, the prompts, the model's tools, the adult's check; gives back a town that passes the validator | the format, the validator, the catalogue of lab patterns; the model only through an `ask()` interface with two implementations (the artifact's, and a recorded one for tests) | `world/builder/` (its own tests, not part of the engine) |
+| 7. Artifact shell | Wires builder, store and player; declares what the page may do | everything; as thin as possible | `world/app/` |
 
 Consequences: the player and the world can be built and tested with hand-made towns and the
 browser's storage, with no model and no artifact; the builder can be tested with recorded answers
 and no game; only the shell needs the real artifact. The catalogue's courses never see any of it
 (the profile is a switch; CI keeps playing Chroma Town to the end on every change).
 
-## Unknowns to try first (a small technical trial)
+## Technical trials needed before a real plan
 
-1. Does an artifact let the page run code generated on the spot (a lab made to measure)? If not,
-   the world keeps to ready-made patterns, and their catalogue must grow.
-2. How long, and how much usage, does one town take with patterns only, and with one lab to measure?
-3. Is the store enough for towns with photos and lab code (sizes, limits)?
-4. Does the game run well inside the artifact viewer on a phone (sound, touch, full screen)?
+One throw-away test page published as an artifact. The owner opens it on his phone and presses
+"run": the trials need a real viewer (consent, the model call on the viewer's account, the
+phone). Results are written to the page's store, where they can be read back and copied here.
+
+| # | Question | How | It decides |
+|---|---|---|---|
+| T1 | Can the page run code written on the spot? | Three ways of loading a generated module (blob import, data address, an inner frame) | Labs made to measure, or patterns only |
+| T2 | What does a call to the model allow? | A town-sized answer as JSON: time, where it is cut, the tiers, tools called by the model, a photo as input (size, how many) | The shape of the builder's loop, how much goes in one call |
+| T3 | How reliable and how dear is one town? | Ten builds of a three-house town with patterns: calls, time, how many pass the validator at once and after one repair | Whether "economical" holds; the builder's budget |
+| T4 | What can the store hold? | Sizes and counts; private data per person; reading again on another device | Where towns and progress live; photos kept or not |
+| T5 | Does the game run well inside the artifact on a phone? | The real engine in the page: weight, start time, sound, touch, full screen, changing town without a reload | Whether the player goes in as it is |
+| T6 | Who can use one published artifact? | A second account opens the same page: is its world private, whose usage pays for building | How a new family starts: one shared page, or a copy each |
+| T7 | Can a finished town be played with no account? | Export a town and open it in the public player | The child's own device |
+| T8 | Is the content good enough? | Three school topics built and read against the golden town | Needs phase 1 first; the only trial that is about quality, not plumbing |
+
+T1 to T7 fit in one page and one evening of the owner's phone; T8 comes after the golden town.
 
 ## Phases (each ends with something the owner plays or uses)
 
 | Phase | Work | Done when |
 |---|---|---|
-| 0. Trial | Throw-away code in `spikes/`, never merged into the engine: the four unknowns above | The answers are written here, with a yes or no on labs made to measure |
+| 0. Trials | The test page in `spikes/`, never merged into the engine: T1 to T7 above | The answers are written in `world/docs/`, and this plan is revised on them |
 | 1. The golden town | The town format and its rules; one children's town made by hand (the target the builder must hit later), played with the engine as it is | The owner plays it on a phone; the format is frozen |
 | 2. The children's profile | Companion, fights, points, progression; simulated children and parents (small models) on screenshots | The same town reads as a children's game; the design page for the fiction is approved first |
 | 3. World and store | A second hand-made town; the chart, the ship between islands, shared progress, the fog coming back (spaced repetition); browser storage | The owner sails between two islands and finds his progress the next day |
@@ -126,26 +168,28 @@ real phone.
 - **The children's world needs its own fiction**, coherent across many islands; the catalogue's
   story (rain, forgetting, the bitter loop) is not reused.
 
-## The common dynamic across islands (proposal, not approved)
+## The common dynamic: points, a villain, islands set free (first draft)
 
-One thing that grows with the child and travels on the ship from island to island:
+Decided by the owner: the game is about earning points, beating the villain and freeing the
+islands, and growing as you go. Whether a companion evolves is left for later; the points come first.
 
-- **A companion** that the child raises. It gains levels from what the child understands (labs)
-  and remembers (questions); each island gives it one new ability tied to that island's topic.
-- **Challenges as friendly fights.** Each house is kept by a small creature of the fog (what is
-  not yet understood); the companion's moves are the child's answers. Nobody is hurt: a beaten
-  creature clears up and stays in the house as a friend. The island's last check is its keeper.
-- **Coming back matters.** On islands already cleared, the fog creeps back after some days and
-  the creatures return a little stronger: this is spaced repetition, dressed as the game's own
-  rule, and it is where most of the memory work happens.
-- **Coins** from repetition, spent on things that show (the companion's looks, the ship, the
-  island's lights) and on tools that open small secret places. Levels come only from learning,
-  never from spending.
-- **A very clear progression**: stars per house, a seal per island, the companion's level, the
-  chart filling in.
+- **Each island is held by a villain** who keeps it in fog. Each house is one key concept.
+- **Three ways to earn**, matching what the adult wants to know:
+  - *understand*: finish a house's lab, one to three stars by how it went;
+  - *remember*: answer the house's questions, points for each, more for a run without a miss;
+  - *come back*: a short review on an island already freed, some days later, pays again (less).
+- **The villain's bar is the island's progress.** Every house cleared takes a visible piece off
+  it. With all houses done, the last fight is the island's final check: win, and the island is
+  free (lights on, a seal on the chart).
+- **Growing.** Points add up to a level for the whole world; levels open what is next on the
+  chart (routes, a place to build a new island) and things that show (the ship, the flag).
+- **The fog comes back.** A freed island slowly greys on the chart; a short review keeps it free.
+  This is spaced repetition as the game's own rule.
+- **Nothing is ever taken away.** A wrong answer explains and returns later; at most the villain
+  gets a little of his bar back.
+- One currency to start with (points and stars). Coins and a shop only if the game needs them.
 
-The link with the catalogue is light: the fog of forgetting is the same idea, told for children.
-All of this is the engine's (creatures drawn by the generators, fixed rules): no tokens.
+To settle in the design page of phase 2: the numbers, who the villain is, companion or not.
 
 ## Open questions for the owner
 
