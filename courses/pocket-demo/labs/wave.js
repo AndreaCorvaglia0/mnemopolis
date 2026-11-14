@@ -16,7 +16,7 @@ async function push(ctx) {
     // the speaker: a box and a cone the learner pushes
     d.box(14, cy - 90, 62, 180, { fill: C.card2, stroke: C.line2, r: 10 });
     d.box(76 + cone, cy - 70, 16, 140, { fill: grab ? C.acc : C.muted, r: 6, glow: grab ? C.acc : null });
-    d.text(L('speaker', 'altoparlante'), 45, cy + 118, { size: 16, color: C.dim, align: 'center' });
+    d.text(L('speaker', 'cassa'), 45, cy + 118, { size: 16, color: C.dim, align: 'center' });
     // the air: every molecule shifted by the squeeze that has reached it; squeezed air glows
     for (let r = 0; r < l.rows; r++) for (let c = 0; c < l.cols; c++) {
       const hx = l.x0 + c * l.gx, dist = hx - 90, u = shiftAt(dist), squeeze = clamp((shiftAt(dist - 8) - shiftAt(dist + 8)) / 10, -1, 1);
@@ -31,7 +31,7 @@ async function push(ctx) {
     // the ear, which lights up when a squeeze arrives
     d.circle(l.ear, cy, 34 + ring * 16, { fill: alpha(C.gold, 0.1 + 0.3 * ring), glow: ring > 0.05 ? C.gold : null });
     d.emoji('👂', l.ear, cy, 44);
-    d.text(heard ? L(`heard: ${heard}`, `sentite: ${heard}`) : L('ear', 'orecchio'), Math.min(l.ear, pane.W - 40), cy + 72, { size: 17, weight: 600, color: heard ? C.gold : C.dim, align: 'center' });
+    d.text(heard ? L(`heard: ${heard}`, `udite: ${heard}`) : L('ear', 'orecchio'), Math.min(l.ear, pane.W - 40), cy + 72, { size: 17, weight: 600, color: heard ? C.gold : C.dim, align: 'center' });
   });
   const anim = animate(ctx, (dt) => {
     const prev = now; now = clock();

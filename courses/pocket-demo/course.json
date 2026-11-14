@@ -1344,7 +1344,7 @@
                 "value": "10^(k*extra/10)",
                 "label": {
                   "en": "Sound intensity (A = 1)",
-                  "it": "Intensità sonora (A = 1)"
+                  "it": "Intensità (A = 1)"
                 },
                 "decimals": 0
               }
@@ -1840,7 +1840,7 @@
                   "id": "jar",
                   "label": {
                     "en": "A jar with the air pumped out",
-                    "it": "Una campana di vetro svuotata dall'aria"
+                    "it": "Campana a vuoto"
                   },
                   "emoji": "🔔",
                   "bin": "none",
