@@ -3,20 +3,63 @@
   "version": 1,
   "id": "pocket-demo",
   "language": "en",
-  "title": "How Sound Works",
-  "subject": "Sound: what travels, what sets the pitch, what loudness measures, and what sound needs to travel",
-  "bigIdea": "Sound is a squeeze passed from molecule to molecule: its rate is the pitch, its strength the loudness, and it needs matter to travel.",
-  "pitch": "Squeeze the air, set a pitch, and find out why sound needs something to travel through.",
-  "tags": ["physics", "sound"],
-  "level": "introductory",
-  "learner": "Curious adults and secondary-school students with no physics beyond everyday experience.",
-  "goals": [
-    "Explain why the air does not travel from a speaker to your ear.",
-    "Predict how the wavelength changes when the frequency changes.",
-    "Compare two sound levels in decibels as a ratio of intensities.",
-    "Predict whether, and how fast, sound crosses a material."
+  "languages": [
+    "en",
+    "it"
   ],
-  "credit": "Facts checked against OpenStax physics textbooks, The Physics Classroom and Wikipedia.",
+  "title": {
+    "en": "How Sound Works",
+    "it": "Come funziona il suono"
+  },
+  "subject": {
+    "en": "Sound: what travels, what sets the pitch, what loudness measures, and what sound needs to travel",
+    "it": "Il suono: che cosa viaggia, che cosa determina l'altezza, che cosa misura il volume e di che cosa ha bisogno il suono per propagarsi"
+  },
+  "bigIdea": {
+    "en": "Sound is a squeeze passed from molecule to molecule: its rate is the pitch, its strength the loudness, and it needs matter to travel.",
+    "it": "Il suono è una compressione che passa di molecola in molecola: la sua frequenza determina l'altezza, la sua forza il volume, e per propagarsi ha bisogno di materia."
+  },
+  "pitch": {
+    "en": "Squeeze the air, set a pitch, and find out why sound needs something to travel through.",
+    "it": "Comprimi l'aria, scegli un'altezza e scopri perché il suono ha bisogno di un mezzo attraverso cui propagarsi."
+  },
+  "tags": [
+    {
+      "en": "physics",
+      "it": "fisica"
+    },
+    {
+      "en": "sound",
+      "it": "suono"
+    }
+  ],
+  "level": "introductory",
+  "learner": {
+    "en": "Curious adults and secondary-school students with no physics beyond everyday experience.",
+    "it": "Adulti curiosi e studenti delle scuole superiori senza altre conoscenze di fisica oltre all'esperienza quotidiana."
+  },
+  "goals": [
+    {
+      "en": "Explain why the air does not travel from a speaker to your ear.",
+      "it": "Spiegare perché l'aria non viaggia dall'altoparlante al tuo orecchio."
+    },
+    {
+      "en": "Predict how the wavelength changes when the frequency changes.",
+      "it": "Prevedere come cambia la lunghezza d'onda quando cambia la frequenza."
+    },
+    {
+      "en": "Compare two sound levels in decibels as a ratio of intensities.",
+      "it": "Confrontare due livelli sonori in decibel come rapporto tra intensità."
+    },
+    {
+      "en": "Predict whether, and how fast, sound crosses a material.",
+      "it": "Prevedere se il suono attraversa un materiale e con quale velocità."
+    }
+  ],
+  "credit": {
+    "en": "Facts checked against OpenStax physics textbooks, The Physics Classroom and Wikipedia.",
+    "it": "Fatti verificati su testi di fisica OpenStax, The Physics Classroom e Wikipedia."
+  },
   "sources": [
     {
       "id": "os171",
@@ -57,8 +100,14 @@
   "themes": [
     {
       "id": "sound",
-      "name": "Sound",
-      "idea": "A squeeze that travels through matter."
+      "name": {
+        "en": "Sound",
+        "it": "Il suono"
+      },
+      "idea": {
+        "en": "A squeeze that travels through matter.",
+        "it": "Una compressione che si propaga attraverso la materia."
+      }
     }
   ],
   "concepts": [
@@ -66,33 +115,81 @@
       "id": "wave",
       "theme": "sound",
       "type": "mechanism",
-      "name": "A travelling squeeze",
-      "place": "Squeeze House",
-      "objective": "Explain why the air near a speaker does not travel to the ear when the speaker sounds.",
-      "idea": "A speaker squeezes the air next to it; each molecule pushes its neighbour and returns. The squeeze travels, the air stays.",
-      "wrongBelief": "The air from the speaker flies to your ear, like a breeze.",
+      "name": {
+        "en": "A travelling squeeze",
+        "it": "Una compressione che viaggia"
+      },
+      "place": {
+        "en": "Squeeze House",
+        "it": "Casa della Compressione"
+      },
+      "objective": {
+        "en": "Explain why the air near a speaker does not travel to the ear when the speaker sounds.",
+        "it": "Spiegare perché l'aria vicina a un altoparlante non arriva fino all'orecchio quando l'altoparlante suona."
+      },
+      "idea": {
+        "en": "A speaker squeezes the air next to it; each molecule pushes its neighbour and returns. The squeeze travels, the air stays.",
+        "it": "Un altoparlante comprime l'aria che ha accanto; ogni molecola spinge la vicina e poi ritorna. La compressione viaggia, l'aria resta."
+      },
+      "wrongBelief": {
+        "en": "The air from the speaker flies to your ear, like a breeze.",
+        "it": "L'aria dell'altoparlante vola fino al tuo orecchio, come una brezza."
+      },
       "anchor": {
         "type": "analogy",
-        "text": "A stadium wave: each person stands up and sits down in place, and the wave runs around the stadium.",
-        "limits": "In a stadium people move up and down, across the direction of the wave; air molecules move back and forth along it."
+        "text": {
+          "en": "A stadium wave: each person stands up and sits down in place, and the wave runs around the stadium.",
+          "it": "L'ola allo stadio: ogni persona si alza e si siede restando al proprio posto, mentre l'onda percorre tutto lo stadio."
+        },
+        "limits": {
+          "en": "In a stadium people move up and down, across the direction of the wave; air molecules move back and forth along it.",
+          "it": "Allo stadio le persone si muovono su e giù, perpendicolarmente alla direzione dell'onda; le molecole d'aria si muovono avanti e indietro lungo di essa."
+        }
       },
-      "application": "Speakers, voices and musical instruments all push and pull the air next to them; your eardrum is pushed and pulled in turn.",
+      "application": {
+        "en": "Speakers, voices and musical instruments all push and pull the air next to them; your eardrum is pushed and pulled in turn.",
+        "it": "Altoparlanti, voci e strumenti musicali spingono e tirano l'aria che hanno accanto, e a sua volta il tuo timpano viene spinto e tirato."
+      },
       "remember": [
-        "Sound is a squeeze (compression) and stretch (rarefaction) passed from molecule to molecule.",
-        "Each molecule only moves back and forth around its place: the squeeze travels, the air does not."
+        {
+          "en": "Sound is a squeeze (compression) and stretch (rarefaction) passed from molecule to molecule.",
+          "it": "Il suono è una compressione e una rarefazione che passano di molecola in molecola."
+        },
+        {
+          "en": "Each molecule only moves back and forth around its place: the squeeze travels, the air does not.",
+          "it": "Ogni molecola si muove solo avanti e indietro attorno alla propria posizione: la compressione viaggia, l'aria no."
+        }
       ],
       "explain": {
-        "q": "Why does a loud speaker not blow your hair back?",
-        "a": "Its cone only pushes and pulls the air next to it. The molecules pass the push along and return to their places, so there is no flow of air towards you, only a travelling squeeze."
+        "q": {
+          "en": "Why does a loud speaker not blow your hair back?",
+          "it": "Perché un altoparlante potente non ti spinge indietro i capelli?"
+        },
+        "a": {
+          "en": "Its cone only pushes and pulls the air next to it. The molecules pass the push along and return to their places, so there is no flow of air towards you, only a travelling squeeze.",
+          "it": "Il suo cono spinge e tira soltanto l'aria che ha accanto. Le molecole si passano la spinta e tornano al loro posto, quindi non c'è alcun flusso d'aria verso di te, ma solo una compressione che si propaga."
+        }
       },
       "page": [
         {
-          "title": "Push, pass, return",
-          "text": "When a speaker cone moves forward it crowds the air molecules next to it: a compression. Those molecules push their neighbours and spring back; when the cone moves back it leaves a region of thinner air, a rarefaction. Compressions and rarefactions travel outward as a pressure wave, while each molecule only oscillates about its own position, along the direction the wave travels."
+          "title": {
+            "en": "Push, pass, return",
+            "it": "Spinta, passaggio, ritorno"
+          },
+          "text": {
+            "en": "When a speaker cone moves forward it crowds the air molecules next to it: a compression. Those molecules push their neighbours and spring back; when the cone moves back it leaves a region of thinner air, a rarefaction. Compressions and rarefactions travel outward as a pressure wave, while each molecule only oscillates about its own position, along the direction the wave travels.",
+            "it": "Quando il cono di un altoparlante avanza, ammassa le molecole d'aria che ha accanto: è una compressione. Quelle molecole spingono le vicine e poi tornano indietro; quando il cono arretra, lascia una zona di aria più rada, una rarefazione. Compressioni e rarefazioni si allontanano come un'onda di pressione, mentre ogni molecola oscilla soltanto attorno alla propria posizione, lungo la direzione in cui l'onda si propaga."
+          }
         },
         {
-          "title": "What reaches your ear",
-          "text": "Your eardrum is pushed in by each compression and pulled out by each rarefaction: it moves at the same rate as the speaker cone. What travels is energy and pattern, not air."
+          "title": {
+            "en": "What reaches your ear",
+            "it": "Che cosa arriva all'orecchio"
+          },
+          "text": {
+            "en": "Your eardrum is pushed in by each compression and pulled out by each rarefaction: it moves at the same rate as the speaker cone. What travels is energy and pattern, not air.",
+            "it": "Il timpano viene spinto verso l'interno da ogni compressione e richiamato verso l'esterno da ogni rarefazione, quindi si muove con la stessa frequenza del cono dell'altoparlante. Ciò che viaggia sono energia e perturbazione, non aria."
+          }
         }
       ],
       "sources": [
@@ -100,43 +197,76 @@
         "pcmech"
       ],
       "lab": {
-        "title": "The squeeze",
+        "title": {
+          "en": "The squeeze",
+          "it": "La compressione"
+        },
         "stations": [
           {
             "id": "push",
-            "tab": "Push the air",
-            "goal": "A push on the air travels as a squeeze, but each molecule only moves a little and comes back.",
+            "tab": {
+              "en": "Push the air",
+              "it": "Spingi l'aria"
+            },
+            "goal": {
+              "en": "A push on the air travels as a squeeze, but each molecule only moves a little and comes back.",
+              "it": "Una spinta sull'aria si propaga come compressione, ma ogni molecola si sposta di poco e poi ritorna."
+            },
             "beat": "ground",
             "pattern": "handle",
             "object": "A speaker cone, a field of air molecules with one gold molecule beside the cone, and an ear on the far side.",
             "action": "Pushes the cone by hand and watches the squeeze cross the air while the gold molecule stays near its place.",
             "surprise": "The squeeze reaches the ear, but the gold molecule never leaves the speaker: its whole trip is a few units.",
             "predict": {
-              "q": "The speaker sends a sound to the ear. The gold molecule next to the speaker...",
+              "q": {
+                "en": "The speaker sends a sound to the ear. The gold molecule next to the speaker...",
+                "it": "L'altoparlante manda un suono all'orecchio. La molecola dorata accanto all'altoparlante..."
+              },
               "options": [
-                "travels across to the ear",
-                "jiggles back and forth near where it started",
-                "is pushed away and stays near the ear"
+                {
+                  "en": "travels across to the ear",
+                  "it": "viaggia fino all'orecchio"
+                },
+                {
+                  "en": "jiggles back and forth near where it started",
+                  "it": "oscilla avanti e indietro vicino al punto di partenza"
+                },
+                {
+                  "en": "is pushed away and stays near the ear",
+                  "it": "viene spinta via e resta vicino all'orecchio"
+                }
               ],
               "answer": 1,
-              "why": "Each molecule only nudges its neighbour and comes back: the squeeze travels, the air stays."
+              "why": {
+                "en": "Each molecule only nudges its neighbour and comes back: the squeeze travels, the air stays.",
+                "it": "Ogni molecola si limita a urtare la vicina e a tornare indietro: la compressione viaggia, l'aria resta."
+              }
             },
             "controls": [],
             "tries": [
               {
-                "text": "Grab the speaker cone, push it and let go.",
+                "text": {
+                  "en": "Grab the speaker cone, push it and let go.",
+                  "it": "Afferra il cono dell'altoparlante, spingilo e rilascialo."
+                },
                 "when": {
                   "select": "push"
                 }
               },
               {
-                "text": "Send a squeeze all the way to the ear.",
+                "text": {
+                  "en": "Send a squeeze all the way to the ear.",
+                  "it": "Manda una compressione fino all'orecchio."
+                },
                 "when": {
                   "select": "heard"
                 }
               },
               {
-                "text": "Send three squeezes and watch how far the gold molecule goes.",
+                "text": {
+                  "en": "Send three squeezes and watch how far the gold molecule goes.",
+                  "it": "Manda tre compressioni e osserva fin dove arriva la molecola dorata."
+                },
                 "when": {
                   "try": {
                     "count": 3
@@ -144,106 +274,238 @@
                 }
               }
             ],
-            "takeaway": "Sound is a <b>squeeze passed along</b>: each molecule moves only a little, <b>back and forth</b>, and the <b>pattern</b> travels to the ear.",
-            "source": "Each molecule is drawn shifted by the cone's own shift a moment earlier, the time the squeeze needs to reach it: a travelling wave computed live. Slowed down about a thousand times and with the shifts enlarged, so that they can be seen."
+            "takeaway": {
+              "en": "Sound is a <b>squeeze passed along</b>: each molecule moves only a little, <b>back and forth</b>, and the <b>pattern</b> travels to the ear.",
+              "it": "Il suono è una <b>compressione che passa da una molecola all'altra</b>: ogni molecola si sposta di poco, <b>avanti e indietro</b>, e a raggiungere l'orecchio è la <b>perturbazione</b>."
+            },
+            "source": {
+              "en": "Each molecule is drawn shifted by the cone's own shift a moment earlier, the time the squeeze needs to reach it: a travelling wave computed live. Slowed down about a thousand times and with the shifts enlarged, so that they can be seen.",
+              "it": "Ogni molecola è disegnata spostata come lo era il cono un istante prima, cioè il tempo che la compressione impiega a raggiungerla: un'onda che si propaga, calcolata in tempo reale. È rallentata di circa mille volte e con gli spostamenti ingranditi, perché si possano vedere."
+            }
           }
         ]
       },
       "questions": [
         {
           "level": 1,
-          "q": "When a sound travels from a speaker to your ear, what travels across the room?",
+          "q": {
+            "en": "When a sound travels from a speaker to your ear, what travels across the room?",
+            "it": "Quando un suono viaggia da un altoparlante al tuo orecchio, che cosa attraversa la stanza?"
+          },
           "options": [
-            "The air next to the speaker",
-            "Molecules thrown out by the cone",
-            "A squeeze passed from molecule to molecule"
+            {
+              "en": "The air next to the speaker",
+              "it": "L'aria accanto all'altoparlante"
+            },
+            {
+              "en": "Molecules thrown out by the cone",
+              "it": "Molecole lanciate fuori dal cono"
+            },
+            {
+              "en": "A squeeze passed from molecule to molecule",
+              "it": "Una compressione passata di molecola in molecola"
+            }
           ],
           "answer": 2,
-          "why": "Each molecule pushes its neighbour and returns; only the squeeze, the pattern, crosses the room.",
+          "why": {
+            "en": "Each molecule pushes its neighbour and returns; only the squeeze, the pattern, crosses the room.",
+            "it": "Ogni molecola spinge la vicina e ritorna; a attraversare la stanza è soltanto la compressione, cioè la perturbazione."
+          },
           "traps": [
-            "This is the breeze picture: the air near the cone would have to flow to you, and it does not.",
-            "Molecules are pushed only a tiny distance and then pulled back by the next rarefaction.",
+            {
+              "en": "This is the breeze picture: the air near the cone would have to flow to you, and it does not.",
+              "it": "Questa è l'immagine della brezza: l'aria vicina al cono dovrebbe fluire fino a te, e non succede."
+            },
+            {
+              "en": "Molecules are pushed only a tiny distance and then pulled back by the next rarefaction.",
+              "it": "Le molecole vengono spinte solo di pochissimo e poi richiamate indietro dalla rarefazione successiva."
+            },
             null
           ]
         },
         {
           "level": 1,
-          "q": "What is a compression in a sound wave?",
+          "q": {
+            "en": "What is a compression in a sound wave?",
+            "it": "Che cos'è una compressione in un'onda sonora?"
+          },
           "options": [
-            "A region where molecules are crowded together",
-            "A region with no molecules at all",
-            "A molecule that has stopped moving"
+            {
+              "en": "A region where molecules are crowded together",
+              "it": "Una regione in cui le molecole sono ammassate"
+            },
+            {
+              "en": "A region with no molecules at all",
+              "it": "Una regione senza alcuna molecola"
+            },
+            {
+              "en": "A molecule that has stopped moving",
+              "it": "Una molecola che ha smesso di muoversi"
+            }
           ],
           "answer": 0,
-          "why": "A compression is a region of higher pressure where molecules are pushed closer together; a rarefaction is where they are spread out.",
+          "why": {
+            "en": "A compression is a region of higher pressure where molecules are pushed closer together; a rarefaction is where they are spread out.",
+            "it": "Una compressione è una regione a pressione più alta in cui le molecole sono spinte più vicine tra loro; una rarefazione è dove sono più distanziate."
+          },
           "traps": [
             null,
-            "That would be a vacuum, and sound cannot travel through a vacuum at all.",
-            "Molecules in a compression are still moving: they are crowded together for a moment, not still."
+            {
+              "en": "That would be a vacuum, and sound cannot travel through a vacuum at all.",
+              "it": "Quello sarebbe il vuoto, e il suono non può propagarsi affatto nel vuoto."
+            },
+            {
+              "en": "Molecules in a compression are still moving: they are crowded together for a moment, not still.",
+              "it": "In una compressione le molecole continuano a muoversi: sono ammassate per un istante, non ferme."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "A candle flame sits in front of a speaker playing a low hum. What does the flame most likely do?",
+          "q": {
+            "en": "A candle flame sits in front of a speaker playing a low hum. What does the flame most likely do?",
+            "it": "Una candela accesa sta davanti a un altoparlante che emette un ronzio grave. Che cosa fa più probabilmente la fiamma?"
+          },
           "options": [
-            "It is blown steadily away from the speaker",
-            "It flickers back and forth",
-            "Nothing at all, sound has no effect on air"
+            {
+              "en": "It is blown steadily away from the speaker",
+              "it": "Viene spinta con continuità lontano dall'altoparlante"
+            },
+            {
+              "en": "It flickers back and forth",
+              "it": "Oscilla avanti e indietro"
+            },
+            {
+              "en": "Nothing at all, sound has no effect on air",
+              "it": "Nulla, il suono non ha effetto sull'aria"
+            }
           ],
           "answer": 1,
-          "why": "The air near the flame is pushed and pulled in turn, so the flame moves back and forth with the sound instead of being blown away.",
+          "why": {
+            "en": "The air near the flame is pushed and pulled in turn, so the flame moves back and forth with the sound instead of being blown away.",
+            "it": "L'aria vicina alla fiamma viene spinta e tirata a turno, quindi la fiamma oscilla con il suono invece di essere spostata via."
+          },
           "traps": [
-            "A steady push away would need a flow of air, but the cone pushes and then pulls.",
+            {
+              "en": "A steady push away would need a flow of air, but the cone pushes and then pulls.",
+              "it": "Una spinta continua verso l'esterno richiederebbe un flusso d'aria, ma il cono spinge e poi tira."
+            },
             null,
-            "Sound is made of air being pushed and pulled, so it does move the air near the flame."
+            {
+              "en": "Sound is made of air being pushed and pulled, so it does move the air near the flame.",
+              "it": "Il suono è fatto di aria spinta e tirata, quindi muove eccome l'aria vicina alla fiamma."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Your eardrum moves when a sound arrives. How does it move?",
+          "q": {
+            "en": "Your eardrum moves when a sound arrives. How does it move?",
+            "it": "Il timpano si muove quando arriva un suono. Come si muove?"
+          },
           "options": [
-            "Back and forth at the same rate as the source",
-            "Pushed in once and left there",
-            "It spins around in circles"
+            {
+              "en": "Back and forth at the same rate as the source",
+              "it": "Avanti e indietro con la stessa frequenza della sorgente"
+            },
+            {
+              "en": "Pushed in once and left there",
+              "it": "Viene spinto dentro una volta e lì resta"
+            },
+            {
+              "en": "It spins around in circles",
+              "it": "Gira su sé stesso in cerchio"
+            }
           ],
           "answer": 0,
-          "why": "Each compression pushes it in and each rarefaction lets it out, at the rate the source vibrates.",
+          "why": {
+            "en": "Each compression pushes it in and each rarefaction lets it out, at the rate the source vibrates.",
+            "it": "Ogni compressione lo spinge dentro e ogni rarefazione lo lascia tornare fuori, con la frequenza con cui vibra la sorgente."
+          },
           "traps": [
             null,
-            "A single push would be one click, not a sound that lasts: the eardrum follows every squeeze and stretch.",
-            "The air pushes along the direction the sound travels, so the eardrum moves in and out, not in circles."
+            {
+              "en": "A single push would be one click, not a sound that lasts: the eardrum follows every squeeze and stretch.",
+              "it": "Una sola spinta darebbe un solo click, non un suono che dura: il timpano segue ogni compressione e ogni rarefazione."
+            },
+            {
+              "en": "The air pushes along the direction the sound travels, so the eardrum moves in and out, not in circles.",
+              "it": "L'aria spinge lungo la direzione in cui il suono si propaga, quindi il timpano si muove dentro e fuori, non in cerchio."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "In a stadium wave, people stand and sit in place while the wave runs around. Where does this picture of sound go wrong?",
+          "q": {
+            "en": "In a stadium wave, people stand and sit in place while the wave runs around. Where does this picture of sound go wrong?",
+            "it": "In un'ola da stadio le persone si alzano e si siedono al loro posto mentre l'onda gira intorno allo stadio. Dove sbaglia questa immagine del suono?"
+          },
           "options": [
-            "People move across the direction of the wave; air molecules move along it",
-            "In a stadium wave nobody moves",
-            "Sound molecules travel around the room like the wave"
+            {
+              "en": "People move across the direction of the wave; air molecules move along it",
+              "it": "Le persone si muovono perpendicolarmente alla direzione dell'onda; le molecole d'aria si muovono lungo di essa"
+            },
+            {
+              "en": "In a stadium wave nobody moves",
+              "it": "In un'ola da stadio nessuno si muove"
+            },
+            {
+              "en": "Sound molecules travel around the room like the wave",
+              "it": "Le molecole del suono girano per la stanza come l'onda"
+            }
           ],
           "answer": 0,
-          "why": "Sound in air is longitudinal: molecules oscillate along the direction the wave travels.",
+          "why": {
+            "en": "Sound in air is longitudinal: molecules oscillate along the direction the wave travels.",
+            "it": "Il suono nell'aria è un'onda longitudinale: le molecole oscillano lungo la direzione in cui l'onda si propaga."
+          },
           "traps": [
             null,
-            "People do move: they stand up and sit down, which is the whole point of the picture.",
-            "Molecules stay near their places in sound too; that part of the picture is right."
+            {
+              "en": "People do move: they stand up and sit down, which is the whole point of the picture.",
+              "it": "Le persone si muovono: si alzano e si siedono, ed è proprio questo il senso dell'immagine."
+            },
+            {
+              "en": "Molecules stay near their places in sound too; that part of the picture is right.",
+              "it": "Anche nel suono le molecole restano vicine al loro posto: questa parte dell'immagine è giusta."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A speaker plays the same note for a minute. Roughly how far does one air molecule beside it travel in that minute?",
+          "q": {
+            "en": "A speaker plays the same note for a minute. Roughly how far does one air molecule beside it travel in that minute?",
+            "it": "Un altoparlante suona la stessa nota per un minuto. Più o meno quanta strada percorre in quel minuto una molecola d'aria accanto ad esso?"
+          },
           "options": [
-            "About as far as the sound travels",
-            "A tiny distance, back and forth",
-            "Exactly one metre"
+            {
+              "en": "About as far as the sound travels",
+              "it": "Più o meno quanta ne percorre il suono"
+            },
+            {
+              "en": "A tiny distance, back and forth",
+              "it": "Una distanza minuscola, avanti e indietro"
+            },
+            {
+              "en": "Exactly one metre",
+              "it": "Esattamente un metro"
+            }
           ],
           "answer": 1,
-          "why": "Each molecule oscillates about its own position, so after a minute it is still near where it started.",
+          "why": {
+            "en": "Each molecule oscillates about its own position, so after a minute it is still near where it started.",
+            "it": "Ogni molecola oscilla attorno alla propria posizione, quindi dopo un minuto è ancora vicina al punto di partenza."
+          },
           "traps": [
-            "The sound covers kilometres in a minute; the molecules do not, they only pass the squeeze on.",
+            {
+              "en": "The sound covers kilometres in a minute; the molecules do not, they only pass the squeeze on.",
+              "it": "In un minuto il suono percorre chilometri; le molecole no, si limitano a passare avanti la compressione."
+            },
             null,
-            "Nothing fixes a distance of one metre: molecules oscillate around their place, they do not travel a set distance."
+            {
+              "en": "Nothing fixes a distance of one metre: molecules oscillate around their place, they do not travel a set distance.",
+              "it": "Niente fissa una distanza di un metro: le molecole oscillano attorno al loro posto, non percorrono una distanza prestabilita."
+            }
           ]
         }
       ]
@@ -252,33 +514,81 @@
       "id": "pitch",
       "theme": "sound",
       "type": "mechanism",
-      "name": "Pitch and frequency",
-      "place": "Tuning House",
-      "objective": "Predict how the pitch and the wavelength of a sound change when its frequency changes.",
-      "idea": "Pitch is how many squeezes reach the ear each second. In air the speed is fixed, so more squeezes per second means shorter ones.",
-      "wrongBelief": "A higher note travels faster, or has longer waves.",
+      "name": {
+        "en": "Pitch and frequency",
+        "it": "Altezza e frequenza"
+      },
+      "place": {
+        "en": "Tuning House",
+        "it": "Casa dell'Accordatura"
+      },
+      "objective": {
+        "en": "Predict how the pitch and the wavelength of a sound change when its frequency changes.",
+        "it": "Prevedere come cambiano l'altezza e la lunghezza d'onda di un suono quando cambia la sua frequenza."
+      },
+      "idea": {
+        "en": "Pitch is how many squeezes reach the ear each second. In air the speed is fixed, so more squeezes per second means shorter ones.",
+        "it": "L'altezza dipende da quante compressioni raggiungono l'orecchio ogni secondo. Nell'aria la velocità è fissa, quindi più compressioni al secondo significano compressioni più corte."
+      },
+      "wrongBelief": {
+        "en": "A higher note travels faster, or has longer waves.",
+        "it": "Una nota più acuta viaggia più veloce, oppure ha onde più lunghe."
+      },
       "anchor": {
         "type": "example",
-        "text": "A guitar string: press it shorter and it vibrates faster, and the note goes up."
+        "text": {
+          "en": "A guitar string: press it shorter and it vibrates faster, and the note goes up.",
+          "it": "Una corda di chitarra: se la si preme per accorciarla vibra più velocemente e la nota sale."
+        }
       },
-      "application": "Tuning an instrument; the note A that orchestras tune to is 440 vibrations per second.",
+      "application": {
+        "en": "Tuning an instrument; the note A that orchestras tune to is 440 vibrations per second.",
+        "it": "L'accordatura di uno strumento: il la a cui si accordano le orchestre ha 440 vibrazioni al secondo."
+      },
       "remember": [
-        "Frequency is the number of squeezes per second, in hertz (Hz); we hear it as pitch.",
-        "Speed = frequency × wavelength: in air (343 m/s), twice the frequency means half the wavelength.",
-        "People hear roughly from 20 Hz to 20 000 Hz."
+        {
+          "en": "Frequency is the number of squeezes per second, in hertz (Hz); we hear it as pitch.",
+          "it": "La frequenza è il numero di compressioni al secondo, misurato in hertz (Hz); noi la sentiamo come altezza."
+        },
+        {
+          "en": "Speed = frequency × wavelength: in air (343 m/s), twice the frequency means half the wavelength.",
+          "it": "Velocità = frequenza × lunghezza d'onda: nell'aria (343 m/s) una frequenza doppia significa una lunghezza d'onda dimezzata."
+        },
+        {
+          "en": "People hear roughly from 20 Hz to 20 000 Hz.",
+          "it": "Le persone sentono all'incirca da 20 Hz a 20.000 Hz."
+        }
       ],
       "explain": {
-        "q": "Why do a high note and a low note played together reach you at the same moment?",
-        "a": "In a given medium sound travels at nearly the same speed whatever its frequency. The high note has more squeezes per second, and each of them is shorter."
+        "q": {
+          "en": "Why do a high note and a low note played together reach you at the same moment?",
+          "it": "Perché una nota acuta e una grave suonate insieme ti raggiungono nello stesso istante?"
+        },
+        "a": {
+          "en": "In a given medium sound travels at nearly the same speed whatever its frequency. The high note has more squeezes per second, and each of them is shorter.",
+          "it": "In un dato mezzo il suono viaggia quasi alla stessa velocità qualunque sia la sua frequenza. La nota acuta ha più compressioni al secondo, e ciascuna di esse è più corta."
+        }
       },
       "page": [
         {
-          "title": "How many per second",
-          "text": "A source that vibrates 440 times a second sends 440 squeezes a second towards you: its frequency is 440 hertz. The perception of frequency is called pitch. People hear roughly from 20 Hz to 20 000 Hz."
+          "title": {
+            "en": "How many per second",
+            "it": "Quante al secondo"
+          },
+          "text": {
+            "en": "A source that vibrates 440 times a second sends 440 squeezes a second towards you: its frequency is 440 hertz. The perception of frequency is called pitch. People hear roughly from 20 Hz to 20 000 Hz.",
+            "it": "Una sorgente che vibra 440 volte al secondo manda verso di te 440 compressioni al secondo: la sua frequenza è di 440 hertz. La percezione della frequenza si chiama altezza, e l'udito umano copre all'incirca l'intervallo da 20 Hz a 20.000 Hz."
+          }
         },
         {
-          "title": "Fixed speed, shorter waves",
-          "text": "For every wave, speed = frequency × wavelength. In air at 20 °C sound travels at about 343 m/s whatever its frequency, so a higher frequency must have a shorter wavelength: at 343 Hz one squeeze-and-stretch is 1 m long, at 686 Hz it is 0.5 m."
+          "title": {
+            "en": "Fixed speed, shorter waves",
+            "it": "Velocità fissa, onde più corte"
+          },
+          "text": {
+            "en": "For every wave, speed = frequency × wavelength. In air at 20 °C sound travels at about 343 m/s whatever its frequency, so a higher frequency must have a shorter wavelength: at 343 Hz one squeeze-and-stretch is 1 m long, at 686 Hz it is 0.5 m.",
+            "it": "Per ogni onda vale la relazione velocità = frequenza × lunghezza d'onda. Nell'aria a 20 °C il suono viaggia a circa 343 m/s qualunque sia la sua frequenza, quindi a una frequenza più alta deve corrispondere una lunghezza d'onda più corta: a 343 Hz una compressione con la sua rarefazione è lunga 1 m, a 686 Hz è lunga 0,5 m."
+          }
         }
       ],
       "sources": [
@@ -288,37 +598,67 @@
       "callbacks": [
         {
           "to": "wave",
-          "text": "Each squeeze is the push of the Squeeze House; frequency counts how many arrive each second."
+          "text": {
+            "en": "Each squeeze is the push of the Squeeze House; frequency counts how many arrive each second.",
+            "it": "Ogni compressione è la spinta della Casa della Compressione; la frequenza conta quante ne arrivano ogni secondo."
+          }
         }
       ],
       "lab": {
-        "title": "Pitch",
+        "title": {
+          "en": "Pitch",
+          "it": "Altezza"
+        },
         "stations": [
           {
             "id": "tone",
-            "tab": "More per second",
-            "goal": "Pitch is the number of squeezes per second: more squeezes per second is a higher note.",
+            "tab": {
+              "en": "More per second",
+              "it": "Di più al secondo"
+            },
+            "goal": {
+              "en": "Pitch is the number of squeezes per second: more squeezes per second is a higher note.",
+              "it": "L'altezza è il numero di compressioni al secondo: più compressioni al secondo significano una nota più acuta."
+            },
             "beat": "ground",
             "pattern": "cause-effect",
             "object": "The air pressure at the ear over 25 milliseconds, with each squeeze marked, and the tone itself.",
             "action": "Turns the frequency up and down, counts the squeezes, and listens.",
             "surprise": "Doubling the frequency doubles the squeezes in the same 25 ms, and the note jumps up by an octave.",
             "predict": {
-              "q": "Set the frequency to 880 Hz instead of 440 Hz. In 25 ms the ear receives...",
+              "q": {
+                "en": "Set the frequency to 880 Hz instead of 440 Hz. In 25 ms the ear receives...",
+                "it": "Imposta la frequenza a 880 Hz invece di 440 Hz. In 25 ms l'orecchio riceve..."
+              },
               "options": [
-                "the same number of squeezes, but stronger",
-                "twice as many squeezes",
-                "half as many squeezes"
+                {
+                  "en": "the same number of squeezes, but stronger",
+                  "it": "lo stesso numero di compressioni, ma più forti"
+                },
+                {
+                  "en": "twice as many squeezes",
+                  "it": "il doppio delle compressioni"
+                },
+                {
+                  "en": "half as many squeezes",
+                  "it": "la metà delle compressioni"
+                }
               ],
               "answer": 1,
-              "why": "Frequency counts squeezes per second: twice the frequency, twice as many squeezes in any time."
+              "why": {
+                "en": "Frequency counts squeezes per second: twice the frequency, twice as many squeezes in any time.",
+                "it": "La frequenza conta le compressioni al secondo: frequenza doppia, compressioni doppie in qualsiasi intervallo di tempo."
+              }
             },
             "controls": [
               "Frequency, 100 to 1000 Hz"
             ],
             "tries": [
               {
-                "text": "Set the note A, 440 Hz, and count the squeezes in 25 ms.",
+                "text": {
+                  "en": "Set the note A, 440 Hz, and count the squeezes in 25 ms.",
+                  "it": "Imposta il la, 440 Hz, e conta le compressioni in 25 ms."
+                },
                 "when": {
                   "reach": {
                     "control": "f",
@@ -328,7 +668,10 @@
                 }
               },
               {
-                "text": "Double it to 880 Hz and count again.",
+                "text": {
+                  "en": "Double it to 880 Hz and count again.",
+                  "it": "Raddoppia a 880 Hz e conta di nuovo."
+                },
                 "when": {
                   "reach": {
                     "control": "f",
@@ -338,145 +681,310 @@
                 }
               }
             ],
-            "takeaway": "Frequency is <b>squeezes per second</b> (hertz). The ear hears it as <b>pitch</b>: twice the frequency is the same note an <b>octave higher</b>.",
-            "source": "The pressure trace is a sine wave computed live from the frequency; the tone is played by your browser at that frequency. A real instrument adds overtones."
+            "takeaway": {
+              "en": "Frequency is <b>squeezes per second</b> (hertz). The ear hears it as <b>pitch</b>: twice the frequency is the same note an <b>octave higher</b>.",
+              "it": "La frequenza è il numero di <b>compressioni al secondo</b> (hertz). L'orecchio la sente come <b>altezza</b>: una frequenza doppia è la stessa nota un'<b>ottava più in alto</b>."
+            },
+            "source": {
+              "en": "The pressure trace is a sine wave computed live from the frequency; the tone is played by your browser at that frequency. A real instrument adds overtones.",
+              "it": "La traccia di pressione è un'onda sinusoidale calcolata in tempo reale a partire dalla frequenza; il tono è riprodotto dal tuo browser a quella frequenza. Uno strumento reale aggiunge gli armonici."
+            }
           },
           {
             "id": "wavelength",
-            "tab": "Guess the curve",
-            "goal": "In air sound always travels at 343 m/s, so twice the frequency gives half the wavelength.",
+            "tab": {
+              "en": "Guess the curve",
+              "it": "Indovina la curva"
+            },
+            "goal": {
+              "en": "In air sound always travels at 343 m/s, so twice the frequency gives half the wavelength.",
+              "it": "Nell'aria il suono viaggia sempre a 343 m/s, quindi a una frequenza doppia corrisponde una lunghezza d'onda dimezzata."
+            },
             "beat": "twist",
             "pattern": "predict-test",
             "object": "An empty chart of wavelength against frequency, with four handles to sketch a guess.",
             "action": "Drags the handles to sketch how long one wave is at each frequency, then shows the real curve over the guess.",
             "surprise": "The real curve is not a straight line: it falls steeply at low frequencies and flattens out, because wavelength is 343 divided by frequency.",
             "predict": {
-              "q": "Double the frequency of a sound in air. Its wavelength...",
+              "q": {
+                "en": "Double the frequency of a sound in air. Its wavelength...",
+                "it": "Raddoppia la frequenza di un suono nell'aria. La sua lunghezza d'onda..."
+              },
               "options": [
-                "doubles",
-                "halves",
-                "stays the same"
+                {
+                  "en": "doubles",
+                  "it": "raddoppia"
+                },
+                {
+                  "en": "halves",
+                  "it": "si dimezza"
+                },
+                {
+                  "en": "stays the same",
+                  "it": "resta uguale"
+                }
               ],
               "answer": 1,
-              "why": "Speed = frequency × wavelength, and the speed in air stays 343 m/s: twice the frequency, half the wavelength."
+              "why": {
+                "en": "Speed = frequency × wavelength, and the speed in air stays 343 m/s: twice the frequency, half the wavelength.",
+                "it": "Velocità = frequenza × lunghezza d'onda, e la velocità nell'aria resta di 343 m/s: frequenza doppia, lunghezza d'onda dimezzata."
+              }
             },
             "controls": [
               "Show the real curve"
             ],
             "tries": [
               {
-                "text": "Drag all four handles to your guess.",
+                "text": {
+                  "en": "Drag all four handles to your guess.",
+                  "it": "Trascina tutti e quattro i punti sulla tua stima."
+                },
                 "when": {
                   "sketch": true
                 }
               },
               {
-                "text": "Show the real curve and compare.",
+                "text": {
+                  "en": "Show the real curve and compare.",
+                  "it": "Mostra la curva reale e confrontala con la tua."
+                },
                 "when": {
                   "reveal": true
                 }
               }
             ],
-            "takeaway": "Speed = <b>frequency × wavelength</b>. In air the speed stays about <b>343 m/s</b>, so the wavelength is <b>343 ÷ frequency</b>: twice the frequency, half the wavelength.",
-            "source": "The real curve is computed live as 343 m/s divided by the frequency, for air at 20 °C (OpenStax). Your sketch is only compared, never scored as right or wrong."
+            "takeaway": {
+              "en": "Speed = <b>frequency × wavelength</b>. In air the speed stays about <b>343 m/s</b>, so the wavelength is <b>343 ÷ frequency</b>: twice the frequency, half the wavelength.",
+              "it": "Velocità = <b>frequenza × lunghezza d'onda</b>. Nell'aria la velocità resta di circa <b>343 m/s</b>, quindi la lunghezza d'onda è <b>343 ÷ frequenza</b>: frequenza doppia, lunghezza d'onda dimezzata."
+            },
+            "source": {
+              "en": "The real curve is computed live as 343 m/s divided by the frequency, for air at 20 °C (OpenStax). Your sketch is only compared, never scored as right or wrong.",
+              "it": "La curva reale è calcolata in tempo reale come 343 m/s diviso la frequenza, per aria a 20 °C (OpenStax). Il tuo disegno viene soltanto confrontato, mai valutato come giusto o sbagliato."
+            }
           }
         ]
       },
       "questions": [
         {
           "level": 1,
-          "q": "What does the frequency of a sound count?",
+          "q": {
+            "en": "What does the frequency of a sound count?",
+            "it": "Che cosa conta la frequenza di un suono?"
+          },
           "options": [
-            "How loud it is",
-            "How far it travels",
-            "Squeezes per second"
+            {
+              "en": "How loud it is",
+              "it": "Quanto è forte"
+            },
+            {
+              "en": "How far it travels",
+              "it": "Quanto lontano arriva"
+            },
+            {
+              "en": "Squeezes per second",
+              "it": "Le compressioni al secondo"
+            }
           ],
           "answer": 2,
-          "why": "Frequency is the number of vibrations, or squeezes, per second, measured in hertz.",
+          "why": {
+            "en": "Frequency is the number of vibrations, or squeezes, per second, measured in hertz.",
+            "it": "La frequenza è il numero di vibrazioni, o compressioni, al secondo, misurato in hertz."
+          },
           "traps": [
-            "Loudness depends on how strong each squeeze is, not on how many arrive.",
-            "Distance depends on the medium and on losses, not on what the frequency counts.",
+            {
+              "en": "Loudness depends on how strong each squeeze is, not on how many arrive.",
+              "it": "Il volume dipende da quanto è forte ogni compressione, non da quante ne arrivano."
+            },
+            {
+              "en": "Distance depends on the medium and on losses, not on what the frequency counts.",
+              "it": "La distanza dipende dal mezzo e dalle perdite, non da ciò che la frequenza conta."
+            },
             null
           ]
         },
         {
           "level": 1,
-          "q": "Roughly which frequencies can people hear?",
+          "q": {
+            "en": "Roughly which frequencies can people hear?",
+            "it": "Più o meno quali frequenze può sentire l'orecchio umano?"
+          },
           "options": [
-            "From 20 Hz to 20 000 Hz",
-            "From 1 Hz to 100 Hz",
-            "From 1000 Hz to a million Hz"
+            {
+              "en": "From 20 Hz to 20 000 Hz",
+              "it": "Da 20 Hz a 20.000 Hz"
+            },
+            {
+              "en": "From 1 Hz to 100 Hz",
+              "it": "Da 1 Hz a 100 Hz"
+            },
+            {
+              "en": "From 1000 Hz to a million Hz",
+              "it": "Da 1000 Hz a un milione di Hz"
+            }
           ],
           "answer": 0,
-          "why": "The audible range is about 20 to 20 000 Hz; it shrinks at the top with age.",
+          "why": {
+            "en": "The audible range is about 20 to 20 000 Hz; it shrinks at the top with age.",
+            "it": "L'intervallo udibile va da circa 20 a 20.000 Hz, e con l'età si restringe verso l'alto."
+          },
           "traps": [
             null,
-            "Below about 20 Hz vibrations are felt rather than heard, so this range misses almost all audible sound.",
-            "Above about 20 000 Hz is ultrasound, which bats hear but people do not."
+            {
+              "en": "Below about 20 Hz vibrations are felt rather than heard, so this range misses almost all audible sound.",
+              "it": "Sotto i 20 Hz circa le vibrazioni si avvertono più che udirsi, quindi questo intervallo lascia fuori quasi tutti i suoni udibili."
+            },
+            {
+              "en": "Above about 20 000 Hz is ultrasound, which bats hear but people do not.",
+              "it": "Sopra i 20.000 Hz circa ci sono gli ultrasuoni, che i pipistrelli sentono e gli esseri umani no."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Sound travels at 343 m/s in warm air. Its frequency is doubled. What happens to its wavelength?",
+          "q": {
+            "en": "Sound travels at 343 m/s in warm air. Its frequency is doubled. What happens to its wavelength?",
+            "it": "Il suono viaggia a 343 m/s nell'aria calda. La sua frequenza viene raddoppiata. Che cosa succede alla sua lunghezza d'onda?"
+          },
           "options": [
-            "It doubles",
-            "It halves",
-            "It stays the same"
+            {
+              "en": "It doubles",
+              "it": "Raddoppia"
+            },
+            {
+              "en": "It halves",
+              "it": "Si dimezza"
+            },
+            {
+              "en": "It stays the same",
+              "it": "Resta uguale"
+            }
           ],
           "answer": 1,
-          "why": "Speed = frequency × wavelength, and the speed does not change, so the wavelength halves.",
+          "why": {
+            "en": "Speed = frequency × wavelength, and the speed does not change, so the wavelength halves.",
+            "it": "Velocità = frequenza × lunghezza d'onda, e la velocità non cambia, quindi la lunghezza d'onda si dimezza."
+          },
           "traps": [
-            "Doubling both would double the speed too, and the speed of sound in air does not depend on the note.",
+            {
+              "en": "Doubling both would double the speed too, and the speed of sound in air does not depend on the note.",
+              "it": "Se raddoppiassero entrambe, raddoppierebbe anche la velocità, e la velocità del suono nell'aria non dipende dalla nota."
+            },
             null,
-            "If the wavelength stayed the same while the frequency doubled, the speed would have to double."
+            {
+              "en": "If the wavelength stayed the same while the frequency doubled, the speed would have to double.",
+              "it": "Se la lunghezza d'onda restasse uguale mentre la frequenza raddoppia, anche la velocità dovrebbe raddoppiare."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "A flute plays a high note and a tuba a low note at the same moment, far away. Which reaches you first?",
+          "q": {
+            "en": "A flute plays a high note and a tuba a low note at the same moment, far away. Which reaches you first?",
+            "it": "Un flauto suona una nota acuta e una tuba una nota grave nello stesso istante, lontano da te. Quale delle due ti raggiunge per prima?"
+          },
           "options": [
-            "The flute, high notes are faster",
-            "The tuba, low notes are faster",
-            "Both at the same time"
+            {
+              "en": "The flute, high notes are faster",
+              "it": "Il flauto, le note acute sono più veloci"
+            },
+            {
+              "en": "The tuba, low notes are faster",
+              "it": "La tuba, le note gravi sono più veloci"
+            },
+            {
+              "en": "Both at the same time",
+              "it": "Tutte e due insieme"
+            }
           ],
           "answer": 2,
-          "why": "In a given medium the speed of sound is nearly independent of frequency, so both arrive together.",
+          "why": {
+            "en": "In a given medium the speed of sound is nearly independent of frequency, so both arrive together.",
+            "it": "In un dato mezzo la velocità del suono è quasi indipendente dalla frequenza, quindi arrivano insieme."
+          },
           "traps": [
-            "High notes have more squeezes per second, not faster squeezes: the speed is the same.",
-            "Low notes have longer waves, but each wave still moves at the same speed.",
+            {
+              "en": "High notes have more squeezes per second, not faster squeezes: the speed is the same.",
+              "it": "Le note acute hanno più compressioni al secondo, non compressioni più veloci: la velocità è la stessa."
+            },
+            {
+              "en": "Low notes have longer waves, but each wave still moves at the same speed.",
+              "it": "Le note gravi hanno onde più lunghe, ma ogni onda si muove comunque alla stessa velocità."
+            },
             null
           ]
         },
         {
           "level": 2,
-          "q": "What is the wavelength of a 343 Hz sound in air at 20 °C, where sound travels at 343 m/s?",
+          "q": {
+            "en": "What is the wavelength of a 343 Hz sound in air at 20 °C, where sound travels at 343 m/s?",
+            "it": "Qual è la lunghezza d'onda di un suono a 343 Hz nell'aria a 20 °C, dove il suono viaggia a 343 m/s?"
+          },
           "options": [
-            "1 metre",
-            "343 metres",
-            "1 millimetre"
+            {
+              "en": "1 metre",
+              "it": "1 metro"
+            },
+            {
+              "en": "343 metres",
+              "it": "343 metri"
+            },
+            {
+              "en": "1 millimetre",
+              "it": "1 millimetro"
+            }
           ],
           "answer": 0,
-          "why": "Wavelength = speed ÷ frequency = 343 ÷ 343 = 1 m.",
+          "why": {
+            "en": "Wavelength = speed ÷ frequency = 343 ÷ 343 = 1 m.",
+            "it": "Lunghezza d'onda = velocità ÷ frequenza = 343 ÷ 343 = 1 m."
+          },
           "traps": [
             null,
-            "This multiplies instead of dividing: 343 is the speed, and it must be divided by the frequency.",
-            "A millimetre would need a frequency of about 343 000 Hz, far above hearing."
+            {
+              "en": "This multiplies instead of dividing: 343 is the speed, and it must be divided by the frequency.",
+              "it": "Qui si moltiplica invece di dividere: 343 è la velocità, e va divisa per la frequenza."
+            },
+            {
+              "en": "A millimetre would need a frequency of about 343 000 Hz, far above hearing.",
+              "it": "Un millimetro richiederebbe una frequenza di circa 343.000 Hz, ben oltre l'udibile."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A guitarist presses a string to make it vibrate twice as fast. Which describes the new sound in the air?",
+          "q": {
+            "en": "A guitarist presses a string to make it vibrate twice as fast. Which describes the new sound in the air?",
+            "it": "Un chitarrista preme una corda per farla vibrare due volte più in fretta. Quale tra queste descrive il nuovo suono nell'aria?"
+          },
           "options": [
-            "Same wavelength, twice the speed",
-            "Half the wavelength, same speed, an octave higher",
-            "Twice the wavelength, a lower note"
+            {
+              "en": "Same wavelength, twice the speed",
+              "it": "Stessa lunghezza d'onda, velocità doppia"
+            },
+            {
+              "en": "Half the wavelength, same speed, an octave higher",
+              "it": "Lunghezza d'onda dimezzata, stessa velocità, un'ottava più in alto"
+            },
+            {
+              "en": "Twice the wavelength, a lower note",
+              "it": "Lunghezza d'onda doppia, una nota più grave"
+            }
           ],
           "answer": 1,
-          "why": "The air sets the speed; twice the frequency gives half the wavelength, which we hear as the same note an octave up.",
+          "why": {
+            "en": "The air sets the speed; twice the frequency gives half the wavelength, which we hear as the same note an octave up.",
+            "it": "È l'aria a fissare la velocità; una frequenza doppia dà una lunghezza d'onda dimezzata, che sentiamo come la stessa nota un'ottava sopra."
+          },
           "traps": [
-            "The speed of sound is set by the air, not by the string, so it cannot double.",
+            {
+              "en": "The speed of sound is set by the air, not by the string, so it cannot double.",
+              "it": "La velocità del suono è fissata dall'aria, non dalla corda, quindi non può raddoppiare."
+            },
             null,
-            "Faster vibration means more squeezes per second: a higher note with shorter waves, not longer."
+            {
+              "en": "Faster vibration means more squeezes per second: a higher note with shorter waves, not longer.",
+              "it": "Una vibrazione più rapida significa più compressioni al secondo: una nota più acuta con onde più corte, non più lunghe."
+            }
           ]
         }
       ]
@@ -485,32 +993,77 @@
       "id": "loudness",
       "theme": "sound",
       "type": "mechanism",
-      "name": "Loudness and decibels",
-      "place": "Decibel House",
-      "objective": "Compute how many times more intense one sound is than another from the difference in decibels.",
-      "idea": "Loudness measures how strong the squeezes are. Every 10 decibels more means ten times the sound intensity.",
-      "wrongBelief": "Decibels add like metres: 70 dB is just a bit more than 60 dB.",
+      "name": {
+        "en": "Loudness and decibels",
+        "it": "Volume e decibel"
+      },
+      "place": {
+        "en": "Decibel House",
+        "it": "Casa del Decibel"
+      },
+      "objective": {
+        "en": "Compute how many times more intense one sound is than another from the difference in decibels.",
+        "it": "Calcolare quante volte un suono è più intenso di un altro a partire dalla differenza in decibel."
+      },
+      "idea": {
+        "en": "Loudness measures how strong the squeezes are. Every 10 decibels more means ten times the sound intensity.",
+        "it": "Il volume misura quanto sono forti le compressioni. Ogni 10 decibel in più significano un'intensità sonora dieci volte maggiore."
+      },
+      "wrongBelief": {
+        "en": "Decibels add like metres: 70 dB is just a bit more than 60 dB.",
+        "it": "I decibel si sommano come i metri: 70 dB sono solo un po' più di 60 dB."
+      },
       "anchor": {
         "type": "example",
-        "text": "Ordinary talk is about 60 dB and a heavy truck about 90 dB: 30 dB more, a thousand times the intensity."
+        "text": {
+          "en": "Ordinary talk is about 60 dB and a heavy truck about 90 dB: 30 dB more, a thousand times the intensity.",
+          "it": "Una conversazione normale è intorno ai 60 dB e un camion pesante intorno ai 90 dB: 30 dB in più, mille volte l'intensità."
+        }
       },
-      "application": "Noise limits at work and on headphones are set in decibels; agencies recommend not exceeding 85 dB for eight hours a day without protection.",
+      "application": {
+        "en": "Noise limits at work and on headphones are set in decibels; agencies recommend not exceeding 85 dB for eight hours a day without protection.",
+        "it": "I limiti di rumore sul lavoro e nelle cuffie sono fissati in decibel; le agenzie raccomandano di non superare 85 dB per otto ore al giorno senza protezioni."
+      },
       "remember": [
-        "Each 10 dB more is ten times the intensity: 20 dB more is a hundred times.",
-        "Intensity grows with the square of the pressure amplitude: stronger squeezes, much more energy."
+        {
+          "en": "Each 10 dB more is ten times the intensity: 20 dB more is a hundred times.",
+          "it": "Ogni 10 dB in più significano un'intensità dieci volte maggiore: 20 dB in più, cento volte."
+        },
+        {
+          "en": "Intensity grows with the square of the pressure amplitude: stronger squeezes, much more energy.",
+          "it": "L'intensità cresce con il quadrato dell'ampiezza di pressione: compressioni più forti, molta più energia."
+        }
       ],
       "explain": {
-        "q": "Why is a step from 80 dB to 90 dB a much bigger change in energy than a step from 20 dB to 30 dB?",
-        "a": "Both steps multiply the intensity by ten, but ten times a large intensity adds far more energy than ten times a tiny one."
+        "q": {
+          "en": "Why is a step from 80 dB to 90 dB a much bigger change in energy than a step from 20 dB to 30 dB?",
+          "it": "Perché il passaggio da 80 dB a 90 dB è una variazione di energia molto più grande di quello da 20 dB a 30 dB?"
+        },
+        "a": {
+          "en": "Both steps multiply the intensity by ten, but ten times a large intensity adds far more energy than ten times a tiny one.",
+          "it": "Entrambi i passaggi moltiplicano l'intensità per dieci, ma dieci volte un'intensità grande aggiunge molta più energia di dieci volte un'intensità minuscola."
+        }
       },
       "page": [
         {
-          "title": "A scale of factors of ten",
-          "text": "The sound intensity level is measured in decibels on a logarithmic scale: each factor of 10 in intensity adds 10 dB. A 90 dB sound is three factors of ten, a thousand times, more intense than a 60 dB sound. The threshold of hearing is 0 dB."
+          "title": {
+            "en": "A scale of factors of ten",
+            "it": "Una scala a fattori di dieci"
+          },
+          "text": {
+            "en": "The sound intensity level is measured in decibels on a logarithmic scale: each factor of 10 in intensity adds 10 dB. A 90 dB sound is three factors of ten, a thousand times, more intense than a 60 dB sound. The threshold of hearing is 0 dB.",
+            "it": "Il livello di intensità sonora si misura in decibel su una scala logaritmica: ogni fattore 10 nell'intensità aggiunge 10 dB. Per esempio, un suono di 90 dB è più intenso di uno di 60 dB di tre fattori di dieci, cioè di mille volte, e la soglia di udibilità corrisponde a 0 dB."
+          }
         },
         {
-          "title": "Stronger squeezes",
-          "text": "Intensity is proportional to the square of the pressure amplitude, the strength of each squeeze. Ten times the intensity needs about 3.2 times the pressure amplitude."
+          "title": {
+            "en": "Stronger squeezes",
+            "it": "Compressioni più forti"
+          },
+          "text": {
+            "en": "Intensity is proportional to the square of the pressure amplitude, the strength of each squeeze. Ten times the intensity needs about 3.2 times the pressure amplitude.",
+            "it": "L'intensità è proporzionale al quadrato dell'ampiezza di pressione, cioè della forza di ciascuna compressione. Per avere un'intensità dieci volte maggiore serve quindi un'ampiezza di pressione circa 3,2 volte maggiore."
+          }
         }
       ],
       "sources": [
@@ -519,37 +1072,67 @@
       "callbacks": [
         {
           "to": "wave",
-          "text": "Loudness is how hard each squeeze of the Squeeze House pushes."
+          "text": {
+            "en": "Loudness is how hard each squeeze of the Squeeze House pushes.",
+            "it": "Il volume dipende da quanto forte spinge ogni compressione della Casa della Compressione."
+          }
         }
       ],
       "lab": {
-        "title": "Decibels",
+        "title": {
+          "en": "Decibels",
+          "it": "Decibel"
+        },
         "stations": [
           {
             "id": "decibels",
-            "tab": "Ten times",
-            "goal": "Each 10 decibels more is ten times the sound intensity: decibels count factors of ten.",
+            "tab": {
+              "en": "Ten times",
+              "it": "Dieci volte"
+            },
+            "goal": {
+              "en": "Each 10 decibels more is ten times the sound intensity: decibels count factors of ten.",
+              "it": "Ogni 10 decibel in più significano un'intensità sonora dieci volte maggiore: i decibel contano i fattori di dieci."
+            },
             "beat": "rule",
             "pattern": "contrast",
             "object": "Two speakers side by side, A at 60 dB and B louder by the amount you set, with their sound intensities on one scale.",
             "action": "Raises speaker B decibel by decibel and watches the ratio of intensities.",
             "surprise": "At only 10 dB more, B already carries ten times the intensity of A; at 20 dB, a hundred times.",
             "predict": {
-              "q": "Speaker B is 10 dB louder than speaker A. Compared with A, B carries...",
+              "q": {
+                "en": "Speaker B is 10 dB louder than speaker A. Compared with A, B carries...",
+                "it": "L'altoparlante B suona 10 dB più forte dell'altoparlante A. Rispetto ad A, B ha..."
+              },
               "options": [
-                "10% more sound intensity",
-                "twice the sound intensity",
-                "ten times the sound intensity"
+                {
+                  "en": "10% more sound intensity",
+                  "it": "il 10% di intensità sonora in più"
+                },
+                {
+                  "en": "twice the sound intensity",
+                  "it": "il doppio dell'intensità sonora"
+                },
+                {
+                  "en": "ten times the sound intensity",
+                  "it": "dieci volte l'intensità sonora"
+                }
               ],
               "answer": 2,
-              "why": "Each factor of 10 in intensity is 10 dB."
+              "why": {
+                "en": "Each factor of 10 in intensity is 10 dB.",
+                "it": "Ogni fattore 10 nell'intensità vale 10 dB."
+              }
             },
             "controls": [
               "How many decibels louder speaker B is"
             ],
             "tries": [
               {
-                "text": "Make speaker B 10 dB louder than A.",
+                "text": {
+                  "en": "Make speaker B 10 dB louder than A.",
+                  "it": "Porta l'altoparlante B a 10 dB in più rispetto ad A."
+                },
                 "when": {
                   "reach": {
                     "control": "extra",
@@ -558,7 +1141,10 @@
                 }
               },
               {
-                "text": "Now 20 dB louder: read the ratio.",
+                "text": {
+                  "en": "Now 20 dB louder: read the ratio.",
+                  "it": "Ora 20 dB in più: leggi il rapporto."
+                },
                 "when": {
                   "reach": {
                     "control": "extra",
@@ -567,14 +1153,23 @@
                 }
               }
             ],
-            "takeaway": "Decibels count <b>factors of ten</b>: +10 dB is <b>×10</b> the intensity, +20 dB is <b>×100</b>, +30 dB is <b>×1000</b>.",
-            "source": "Intensities computed live from the definition of the decibel, ten times the logarithm of the intensity ratio. The rings drawn round each speaker grow with the pressure amplitude, the square root of the intensity.",
+            "takeaway": {
+              "en": "Decibels count <b>factors of ten</b>: +10 dB is <b>×10</b> the intensity, +20 dB is <b>×100</b>, +30 dB is <b>×1000</b>.",
+              "it": "I decibel contano i <b>fattori di dieci</b>: +10 dB significa <b>×10</b> l'intensità, +20 dB significa <b>×100</b>, +30 dB significa <b>×1000</b>."
+            },
+            "source": {
+              "en": "Intensities computed live from the definition of the decibel, ten times the logarithm of the intensity ratio. The rings drawn round each speaker grow with the pressure amplitude, the square root of the intensity.",
+              "it": "Le intensità sono calcolate in tempo reale dalla definizione di decibel, cioè dieci volte il logaritmo del rapporto tra le intensità. Gli anelli disegnati attorno a ogni altoparlante crescono con l'ampiezza di pressione, che è la radice quadrata dell'intensità."
+            },
             "ready": {
               "kind": "compare",
               "controls": [
                 {
                   "id": "extra",
-                  "label": "Speaker B, louder by",
+                  "label": {
+                    "en": "Speaker B, louder by",
+                    "it": "Altoparlante B, più forte di"
+                  },
                   "min": 0,
                   "max": 30,
                   "step": 1,
@@ -585,7 +1180,10 @@
               "cases": [
                 {
                   "id": "a",
-                  "label": "Speaker A: 60 dB",
+                  "label": {
+                    "en": "Speaker A: 60 dB",
+                    "it": "Altoparlante A: 60 dB"
+                  },
                   "short": "A",
                   "vars": {
                     "k": 0
@@ -593,7 +1191,10 @@
                 },
                 {
                   "id": "b",
-                  "label": "Speaker B: {60+extra:0} dB",
+                  "label": {
+                    "en": "Speaker B: {60+extra:0} dB",
+                    "it": "Altoparlante B: {60+extra:0} dB"
+                  },
                   "short": "B",
                   "vars": {
                     "k": 1
@@ -672,7 +1273,10 @@
               ],
               "diff": {
                 "value": "10^(k*extra/10)",
-                "label": "Sound intensity (A = 1)",
+                "label": {
+                  "en": "Sound intensity (A = 1)",
+                  "it": "Intensità sonora (A = 1)"
+                },
                 "decimals": 0
               }
             }
@@ -682,98 +1286,206 @@
       "questions": [
         {
           "level": 1,
-          "q": "Sound B is 10 dB louder than sound A. How does its intensity compare?",
+          "q": {
+            "en": "Sound B is 10 dB louder than sound A. How does its intensity compare?",
+            "it": "Il suono B è 10 dB più forte del suono A. Come si confronta la sua intensità?"
+          },
           "options": [
-            "Ten times as intense",
-            "10% more intense",
-            "Twice as intense"
+            {
+              "en": "Ten times as intense",
+              "it": "Dieci volte più intenso"
+            },
+            {
+              "en": "10% more intense",
+              "it": "Il 10% più intenso"
+            },
+            {
+              "en": "Twice as intense",
+              "it": "Due volte più intenso"
+            }
           ],
           "answer": 0,
-          "why": "Each factor of 10 in intensity corresponds to 10 dB.",
+          "why": {
+            "en": "Each factor of 10 in intensity corresponds to 10 dB.",
+            "it": "Ogni fattore 10 nell'intensità corrisponde a 10 dB."
+          },
           "traps": [
             null,
-            "This treats decibels like a percentage scale, but each 10 dB step multiplies the intensity.",
-            "Twice the intensity is only about 3 dB more, far less than 10 dB."
+            {
+              "en": "This treats decibels like a percentage scale, but each 10 dB step multiplies the intensity.",
+              "it": "Qui i decibel sono trattati come una scala percentuale, ma ogni passo di 10 dB moltiplica l'intensità."
+            },
+            {
+              "en": "Twice the intensity is only about 3 dB more, far less than 10 dB.",
+              "it": "Un'intensità doppia corrisponde ad appena 3 dB circa in più, molto meno di 10 dB."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "What is 0 dB?",
+          "q": {
+            "en": "What is 0 dB?",
+            "it": "Che cos'è 0 dB?"
+          },
           "options": [
-            "The threshold of hearing, about the faintest sound people hear",
-            "Complete silence, no sound waves at all",
-            "The level where hearing damage starts"
+            {
+              "en": "The threshold of hearing, about the faintest sound people hear",
+              "it": "La soglia di udibilità, cioè all'incirca il suono più debole che le persone sentono"
+            },
+            {
+              "en": "Complete silence, no sound waves at all",
+              "it": "Il silenzio completo, nessuna onda sonora"
+            },
+            {
+              "en": "The level where hearing damage starts",
+              "it": "Il livello a cui comincia il danno all'udito"
+            }
           ],
           "answer": 0,
-          "why": "The reference intensity of the decibel scale is the threshold of hearing, so it is 0 dB.",
+          "why": {
+            "en": "The reference intensity of the decibel scale is the threshold of hearing, so it is 0 dB.",
+            "it": "L'intensità di riferimento della scala dei decibel è la soglia di udibilità, quindi corrisponde a 0 dB."
+          },
           "traps": [
             null,
-            "0 dB is a real, very faint sound; quieter sounds have negative decibel levels.",
-            "Damage comes from long exposure to levels around 85 dB and more, far above 0 dB."
+            {
+              "en": "0 dB is a real, very faint sound; quieter sounds have negative decibel levels.",
+              "it": "0 dB è un suono reale e molto debole; i suoni ancora più deboli hanno livelli in decibel negativi."
+            },
+            {
+              "en": "Damage comes from long exposure to levels around 85 dB and more, far above 0 dB.",
+              "it": "Il danno deriva da un'esposizione prolungata a livelli di circa 85 dB e oltre, ben sopra 0 dB."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Ordinary talk is about 60 dB and the inside of a heavy truck about 90 dB. How many times more intense is the truck?",
+          "q": {
+            "en": "Ordinary talk is about 60 dB and the inside of a heavy truck about 90 dB. How many times more intense is the truck?",
+            "it": "Una conversazione normale è intorno ai 60 dB e l'interno di un camion pesante intorno ai 90 dB. Quante volte è più intenso il camion?"
+          },
           "options": [
-            "30 times",
-            "1000 times",
-            "1.5 times"
+            {
+              "en": "30 times",
+              "it": "30 volte"
+            },
+            {
+              "en": "1000 times",
+              "it": "1000 volte"
+            },
+            {
+              "en": "1.5 times",
+              "it": "1,5 volte"
+            }
           ],
           "answer": 1,
-          "why": "30 dB more is three factors of ten: 10 × 10 × 10 = 1000.",
+          "why": {
+            "en": "30 dB more is three factors of ten: 10 × 10 × 10 = 1000.",
+            "it": "30 dB in più sono tre fattori di dieci: 10 × 10 × 10 = 1000."
+          },
           "traps": [
-            "This adds decibels like plain numbers, but each 10 dB multiplies the intensity by ten.",
+            {
+              "en": "This adds decibels like plain numbers, but each 10 dB multiplies the intensity by ten.",
+              "it": "Qui i decibel sono sommati come numeri semplici, ma ogni 10 dB moltiplicano l'intensità per dieci."
+            },
             null,
-            "This divides 90 by 60, but decibel levels are logarithms, so their ratio means nothing."
+            {
+              "en": "This divides 90 by 60, but decibel levels are logarithms, so their ratio means nothing.",
+              "it": "Qui si divide 90 per 60, ma i livelli in decibel sono logaritmi, quindi il loro rapporto non significa nulla."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Two identical speakers play the same sound together instead of one alone. The level rises by about...",
+          "q": {
+            "en": "Two identical speakers play the same sound together instead of one alone. The level rises by about...",
+            "it": "Due altoparlanti identici suonano insieme lo stesso suono invece di uno solo. Il livello sale di circa..."
+          },
           "options": [
             "3 dB",
             "10 dB",
             "100 dB"
           ],
           "answer": 0,
-          "why": "Twice the intensity is a factor of 2, which is about 3 dB; 10 dB would need ten speakers.",
+          "why": {
+            "en": "Twice the intensity is a factor of 2, which is about 3 dB; 10 dB would need ten speakers.",
+            "it": "Un'intensità doppia è un fattore 2, cioè circa 3 dB; per 10 dB servirebbero dieci altoparlanti."
+          },
           "traps": [
             null,
-            "10 dB more would need ten times the intensity, so ten speakers, not two.",
-            "A rise of 100 dB would mean ten billion times the intensity, impossible from a second speaker."
+            {
+              "en": "10 dB more would need ten times the intensity, so ten speakers, not two.",
+              "it": "Per 10 dB in più servirebbe un'intensità dieci volte maggiore, quindi dieci altoparlanti, non due."
+            },
+            {
+              "en": "A rise of 100 dB would mean ten billion times the intensity, impossible from a second speaker.",
+              "it": "Un aumento di 100 dB significherebbe un'intensità dieci miliardi di volte maggiore, impossibile con un secondo altoparlante."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "Agencies recommend not exceeding 85 dB for eight hours a day. A machine runs at 95 dB. Compared with 85 dB, its intensity is...",
+          "q": {
+            "en": "Agencies recommend not exceeding 85 dB for eight hours a day. A machine runs at 95 dB. Compared with 85 dB, its intensity is...",
+            "it": "Le agenzie raccomandano di non superare 85 dB per otto ore al giorno. Una macchina funziona a 95 dB. Rispetto a 85 dB, la sua intensità è..."
+          },
           "options": [
-            "about 12% higher",
-            "ten times higher",
-            "the same, both are just loud"
+            {
+              "en": "about 12% higher",
+              "it": "più alta di circa il 12%"
+            },
+            {
+              "en": "ten times higher",
+              "it": "dieci volte più alta"
+            },
+            {
+              "en": "the same, both are just loud",
+              "it": "la stessa, tutte e due sono semplicemente forti"
+            }
           ],
           "answer": 1,
-          "why": "10 dB more is ten times the intensity, which is why limits get much stricter as the level rises.",
+          "why": {
+            "en": "10 dB more is ten times the intensity, which is why limits get much stricter as the level rises.",
+            "it": "10 dB in più significano un'intensità dieci volte maggiore, ed è per questo che i limiti diventano molto più severi al crescere del livello."
+          },
           "traps": [
-            "This reads 95 as 12% more than 85, but decibels are not a linear scale.",
+            {
+              "en": "This reads 95 as 12% more than 85, but decibels are not a linear scale.",
+              "it": "Qui 95 viene letto come il 12% in più di 85, ma i decibel non sono una scala lineare."
+            },
             null,
-            "Ten dB is a factor of ten in intensity, a large difference in the energy reaching the ear."
+            {
+              "en": "Ten dB is a factor of ten in intensity, a large difference in the energy reaching the ear.",
+              "it": "Dieci dB sono un fattore dieci nell'intensità, una grande differenza nell'energia che raggiunge l'orecchio."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "The pressure amplitude of a sound is made ten times larger. By how much does its level rise?",
+          "q": {
+            "en": "The pressure amplitude of a sound is made ten times larger. By how much does its level rise?",
+            "it": "L'ampiezza di pressione di un suono viene resa dieci volte più grande. Di quanto sale il suo livello?"
+          },
           "options": [
             "10 dB",
             "20 dB",
             "100 dB"
           ],
           "answer": 1,
-          "why": "Intensity grows with the square of the pressure amplitude: ten times the amplitude is a hundred times the intensity, which is 20 dB.",
+          "why": {
+            "en": "Intensity grows with the square of the pressure amplitude: ten times the amplitude is a hundred times the intensity, which is 20 dB.",
+            "it": "L'intensità cresce con il quadrato dell'ampiezza di pressione: un'ampiezza dieci volte maggiore dà un'intensità cento volte maggiore, cioè 20 dB."
+          },
           "traps": [
-            "This forgets that intensity grows with the square of the amplitude, not in proportion to it.",
+            {
+              "en": "This forgets that intensity grows with the square of the amplitude, not in proportion to it.",
+              "it": "Qui si dimentica che l'intensità cresce con il quadrato dell'ampiezza, non in proporzione a essa."
+            },
             null,
-            "A hundred times the intensity is two factors of ten, so 20 dB, not 100 dB."
+            {
+              "en": "A hundred times the intensity is two factors of ten, so 20 dB, not 100 dB.",
+              "it": "Un'intensità cento volte maggiore sono due fattori di dieci, quindi 20 dB, non 100 dB."
+            }
           ]
         }
       ]
@@ -782,32 +1494,77 @@
       "id": "medium",
       "theme": "sound",
       "type": "cases",
-      "name": "What sound travels through",
-      "place": "Medium House",
-      "objective": "Predict whether sound can cross a material and whether it goes faster or slower than in air.",
-      "idea": "Sound needs matter to pass the squeeze along: none in a vacuum, faster in most liquids and solids than in air.",
-      "wrongBelief": "Sound can cross empty space, and it is slowest in solid things because they are dense.",
+      "name": {
+        "en": "What sound travels through",
+        "it": "Dove si propaga il suono"
+      },
+      "place": {
+        "en": "Medium House",
+        "it": "Casa del Mezzo"
+      },
+      "objective": {
+        "en": "Predict whether sound can cross a material and whether it goes faster or slower than in air.",
+        "it": "Prevedere se il suono può attraversare un materiale e se vi si propaga più velocemente o più lentamente che nell'aria."
+      },
+      "idea": {
+        "en": "Sound needs matter to pass the squeeze along: none in a vacuum, faster in most liquids and solids than in air.",
+        "it": "Il suono ha bisogno di materia per passare avanti la compressione: nel vuoto non si propaga, nella maggior parte dei liquidi e dei solidi è più veloce che nell'aria."
+      },
+      "wrongBelief": {
+        "en": "Sound can cross empty space, and it is slowest in solid things because they are dense.",
+        "it": "Il suono può attraversare lo spazio vuoto, ed è più lento nei corpi solidi perché sono densi."
+      },
       "anchor": {
         "type": "example",
-        "text": "A bell ringing inside a jar: as the air is pumped out, the clapper still strikes but the sound fades away."
+        "text": {
+          "en": "A bell ringing inside a jar: as the air is pumped out, the clapper still strikes but the sound fades away.",
+          "it": "Una campanella che suona dentro una campana di vetro: man mano che si pompa fuori l'aria, il batacchio continua a colpire ma il suono si spegne."
+        }
       },
-      "application": "Doctors' ultrasound, sonar under water, and putting an ear to a railway track to hear a distant train.",
+      "application": {
+        "en": "Doctors' ultrasound, sonar under water, and putting an ear to a railway track to hear a distant train.",
+        "it": "Gli ultrasuoni usati dai medici per le ecografie, il sonar sott'acqua e l'orecchio appoggiato al binario per sentire un treno lontano."
+      },
       "remember": [
-        "Sound needs a medium: it cannot travel through a vacuum.",
-        "In air at 20 °C about 343 m/s; in water about 1480 m/s; in steel about 5960 m/s."
+        {
+          "en": "Sound needs a medium: it cannot travel through a vacuum.",
+          "it": "Il suono ha bisogno di un mezzo: non può propagarsi nel vuoto."
+        },
+        {
+          "en": "In air at 20 °C about 343 m/s; in water about 1480 m/s; in steel about 5960 m/s.",
+          "it": "Nell'aria a 20 °C circa 343 m/s; nell'acqua circa 1480 m/s; nell'acciaio circa 5960 m/s."
+        }
       ],
       "explain": {
-        "q": "Why can astronauts not talk to each other in space without radios?",
-        "a": "Sound is a squeeze passed from molecule to molecule. In the near vacuum of space there are almost no molecules to pass it, so the voice goes nowhere; radio waves need no medium."
+        "q": {
+          "en": "Why can astronauts not talk to each other in space without radios?",
+          "it": "Perché gli astronauti non possono parlarsi nello spazio senza radio?"
+        },
+        "a": {
+          "en": "Sound is a squeeze passed from molecule to molecule. In the near vacuum of space there are almost no molecules to pass it, so the voice goes nowhere; radio waves need no medium.",
+          "it": "Il suono è una compressione che passa di molecola in molecola. Nel quasi vuoto dello spazio non ci sono praticamente molecole che la passino avanti, quindi la voce non va da nessuna parte; le onde radio, invece, non hanno bisogno di un mezzo."
+        }
       },
       "page": [
         {
-          "title": "No matter, no sound",
-          "text": "Sound is a mechanical wave: it needs a medium, a material whose particles can pass the squeeze along. A bell in a jar can be seen ringing as the air is pumped out, but it is no longer heard."
+          "title": {
+            "en": "No matter, no sound",
+            "it": "Senza materia, niente suono"
+          },
+          "text": {
+            "en": "Sound is a mechanical wave: it needs a medium, a material whose particles can pass the squeeze along. A bell in a jar can be seen ringing as the air is pumped out, but it is no longer heard.",
+            "it": "Il suono è un'onda meccanica: ha bisogno di un mezzo, cioè di un materiale le cui particelle possano passare avanti la compressione. Una campanella in una campana di vetro si vede continuare a suonare mentre l'aria viene pompata fuori, ma non si sente più."
+          }
         },
         {
-          "title": "Faster in water and steel",
-          "text": "Sound typically travels slowest in gases, faster in liquids and fastest in solids, because their particles interact more strongly. Approximate speeds: air 343 m/s at 20 °C, fresh water 1480 m/s, steel 5960 m/s. Among gases a light one carries it faster: helium about 965 m/s and carbon dioxide about 259 m/s, both at 0 °C, where air gives 331 m/s."
+          "title": {
+            "en": "Faster in water and steel",
+            "it": "Più veloce nell'acqua e nell'acciaio"
+          },
+          "text": {
+            "en": "Sound typically travels slowest in gases, faster in liquids and fastest in solids, because their particles interact more strongly. Approximate speeds: air 343 m/s at 20 °C, fresh water 1480 m/s, steel 5960 m/s. Among gases a light one carries it faster: helium about 965 m/s and carbon dioxide about 259 m/s, both at 0 °C, where air gives 331 m/s.",
+            "it": "Di solito il suono viaggia più lentamente nei gas, più in fretta nei liquidi e più in fretta ancora nei solidi, perché le loro particelle interagiscono più fortemente. Le velocità approssimative sono: aria 343 m/s a 20 °C, acqua dolce 1480 m/s, acciaio 5960 m/s. Tra i gas, uno leggero lo trasmette più in fretta: l'elio circa 965 m/s e l'anidride carbonica circa 259 m/s, entrambi a 0 °C, dove l'aria dà 331 m/s."
+          }
         }
       ],
       "sources": [
@@ -819,39 +1576,72 @@
       "callbacks": [
         {
           "to": "wave",
-          "text": "The squeeze of the Squeeze House needs molecules to pass it on."
+          "text": {
+            "en": "The squeeze of the Squeeze House needs molecules to pass it on.",
+            "it": "La compressione della Casa della Compressione ha bisogno di molecole che la passino avanti."
+          }
         },
         {
           "to": "pitch",
-          "text": "The speed set here is the one that fixes wavelengths in the Tuning House."
+          "text": {
+            "en": "The speed set here is the one that fixes wavelengths in the Tuning House.",
+            "it": "La velocità stabilita qui è quella che fissa le lunghezze d'onda nella Casa dell'Accordatura."
+          }
         }
       ],
       "lab": {
-        "title": "Mediums",
+        "title": {
+          "en": "Mediums",
+          "it": "I mezzi"
+        },
         "stations": [
           {
             "id": "mediums",
-            "tab": "Sort the mediums",
-            "goal": "Sound needs matter: it cannot cross a vacuum, and it goes faster in water and steel than in air.",
+            "tab": {
+              "en": "Sort the mediums",
+              "it": "Ordina i mezzi"
+            },
+            "goal": {
+              "en": "Sound needs matter: it cannot cross a vacuum, and it goes faster in water and steel than in air.",
+              "it": "Il suono ha bisogno di materia: non può attraversare il vuoto, e nell'acqua e nell'acciaio va più veloce che nell'aria."
+            },
             "beat": "rule",
             "pattern": "sort-cases",
             "object": "Cards of materials and places, and three bins: slower than in air, faster than in air, no sound at all.",
             "action": "Drags each card into a bin and reads why it belongs there.",
             "surprise": "Dense steel carries sound about seventeen times faster than air, and empty space carries none.",
             "predict": {
-              "q": "In which of these does sound travel fastest?",
+              "q": {
+                "en": "In which of these does sound travel fastest?",
+                "it": "In quale di questi il suono viaggia più veloce?"
+              },
               "options": [
-                "Air",
-                "Water",
-                "Steel"
+                {
+                  "en": "Air",
+                  "it": "Aria"
+                },
+                {
+                  "en": "Water",
+                  "it": "Acqua"
+                },
+                {
+                  "en": "Steel",
+                  "it": "Acciaio"
+                }
               ],
               "answer": 2,
-              "why": "Sound is fastest in solids, where particles are most strongly bound to each other."
+              "why": {
+                "en": "Sound is fastest in solids, where particles are most strongly bound to each other.",
+                "it": "Il suono è più veloce nei solidi, dove le particelle sono legate più strettamente tra loro."
+              }
             },
             "controls": [],
             "tries": [
               {
-                "text": "Put outer space in its bin.",
+                "text": {
+                  "en": "Put outer space in its bin.",
+                  "it": "Metti lo spazio cosmico nel suo contenitore."
+                },
                 "when": {
                   "place": {
                     "item": "space",
@@ -860,7 +1650,10 @@
                 }
               },
               {
-                "text": "Sort every card correctly.",
+                "text": {
+                  "en": "Sort every card correctly.",
+                  "it": "Ordina correttamente tutte le carte."
+                },
                 "when": {
                   "place": {
                     "correct": true
@@ -868,26 +1661,41 @@
                 }
               }
             ],
-            "takeaway": "Sound needs a <b>medium</b>, so there is <b>no sound in a vacuum</b>. It is usually <b>faster in liquids and solids</b> than in air: water about <b>4×</b>, steel about <b>17×</b>.",
-            "source": "Speeds from OpenStax University Physics 1, table 17.1, and Wikipedia; the bell-in-a-jar from The Physics Classroom. Real speeds depend on temperature and, for solids, on the alloy.",
+            "takeaway": {
+              "en": "Sound needs a <b>medium</b>, so there is <b>no sound in a vacuum</b>. It is usually <b>faster in liquids and solids</b> than in air: water about <b>4×</b>, steel about <b>17×</b>.",
+              "it": "Il suono ha bisogno di un <b>mezzo</b>, quindi <b>nel vuoto non c'è suono</b>. Di solito è <b>più veloce nei liquidi e nei solidi</b> che nell'aria: nell'acqua circa <b>4×</b>, nell'acciaio circa <b>17×</b>."
+            },
+            "source": {
+              "en": "Speeds from OpenStax University Physics 1, table 17.1, and Wikipedia; the bell-in-a-jar from The Physics Classroom. Real speeds depend on temperature and, for solids, on the alloy.",
+              "it": "Velocità tratte da OpenStax University Physics 1, tabella 17.1, e da Wikipedia; la campanella nella campana di vetro da The Physics Classroom. Le velocità reali dipendono dalla temperatura e, per i solidi, dalla lega."
+            },
             "ready": {
               "kind": "sort",
               "bins": [
                 {
                   "id": "slow",
-                  "label": "Slower than in air",
+                  "label": {
+                    "en": "Slower than in air",
+                    "it": "Più lento che nell'aria"
+                  },
                   "emoji": "🐢",
                   "color": "blue"
                 },
                 {
                   "id": "fast",
-                  "label": "Faster than in air",
+                  "label": {
+                    "en": "Faster than in air",
+                    "it": "Più veloce che nell'aria"
+                  },
                   "emoji": "🚀",
                   "color": "gold"
                 },
                 {
                   "id": "none",
-                  "label": "No sound at all",
+                  "label": {
+                    "en": "No sound at all",
+                    "it": "Nessun suono"
+                  },
                   "emoji": "🔇",
                   "color": "red"
                 }
@@ -895,45 +1703,81 @@
               "cards": [
                 {
                   "id": "water",
-                  "label": "Fresh water",
+                  "label": {
+                    "en": "Fresh water",
+                    "it": "Acqua dolce"
+                  },
                   "emoji": "💧",
                   "bin": "fast",
-                  "why": "about 1480 m/s, over four times faster than in air."
+                  "why": {
+                    "en": "about 1480 m/s, over four times faster than in air.",
+                    "it": "circa 1480 m/s, oltre quattro volte più veloce che nell'aria."
+                  }
                 },
                 {
                   "id": "steel",
-                  "label": "A steel rail",
+                  "label": {
+                    "en": "A steel rail",
+                    "it": "Una rotaia d'acciaio"
+                  },
                   "emoji": "🛤️",
                   "bin": "fast",
-                  "why": "about 5960 m/s, some seventeen times faster than in air."
+                  "why": {
+                    "en": "about 5960 m/s, some seventeen times faster than in air.",
+                    "it": "circa 5960 m/s, circa diciassette volte più veloce che nell'aria."
+                  }
                 },
                 {
                   "id": "space",
-                  "label": "Outer space",
+                  "label": {
+                    "en": "Outer space",
+                    "it": "Lo spazio cosmico"
+                  },
                   "emoji": "🌌",
                   "bin": "none",
-                  "why": "a near vacuum: almost no molecules to pass the squeeze along."
+                  "why": {
+                    "en": "a near vacuum: almost no molecules to pass the squeeze along.",
+                    "it": "un quasi vuoto: quasi nessuna molecola che passi avanti la compressione."
+                  }
                 },
                 {
                   "id": "jar",
-                  "label": "A jar with the air pumped out",
+                  "label": {
+                    "en": "A jar with the air pumped out",
+                    "it": "Una campana di vetro svuotata dall'aria"
+                  },
                   "emoji": "🔔",
                   "bin": "none",
-                  "why": "the bell is seen ringing but no longer heard."
+                  "why": {
+                    "en": "the bell is seen ringing but no longer heard.",
+                    "it": "la campanella si vede suonare ma non si sente più."
+                  }
                 },
                 {
                   "id": "helium",
-                  "label": "Helium gas",
+                  "label": {
+                    "en": "Helium gas",
+                    "it": "Elio (gas)"
+                  },
                   "emoji": "🎈",
                   "bin": "fast",
-                  "why": "about 965 m/s at 0 °C, where air gives 331 m/s: light molecules pass the squeeze faster."
+                  "why": {
+                    "en": "about 965 m/s at 0 °C, where air gives 331 m/s: light molecules pass the squeeze faster.",
+                    "it": "circa 965 m/s a 0 °C, dove l'aria dà 331 m/s: le molecole leggere passano la compressione più in fretta."
+                  }
                 },
                 {
                   "id": "co2",
-                  "label": "Carbon dioxide gas",
+                  "label": {
+                    "en": "Carbon dioxide gas",
+                    "it": "Anidride carbonica (gas)"
+                  },
                   "emoji": "🫧",
                   "bin": "slow",
-                  "why": "about 259 m/s at 0 °C, where air gives 331 m/s: heavier molecules, slower squeeze."
+                  "why": {
+                    "en": "about 259 m/s at 0 °C, where air gives 331 m/s: heavier molecules, slower squeeze.",
+                    "it": "circa 259 m/s a 0 °C, dove l'aria dà 331 m/s: molecole più pesanti, compressione più lenta."
+                  }
                 }
               ]
             }
@@ -943,98 +1787,218 @@
       "questions": [
         {
           "level": 1,
-          "q": "Why is there no sound in outer space?",
+          "q": {
+            "en": "Why is there no sound in outer space?",
+            "it": "Perché nello spazio cosmico non c'è suono?"
+          },
           "options": [
-            "It is too cold for sound",
-            "Sound is absorbed by starlight",
-            "There is almost no matter in it"
+            {
+              "en": "It is too cold for sound",
+              "it": "Fa troppo freddo per il suono"
+            },
+            {
+              "en": "Sound is absorbed by starlight",
+              "it": "Il suono è assorbito dalla luce delle stelle"
+            },
+            {
+              "en": "There is almost no matter in it",
+              "it": "Non c'è quasi materia"
+            }
           ],
           "answer": 2,
-          "why": "Sound is a mechanical wave: it needs a medium, and space is a near vacuum.",
+          "why": {
+            "en": "Sound is a mechanical wave: it needs a medium, and space is a near vacuum.",
+            "it": "Il suono è un'onda meccanica: ha bisogno di un mezzo, e lo spazio è un quasi vuoto."
+          },
           "traps": [
-            "Sound travels through very cold air and ice: temperature changes its speed, it does not stop it.",
-            "Light and sound do not absorb each other; the missing ingredient is matter.",
+            {
+              "en": "Sound travels through very cold air and ice: temperature changes its speed, it does not stop it.",
+              "it": "Il suono si propaga nell'aria molto fredda e nel ghiaccio: la temperatura ne cambia la velocità, non lo ferma."
+            },
+            {
+              "en": "Light and sound do not absorb each other; the missing ingredient is matter.",
+              "it": "Luce e suono non si assorbono a vicenda; ciò che manca è la materia."
+            },
             null
           ]
         },
         {
           "level": 1,
-          "q": "About how fast does sound travel in air at 20 °C?",
+          "q": {
+            "en": "About how fast does sound travel in air at 20 °C?",
+            "it": "Più o meno a che velocità viaggia il suono nell'aria a 20 °C?"
+          },
           "options": [
             "343 m/s",
             "3 m/s",
-            "300 000 km/s"
+            {
+              "en": "300 000 km/s",
+              "it": "300.000 km/s"
+            }
           ],
           "answer": 0,
-          "why": "About 343 m/s, roughly a kilometre in three seconds.",
+          "why": {
+            "en": "About 343 m/s, roughly a kilometre in three seconds.",
+            "it": "Circa 343 m/s, più o meno un chilometro in tre secondi."
+          },
           "traps": [
             null,
-            "That is walking pace: you would see a thunderclap minutes before hearing it nearby, which never happens.",
-            "That is the speed of light, almost a million times faster than sound."
+            {
+              "en": "That is walking pace: you would see a thunderclap minutes before hearing it nearby, which never happens.",
+              "it": "Questa è la velocità di una camminata: un tuono vicino si vedrebbe minuti prima di sentirlo, e non succede mai."
+            },
+            {
+              "en": "That is the speed of light, almost a million times faster than sound.",
+              "it": "Questa è la velocità della luce, quasi un milione di volte più veloce di quella del suono."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Through which does sound usually travel fastest?",
+          "q": {
+            "en": "Through which does sound usually travel fastest?",
+            "it": "In quale di questi il suono di solito viaggia più veloce?"
+          },
           "options": [
-            "A gas such as air",
-            "A liquid such as water",
-            "A solid such as steel"
+            {
+              "en": "A gas such as air",
+              "it": "Un gas come l'aria"
+            },
+            {
+              "en": "A liquid such as water",
+              "it": "Un liquido come l'acqua"
+            },
+            {
+              "en": "A solid such as steel",
+              "it": "Un solido come l'acciaio"
+            }
           ],
           "answer": 2,
-          "why": "Sound typically travels slowest in gases, faster in liquids and fastest in solids.",
+          "why": {
+            "en": "Sound typically travels slowest in gases, faster in liquids and fastest in solids.",
+            "it": "Di solito il suono viaggia più lentamente nei gas, più in fretta nei liquidi e più in fretta ancora nei solidi."
+          },
           "traps": [
-            "Gases are the slowest: their molecules are far apart and interact weakly.",
-            "Water is faster than air, about 1480 m/s, but steel is faster still at about 5960 m/s.",
+            {
+              "en": "Gases are the slowest: their molecules are far apart and interact weakly.",
+              "it": "I gas sono i più lenti: le loro molecole sono distanti e interagiscono debolmente."
+            },
+            {
+              "en": "Water is faster than air, about 1480 m/s, but steel is faster still at about 5960 m/s.",
+              "it": "L'acqua è più veloce dell'aria, circa 1480 m/s, ma l'acciaio lo è ancora di più, con circa 5960 m/s."
+            },
             null
           ]
         },
         {
           "level": 2,
-          "q": "You put your ear to a long steel rail while a friend taps the far end. What do you notice?",
+          "q": {
+            "en": "You put your ear to a long steel rail while a friend taps the far end. What do you notice?",
+            "it": "Appoggi l'orecchio a una lunga rotaia d'acciaio mentre un amico batte un colpo all'altra estremità. Che cosa noti?"
+          },
           "options": [
-            "The tap through the rail arrives before the tap through the air",
-            "Both arrive together",
-            "Only the sound through the air arrives"
+            {
+              "en": "The tap through the rail arrives before the tap through the air",
+              "it": "Il colpo arriva attraverso la rotaia prima di quello attraverso l'aria"
+            },
+            {
+              "en": "Both arrive together",
+              "it": "Arrivano insieme"
+            },
+            {
+              "en": "Only the sound through the air arrives",
+              "it": "Arriva solo il suono attraverso l'aria"
+            }
           ],
           "answer": 0,
-          "why": "Steel carries sound about seventeen times faster than air, so the rail brings the tap first.",
+          "why": {
+            "en": "Steel carries sound about seventeen times faster than air, so the rail brings the tap first.",
+            "it": "L'acciaio trasmette il suono circa diciassette volte più in fretta dell'aria, quindi è la rotaia a portare per prima il colpo."
+          },
           "traps": [
             null,
-            "They would arrive together only if steel and air carried sound at the same speed, and they do not.",
-            "A steel rail carries sound very well: it is a medium, and a fast one."
+            {
+              "en": "They would arrive together only if steel and air carried sound at the same speed, and they do not.",
+              "it": "Arriverebbero insieme solo se acciaio e aria trasmettessero il suono alla stessa velocità, e non è così."
+            },
+            {
+              "en": "A steel rail carries sound very well: it is a medium, and a fast one.",
+              "it": "Una rotaia d'acciaio trasmette benissimo il suono: è un mezzo, e anche veloce."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A bell rings inside a glass jar while the air is pumped out. What happens?",
+          "q": {
+            "en": "A bell rings inside a glass jar while the air is pumped out. What happens?",
+            "it": "Una campanella suona dentro una campana di vetro mentre l'aria viene pompata fuori. Che cosa succede?"
+          },
           "options": [
-            "The bell stops moving",
-            "The bell is seen ringing but heard more and more faintly",
-            "The sound gets higher and higher"
+            {
+              "en": "The bell stops moving",
+              "it": "La campanella smette di muoversi"
+            },
+            {
+              "en": "The bell is seen ringing but heard more and more faintly",
+              "it": "La campanella si vede suonare ma si sente sempre più debole"
+            },
+            {
+              "en": "The sound gets higher and higher",
+              "it": "Il suono diventa sempre più acuto"
+            }
           ],
           "answer": 1,
-          "why": "The clapper keeps striking, but with less and less air there is less and less medium to carry the sound out.",
+          "why": {
+            "en": "The clapper keeps striking, but with less and less air there is less and less medium to carry the sound out.",
+            "it": "Il batacchio continua a colpire, ma con sempre meno aria c'è sempre meno mezzo che porti il suono all'esterno."
+          },
           "traps": [
-            "Removing the air does not stop the bell: you can still see the clapper strike.",
+            {
+              "en": "Removing the air does not stop the bell: you can still see the clapper strike.",
+              "it": "Togliere l'aria non ferma la campanella: si vede ancora il batacchio colpire."
+            },
             null,
-            "Pumping out air takes away the medium; it does not change how fast the bell vibrates."
+            {
+              "en": "Pumping out air takes away the medium; it does not change how fast the bell vibrates.",
+              "it": "Pompare via l'aria toglie il mezzo; non cambia la rapidità con cui vibra la campanella."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "Helium is far less dense than air, yet sound travels faster in it. Which idea does this break?",
+          "q": {
+            "en": "Helium is far less dense than air, yet sound travels faster in it. Which idea does this break?",
+            "it": "L'elio è molto meno denso dell'aria, eppure il suono vi viaggia più veloce. Quale idea mette in crisi?"
+          },
           "options": [
-            "That sound needs a medium",
-            "That denser always means faster",
-            "That sound is a wave"
+            {
+              "en": "That sound needs a medium",
+              "it": "Che il suono abbia bisogno di un mezzo"
+            },
+            {
+              "en": "That denser always means faster",
+              "it": "Che più denso significhi sempre più veloce"
+            },
+            {
+              "en": "That sound is a wave",
+              "it": "Che il suono sia un'onda"
+            }
           ],
           "answer": 1,
-          "why": "Speed depends on how stiff the medium is and how light its particles are, not on density alone; light helium molecules pass the squeeze faster.",
+          "why": {
+            "en": "Speed depends on how stiff the medium is and how light its particles are, not on density alone; light helium molecules pass the squeeze faster.",
+            "it": "La velocità dipende da quanto è rigido il mezzo e da quanto sono leggere le sue particelle, non dalla sola densità; le molecole leggere dell'elio passano la compressione più in fretta."
+          },
           "traps": [
-            "Helium is still a medium; the fact is about speed, not about whether sound can travel.",
+            {
+              "en": "Helium is still a medium; the fact is about speed, not about whether sound can travel.",
+              "it": "L'elio è comunque un mezzo; il fatto riguarda la velocità, non la possibilità che il suono si propaghi."
+            },
             null,
-            "Sound in helium is still a wave; only its speed differs."
+            {
+              "en": "Sound in helium is still a wave; only its speed differs.",
+              "it": "Il suono nell'elio è comunque un'onda; cambia soltanto la sua velocità."
+            }
           ]
         }
       ]
@@ -1063,14 +2027,20 @@
     }
   ],
   "finalCheck": {
-    "name": "The Sound League",
+    "name": {
+      "en": "The Sound League",
+      "it": "La Lega del Suono"
+    },
     "size": 6,
     "pass": 0.67
   },
   "games": [
     {
       "id": "higher",
-      "title": "Higher or lower?",
+      "title": {
+        "en": "Higher or lower?",
+        "it": "Più acuto o più grave?"
+      },
       "concepts": [
         "pitch"
       ],
@@ -1078,9 +2048,15 @@
       "where": "town",
       "object": "piano",
       "rounds": 8,
-      "learn": "More squeezes per second: a higher note.",
+      "learn": {
+        "en": "More squeezes per second: a higher note.",
+        "it": "Più compressioni al secondo: una nota più acuta."
+      },
       "data": {
-        "ask": "Which tone is higher?",
+        "ask": {
+          "en": "Which tone is higher?",
+          "it": "Quale tono è più acuto?"
+        },
         "pick": "max",
         "make": {
           "kind": "tone",
@@ -1096,16 +2072,25 @@
     },
     {
       "id": "guess-hz",
-      "title": "Guess the frequency",
+      "title": {
+        "en": "Guess the frequency",
+        "it": "Indovina la frequenza"
+      },
       "concepts": [
         "pitch"
       ],
       "kind": "estimate",
       "where": "person",
       "rounds": 6,
-      "learn": "Twice the frequency is the same note an octave higher.",
+      "learn": {
+        "en": "Twice the frequency is the same note an octave higher.",
+        "it": "Una frequenza doppia è la stessa nota un'ottava più in alto."
+      },
       "data": {
-        "ask": "How many hertz is this tone?",
+        "ask": {
+          "en": "How many hertz is this tone?",
+          "it": "Quanti hertz ha questo tono?"
+        },
         "scale": {
           "from": 100,
           "to": 3200,
@@ -1133,7 +2118,10 @@
     },
     {
       "id": "echo",
-      "title": "Echo the tones",
+      "title": {
+        "en": "Echo the tones",
+        "it": "Ripeti i toni"
+      },
       "concepts": [
         "pitch"
       ],
@@ -1141,9 +2129,15 @@
       "where": "town",
       "object": "hat",
       "rounds": 8,
-      "learn": "Each pad is a frequency: higher pads, higher pitch.",
+      "learn": {
+        "en": "Each pad is a frequency: higher pads, higher pitch.",
+        "it": "Ogni tasto è una frequenza: a un tasto più alto corrisponde un suono più acuto."
+      },
       "data": {
-        "ask": "Listen, then play it back.",
+        "ask": {
+          "en": "Listen, then play it back.",
+          "it": "Ascolta, poi riproducilo."
+        },
         "start": 3,
         "longest": 8,
         "pads": [
@@ -1184,19 +2178,34 @@
     },
     {
       "id": "travels",
-      "title": "Does sound get through?",
+      "title": {
+        "en": "Does sound get through?",
+        "it": "Il suono passa?"
+      },
       "concepts": [
         "medium"
       ],
       "kind": "sort-fast",
       "where": "host",
       "rounds": 8,
-      "learn": "Sound needs matter: none in a vacuum.",
+      "learn": {
+        "en": "Sound needs matter: none in a vacuum.",
+        "it": "Il suono ha bisogno di materia: nel vuoto non si propaga."
+      },
       "data": {
-        "ask": "Can sound travel through it?",
+        "ask": {
+          "en": "Can sound travel through it?",
+          "it": "Il suono può attraversarlo?"
+        },
         "bins": [
-          "it travels",
-          "no sound"
+          {
+            "en": "it travels",
+            "it": "il suono passa"
+          },
+          {
+            "en": "no sound",
+            "it": "nessun suono"
+          }
         ],
         "time": [
           6,
@@ -1204,31 +2213,52 @@
         ],
         "cards": [
           {
-            "text": "air",
+            "text": {
+              "en": "air",
+              "it": "aria"
+            },
             "bin": 0
           },
           {
-            "text": "water",
+            "text": {
+              "en": "water",
+              "it": "acqua"
+            },
             "bin": 0
           },
           {
-            "text": "steel",
+            "text": {
+              "en": "steel",
+              "it": "acciaio"
+            },
             "bin": 0
           },
           {
-            "text": "wood",
+            "text": {
+              "en": "wood",
+              "it": "legno"
+            },
             "bin": 0
           },
           {
-            "text": "the ground",
+            "text": {
+              "en": "the ground",
+              "it": "il terreno"
+            },
             "bin": 0
           },
           {
-            "text": "outer space",
+            "text": {
+              "en": "outer space",
+              "it": "lo spazio cosmico"
+            },
             "bin": 1
           },
           {
-            "text": "a perfect vacuum",
+            "text": {
+              "en": "a perfect vacuum",
+              "it": "un vuoto perfetto"
+            },
             "bin": 1
           }
         ]
@@ -1236,7 +2266,10 @@
     },
     {
       "id": "times",
-      "title": "How many times?",
+      "title": {
+        "en": "How many times?",
+        "it": "Quante volte?"
+      },
       "concepts": [
         "loudness"
       ],
@@ -1244,9 +2277,15 @@
       "where": "town",
       "object": "box",
       "rounds": 6,
-      "learn": "Every 10 decibels more is ten times the intensity.",
+      "learn": {
+        "en": "Every 10 decibels more is ten times the intensity.",
+        "it": "Ogni 10 decibel in più significano un'intensità dieci volte maggiore."
+      },
       "data": {
-        "ask": "How many times as intense?"
+        "ask": {
+          "en": "How many times as intense?",
+          "it": "Quante volte più intenso?"
+        }
       }
     }
   ]
