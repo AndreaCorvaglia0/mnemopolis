@@ -3309,131 +3309,308 @@
       "id": "triads",
       "theme": "chords",
       "type": "parts",
-      "name": "Major and minor triads",
-      "place": "Choir House",
-      "sign": "CHOIR",
+      "name": {
+        "en": "Major and minor triads",
+        "it": "Triadi maggiori e minori"
+      },
+      "place": {
+        "en": "Choir House",
+        "it": "Casa del Coro"
+      },
+      "sign": {
+        "en": "CHOIR",
+        "it": "CORO"
+      },
       "emblem": "note",
       "expert": {
         "name": "Cora",
-        "trade": "musician",
+        "trade": {
+          "en": "musician",
+          "it": "musicista"
+        },
         "temper": "smitten",
-        "line": "Three voices, each a third above the last. Ask the middle one to sing a half step lower and the whole chord turns minor."
+        "line": {
+          "en": "Three voices, each a third above the last. Ask the middle one to sing a half step lower and the whole chord turns minor.",
+          "it": "Tre voci, ciascuna una terza sopra la precedente. Chiedi a quella di mezzo di cantare un semitono più in basso e tutto l'accordo diventa minore."
+        }
       },
-      "objective": "Build major and minor triads from a root and find their notes inside an open chord shape.",
-      "idea": "A triad stacks two thirds on a root: major is four then three half steps, minor three then four. An open chord repeats those three notes.",
-      "wrongBelief": "A six-string chord is six different notes, and major and minor chords are unrelated shapes to learn one by one.",
+      "objective": {
+        "en": "Build major and minor triads from a root and find their notes inside an open chord shape.",
+        "it": "Costruire triadi maggiori e minori da una tonica e trovarne le note dentro la forma di un accordo a vuoto."
+      },
+      "idea": {
+        "en": "A triad stacks two thirds on a root: major is four then three half steps, minor three then four. An open chord repeats those three notes.",
+        "it": "Una triade impila due terze su una tonica: la maggiore è quattro e poi tre semitoni, la minore tre e poi quattro. Un accordo a vuoto ripete queste tre note."
+      },
+      "wrongBelief": {
+        "en": "A six-string chord is six different notes, and major and minor chords are unrelated shapes to learn one by one.",
+        "it": "Un accordo di sei corde è fatto di sei note diverse, e gli accordi maggiori e minori sono forme senza relazione da imparare una per una."
+      },
       "anchor": {
         "type": "example",
-        "text": "The open E major chord, fretted 0 2 2 1 0 0, rings E, B, E, G♯, B, E: three note names over six strings."
+        "text": {
+          "en": "The open E major chord, fretted 0 2 2 1 0 0, rings E, B, E, G♯, B, E: three note names over six strings.",
+          "it": "L'accordo di Mi maggiore (E) a vuoto, con le dita su 0 2 2 1 0 0, suona Mi, Si, Mi, Sol♯, Si, Mi: tre nomi di nota su sei corde."
+        }
       },
-      "application": "Knowing which strings carry the root, the third and the fifth tells a guitarist which finger turns a chord minor, and which notes can be dropped from a crowded chord.",
+      "application": {
+        "en": "Knowing which strings carry the root, the third and the fifth tells a guitarist which finger turns a chord minor, and which notes can be dropped from a crowded chord.",
+        "it": "Sapere quali corde portano la tonica, la terza e la quinta dice a un chitarrista quale dito rende minore un accordo, e quali note si possono togliere da un accordo affollato."
+      },
       "remember": [
-        "A triad is a root, a third and a fifth; the fifth is seven half steps above the root.",
-        "Major is root, then four half steps, then three more; minor is root, then three, then four.",
-        "Open E major is E, B, E, G♯, B, E; lifting the finger on G♯ gives E minor."
+        {
+          "en": "A triad is a root, a third and a fifth; the fifth is seven half steps above the root.",
+          "it": "Una triade è una tonica, una terza e una quinta; la quinta sta sette semitoni sopra la tonica."
+        },
+        {
+          "en": "Major is root, then four half steps, then three more; minor is root, then three, then four.",
+          "it": "La triade maggiore è la tonica, poi quattro semitoni, poi altri tre; la minore è la tonica, poi tre, poi quattro."
+        },
+        {
+          "en": "Open E major is E, B, E, G♯, B, E; lifting the finger on G♯ gives E minor.",
+          "it": "Mi maggiore a vuoto è Mi, Si, Mi, Sol♯, Si, Mi; alzando il dito sul Sol♯ si ottiene Mi minore."
+        }
       ],
       "explain": {
-        "q": "Why does lifting one finger turn E major into E minor?",
-        "a": "E major is E, G♯ and B, and the finger at fret 1 of the G string plays G♯, the major third. Lifting it lets the open G sound, one half step lower, which is a minor third above E, so the chord becomes E, G and B, which is E minor."
+        "q": {
+          "en": "Why does lifting one finger turn E major into E minor?",
+          "it": "Perché alzare un dito trasforma Mi maggiore in Mi minore?"
+        },
+        "a": {
+          "en": "E major is E, G♯ and B, and the finger at fret 1 of the G string plays G♯, the major third. Lifting it lets the open G sound, one half step lower, which is a minor third above E, so the chord becomes E, G and B, which is E minor.",
+          "it": "Mi maggiore è Mi, Sol♯ e Si, e il dito al tasto 1 della corda di Sol (G) suona il Sol♯, la terza maggiore. Alzandolo suona il Sol a vuoto, un semitono più in basso, che è una terza minore sopra il Mi, quindi l'accordo diventa Mi, Sol e Si, cioè Mi minore."
+        }
       },
       "callbacks": [
         {
           "to": "scale",
-          "how": "The third and the fifth are the third and fifth notes of the major scale built at the Step Ladder."
+          "how": {
+            "en": "The third and the fifth are the third and fifth notes of the major scale built at the Step Ladder.",
+            "it": "La terza e la quinta sono la terza e la quinta nota della scala maggiore costruita nella Scala a Pioli."
+          }
         },
         {
           "to": "beats",
-          "how": "The fifth inside every triad is the 3:2 of the Tuner's House, which is why it sounds so stable."
+          "how": {
+            "en": "The fifth inside every triad is the 3:2 of the Tuner's House, which is why it sounds so stable.",
+            "it": "La quinta dentro ogni triade è il 3:2 della Casa dell'Accordatore, ed è per questo che suona così stabile."
+          }
         }
       ],
       "lab": {
-        "title": "Stack the thirds",
+        "title": {
+          "en": "Stack the thirds",
+          "it": "Impila le terze"
+        },
         "stations": [
           {
             "id": "stack",
-            "tab": "Three notes, six strings",
-            "goal": "A chord is a root, a third and a fifth, repeated over six strings; lowering the third a half step turns major into minor.",
+            "tab": {
+              "en": "Three notes, six strings",
+              "it": "Tre note, sei corde"
+            },
+            "goal": {
+              "en": "A chord is a root, a third and a fifth, repeated over six strings; lowering the third a half step turns major into minor.",
+              "it": "Un accordo è una tonica, una terza e una quinta, ripetute su sei corde; abbassando la terza di un semitono il maggiore diventa minore."
+            },
             "beat": "ground",
             "pattern": "handle",
-            "object": "The circle of twelve notes with a root and two thirds stacked on it, linked to the open E chord on the neck.",
-            "action": "Strums the open E chord, then moves the middle note of the stack down or up by a half step.",
-            "surprise": "Six strings sound only three note names, and one fret on the G string is all that separates E major from E minor.",
+            "object": {
+              "en": "The circle of twelve notes with a root and two thirds stacked on it, linked to the open E chord on the neck.",
+              "it": "Il cerchio delle dodici note con una tonica e due terze impilate sopra, collegato all'accordo di Mi (E) a vuoto sul manico."
+            },
+            "action": {
+              "en": "Strums the open E chord, then moves the middle note of the stack down or up by a half step.",
+              "it": "Strimpella l'accordo di Mi (E) a vuoto, poi sposta la nota di mezzo della pila in giù o in su di un semitono."
+            },
+            "surprise": {
+              "en": "Six strings sound only three note names, and one fret on the G string is all that separates E major from E minor.",
+              "it": "Sei corde fanno sentire solo tre nomi di nota, e un solo tasto sulla corda di Sol (G) separa Mi maggiore da Mi minore."
+            },
             "predict": {
-              "q": "An open E major chord rings all six strings. How many different note names does it contain?",
+              "q": {
+                "en": "An open E major chord rings all six strings. How many different note names does it contain?",
+                "it": "Un accordo di Mi maggiore (E) a vuoto fa suonare tutte e sei le corde. Quanti nomi di nota diversi contiene?"
+              },
               "options": [
-                "six",
-                "five",
-                "four",
-                "three"
+                {
+                  "en": "six",
+                  "it": "sei"
+                },
+                {
+                  "en": "five",
+                  "it": "cinque"
+                },
+                {
+                  "en": "four",
+                  "it": "quattro"
+                },
+                {
+                  "en": "three",
+                  "it": "tre"
+                }
               ],
               "answer": 3,
-              "why": "A major triad has three notes, E, G♯ and B, and the six strings repeat them in different octaves."
+              "why": {
+                "en": "A major triad has three notes, E, G♯ and B, and the six strings repeat them in different octaves.",
+                "it": "Una triade maggiore ha tre note, Mi, Sol♯ e Si, e le sei corde le ripetono in ottave diverse."
+              }
             },
             "controls": [
-              "Strum the chord"
+              {
+                "en": "Strum the chord",
+                "it": "Strimpella l'accordo"
+              }
             ],
             "tries": [
-              "Strum the open E chord and look at the names of its six notes.",
-              "Lower the third by one half step and strum again.",
-              "Find the string whose note changed."
+              {
+                "en": "Strum the open E chord and look at the names of its six notes.",
+                "it": "Strimpella l'accordo di Mi (E) a vuoto e guarda i nomi delle sue sei note."
+              },
+              {
+                "en": "Lower the third by one half step and strum again.",
+                "it": "Abbassa la terza di un semitono e strimpella di nuovo."
+              },
+              {
+                "en": "Find the string whose note changed.",
+                "it": "Trova la corda la cui nota è cambiata."
+              }
             ],
-            "takeaway": "A <b>major triad</b> is a root, a <b>major third</b> (4 half steps) and a <b>fifth</b> (7); a <b>minor triad</b> lowers the third to 3 half steps. The open E chord rings <b>E, B, E, G♯, B, E</b>, only three names, and lifting the finger on G♯ leaves the open G: <b>E minor</b>.",
-            "source": "Chord tones computed live from the intervals (Open Music Theory, Hutchinson); string notes from standard tuning; sound synthesised from each string's frequency in equal temperament."
+            "takeaway": {
+              "en": "A <b>major triad</b> is a root, a <b>major third</b> (4 half steps) and a <b>fifth</b> (7); a <b>minor triad</b> lowers the third to 3 half steps. The open E chord rings <b>E, B, E, G♯, B, E</b>, only three names, and lifting the finger on G♯ leaves the open G: <b>E minor</b>.",
+              "it": "Una <b>triade maggiore</b> è una tonica, una <b>terza maggiore</b> (4 semitoni) e una <b>quinta</b> (7); una <b>triade minore</b> abbassa la terza a 3 semitoni. L'accordo di Mi (E) a vuoto suona <b>Mi, Si, Mi, Sol♯, Si, Mi</b>, soltanto tre nomi, e alzando il dito sul Sol♯ resta il Sol a vuoto: <b>Mi minore</b>."
+            },
+            "source": {
+              "en": "Chord tones computed live from the intervals (Open Music Theory, Hutchinson); string notes from standard tuning; sound synthesised from each string's frequency in equal temperament.",
+              "it": "Note dell'accordo calcolate in tempo reale dagli intervalli (Open Music Theory, Hutchinson); note delle corde dall'accordatura standard; suono sintetizzato dalla frequenza di ogni corda in temperamento equabile."
+            }
           },
           {
             "id": "shapes",
-            "tab": "Five open shapes",
+            "tab": {
+              "en": "Five open shapes",
+              "it": "Cinque forme a vuoto"
+            },
             "advanced": true,
-            "goal": "Every open chord shape, C, A, G, E and D, holds only three note names, and its lowest string played is its root.",
+            "goal": {
+              "en": "Every open chord shape, C, A, G, E and D, holds only three note names, and its lowest string played is its root.",
+              "it": "Ogni forma di accordo a vuoto, C, A, G, E e D, contiene solo tre nomi di nota, e la corda più bassa suonata è la sua tonica."
+            },
             "beat": "sandbox",
             "pattern": "sandbox",
-            "object": "The neck with the five open major chord shapes, each string labelled root, third or fifth.",
-            "action": "Picks a shape, strums it and reads which strings carry the root, the third and the fifth.",
-            "surprise": "Every shape, however different under the fingers, holds the same three roles, and the lowest string played is always the root.",
+            "object": {
+              "en": "The neck with the five open major chord shapes, each string labelled root, third or fifth.",
+              "it": "Il manico con le cinque forme di accordo maggiore a vuoto, ogni corda indicata come tonica, terza o quinta."
+            },
+            "action": {
+              "en": "Picks a shape, strums it and reads which strings carry the root, the third and the fifth.",
+              "it": "Sceglie una forma, la strimpella e legge quali corde portano la tonica, la terza e la quinta."
+            },
+            "surprise": {
+              "en": "Every shape, however different under the fingers, holds the same three roles, and the lowest string played is always the root.",
+              "it": "Ogni forma, per quanto diversa sotto le dita, contiene gli stessi tre ruoli, e la corda più bassa suonata è sempre la tonica."
+            },
             "controls": [
-              "Choose the shape"
+              {
+                "en": "Choose the shape",
+                "it": "Scegli la forma"
+              }
             ],
             "tries": [
-              "Strum three different open shapes and read their roles.",
-              "Find the shape whose root is the open D string."
+              {
+                "en": "Strum three different open shapes and read their roles.",
+                "it": "Strimpella tre forme a vuoto diverse e leggi i loro ruoli."
+              },
+              {
+                "en": "Find the shape whose root is the open D string.",
+                "it": "Trova la forma la cui tonica è la corda di Re (D) a vuoto."
+              }
             ],
-            "takeaway": "The open shapes <b>C, A, G, E and D</b> each hold only a root, a third and a fifth, spread over four to six strings, and the lowest string played is the root. These are the five shapes that the <b>CAGED</b> system later moves up the neck.",
-            "source": "Shapes in standard tuning: C x32010, A x02220, G 320003, E 022100, D xx0232; note roles computed live."
+            "takeaway": {
+              "en": "The open shapes <b>C, A, G, E and D</b> each hold only a root, a third and a fifth, spread over four to six strings, and the lowest string played is the root. These are the five shapes that the <b>CAGED</b> system later moves up the neck.",
+              "it": "Le forme a vuoto <b>C, A, G, E e D</b> contengono ciascuna solo una tonica, una terza e una quinta, distribuite su da quattro a sei corde, e la corda più bassa suonata è la tonica. Sono le cinque forme che il sistema <b>CAGED</b> sposta poi lungo il manico."
+            },
+            "source": {
+              "en": "Shapes in standard tuning: C x32010, A x02220, G 320003, E 022100, D xx0232; note roles computed live.",
+              "it": "Forme in accordatura standard: C x32010, A x02220, G 320003, E 022100, D xx0232; ruoli delle note calcolati in tempo reale."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "Stacked thirds",
-          "text": "A triad is three notes stacked in thirds: a root, a third above it and a fifth above the root. A major triad has a major third, four half steps above the root, and then three more half steps to the fifth; a minor triad has a minor third, three half steps, and then four more. Both have the same fifth, seven half steps up, and the third alone decides whether the chord is major or minor."
+          "title": {
+            "en": "Stacked thirds",
+            "it": "Terze impilate"
+          },
+          "text": {
+            "en": "A triad is three notes stacked in thirds: a root, a third above it and a fifth above the root. A major triad has a major third, four half steps above the root, and then three more half steps to the fifth; a minor triad has a minor third, three half steps, and then four more. Both have the same fifth, seven half steps up, and the third alone decides whether the chord is major or minor.",
+            "it": "Una triade è formata da tre note impilate per terze: una tonica, una terza sopra di essa e una quinta sopra la tonica. La triade maggiore ha una terza maggiore, quattro semitoni sopra la tonica, e poi altri tre semitoni fino alla quinta; la triade minore ha una terza minore, tre semitoni, e poi altri quattro. Entrambe hanno la stessa quinta, sette semitoni sopra, e la terza da sola decide se l'accordo è maggiore o minore."
+          }
         },
         {
-          "title": "Six strings, three notes",
-          "text": "An open chord on the guitar spreads a triad over the strings and repeats some of its notes. The open E major chord plays E on the low string, then B, E, G♯, B and E, so it holds only E, G♯ and B. The G♯ is the finger at fret 1 of the G string, and lifting it lets the open G sound, a half step lower, which turns the chord into E minor."
+          "title": {
+            "en": "Six strings, three notes",
+            "it": "Sei corde, tre note"
+          },
+          "text": {
+            "en": "An open chord on the guitar spreads a triad over the strings and repeats some of its notes. The open E major chord plays E on the low string, then B, E, G♯, B and E, so it holds only E, G♯ and B. The G♯ is the finger at fret 1 of the G string, and lifting it lets the open G sound, a half step lower, which turns the chord into E minor.",
+            "it": "Un accordo a vuoto sulla chitarra distribuisce una triade sulle corde e ripete alcune delle sue note. L'accordo di Mi maggiore (E) a vuoto suona Mi sulla corda bassa, poi Si, Mi, Sol♯, Si e Mi, quindi contiene soltanto Mi, Sol♯ e Si. Il Sol♯ è il dito al tasto 1 della corda di Sol (G), e alzandolo suona il Sol a vuoto, un semitono più in basso, che trasforma l'accordo in Mi minore (Em). Da qui in poi gli accordi si indicano con i loro simboli, come E, Am e G."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "A triad is made of...",
+          "q": {
+            "en": "A triad is made of...",
+            "it": "Una triade è formata da..."
+          },
           "options": [
-            "a root, a third and a fifth",
-            "any three notes played together",
-            "three notes a half step apart",
-            "a root and its octave"
+            {
+              "en": "a root, a third and a fifth",
+              "it": "una tonica, una terza e una quinta"
+            },
+            {
+              "en": "any three notes played together",
+              "it": "tre note qualsiasi suonate insieme"
+            },
+            {
+              "en": "three notes a half step apart",
+              "it": "tre note a distanza di un semitono"
+            },
+            {
+              "en": "a root and its octave",
+              "it": "una tonica e la sua ottava"
+            }
           ],
           "answer": 0,
-          "why": "A triad stacks two thirds: root, third above it, and fifth above the root.",
+          "why": {
+            "en": "A triad stacks two thirds: root, third above it, and fifth above the root.",
+            "it": "Una triade impila due terze: la tonica, la terza sopra di essa e la quinta sopra la tonica."
+          },
           "traps": [
             null,
-            "Any three notes make a sound, but a triad is a particular stack: two thirds on a root.",
-            "Three notes a half step apart make a cluster that beats; the notes of a triad are three or four half steps apart.",
-            "Root and octave are two notes with the same name; a triad needs three different names."
+            {
+              "en": "Any three notes make a sound, but a triad is a particular stack: two thirds on a root.",
+              "it": "Tre note qualsiasi producono un suono, ma una triade è una pila particolare: due terze su una tonica."
+            },
+            {
+              "en": "Three notes a half step apart make a cluster that beats; the notes of a triad are three or four half steps apart.",
+              "it": "Tre note a un semitono l'una dall'altra formano un cluster che batte; le note di una triade distano tre o quattro semitoni."
+            },
+            {
+              "en": "Root and octave are two notes with the same name; a triad needs three different names.",
+              "it": "Tonica e ottava sono due note con lo stesso nome; una triade ne richiede tre con nomi diversi."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "A major triad, counted in half steps from the root, is...",
+          "q": {
+            "en": "A major triad, counted in half steps from the root, is...",
+            "it": "Una triade maggiore, contata in semitoni dalla tonica, è..."
+          },
           "options": [
             "0, 3, 7",
             "0, 4, 7",
@@ -3441,82 +3618,193 @@
             "0, 5, 7"
           ],
           "answer": 1,
-          "why": "The major third is four half steps above the root and the fifth seven.",
+          "why": {
+            "en": "The major third is four half steps above the root and the fifth seven.",
+            "it": "La terza maggiore sta quattro semitoni sopra la tonica e la quinta sette."
+          },
           "traps": [
-            "0, 3, 7 has a minor third, three half steps, which makes the minor triad.",
+            {
+              "en": "0, 3, 7 has a minor third, three half steps, which makes the minor triad.",
+              "it": "0, 3, 7 ha una terza minore, tre semitoni, che dà la triade minore."
+            },
             null,
-            "0, 4, 8 raises the fifth to eight half steps, which is an augmented triad, not a major one.",
-            "0, 5, 7 replaces the third with the fourth, a suspended chord, which is neither major nor minor."
+            {
+              "en": "0, 4, 8 raises the fifth to eight half steps, which is an augmented triad, not a major one.",
+              "it": "0, 4, 8 alza la quinta a otto semitoni, il che dà una triade aumentata, non una maggiore."
+            },
+            {
+              "en": "0, 5, 7 replaces the third with the fourth, a suspended chord, which is neither major nor minor.",
+              "it": "0, 5, 7 sostituisce la terza con la quarta, un accordo sospeso, che non è né maggiore né minore."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Lifting the finger at fret 1 of the G string in an open E major chord gives...",
+          "q": {
+            "en": "Lifting the finger at fret 1 of the G string in an open E major chord gives...",
+            "it": "Alzare il dito al tasto 1 della corda di Sol (G) in un accordo di Mi maggiore (E) a vuoto dà..."
+          },
           "options": [
-            "E minor",
+            {
+              "en": "E minor",
+              "it": "Mi minore"
+            },
             "E7",
-            "A major",
-            "a broken chord with no name"
+            {
+              "en": "A major",
+              "it": "La maggiore"
+            },
+            {
+              "en": "a broken chord with no name",
+              "it": "un accordo spezzato senza nome"
+            }
           ],
           "answer": 0,
-          "why": "That finger plays G♯, the major third; the open G is a half step lower, a minor third, so the chord becomes E G B, E minor.",
+          "why": {
+            "en": "That finger plays G♯, the major third; the open G is a half step lower, a minor third, so the chord becomes E G B, E minor.",
+            "it": "Quel dito suona il Sol♯, la terza maggiore; il Sol a vuoto è un semitono più in basso, una terza minore, quindi l'accordo diventa Mi Sol Si, Mi minore."
+          },
           "traps": [
             null,
-            "E7 adds D, which needs a finger on the D string or the B string; lifting the G-string finger changes the third instead.",
-            "A major is A, C♯ and E, a different root; the low E string still sounds the root of the chord.",
-            "The open G is a minor third above E, so the chord is still a complete triad: E minor."
+            {
+              "en": "E7 adds D, which needs a finger on the D string or the B string; lifting the G-string finger changes the third instead.",
+              "it": "E7 aggiunge il Re, che richiede un dito sulla corda di Re o su quella di Si; alzare il dito sulla corda di Sol cambia invece la terza."
+            },
+            {
+              "en": "A major is A, C♯ and E, a different root; the low E string still sounds the root of the chord.",
+              "it": "La maggiore è La, Do♯ e Mi, con un'altra tonica; la corda di Mi (E) bassa continua a suonare la tonica dell'accordo."
+            },
+            {
+              "en": "The open G is a minor third above E, so the chord is still a complete triad: E minor.",
+              "it": "Il Sol a vuoto è una terza minore sopra il Mi, quindi l'accordo è ancora una triade completa: Mi minore."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Which notes make a C major triad?",
+          "q": {
+            "en": "Which notes make a C major triad?",
+            "it": "Quali note formano una triade di Do maggiore?"
+          },
           "options": [
-            "C E♭ G",
-            "C E G",
-            "C F A",
-            "C E G♯"
+            {
+              "en": "C E♭ G",
+              "it": "Do Mi♭ Sol"
+            },
+            {
+              "en": "C E G",
+              "it": "Do Mi Sol"
+            },
+            {
+              "en": "C F A",
+              "it": "Do Fa La"
+            },
+            {
+              "en": "C E G♯",
+              "it": "Do Mi Sol♯"
+            }
           ],
           "answer": 1,
-          "why": "Four half steps above C is E, and seven is G.",
+          "why": {
+            "en": "Four half steps above C is E, and seven is G.",
+            "it": "Quattro semitoni sopra il Do c'è il Mi, e sette il Sol."
+          },
           "traps": [
-            "E♭ is three half steps above C, a minor third, so C E♭ G is C minor.",
+            {
+              "en": "E♭ is three half steps above C, a minor third, so C E♭ G is C minor.",
+              "it": "Il Mi♭ è tre semitoni sopra il Do, una terza minore, quindi Do Mi♭ Sol è Do minore."
+            },
             null,
-            "C F A is an F major triad with C at the bottom; its root is F.",
-            "G♯ is eight half steps above C, so C E G♯ is augmented."
+            {
+              "en": "C F A is an F major triad with C at the bottom; its root is F.",
+              "it": "Do Fa La è una triade di Fa maggiore con il Do in basso; la sua tonica è il Fa."
+            },
+            {
+              "en": "G♯ is eight half steps above C, so C E G♯ is augmented.",
+              "it": "Il Sol♯ è otto semitoni sopra il Do, quindi Do Mi Sol♯ è aumentata."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "An open A minor chord, x02210, rings A, E, A, C and E. Which note is the third?",
+          "q": {
+            "en": "An open A minor chord, x02210, rings A, E, A, C and E. Which note is the third?",
+            "it": "Un accordo di La minore (Am) a vuoto, x02210, suona La, Mi, La, Do e Mi. Quale nota è la terza?"
+          },
           "options": [
-            "A",
-            "C",
-            "E"
+            {
+              "en": "A",
+              "it": "La"
+            },
+            {
+              "en": "C",
+              "it": "Do"
+            },
+            {
+              "en": "E",
+              "it": "Mi"
+            }
           ],
           "answer": 1,
-          "why": "C is three half steps above A, the minor third; E is seven half steps up, the fifth.",
+          "why": {
+            "en": "C is three half steps above A, the minor third; E is seven half steps up, the fifth.",
+            "it": "Il Do sta tre semitoni sopra il La, la terza minore; il Mi sta sette semitoni sopra, la quinta."
+          },
           "traps": [
-            "A is the root, the note the chord is named after, on the open A string.",
+            {
+              "en": "A is the root, the note the chord is named after, on the open A string.",
+              "it": "Il La è la tonica, la nota da cui l'accordo prende il nome, sulla corda di La (A) a vuoto."
+            },
             null,
-            "E is the fifth, seven half steps above A, and it appears twice."
+            {
+              "en": "E is the fifth, seven half steps above A, and it appears twice.",
+              "it": "Il Mi è la quinta, sette semitoni sopra il La, e compare due volte."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A bass player plays G under your open E minor chord. What happens to the chord?",
+          "q": {
+            "en": "A bass player plays G under your open E minor chord. What happens to the chord?",
+            "it": "Un bassista suona il Sol sotto il tuo accordo di Mi minore (Em) a vuoto. Che cosa succede all'accordo?"
+          },
           "options": [
-            "It fits: G is already in E minor",
-            "It turns into E major",
-            "It turns into G minor",
-            "It clashes: G is not in E minor"
+            {
+              "en": "It fits: G is already in E minor",
+              "it": "Ci sta: il Sol è già in Mi minore"
+            },
+            {
+              "en": "It turns into E major",
+              "it": "Diventa Mi maggiore"
+            },
+            {
+              "en": "It turns into G minor",
+              "it": "Diventa Sol minore"
+            },
+            {
+              "en": "It clashes: G is not in E minor",
+              "it": "Stona: il Sol non è in Mi minore"
+            }
           ],
           "answer": 0,
-          "why": "E minor is E, G and B, so the bass G is the chord's own minor third; the chord stays E minor with its third at the bottom, written Em/G.",
+          "why": {
+            "en": "E minor is E, G and B, so the bass G is the chord's own minor third; the chord stays E minor with its third at the bottom, written Em/G.",
+            "it": "Mi minore è Mi, Sol e Si, quindi il Sol del basso è la terza minore dell'accordo; l'accordo resta Mi minore con la terza in basso, e si scrive Em/G."
+          },
           "traps": [
             null,
-            "E major needs G♯; the bass plays G natural, which is the minor third of E.",
-            "G minor needs B♭ and D; the guitar keeps E and B natural, so the chord is still E G B.",
-            "G is the minor third of E minor, already inside the chord, so it fits rather than clashes."
+            {
+              "en": "E major needs G♯; the bass plays G natural, which is the minor third of E.",
+              "it": "Mi maggiore richiede il Sol♯; il basso suona il Sol naturale, che è la terza minore del Mi."
+            },
+            {
+              "en": "G minor needs B♭ and D; the guitar keeps E and B natural, so the chord is still E G B.",
+              "it": "Sol minore richiede Si♭ e Re; la chitarra mantiene Mi e Si naturali, quindi l'accordo è ancora Mi Sol Si."
+            },
+            {
+              "en": "G is the minor third of E minor, already inside the chord, so it fits rather than clashes.",
+              "it": "Il Sol è la terza minore di Mi minore, già dentro l'accordo, quindi ci sta e non stona."
+            }
           ]
         }
       ],
@@ -3530,28 +3818,42 @@
         {
           "title": "Open Music Theory: Triads",
           "url": "https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_(Gotham_et_al.)/01%3A_Fundamentals/1.16%3A_Triads",
-          "why": "Triads on the staff, with the four qualities and their names."
+          "why": {
+            "en": "Triads on the staff, with the four qualities and their names.",
+            "it": "Le triadi sul pentagramma, con le quattro specie e i loro nomi (in inglese)."
+          }
         },
         {
           "title": "JustinGuitar: Practical Music Theory, grade 4",
           "url": "https://justinguitar.com/categories/PMT",
-          "why": "Triad theory and chords in keys, taught on the guitar."
+          "why": {
+            "en": "Triad theory and chords in keys, taught on the guitar.",
+            "it": "La teoria delle triadi e gli accordi nelle tonalità, insegnati sulla chitarra (in inglese)."
+          }
         }
       ],
       "riddles": [
         {
           "id": "cora-pc",
           "kind": "computer",
-          "clue": "pw: the note my altos sing in E major, the one that turns it minor when they drop it. Sharps spelled out, please. C.",
+          "clue": {
+            "en": "pw: the note my altos sing in E major, the one that turns it minor when they drop it. Sharps spelled out, please. C.",
+            "it": "pw: la nota che i miei contralti cantano in Mi maggiore, quella che lo rende minore quando la abbassano. I diesis a parole, per favore. C."
+          },
           "answer": [
-            "G sharp"
+            "G sharp",
+            "sol diesis",
+            "sol#"
           ],
           "type": "text",
           "from": {
             "station": "stack"
           },
           "inside": {
-            "note": "Cora's rehearsal notes. In every open major shape the lowest string played is the root, and the third is the note to watch: it sits on the G string in E, on the B string in A, and in D on the top string. Lowering it by a fret makes the minor chord, which is why Em, Am and Dm are their major shapes with one note moved.",
+            "note": {
+              "en": "Cora's rehearsal notes. In every open major shape the lowest string played is the root, and the third is the note to watch: it sits on the G string in E, on the B string in A, and in D on the top string. Lowering it by a fret makes the minor chord, which is why Em, Am and Dm are their major shapes with one note moved.",
+              "it": "Gli appunti di prova di Cora. In ogni forma maggiore a vuoto la corda più bassa suonata è la tonica, e la terza è la nota da tenere d'occhio: sta sulla corda di Sol in Mi, sulla corda di Si in La, e in Re sulla corda più acuta. Abbassarla di un tasto dà l'accordo minore, ed è per questo che Em, Am e Dm sono le loro forme maggiori con una nota spostata."
+            },
             "station": "shapes",
             "coins": 15
           }
@@ -3563,98 +3865,227 @@
       "core": false,
       "theme": "chords",
       "type": "choice",
-      "name": "The chords of a key",
-      "place": "Hall of Keys",
-      "sign": "KEYS",
+      "name": {
+        "en": "The chords of a key",
+        "it": "Gli accordi di una tonalità"
+      },
+      "place": {
+        "en": "Hall of Keys",
+        "it": "Sala delle Tonalità"
+      },
+      "sign": {
+        "en": "KEYS",
+        "it": "TONALITÀ"
+      },
       "emblem": "book",
-      "objective": "Choose the chords that belong to a key by stacking thirds on each note of its major scale.",
-      "idea": "Thirds stacked on each note of a major scale, with only its notes, give the key's chords: I, IV and V major, ii, iii and vi minor.",
-      "wrongBelief": "Songs combine chords at random, or chord families are rules invented by teachers rather than a consequence of the scale.",
+      "objective": {
+        "en": "Choose the chords that belong to a key by stacking thirds on each note of its major scale.",
+        "it": "Scegliere gli accordi che appartengono a una tonalità impilando terze su ogni nota della sua scala maggiore."
+      },
+      "idea": {
+        "en": "Thirds stacked on each note of a major scale, with only its notes, give the key's chords: I, IV and V major, ii, iii and vi minor.",
+        "it": "Le terze impilate su ogni nota di una scala maggiore, usando solo le sue note, danno gli accordi della tonalità: I, IV e V maggiori, ii, iii e vi minori."
+      },
+      "wrongBelief": {
+        "en": "Songs combine chords at random, or chord families are rules invented by teachers rather than a consequence of the scale.",
+        "it": "Le canzoni combinano gli accordi a caso, oppure le famiglie di accordi sono regole inventate dagli insegnanti e non una conseguenza della scala."
+      },
       "anchor": {
         "type": "example",
-        "text": "G, C, D and Em, the four chords of countless campfire songs, are chords I, IV, V and vi of G major."
+        "text": {
+          "en": "G, C, D and Em, the four chords of countless campfire songs, are chords I, IV, V and vi of G major.",
+          "it": "G, C, D ed Em, i quattro accordi di innumerevoli canzoni da falò, sono gli accordi I, IV, V e vi di Sol maggiore."
+        }
       },
-      "application": "A guitarist who knows a song is in G can expect the chords G, Am, Bm, C, D and Em, and can play along without a chart.",
+      "application": {
+        "en": "A guitarist who knows a song is in G can expect the chords G, Am, Bm, C, D and Em, and can play along without a chart.",
+        "it": "Un chitarrista che sa che un brano è in Sol può aspettarsi gli accordi G, Am, Bm, C, D ed Em, e suonare insieme agli altri senza uno spartito."
+      },
       "remember": [
-        "In a major key the chords on notes 1, 4 and 5 are major, on 2, 3 and 6 minor, and on 7 diminished.",
-        "In G major the chords are G, Am, Bm, C, D, Em and F♯dim."
+        {
+          "en": "In a major key the chords on notes 1, 4 and 5 are major, on 2, 3 and 6 minor, and on 7 diminished.",
+          "it": "In una tonalità maggiore gli accordi sulle note 1, 4 e 5 sono maggiori, quelli sulle note 2, 3 e 6 minori, e quello sulla 7 diminuito."
+        },
+        {
+          "en": "In G major the chords are G, Am, Bm, C, D, Em and F♯dim.",
+          "it": "In Sol maggiore gli accordi sono G, Am, Bm, C, D, Em e F♯dim."
+        }
       ],
       "explain": {
-        "q": "Why is the chord on the second note of C major minor, when the chord on the first is major?",
-        "a": "Both are stacks of thirds made only from the notes of C major. From D the next scale notes are F and A, and F is only three half steps above D, a minor third, so the chord is D minor, while from C the third is E, four half steps up."
+        "q": {
+          "en": "Why is the chord on the second note of C major minor, when the chord on the first is major?",
+          "it": "Perché l'accordo sulla seconda nota di Do maggiore è minore, quando quello sulla prima è maggiore?"
+        },
+        "a": {
+          "en": "Both are stacks of thirds made only from the notes of C major. From D the next scale notes are F and A, and F is only three half steps above D, a minor third, so the chord is D minor, while from C the third is E, four half steps up.",
+          "it": "Sono entrambi pile di terze fatte solo con le note di Do maggiore. Da Re le note successive della scala sono Fa e La, e il Fa sta solo tre semitoni sopra il Re, una terza minore, quindi l'accordo è Re minore, mentre da Do la terza è Mi, quattro semitoni sopra."
+        }
       },
       "callbacks": [
         {
           "to": "triads",
-          "how": "Each chord is a triad from the Choir House, with its third chosen by the scale instead of by the player."
+          "how": {
+            "en": "Each chord is a triad from the Choir House, with its third chosen by the scale instead of by the player.",
+            "it": "Ogni accordo è una triade della Casa del Coro, con la terza scelta dalla scala invece che da chi suona."
+          }
         }
       ],
       "lab": {
-        "title": "A family of chords",
+        "title": {
+          "en": "A family of chords",
+          "it": "Una famiglia di accordi"
+        },
         "stations": [
           {
             "id": "family",
-            "tab": "Seven chords",
-            "goal": "With only a major scale's notes, the stack of thirds on each note comes out major on 1, 4, 5 and minor on 2, 3, 6.",
+            "tab": {
+              "en": "Seven chords",
+              "it": "Sette accordi"
+            },
+            "goal": {
+              "en": "With only a major scale's notes, the stack of thirds on each note comes out major on 1, 4, 5 and minor on 2, 3, 6.",
+              "it": "Con le sole note di una scala maggiore, la pila di terze su ogni nota viene maggiore sulla 1, 4, 5 e minore sulla 2, 3, 6."
+            },
             "beat": "ground",
             "pattern": "puzzle",
-            "object": "The seven notes of a major key, each with a triad stacked from the scale, and a strip of chord buttons.",
-            "action": "Builds the chord on each note of the scale and plays a progression from the family.",
-            "surprise": "Nobody chooses major or minor: the scale decides it, and the pattern is the same in every key.",
+            "object": {
+              "en": "The seven notes of a major key, each with a triad stacked from the scale, and a strip of chord buttons.",
+              "it": "Le sette note di una tonalità maggiore, ciascuna con una triade impilata dalla scala, e una fila di pulsanti degli accordi."
+            },
+            "action": {
+              "en": "Builds the chord on each note of the scale and plays a progression from the family.",
+              "it": "Costruisce l'accordo su ogni nota della scala e suona una progressione della famiglia."
+            },
+            "surprise": {
+              "en": "Nobody chooses major or minor: the scale decides it, and the pattern is the same in every key.",
+              "it": "Nessuno sceglie maggiore o minore: lo decide la scala, e lo schema è lo stesso in ogni tonalità."
+            },
             "predict": {
-              "q": "Stack thirds using only the notes of C major, starting on D. The chord is...",
+              "q": {
+                "en": "Stack thirds using only the notes of C major, starting on D. The chord is...",
+                "it": "Impila terze usando solo le note di Do maggiore, partendo dal Re. L'accordo è..."
+              },
               "options": [
-                "D major",
-                "D minor",
-                "D diminished"
+                {
+                  "en": "D major",
+                  "it": "Re maggiore"
+                },
+                {
+                  "en": "D minor",
+                  "it": "Re minore"
+                },
+                {
+                  "en": "D diminished",
+                  "it": "Re diminuito"
+                }
               ],
               "answer": 1,
-              "why": "The notes are D, F and A; F is three half steps above D, a minor third, and A seven, a fifth."
+              "why": {
+                "en": "The notes are D, F and A; F is three half steps above D, a minor third, and A seven, a fifth.",
+                "it": "Le note sono Re, Fa e La; il Fa sta tre semitoni sopra il Re, una terza minore, e il La sette, una quinta."
+              }
             },
             "controls": [
-              "Play a progression"
+              {
+                "en": "Play a progression",
+                "it": "Suona una progressione"
+              }
             ],
             "tries": [
-              "Build the chord on each of the seven notes of the scale.",
-              "Play I, V, vi, IV in G."
+              {
+                "en": "Build the chord on each of the seven notes of the scale.",
+                "it": "Costruisci l'accordo su ciascuna delle sette note della scala."
+              },
+              {
+                "en": "Play I, V, vi, IV in G.",
+                "it": "Suona I, V, vi, IV in Sol."
+              }
             ],
-            "takeaway": "Stacking thirds from a major scale gives <b>I, IV and V major</b>, <b>ii, iii and vi minor</b> and vii diminished, in every key. In G that is G, Am, Bm, C, D, Em and F♯dim, and <b>I–V–vi–IV</b> (G, D, Em, C) is a common progression of popular songs.",
-            "source": "Chords computed live by stacking scale notes (Applied Guitar Theory, Open Music Theory); sound synthesised in equal temperament."
+            "takeaway": {
+              "en": "Stacking thirds from a major scale gives <b>I, IV and V major</b>, <b>ii, iii and vi minor</b> and vii diminished, in every key. In G that is G, Am, Bm, C, D, Em and F♯dim, and <b>I–V–vi–IV</b> (G, D, Em, C) is a common progression of popular songs.",
+              "it": "Impilare terze da una scala maggiore dà <b>I, IV e V maggiori</b>, <b>ii, iii e vi minori</b> e vii diminuito, in ogni tonalità. In Sol sono G, Am, Bm, C, D, Em e F♯dim, e <b>I–V–vi–IV</b> (G, D, Em, C) è una progressione comune nelle canzoni popolari."
+            },
+            "source": {
+              "en": "Chords computed live by stacking scale notes (Applied Guitar Theory, Open Music Theory); sound synthesised in equal temperament.",
+              "it": "Accordi calcolati in tempo reale impilando le note della scala (Applied Guitar Theory, Open Music Theory); suono sintetizzato in temperamento equabile."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "Chords from the scale",
-          "text": "The chords of a key are triads built only from the notes of its scale, one on each scale note. Because the scale is uneven, with half steps in two places, some of these stacks have a major third and some a minor one. In every major key the pattern is the same: major chords on notes 1, 4 and 5, minor chords on 2, 3 and 6, and a diminished chord on 7."
+          "title": {
+            "en": "Chords from the scale",
+            "it": "Accordi dalla scala"
+          },
+          "text": {
+            "en": "The chords of a key are triads built only from the notes of its scale, one on each scale note. Because the scale is uneven, with half steps in two places, some of these stacks have a major third and some a minor one. In every major key the pattern is the same: major chords on notes 1, 4 and 5, minor chords on 2, 3 and 6, and a diminished chord on 7.",
+            "it": "Gli accordi di una tonalità sono triadi costruite soltanto con le note della sua scala, una su ogni nota della scala. Poiché la scala è irregolare, con i semitoni in due posti, alcune di queste pile hanno una terza maggiore e altre una minore. In ogni tonalità maggiore lo schema è lo stesso: accordi maggiori sulle note 1, 4 e 5, accordi minori sulle note 2, 3 e 6, e un accordo diminuito sulla 7."
+          }
         },
         {
-          "title": "Numbers instead of names",
-          "text": "Musicians name these chords by number, in Roman numerals, with capitals for major and small letters for minor: I, ii, iii, IV, V, vi and vii°. A progression written in numbers works in any key, so I–IV–V is G, C and D in G major and A, D and E in A major."
+          "title": {
+            "en": "Numbers instead of names",
+            "it": "Numeri al posto dei nomi"
+          },
+          "text": {
+            "en": "Musicians name these chords by number, in Roman numerals, with capitals for major and small letters for minor: I, ii, iii, IV, V, vi and vii°. A progression written in numbers works in any key, so I–IV–V is G, C and D in G major and A, D and E in A major.",
+            "it": "I musicisti indicano questi accordi con un numero, in cifre romane, con la maiuscola per i maggiori e la minuscola per i minori: I, ii, iii, IV, V, vi e vii°. Una progressione scritta con i numeri funziona in qualsiasi tonalità, quindi I–IV–V è G, C e D in Sol maggiore e A, D ed E in La maggiore."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "In a major key, which chords are major?",
+          "q": {
+            "en": "In a major key, which chords are major?",
+            "it": "In una tonalità maggiore, quali accordi sono maggiori?"
+          },
           "options": [
-            "I, II and III",
-            "I, IV and V",
-            "I, III and VI",
-            "All seven"
+            {
+              "en": "I, II and III",
+              "it": "I, II e III"
+            },
+            {
+              "en": "I, IV and V",
+              "it": "I, IV e V"
+            },
+            {
+              "en": "I, III and VI",
+              "it": "I, III e VI"
+            },
+            {
+              "en": "All seven",
+              "it": "Tutti e sette"
+            }
           ],
           "answer": 1,
-          "why": "Stacking thirds from the scale gives major triads on notes 1, 4 and 5.",
+          "why": {
+            "en": "Stacking thirds from the scale gives major triads on notes 1, 4 and 5.",
+            "it": "Impilando terze dalla scala si ottengono triadi maggiori sulle note 1, 4 e 5."
+          },
           "traps": [
-            "The chords on 2 and 3 get minor thirds from the scale, so they are minor.",
+            {
+              "en": "The chords on 2 and 3 get minor thirds from the scale, so they are minor.",
+              "it": "Gli accordi sulla 2 e sulla 3 ricevono dalla scala terze minori, quindi sono minori."
+            },
             null,
-            "The chords on 3 and 6 are minor; their third is three half steps above the root.",
-            "Only the notes of the scale are used, so some thirds come out minor and one fifth diminished."
+            {
+              "en": "The chords on 3 and 6 are minor; their third is three half steps above the root.",
+              "it": "Gli accordi sulla 3 e sulla 6 sono minori; la loro terza sta tre semitoni sopra la tonica."
+            },
+            {
+              "en": "Only the notes of the scale are used, so some thirds come out minor and one fifth diminished.",
+              "it": "Si usano solo le note della scala, quindi alcune terze vengono minori e una quinta diminuita."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Which of these chords belongs to G major?",
+          "q": {
+            "en": "Which of these chords belongs to G major?",
+            "it": "Quale di questi accordi appartiene a Sol maggiore?"
+          },
           "options": [
             "F",
             "Cm",
@@ -3662,30 +4093,69 @@
             "B♭"
           ],
           "answer": 2,
-          "why": "Em is E, G and B, all notes of G major; it is the key's vi chord.",
+          "why": {
+            "en": "Em is E, G and B, all notes of G major; it is the key's vi chord.",
+            "it": "Em è Mi, Sol e Si, tutte note di Sol maggiore; è l'accordo vi della tonalità."
+          },
           "traps": [
-            "F is not a note of G major, which has F♯, so a chord built on F comes from outside the key.",
-            "Cm needs E♭; the IV chord of G is C major, with E natural.",
+            {
+              "en": "F is not a note of G major, which has F♯, so a chord built on F comes from outside the key.",
+              "it": "Il Fa non è una nota di Sol maggiore, che ha il Fa♯, quindi un accordo costruito sul Fa viene da fuori della tonalità."
+            },
+            {
+              "en": "Cm needs E♭; the IV chord of G is C major, with E natural.",
+              "it": "Cm richiede il Mi♭; l'accordo IV di Sol è Do maggiore, con il Mi naturale."
+            },
             null,
-            "B♭ is outside G major, whose chord on B is B minor, B D F♯."
+            {
+              "en": "B♭ is outside G major, whose chord on B is B minor, B D F♯.",
+              "it": "B♭ è fuori da Sol maggiore, il cui accordo sul Si è Si minore, Si Re Fa♯."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "A song in A major uses I, IV and V. Which chords are they?",
+          "q": {
+            "en": "A song in A major uses I, IV and V. Which chords are they?",
+            "it": "Un brano in La maggiore usa I, IV e V. Quali accordi sono?"
+          },
           "options": [
-            "A, D and E",
-            "A, C and D",
-            "A, B and C♯",
-            "A, Bm and C♯m"
+            {
+              "en": "A, D and E",
+              "it": "A, D, E"
+            },
+            {
+              "en": "A, C and D",
+              "it": "A, C, D"
+            },
+            {
+              "en": "A, B and C♯",
+              "it": "A, B, C♯"
+            },
+            {
+              "en": "A, Bm and C♯m",
+              "it": "A, Bm, C♯m"
+            }
           ],
           "answer": 0,
-          "why": "The fourth note of A major is D and the fifth is E, and those chords are major.",
+          "why": {
+            "en": "The fourth note of A major is D and the fifth is E, and those chords are major.",
+            "it": "La quarta nota di La maggiore è il Re e la quinta il Mi, e quegli accordi sono maggiori."
+          },
           "traps": [
             null,
-            "C is not in A major, which has C♯; counting from A by letters without the scale gives the wrong IV and V.",
-            "B and C♯ are notes 2 and 3, whose chords are minor, Bm and C♯m.",
-            "Bm and C♯m are ii and iii; I, IV and V are built on notes 1, 4 and 5."
+            {
+              "en": "C is not in A major, which has C♯; counting from A by letters without the scale gives the wrong IV and V.",
+              "it": "Il Do non è in La maggiore, che ha il Do♯; contare a partire dal La per nomi senza la scala dà il IV e il V sbagliati."
+            },
+            {
+              "en": "B and C♯ are notes 2 and 3, whose chords are minor, Bm and C♯m.",
+              "it": "Si e Do♯ sono le note 2 e 3, i cui accordi sono minori, Bm e C♯m."
+            },
+            {
+              "en": "Bm and C♯m are ii and iii; I, IV and V are built on notes 1, 4 and 5.",
+              "it": "Bm e C♯m sono ii e iii; I, IV e V sono costruiti sulle note 1, 4 e 5."
+            }
           ]
         }
       ],
@@ -3697,7 +4167,10 @@
         {
           "title": "Applied Guitar Theory: Major scale chords",
           "url": "https://appliedguitartheory.com/lessons/major-scale-chords/",
-          "why": "The chord family of a key worked out on the guitar."
+          "why": {
+            "en": "The chord family of a key worked out on the guitar.",
+            "it": "La famiglia di accordi di una tonalità ricavata sulla chitarra (in inglese)."
+          }
         }
       ]
     }
