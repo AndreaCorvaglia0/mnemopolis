@@ -22,7 +22,7 @@ async function grey(ctx) {
   };
   pane.onResize(() => { if (up() !== shape) { shape = up(); home().forEach(([x, y], i) => Object.assign(sq[i], { x, y })); } draw(); });
   draggable(pane, sq, draw, { radius: () => 64, bounds: () => [50, 50, pane.W - 50, pane.H - 50] });
-  const wall = seg([['gradient', L('Dark-to-light wall', 'Parete dallo scuro al chiaro')], ['plain', L('Plain wall', 'Parete uniforme')]], 'gradient', (v) => { bg = v; draw(); });
+  const wall = seg([['gradient', L('Dark-to-light wall', 'Parete sfumata')], ['plain', L('Plain wall', 'Parete uniforme')]], 'gradient', (v) => { bg = v; draw(); });
   ctx.controls.append(wall, out);
   ctx.hint?.((k) => (k === 0 ? [sq[1].x, sq[1].y] : wall));
   draw();
