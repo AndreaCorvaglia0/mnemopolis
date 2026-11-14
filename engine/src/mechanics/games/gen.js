@@ -19,9 +19,8 @@ export const hsl = (h, s, l) => `hsl(${round(((h % 360) + 360) % 360, 1)} ${roun
 export function nameOf(it, i = 0, lang = 'en') {
   if (it.label) return it.label;
   if (it.text) return it.text;
-  if (it.sound) return String(i + 1);
-  if (it.colour) return lang === 'it' ? `il colore ${i + 1}` : `colour ${i + 1}`;
-  return String(i + 1);
+  const ord = (lang === 'it' ? ['il primo', 'il secondo', 'il terzo', 'il quarto'] : ['the first', 'the second', 'the third', 'the fourth'])[i] || String(i + 1);
+  return ord;
 }
 // the frequencies of a sound spec (for playing and for checking)
 export function soundHz(s) {

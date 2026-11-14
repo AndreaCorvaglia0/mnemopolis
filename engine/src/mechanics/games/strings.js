@@ -41,7 +41,7 @@ export const G_WORDS = {
   accept: { en: 'Play: {title}', it: 'Gioca: {title}' },
   decline: { en: 'Not now', it: 'Non ora' },
   notYet: { en: ['I don\'t know what this is for yet.', 'Something to play with. Later, when I know more.'], it: ['Non so ancora a cosa serva.', 'Qualcosa con cui giocare. Più avanti, quando ne saprò di più.'] },
-  prompt: { en: 'Space  Play {title}', it: 'Space  Gioca a {title}' },
+  prompt: { en: 'Space  Play: {title}', it: 'Space  Gioca: {title}' },
   objects: {
     piano: { en: 'an old piano', it: 'un vecchio pianoforte' },
     board: { en: 'a game board', it: 'una tavola da gioco' },

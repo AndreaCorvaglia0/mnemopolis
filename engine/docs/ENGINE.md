@@ -26,6 +26,8 @@
 | `npm run play:ci` | The same story, with the player carried in front of each door instead of walking the town (the one place where the bot writes state). `Q='&nolife'` adds to the address (also try `world.json` `"gen": false` or `"voice": false`). |
 | `npm run shots:it` | The Italian test course (`engine/tests/fixtures/prova`: three simple machines, a lab, a workshop, an expert's home with a temper and a safe; never published) played through on a desktop window and a phone: `/tmp/it-*.png`, `/tmp/it-phone-*.png`. Then the engine points back at the course it used. `COURSE=prova npm run build` builds that course alone. |
 | `npm run sound` | Renders the music offline in headless Chrome and measures it (levels, brightness, density, silences, ducking); writes `/tmp/music-*.wav` and `.png`. A few minutes. See "Sound". |
+| `npm run shots:world` | Experience and the mini-games in pictures (`scripts/worldshots.mjs`), for chroma and the pocket demo, desktop then phone: remarks at three tiers, a withheld line refused then told, the notebook with the tier and what was told, the door that knows you, a tier announced, a game spot with its mark, every game of the course (start, a round, a miss, the result), the keeper on a return after the ending. `/tmp/world-<course>-*.png`, `/tmp/world-phone-<course>-*.png`. |
+| `npm run sound:ui` | The sounds of the hands and of the lab API, rendered by the pure synth and measured; writes `/tmp/sound-ui.wav`, `/tmp/sound-pluck-scale.wav`, `/tmp/sound-beats.wav`, `/tmp/sound-chord.wav`. A second. |
 | `npm run dev` | Live server while editing, if a browser is available. |
 
 Add `?lite` to the address for lighter graphics. The game also switches to them by itself on a
@@ -471,6 +473,7 @@ Each kind of thing has its own gesture and its own look, so the learning flow ne
 |---|---|---|
 | Things that matter for learning: people, doors, signs, landmarks, the lab door, the reading wall; and obstacles (key objects) | single tap or click, Space | the dialogue box at the bottom, a page, or for an obstacle a short thought ("Locked. I'd need a key.") and a padlock with the tool that will open it |
 | Locks (a safe, a computer, a door with a hatch) and stairs: key objects | single tap or click, Space | a lock: its first-person close-up, with a padlock and a question mark above it while the player is near and it is shut; stairs: up, or without the key a short thought and a key mark |
+| Mini-games (a piano, a board, a hat, a curiosity box, a bench; or a person's "Fancy a game?") | single tap or click, Space (practice matters for learning) | the game's page; a gold die with a play arrow floats over the object while the player is near and the game is open; before it opens, a short thought ("Something to play with. Later, when I know more.") |
 | Atmosphere: anything else | double tap or double click on a thing within 3 tiles, or T for what the player faces (across empty ground, the first thing up to 3 tiles ahead) | a thought bubble above the head: a pale cloud with small circles, no name, no arrow, gone by itself in 2 to 4 s, never stacked, clear of the HUD, no sound but a soft tick, not read aloud |
 | Animals and happenings | coming close | no interface at all: the cat runs and hides, birds take off, the apple falls |
 | Secrets | exploring: walking somewhere, thinking about something, standing still | the thought bubble, then a small toast "Discovery 3 of 9"; the discoveries (J, or the menu's Mysteries tab) |
@@ -979,3 +982,190 @@ state-to-mix table, the place levels, and the graph against a fake AudioContext.
   `engine.js` (a noise loop with a filter, or a figure in `chirps`) and a line in `LEVELS`.
 - **A cue**: one entry in `CUES` (`theory.js`), then `sfx.motif('<name>')` where it happens.
 - **Levels**: all in `LEVELS` (`engine.js`). Change them only with `npm run sound` afterwards.
+
+## Experience
+
+Experience is everything the player has done, as one number that never goes down
+(`docs/GAME.md`, "Experience, and a world that notices"). Today it is mostly **perceived**: people
+remark on it. Two things are real and cheap: withheld lines are told at their tier, and one door on
+the square opens to someone the town knows. Everything is in `src/mechanics/experience/`;
+`world.json` `"experience": false` (or `?noxp`) switches it all off and the game is as before.
+
+```
+src/mechanics/experience/
+  model.js     pure (tests/experience.test.mjs): experienceOf, scaleOf(course), tiersOf, tierOf,
+               syncXp (coins earned, days, the notable thing just done, a tier change), completionOf,
+               signals, canEnterAt
+  lines.js     the commenting world, English and Italian: greetings by tier and temperature, what you
+               just did, owners before and after, harbour master, purser, keeper (at the lamp and on a
+               return), what is missing, margin notes, musings, the tier announced, refusals
+  withheld.js  the engine's withheld lines (12), a course's own, dealt to people by seed, told once
+  active.js    the active course: switches, scale, the tier now, the line pickers
+  world.js     in the scenes: withheldMoment, announceTier, xpTick, canEnter, the door that knows you
+  owner.js     a house's owner: their remark, their withheld line, the game they offer
+  debug.js     __hb.xp (pictures, tests)
+```
+
+**The number.** Lifetime coins earned (`state.xp.earned`, separate from the spendable `insight`; an
+old save starts from its `insight`) plus: 50 a house remembered, 8 a ground-floor station, 25 an
+advanced station, 15 a memento, 40 a lock, 15 a secret, 20 an obstacle, a game's best score (up to
+40 each), 30 a house brought back from the fog, 20 a day on which the player came back (once a day),
+100 the keeper. `state.xp.max` keeps it from ever going down.
+
+**Tiers** `arrival`, `passing`, `settling`, `known`, `home`. `scaleOf(course.json)` adds up what the
+course offers (`full`: the coins of every question once, houses, stations, locks, mementos, about
+eight secrets, the obstacles, the games, the keeper); the thresholds are `passing` at 4.5 % of it
+(never more than half of the first house, so it changes inside the first house), `settling` 22 %,
+`known` 50 %, `home` 90 % plus three days of practice. For chroma: 0, 70, 377, 856, 1601; for the
+pocket demo: 0, 49, 282, 640, 1212 (`__hb.xp.info()`). Tested: the first house crosses the first
+threshold, the main path alone never reaches `home`, everything plus a week of coming back does, in
+both courses.
+
+**Who says what.** The story's stage (how much the town remembers, `story/stages.js`) sets the
+temperature of a line, cold or warm; the tier sets how they regard you. A townsperson's greeting is,
+in order of preference: what you did in the last four minutes (60 %), the story's own greeting by
+stage (half the time at `arrival`, a third later), else the tier's greeting at that temperature. The
+harbour master sometimes speaks his own line by tier. A house's owner opens with a remark (curt before
+remembering, noticing your progress elsewhere after) followed by their usual line. The notebook's
+Journey pencils a margin note now and then; one musing in about sixteen is a thought about oneself.
+Every list is cycled by a `Deck` (no immediate repeats). `?xpremark` always picks the tier's line
+(for pictures).
+
+**A tier change** is noticed by `xpTick` (every 1.5 s, from the UI's quest timer): it is announced
+once, when the town is idle, by the nearest person ("Hm. You're not quite so new any more."), with
+the soft `tier` sound, and a short line is kept for the notebook. No toast, no pop-up.
+
+**Withheld lines** (`withheld.js`): 12 of the engine's own, about its extras (the lantern cat,
+thinking aloud at hollow trees, locks, the shooting star, keys upstairs, the fog, the register, the
+ship, the shut door, the games, the tools, the lamp), filtered by what this game has (story, secrets,
+locks, games), plus up to six of the course (`withheld` in `course.json`, `by` a house's owner).
+Dealt to the townspeople by seed (`assign`). When a person with an untold line is talked to: below its
+tier the teaser, cut off, then a refusal in varied words and a held low note (at most every three
+minutes per person); at or above, "You've been here long enough. All right." and the line, once, kept
+in `state.xp.told` and written under Clues ("What they told me").
+
+**canEnter(thing)** (`world.js`, rule in `model.js` `canEnterAt`): today everything answers yes except
+`door:home`, the shut house on the square (the guide's), which needs `known`: below, "Come back when
+they know you better."; above, a small illustrated nook with a note and 25 coins once. Nothing the
+main path or a course's content needs. A real gate later is one more entry in `ENTRY_NEEDS`.
+
+**The endings.** `endingOf(state, { tier, completion })` (`story/logic.js`) stays the single
+chooser; `ENDING_RULES` states the planned endings as data (`STORY.md`, "Endings (planned)"); only
+`loop` is built, so it always answers `loop`. The loop acknowledges the tier in two lines: the keeper
+at the lamp ("You stayed longer this time. Not long enough.") and the purser after "Another round"
+("You stayed long this time. Almost long enough."). After the ending, climbing the lighthouse again
+the keeper speaks by tier and names the kind of thing most missing, vaguely (`missingKinds`).
+
+**State.** `state.xp`: `earned`, `seen` (insight last seen), `max`, `days`, `snap` and `last` (the
+notable thing), `tier` (last announced), `announce`, `notes`, `told`, `teased`, `games` (per game:
+`best`, `plays`, `step`, `day`, `today`), `gamesSeen`, `nook`.
+
+## Mini-games
+
+Short arcade-like games started by an interaction (`docs/GAME.md`, "Mini-games"). The course lists
+them (`games`, `references/10-games.md`); the engine supplies the frame, six ready kinds, scoring,
+placement and the triggers. `world.json` `"games": false` (or `?nogames`) hides them all.
+
+```
+src/mechanics/games/
+  scoring.js   pure: the staircase, points, coins, saved bests
+  gen.js       pure: each kind's rounds from the data and the level (tone, hsl, number, size, hue rules)
+  spec.js      the checks of the course format (no imports: the validator and /play/ read it)
+  place.js     pure: spots in town (planGames, checkGamePlan), people (gamePeople), unlocked
+  strings.js   every word, English and Italian
+  frame.js     the page: title, 3-2-1, rounds, feedback, timer, result; the context `g`
+  kinds/       which, match (match-fast), sort (sort-fast), odd (odd-one-out), sequence, estimate
+  art.js       the objects in town (piano, board, hat, curiosity box, bench) and the mark
+  active.js    the active course's games: open or not, where, playGame(ui, g), the notebook's list
+  town.js      in the Town scene: objects, marks, prompt, use; offerOption for people
+```
+
+**Triggers.** `where: "town"`: an object on a spot planned by seed (`planGames`: a free tile one or
+two steps off a lane, never a door approach or a needed tile or beside a person, a sign or a
+landmark, never on a secret or an animal's spot, with a free tile to stand on; with every object
+standing no needed tile changes its walking distance; districts without a game first; at least ten
+steps apart). A game that finds no room is offered by a person. `where: "person"`: a townsperson (by
+seed) adds "Play: <title>" to their dialogue. `where: "host"`: the owner of the first concept's house
+offers it in the room. A game opens when its concepts are remembered (or their labs done with
+`"unlock": "lab"`); before, the object only gives a thought, and no one offers it. Space or a tap.
+The Clues list the games found with their best score.
+
+**The frame** (`openGame`) is a page (`ui.page`: the game pauses, the music ducks). Phone first:
+one column, 64 px buttons, the round dots and the score at the top, a timer bar where the kind uses
+one, the feedback bar at the bottom (verdict, the right answer after a miss, the points). Keys: 1 to
+4 pick, Space plays again, arrows and Enter for estimate and sort, Esc steps back at any moment
+(nothing is lost; coins are paid at the result). Result: score, best (or "A new best."), the `learn`
+line, coins and experience earned, Again, Done.
+
+**Scoring** (`scoring.js`): level 0..1 from a staircase of six steps (two right: one harder; a miss:
+one easier); a new session starts one step below the last one's end. Points of a right round: 2,
+plus `round(4 × level)`, +1 quick (under 2.5 s), +1 to +3 for a streak of three or more, times the
+kind's weight (a board of pairs, a longer sequence, a closer estimate). Coins = points, halved from
+the fourth play of a game on the same day. Experience: the coins, and the best score up to 40.
+
+**Kinds** (`kinds/`, each a mount on `g`, the same context a course's custom game gets):
+`which` (two to four items side by side; sounds played one after the other, cards lighting),
+`match-fast` (a board of pairs; a slip costs a second), `sort-fast` (one card, two or three bins,
+a timer per card), `odd-one-out` (four, one from another group; the `why` after a miss),
+`sequence` (pads light and sound; repeat; the staircase sets the length), `estimate` (drag a marker
+on a line, linear, log or wrapped, painted as hues if asked; right within the tolerance). Each sets
+`g.bot(right)` for the play-through bot and the pictures.
+
+**Custom games**: `courses/<slug>/games/<id>.js`, `export default { mount(g) }`, imports only from
+the lab kit. `scripts/use-course.mjs` imports them into `_active.js` (`GAME_CODE`); packing rewrites
+them like lab files and the player loads them with the labs (`payload.games`). The pocket demo's
+"How many times?" is one.
+
+**Checks**: `tests/games.test.mjs` (scoring, staircase, generators, every example of the reference,
+both courses, unlocking, placement over 80 synthetic towns), the stress test (three games in every
+town, deterministic, `checkGamePlan`), the play-through bot plays one game.
+
+## Sound for labs and interactions
+
+Two additions to "Sound": the sounds of the hands (a designed set for every interaction) and a sound
+API for labs and games. Both render notes as samples with pure code (`systems/sound/synth.js`),
+which is what makes them measurable in Node.
+
+```
+systems/sound/notes.js   pure: note names (English and Italian) <-> MIDI <-> Hz (A4 = 440, equal
+                         temperament), cents, intervals by name, just ratios, chords, a drawing fallback
+systems/sound/synth.js   pure: pluck (Karplus-Strong, all-pass tuned), piano, bell, tone, designed
+                         short sounds, and the measures (peak, rms, FFT, fundamental, beat rate, WAV)
+systems/sound/ui.js      pure: the interaction set, as events in the course's key
+systems/sound/lab.js     the API for labs and games: sound(ctx)
+systems/sound/index.js   uiSound(name) (cached buffers on the sfx bus), labIO (the lab bus), labSounding
+lab/hands.js             hand(name): the kit's controls make their sounds unless the station is quiet
+```
+
+**The interaction set** (`ui.js`, 24 names): `open`, `close` (the notebook and every overlay),
+`page`, `tab`, `button`, `toggleOn`, `toggleOff`, `door`, `find`, `tick` (a task done in a lab),
+`detent` (a slider's step, its pitch rising with the value, at most one per 45 ms), `dragStart`,
+`drop`, `snap` (sort and order), `right`, `wrong` (two low notes falling a step: never a buzzer),
+`streak`, `count`, `go`, `result`, `timeUp`, `tier` (a tier change), `withheld` (a held breath: one low
+note), `told`. Sines and soft filtered noise, attacks of a few milliseconds, pitched notes on the
+scale of the course's piece (`theory.js` `step` over `piece.noteRoot`). One entry point:
+`uiSound(name, { v })` (also `sfx.ui`, `ui.sound`), played on the sfx bus, so the V switch silences
+it. Measured (`tests/soundui.test.mjs`): every sound's peak at the output under the motif's loudest
+note (they sit at -31 to -43 dBFS, the motif at about -26), under 8 % of the energy above 4 kHz,
+every pitched note in the key, the wrong answer no louder than the right one and lower.
+
+**In labs, by default**: sliders tick per step with rising pitch (`lab/shell.js` `slider`), switches
+toggle, the prediction's answer and buttons click, drags start and drop (`draggable`), sort and order
+snap, a task done ticks. `ctx.quiet()` or `stage(ctx, { quiet: true }, draw)` silences them for a
+station; the frame resets it when a station opens.
+
+**The API** (`sound(ctx)` from `lab/kit.js`; the table is in `references/10-games.md`): notes are
+rendered by `synth.js` (exactly tuned) and played on the lab bus: a gain of 0.5, a hard limiter at
+-9 dBFS (ratio 20, 2 ms attack) into the master limiter, an AnalyserNode for `scope()`. A single voice
+never exceeds 0.8 before the bus. While a lab sound plays, the ambient music ducks to 15 % (glide
+80 ms) and comes back 300 ms after the last one ends. `hold` and `beats` are oscillators (exact
+frequencies, glides for sliders). `stopAll` runs on the station's cleanup. `scope().wave/spectrum`
+read the analyser, or, when sound is off or not started, compute the picture from what is
+"sounding" (`waveOf`, `spectrumOf`), so a lab always has something to draw.
+
+**Measured, not heard** (`npm run sound:ui`, `tests/soundui.test.mjs`): note frequencies exact to
+0.01 Hz over the piano's range, both namings; the pluck's fundamental by FFT within 0.02 Hz from E2 to
+C6 (the test allows 1 Hz); two tones at 440 and 444 Hz beat 3.99 times a second; the just C major
+triad is 261.63, 327.03, 392.44 Hz against 261.63, 329.63, 392.00 tempered (the third 13.7 cents
+apart). WAVs to hear: `/tmp/sound-ui.wav` (+12 dB over the game, to be audible), `/tmp/sound-pluck-scale.wav`,
+`/tmp/sound-beats.wav`, `/tmp/sound-chord.wav`.

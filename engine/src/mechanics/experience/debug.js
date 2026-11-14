@@ -18,7 +18,7 @@ export function xpDebug(game) {
   const put = (x, y, dir = 'up') => { const sc = town(); state.pos = { x, y, dir }; save(); sc.scene.restart(); };
   return {
     info: () => ({ xp: xpNow(), tier: tierNow(), tiers: tiers(), completion: completionNow(), scale: scale() }),
-    add(n) { state.insight = (state.insight || 0) + n; syncNow(); save(); return xpNow(); },
+    add(n) { state.insight = (state.insight || 0) + n; syncNow(); save(); ui()?.refreshHUD?.(); return xpNow(); },
     toTier(t) { const need = tiers().find((x) => x.id === t)?.at ?? 0, have = experienceOf(state); if (need > have) this.add(need - have + 1); return tierNow(); },
     withheld: (key) => withheldNow(key), who: () => whoTells(),
     async talk(id) {

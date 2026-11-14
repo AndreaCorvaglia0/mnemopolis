@@ -19,6 +19,7 @@ export default function which(g) {
     r = { ...r, done: true }; locked = true;
     g.answer(right, { truth: itemName(r.items[r.answer], r.answer, g) });
   };
+  g.bot = (right = true) => choose(right ? r.answer : (r.answer + 1) % r.items.length); // for the play-through bot and the pictures
   g.onKey((e) => { const k = Number(e.key); if (k >= 1 && k <= cards.length) { choose(k - 1); return true; } if (e.key === ' ') { listen(); return true; } return false; });
   g.onRound((n, level) => {
     r = whichRound(d, level, g.rng);

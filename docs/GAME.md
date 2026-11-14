@@ -48,7 +48,10 @@ Short arcade-like games started by an interaction (a person, an object, a spot i
 few rounds of one skill of the subject, fast and repeatable: tell which of two notes is higher,
 sort ten cards against the clock, catch the odd one out. They are practice dressed as play: a
 score, a best score, no penalty. A course lists them (`games`) and supplies their content; the
-engine supplies the frame, the scoring and a few ready kinds; a course may write its own.
+engine supplies the frame, the scoring and six ready kinds (`which`, `match-fast`, `sort-fast`,
+`odd-one-out`, `sequence`, `estimate`); a course may write its own. A game opens only once the
+concepts it practises have been met, and gets gently harder as you get better (two right: harder;
+a miss: easier).
 
 ## Experience, and a world that notices
 
@@ -58,7 +61,11 @@ engine supplies the frame, the scoring and a few ready kinds; a course may write
 - **The world comments on it.** People notice how long you have been around and what you have
   done: "You're new here, aren't you." / "I see you've kept busy." Some start to tell you
   something and stop: "No. Too early for that." The keeper and the purser read you the same way.
-- **Perception first.** For now this is said, not enforced: it costs nothing and already makes the
+- **Five tiers**: arrival, passing through, settling in, known here, at home. Their thresholds
+  scale with what the course offers: the first comes inside the first house, the last needs about
+  everything plus a few days of coming back.
+- **Perception first.** For now this is said, not enforced (two small things are real: withheld
+  lines are told at their tier, and one shut door on the square opens to someone the town knows): it costs nothing and already makes the
   town feel alive. The hooks are single functions of the state (`tierOf`, `endingOf`), so that
   real consequences can be switched on later: places that open with experience, lines that are
   finally spoken, endings.
@@ -94,8 +101,10 @@ Built: the knowledge-base method, labs and their kit, the town generators, the m
 story with its bitter ending, remembering, locks and upper floors, ambient life and obstacles,
 ambient music, voice, the prebuilt player, two example courses.
 
-Being built: experience and the commenting world, mini-games, interaction sounds, a course on
-music theory for guitarists, a new front page for the site.
+Built since: experience and the commenting world (tiers, remarks, withheld lines, the door that
+knows you), mini-games (six ready kinds and custom ones), interaction sounds and a sound API for labs.
 
-Planned: endings by experience, the shop and tools, a pocket skill with the budget question, a
+Being built: a course on music theory for guitarists, a new front page for the site.
+
+Planned: endings by experience (their triggers are fixed: `STORY.md`), the shop and tools, a pocket skill with the budget question, a
 second round (new game plus), play-testing with real learners.

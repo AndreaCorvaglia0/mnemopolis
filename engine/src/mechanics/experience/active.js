@@ -14,6 +14,7 @@ import { withheldFor, assign, pending } from './withheld.js';
 
 const query = (() => { try { return new URLSearchParams(location.search); } catch { return new URLSearchParams(''); } })();
 export const XP_ON = WORLD?.experience !== false && !query.has('noxp');
+const FORCE = query.has('xpremark'); // pictures: always the tier's remark (scripts/worldshots.mjs)
 export const GAMES_ON = WORLD?.games !== false && !query.has('nogames');
 export const COURSE_GAMES = GAMES_ON && Array.isArray(DATA.games) ? DATA.games.filter((g) => g && g.id && g.kind) : [];
 
@@ -50,9 +51,9 @@ const draw = (key, v) => deck.draw(`${key}:${LANG}`, L(v));
 export function greetLine(stage = null, fallback = null) {
   if (!XP_ON) return fallback;
   const s = signals(state), t = tierNow(), temp = stage === 'cold' ? 'cold' : 'warm';
-  if (s.fresh && s.last && XLINES.did[s.last] && Math.random() < 0.6) return draw(`did:${s.last}`, XLINES.did[s.last]);
+  if (!FORCE && s.fresh && s.last && XLINES.did[s.last] && Math.random() < 0.6) return draw(`did:${s.last}`, XLINES.did[s.last]);
   // at the arrival the story's own greeting (its stage) carries the scene more often
-  if (fallback && Math.random() < (t === 'arrival' ? 0.5 : 0.3)) return fallback;
+  if (!FORCE && fallback && Math.random() < (t === 'arrival' ? 0.5 : 0.3)) return fallback;
   return draw(`greet:${t}:${temp}`, XLINES.greet[t][temp]);
 }
 export function ownerLine(remembered) {
@@ -106,7 +107,9 @@ export function withheldLines() {
 }
 export function whoTells() {
   if (WHO) return WHO;
-  const people = NPCS.filter((n) => n.id !== 'champion').map((n) => n.id);
+  // townspeople, and the owners of houses with a remembering (they tell only once they remember):
+  // most towns have few people in the lanes, so the owners carry half the lines
+  const people = [...NPCS.filter((n) => n.id !== 'champion').map((n) => n.id), ...(DATA.concepts || []).filter((c) => (c.questions || []).length >= 2).map((c) => `host:${c.id}`)];
   WHO = assign(withheldLines(), people, DATA.id);
   return WHO;
 }

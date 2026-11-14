@@ -18,6 +18,7 @@ export default function odd(g) {
     cards.forEach((c, j) => c.classList.add(j === r.answer ? 'yes' : j === i ? 'no' : 'dim'));
     g.answer(i === r.answer, { truth: itemName(r.items[r.answer], r.answer, g), why: i === r.answer ? null : r.why });
   };
+  g.bot = (right = true) => choose(right ? r.answer : (r.answer + 1) % r.items.length);
   g.onKey((e) => { const n = Number(e.key); if (n >= 1 && n <= cards.length) { choose(n - 1); return true; } if (e.key === ' ') { listen(); return true; } return false; });
   g.onRound((n, level) => {
     r = oddRound(d, level, g.rng, k++);

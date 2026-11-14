@@ -57,7 +57,7 @@ const CSS = `
 .gm-keys{color:#8d85a0;font-size:14px;text-align:center;padding:0 16px 6px;flex:none}
 .gm-card{width:100%;max-width:520px;margin:auto;padding:22px 20px;border-radius:18px;background:#14111c;border:1px solid #2e2840;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
 .gm-card h2{margin:0;font-size:26px}.gm-card p{margin:0;color:#cfc8dc}
-.gm-card .big{font-size:52px;font-weight:800;color:#ffcf5a;line-height:1.1}
+.gm-card .gm-big{font-size:52px;font-weight:800;color:#ffcf5a;line-height:1.1}
 .gm-card .gold{color:#ffcf5a}.gm-card .teal{color:#4fd1c5}
 .gm-count{font-size:120px;font-weight:800;color:#ffcf5a;margin:auto;text-shadow:0 6px 0 rgba(0,0,0,.4)}
 .gm-shake{animation:gmShake .32s}
@@ -230,9 +230,9 @@ export function openGame(game, opts) {
       const xp = Math.max(0, experience() - before);
       uiSound('result');
       const again = h('button', { type: 'button', class: 'gm-btn big' }, T('again')), done = h('button', { type: 'button', class: 'gm-btn big primary' }, T('done'));
-      const card = h('div', { class: 'gm-card gm-pop' },
+      const card = h('div', { class: 'gm-card gm-res gm-pop' },
         h('p', {}, T('result')),
-        h('div', { class: 'big' }, String(p.score)),
+        h('div', { class: 'gm-big' }, String(p.score)),
         h('p', {}, T('rightOf', { n: p.right, m: p.rounds })),
         h('p', { class: r.best ? 'teal' : 'gold' }, r.best ? T('newBest') : T('best', { n: games[game.id].best })),
         game.learn ? h('p', {}, t(game.learn)) : null,
@@ -248,7 +248,7 @@ export function openGame(game, opts) {
       setTimeout(() => done.focus({ preventScroll: true }), 30);
       opts.onResult?.(res);
     }
-    root.__game = { g, get play() { return p; }, finish: () => finish({ played: false }), start: () => countdown() };
+    root.__game = { g, get play() { return p; }, finish: () => finish({ played: false }), start: () => countdown(), bot: (right = true) => (busy ? null : g.bot?.(right)), get busy() { return busy; }, get phase() { return !alive ? 'closed' : root.querySelector('.gm-res') ? 'result' : p ? 'round' : root.querySelector('.gm-count') ? 'count' : 'intro'; } };
     if (game.kind !== 'custom' && soundUsed(game) && soundMuted()) keys.textContent = T('soundOff');
     intro();
   });

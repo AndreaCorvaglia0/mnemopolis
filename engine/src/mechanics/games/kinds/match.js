@@ -33,6 +33,7 @@ export default function matchFast(g) {
   }
   let tm = null;
   const restart = (secs) => { tm = g.timer(secs, () => { if (!over) { over = true; g.answer(false, { timeUp: true, weight: done / Math.max(1, b.left.length) }); } }); };
+  g.bot = async (right = true) => { for (const it of b.left) { const l = [...L.children][b.left.indexOf(it)], k = b.right.findIndex((x) => x.k === (right ? it.k : (it.k + 1) % b.left.length)); l.click(); [...R.children][k].click(); await new Promise((res) => setTimeout(res, 60)); if (!right) { const k2 = b.right.findIndex((x) => x.k === it.k); l.click(); [...R.children][k2].click(); } } };
   g.onRound((n, level) => {
     b = matchBoard(d, level, g.rng); sel = null; done = 0; slips = 0; over = false;
     g.ask(g.t(d.ask));

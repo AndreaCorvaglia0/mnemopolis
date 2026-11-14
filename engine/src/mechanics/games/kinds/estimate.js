@@ -3,7 +3,7 @@ import { h } from '../../../lab/shell.js';
 import { estimateRound, judgeEstimate, toPos, fromPos } from '../gen.js';
 import { itemView } from './items.js';
 
-const fmt = (v, sc) => `${v >= 100 ? Math.round(v) : Math.round(v * 10) / 10}${sc.unit ? ` ${sc.unit}` : ''}`;
+const fmt = (v, sc) => `${v >= 100 ? Math.round(v) : Math.round(v * 10) / 10}${sc.unit ? (/^[°%′″]$/.test(sc.unit) ? sc.unit : ` ${sc.unit}`) : ''}`;
 export default function estimate(g) {
   const d = g.data, sc = d.scale;
   let r = null, pos = 0.5, locked = false;
@@ -17,7 +17,7 @@ export default function estimate(g) {
   const read = h('div', { class: 'gm-txt', style: 'font-variant-numeric:tabular-nums' });
   const ok = h('button', { type: 'button', class: 'gm-btn big primary' }, g.words('confirm'));
   track.append(band, truth, knob);
-  for (const m of sc.marks || []) marks.append(h('span', { style: `position:absolute;left:${toPos(sc, m) * 100}%;transform:translateX(-50%);white-space:nowrap` }, fmt(m, sc).replace(` ${sc.unit || ''}`, '')));
+  for (const m of sc.marks || []) marks.append(h('span', { style: `position:absolute;left:${toPos(sc, m) * 100}%;transform:translateX(-50%);white-space:nowrap` }, String(m)));
   g.stage.append(show, again, h('div', { style: 'width:100%;padding:0 12px' }, track, marks), read, ok);
   const place = () => { knob.style.left = `${pos * 100}%`; read.textContent = fmt(fromPos(sc, pos), sc); };
   const at = (e) => { const b = track.getBoundingClientRect(); pos = Math.max(0, Math.min(1, (e.clientX - b.left) / b.width)); place(); };
@@ -35,6 +35,7 @@ export default function estimate(g) {
     g.answer(j.right, { truth: fmt(r.value, sc), weight: j.right ? 0.6 + 0.6 * j.quality : 1 });
   };
   ok.onclick = confirm;
+  g.bot = (right = true) => { pos = Math.max(0, Math.min(1, toPos(sc, r.value) + (right ? 0.004 : 0.3))); if (pos === 1 && !right) pos = 0.6; place(); confirm(); };
   g.onKey((e) => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { if (!locked) { pos = Math.max(0, Math.min(1, pos + (e.key === 'ArrowLeft' ? -0.01 : 0.01))); place(); } return true; } if (e.key === 'Enter') { confirm(); return true; } if (e.key === ' ') { listen(); return true; } return false; });
   g.onRound((n, level) => {
     r = estimateRound(d, level, g.rng);

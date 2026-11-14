@@ -33,6 +33,7 @@ export default function sequence(g) {
     at += 1;
     if (at === r.seq.length) { listening = true; g.answer(true, { weight: 0.6 + r.len / 6, fast: false }); }
   }
+  g.bot = async (right = true) => { while (listening && g.alive()) await new Promise((res) => setTimeout(res, 100)); const seq = r.seq.slice(); for (let i = 0; i < seq.length; i++) { press(right || i < seq.length - 1 ? seq[i] : (seq[i] + 1) % pads.length); await new Promise((res) => setTimeout(res, 120)); } };
   g.onKey((e) => { const k = Number(e.key); if (k >= 1 && k <= pads.length) { press(k - 1); return true; } return false; });
   g.onRound(() => { r = sequenceRound(d, g.step(), g.rng); g.ask(g.t(d.ask)); show(); });
 }

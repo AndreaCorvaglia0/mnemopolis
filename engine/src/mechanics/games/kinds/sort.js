@@ -18,6 +18,7 @@ export default function sortFast(g) {
     card.style.transform = `translateX(${(i - (d.bins.length - 1) / 2) * 80}px) scale(.9)`;
     g.answer(right, { truth: g.t(d.bins[r.answer]) });
   };
+  g.bot = (right = true) => choose(right ? r.answer : (r.answer + 1) % d.bins.length);
   g.onKey((e) => {
     const map = d.bins.length === 3 ? { ArrowLeft: 0, ArrowDown: 1, ArrowRight: 2 } : { ArrowLeft: 0, ArrowRight: 1 };
     const k = e.key in map ? map[e.key] : Number(e.key) - 1;
