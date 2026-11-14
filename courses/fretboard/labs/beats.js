@@ -5,7 +5,7 @@
 //   third    (upstairs) A3 and C♯: the pure 5:4 against the guitar's equal-tempered third
 //   tuneup   (upstairs) tune the A string to the 5th fret of the low E by removing the beats
 import { stage, sliders, button, tasks, animate, h, C, alpha, L } from '../../../engine/src/lab/kit.js';
-import { fmtHz, nf, dec } from './lib/music.js';
+import { fmtHz, nf } from './lib/music.js';
 import { sound, soundNote, onPhase } from './lib/sound.js';
 
 const N = 6; // harmonics per string, in the sound and in the drawing

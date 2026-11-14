@@ -1,7 +1,7 @@
 // The Bluesman's House: the minor pentatonic box is movable; the root under the first finger on the
 // low E string names the key.
-import { stage, button, tasks, animate, spring, C, alpha } from '../../../engine/src/lab/kit.js';
-import { TUNING, hz, nameOf, neckGeom, drawNeck, dot } from './lib/music.js';
+import { stage, button, tasks, animate, spring, C, alpha, L } from '../../../engine/src/lab/kit.js';
+import { TUNING, hz, nameOf, both, neckGeom, drawNeck, dot } from './lib/music.js';
 import { sound, soundNote } from './lib/sound.js';
 
 // the root-position box (Premier Guitar, Cram Session): frets above the root fret, per string, low E first
@@ -29,11 +29,12 @@ async function box(ctx) {
     d.box(xa - 4, G.top - 26, xb - xa + 8, G.bottom - G.top + 52, { fill: alpha(C.gold, 0.08), stroke: alpha(C.gold, 0.6), width: 2, r: 12 });
     const ns = notes(r), order = [...ns].sort((a, b) => a.m - b.m);
     ns.forEach((n) => { const deg = DEGREE[(((n.m - root) % 12) + 12) % 12], isRoot = deg === '1', on = lit >= 0 && order[lit] === n; dot(d, G, n.st, n.k, { fill: on ? C.gold : isRoot ? C.bad : C.acc, text: deg, color: '#04201d', r: 15, ring: on ? C.gold : null }); });
+    const rootLine = L(`root on the low E string at fret ${r}${r === 0 ? ' (open)' : ''}`, `tonica sulla corda di Mi (E) basso al tasto ${r}${r === 0 ? ' (a vuoto)' : ''}`);
     const names = [0, 3, 5, 7, 10].map((x) => nameOf(root + x, [5, 10, 3, 8, 1].includes((root + 3) % 12)));
-    d.text(`${nameOf(root)} minor pentatonic`, 24, 44, { size: pane.upright ? 24 : 28, weight: 700, color: C.gold });
-    if (pane.upright) { d.text(`root on the low E string at fret ${r}${r === 0 ? ' (open)' : ''}`, 24, 76, { size: 18, color: C.muted }); d.text(names.join('  '), 24, 104, { size: 20, weight: 700, color: C.text }); }
-    else d.text(`root on the low E string at fret ${r}${r === 0 ? ' (open)' : ''}:  ${names.join('  ')}`, 24, 76, { size: 18, color: C.muted, max: pane.W - 48 });
-    d.text('drag the box along the neck', 24, y1 + 54, { size: 16, color: C.dim });
+    d.text(L(`${nameOf(root)} minor pentatonic`, `Pentatonica minore di ${both(root)}`), 24, 44, { size: pane.upright ? 24 : 28, weight: 700, color: C.gold, max: pane.W - 48 });
+    if (pane.upright) { d.text(rootLine, 24, 76, { size: 18, color: C.muted }); d.text(names.join('  '), 24, 104, { size: 20, weight: 700, color: C.text }); }
+    else d.text(`${rootLine}:  ${names.join('  ')}`, 24, 76, { size: 18, color: C.muted, max: pane.W - 48 });
+    d.text(L('drag the box along the neck', 'trascina il box lungo il manico'), 24, y1 + 54, { size: 16, color: C.dim });
   });
   const anim = animate(ctx, (dt) => { const more = pos.step(dt); view.redraw(); return more; });
   let grab = null;
@@ -43,7 +44,7 @@ async function box(ctx) {
     else if (ph === 'move' && grab != null) { const hit = G.at(x, G.sy(2), 9); if (hit) { const nk = Math.max(0, Math.min(12, hit.k - grab)); if (nk !== r) move(nk); } }
     else if (ph === 'up') grab = null;
   });
-  button(ctx, 'Play the box', play, { primary: true });
+  button(ctx, L('Play the box', 'Suona il box'), play, { primary: true });
   ctx.hint((i) => geo(view.pane).pos(0, i === 0 ? 5 : 12));
   Object.defineProperty(view.pane, 'items', { get: () => { const G = geo(view.pane); return Array.from({ length: 16 }, (_, k) => { const [x, y] = G.pos(0, k); return { c: `low${k}`, x, y }; }); }, configurable: true });
   soundNote(ctx);
