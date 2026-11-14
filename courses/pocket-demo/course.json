@@ -63,37 +63,58 @@
   "sources": [
     {
       "id": "os171",
-      "title": "OpenStax, University Physics Volume 1, 17.1 Sound Waves",
+      "title": {
+        "en": "OpenStax, University Physics Volume 1, 17.1 Sound Waves",
+        "it": "OpenStax, University Physics Volume 1, 17.1 Sound Waves"
+      },
       "url": "https://openstax.org/books/university-physics-volume-1/pages/17-1-sound-waves"
     },
     {
       "id": "os172",
-      "title": "OpenStax, University Physics Volume 1, 17.2 Speed of Sound",
+      "title": {
+        "en": "OpenStax, University Physics Volume 1, 17.2 Speed of Sound",
+        "it": "OpenStax, University Physics Volume 1, 17.2 Speed of Sound"
+      },
       "url": "https://openstax.org/books/university-physics-volume-1/pages/17-2-speed-of-sound"
     },
     {
       "id": "oscp172",
-      "title": "OpenStax, College Physics 2e, 17.2 Speed of Sound, Frequency, and Wavelength",
+      "title": {
+        "en": "OpenStax, College Physics 2e, 17.2 Speed of Sound, Frequency, and Wavelength",
+        "it": "OpenStax, College Physics 2e, 17.2 Speed of Sound, Frequency, and Wavelength"
+      },
       "url": "https://openstax.org/books/college-physics-2e/pages/17-2-speed-of-sound-frequency-and-wavelength"
     },
     {
       "id": "oscp173",
-      "title": "OpenStax, College Physics for AP Courses 2e, 17.3 Sound Intensity and Sound Level",
+      "title": {
+        "en": "OpenStax, College Physics for AP Courses 2e, 17.3 Sound Intensity and Sound Level",
+        "it": "OpenStax, College Physics for AP Courses 2e, 17.3 Sound Intensity and Sound Level"
+      },
       "url": "https://openstax.org/books/college-physics-ap-courses-2e/pages/17-3-sound-intensity-and-sound-level"
     },
     {
       "id": "pcmech",
-      "title": "The Physics Classroom, Sound is a Mechanical Wave",
+      "title": {
+        "en": "The Physics Classroom, Sound is a Mechanical Wave",
+        "it": "The Physics Classroom, Sound is a Mechanical Wave"
+      },
       "url": "https://www.physicsclassroom.com/class/sound/Lesson-1/Sound-is-a-Mechanical-Wave"
     },
     {
       "id": "pcspeed",
-      "title": "The Physics Classroom, The Speed of Sound",
+      "title": {
+        "en": "The Physics Classroom, The Speed of Sound",
+        "it": "The Physics Classroom, The Speed of Sound"
+      },
       "url": "https://www.physicsclassroom.com/class/sound/u11l2c"
     },
     {
       "id": "wiki",
-      "title": "Wikipedia, Speed of sound",
+      "title": {
+        "en": "Wikipedia, Speed of sound",
+        "it": "Wikipedia, Speed of sound"
+      },
       "url": "https://en.wikipedia.org/wiki/Speed_of_sound"
     }
   ],
@@ -163,7 +184,7 @@
       "explain": {
         "q": {
           "en": "Why does a loud speaker not blow your hair back?",
-          "it": "Perché un altoparlante potente non ti spinge indietro i capelli?"
+          "it": "Perché un altoparlante a tutto volume non ti spinge indietro i capelli?"
         },
         "a": {
           "en": "Its cone only pushes and pulls the air next to it. The molecules pass the push along and return to their places, so there is no flow of air towards you, only a travelling squeeze.",
@@ -214,9 +235,18 @@
             },
             "beat": "ground",
             "pattern": "handle",
-            "object": "A speaker cone, a field of air molecules with one gold molecule beside the cone, and an ear on the far side.",
-            "action": "Pushes the cone by hand and watches the squeeze cross the air while the gold molecule stays near its place.",
-            "surprise": "The squeeze reaches the ear, but the gold molecule never leaves the speaker: its whole trip is a few units.",
+            "object": {
+              "en": "A speaker cone, a field of air molecules with one gold molecule beside the cone, and an ear on the far side.",
+              "it": "Il cono di un altoparlante, un campo di molecole d'aria con una molecola dorata accanto al cono e un orecchio dall'altra parte."
+            },
+            "action": {
+              "en": "Pushes the cone by hand and watches the squeeze cross the air while the gold molecule stays near its place.",
+              "it": "Spinge il cono con la mano e osserva la compressione attraversare l'aria mentre la molecola dorata resta vicina al suo posto."
+            },
+            "surprise": {
+              "en": "The squeeze reaches the ear, but the gold molecule never leaves the speaker: its whole trip is a few units.",
+              "it": "La compressione raggiunge l'orecchio, ma la molecola dorata non si allontana dall'altoparlante: il suo viaggio completo è di poche unità."
+            },
             "predict": {
               "q": {
                 "en": "The speaker sends a sound to the ear. The gold molecule next to the speaker...",
@@ -443,7 +473,7 @@
           "options": [
             {
               "en": "People move across the direction of the wave; air molecules move along it",
-              "it": "Le persone si muovono perpendicolarmente alla direzione dell'onda; le molecole d'aria si muovono lungo di essa"
+              "it": "Le persone si muovono di traverso all'onda; le molecole d'aria lungo l'onda"
             },
             {
               "en": "In a stadium wave nobody moves",
@@ -622,9 +652,18 @@
             },
             "beat": "ground",
             "pattern": "cause-effect",
-            "object": "The air pressure at the ear over 25 milliseconds, with each squeeze marked, and the tone itself.",
-            "action": "Turns the frequency up and down, counts the squeezes, and listens.",
-            "surprise": "Doubling the frequency doubles the squeezes in the same 25 ms, and the note jumps up by an octave.",
+            "object": {
+              "en": "The air pressure at the ear over 25 milliseconds, with each squeeze marked, and the tone itself.",
+              "it": "La pressione dell'aria all'orecchio in 25 millisecondi, con ogni compressione segnata, e il tono stesso."
+            },
+            "action": {
+              "en": "Turns the frequency up and down, counts the squeezes, and listens.",
+              "it": "Alza e abbassa la frequenza, conta le compressioni e ascolta."
+            },
+            "surprise": {
+              "en": "Doubling the frequency doubles the squeezes in the same 25 ms, and the note jumps up by an octave.",
+              "it": "Raddoppiare la frequenza raddoppia le compressioni negli stessi 25 ms, e la nota sale di un'ottava."
+            },
             "predict": {
               "q": {
                 "en": "Set the frequency to 880 Hz instead of 440 Hz. In 25 ms the ear receives...",
@@ -651,7 +690,10 @@
               }
             },
             "controls": [
-              "Frequency, 100 to 1000 Hz"
+              {
+                "en": "Frequency, 100 to 1000 Hz",
+                "it": "Frequenza, da 100 a 1000 Hz"
+              }
             ],
             "tries": [
               {
@@ -702,9 +744,18 @@
             },
             "beat": "twist",
             "pattern": "predict-test",
-            "object": "An empty chart of wavelength against frequency, with four handles to sketch a guess.",
-            "action": "Drags the handles to sketch how long one wave is at each frequency, then shows the real curve over the guess.",
-            "surprise": "The real curve is not a straight line: it falls steeply at low frequencies and flattens out, because wavelength is 343 divided by frequency.",
+            "object": {
+              "en": "An empty chart of wavelength against frequency, with four handles to sketch a guess.",
+              "it": "Un grafico vuoto della lunghezza d'onda in funzione della frequenza, con quattro punti da trascinare per disegnare una stima."
+            },
+            "action": {
+              "en": "Drags the handles to sketch how long one wave is at each frequency, then shows the real curve over the guess.",
+              "it": "Trascina i punti per disegnare quanto è lunga un'onda a ciascuna frequenza, poi mostra la curva reale sopra la stima."
+            },
+            "surprise": {
+              "en": "The real curve is not a straight line: it falls steeply at low frequencies and flattens out, because wavelength is 343 divided by frequency.",
+              "it": "La curva reale non è una retta: scende ripida alle basse frequenze e poi si appiattisce, perché la lunghezza d'onda è 343 diviso la frequenza."
+            },
             "predict": {
               "q": {
                 "en": "Double the frequency of a sound in air. Its wavelength...",
@@ -731,7 +782,10 @@
               }
             },
             "controls": [
-              "Show the real curve"
+              {
+                "en": "Show the real curve",
+                "it": "Mostra la curva reale"
+              }
             ],
             "tries": [
               {
@@ -942,7 +996,7 @@
             null,
             {
               "en": "This multiplies instead of dividing: 343 is the speed, and it must be divided by the frequency.",
-              "it": "Qui si moltiplica invece di dividere: 343 è la velocità, e va divisa per la frequenza."
+              "it": "Moltiplicare invece di dividere è un errore: 343 è la velocità, e va divisa per la frequenza."
             },
             {
               "en": "A millimetre would need a frequency of about 343 000 Hz, far above hearing.",
@@ -1096,9 +1150,18 @@
             },
             "beat": "rule",
             "pattern": "contrast",
-            "object": "Two speakers side by side, A at 60 dB and B louder by the amount you set, with their sound intensities on one scale.",
-            "action": "Raises speaker B decibel by decibel and watches the ratio of intensities.",
-            "surprise": "At only 10 dB more, B already carries ten times the intensity of A; at 20 dB, a hundred times.",
+            "object": {
+              "en": "Two speakers side by side, A at 60 dB and B louder by the amount you set, with their sound intensities on one scale.",
+              "it": "Due altoparlanti affiancati, A a 60 dB e B più forte della quantità che imposti, con le loro intensità sonore su un'unica scala."
+            },
+            "action": {
+              "en": "Raises speaker B decibel by decibel and watches the ratio of intensities.",
+              "it": "Alza l'altoparlante B un decibel alla volta e osserva il rapporto tra le intensità."
+            },
+            "surprise": {
+              "en": "At only 10 dB more, B already carries ten times the intensity of A; at 20 dB, a hundred times.",
+              "it": "Con appena 10 dB in più, B ha già dieci volte l'intensità di A; con 20 dB, cento volte."
+            },
             "predict": {
               "q": {
                 "en": "Speaker B is 10 dB louder than speaker A. Compared with A, B carries...",
@@ -1125,7 +1188,10 @@
               }
             },
             "controls": [
-              "How many decibels louder speaker B is"
+              {
+                "en": "How many decibels louder speaker B is",
+                "it": "Di quanti decibel l'altoparlante B è più forte"
+              }
             ],
             "tries": [
               {
@@ -1313,7 +1379,7 @@
             null,
             {
               "en": "This treats decibels like a percentage scale, but each 10 dB step multiplies the intensity.",
-              "it": "Qui i decibel sono trattati come una scala percentuale, ma ogni passo di 10 dB moltiplica l'intensità."
+              "it": "Questa risposta tratta i decibel come una scala percentuale, ma ogni passo di 10 dB moltiplica l'intensità."
             },
             {
               "en": "Twice the intensity is only about 3 dB more, far less than 10 dB.",
@@ -1330,7 +1396,7 @@
           "options": [
             {
               "en": "The threshold of hearing, about the faintest sound people hear",
-              "it": "La soglia di udibilità, cioè all'incirca il suono più debole che le persone sentono"
+              "it": "La soglia di udibilità, circa il suono più debole udibile"
             },
             {
               "en": "Complete silence, no sound waves at all",
@@ -1386,12 +1452,12 @@
           "traps": [
             {
               "en": "This adds decibels like plain numbers, but each 10 dB multiplies the intensity by ten.",
-              "it": "Qui i decibel sono sommati come numeri semplici, ma ogni 10 dB moltiplicano l'intensità per dieci."
+              "it": "Questa risposta somma i decibel come numeri semplici, ma ogni 10 dB moltiplicano l'intensità per dieci."
             },
             null,
             {
               "en": "This divides 90 by 60, but decibel levels are logarithms, so their ratio means nothing.",
-              "it": "Qui si divide 90 per 60, ma i livelli in decibel sono logaritmi, quindi il loro rapporto non significa nulla."
+              "it": "Dividere 90 per 60 non ha senso, perché i livelli in decibel sono logaritmi e il loro rapporto non significa nulla."
             }
           ]
         },
@@ -1402,9 +1468,18 @@
             "it": "Due altoparlanti identici suonano insieme lo stesso suono invece di uno solo. Il livello sale di circa..."
           },
           "options": [
-            "3 dB",
-            "10 dB",
-            "100 dB"
+            {
+              "en": "3 dB",
+              "it": "3 dB"
+            },
+            {
+              "en": "10 dB",
+              "it": "10 dB"
+            },
+            {
+              "en": "100 dB",
+              "it": "100 dB"
+            }
           ],
           "answer": 0,
           "why": {
@@ -1451,7 +1526,7 @@
           "traps": [
             {
               "en": "This reads 95 as 12% more than 85, but decibels are not a linear scale.",
-              "it": "Qui 95 viene letto come il 12% in più di 85, ma i decibel non sono una scala lineare."
+              "it": "Questa risposta legge 95 come il 12% in più di 85, ma i decibel non sono una scala lineare."
             },
             null,
             {
@@ -1467,9 +1542,18 @@
             "it": "L'ampiezza di pressione di un suono viene resa dieci volte più grande. Di quanto sale il suo livello?"
           },
           "options": [
-            "10 dB",
-            "20 dB",
-            "100 dB"
+            {
+              "en": "10 dB",
+              "it": "10 dB"
+            },
+            {
+              "en": "20 dB",
+              "it": "20 dB"
+            },
+            {
+              "en": "100 dB",
+              "it": "100 dB"
+            }
           ],
           "answer": 1,
           "why": {
@@ -1479,7 +1563,7 @@
           "traps": [
             {
               "en": "This forgets that intensity grows with the square of the amplitude, not in proportion to it.",
-              "it": "Qui si dimentica che l'intensità cresce con il quadrato dell'ampiezza, non in proporzione a essa."
+              "it": "Questa risposta dimentica che l'intensità cresce con il quadrato dell'ampiezza, non in proporzione a essa."
             },
             null,
             {
@@ -1508,7 +1592,7 @@
       },
       "idea": {
         "en": "Sound needs matter to pass the squeeze along: none in a vacuum, faster in most liquids and solids than in air.",
-        "it": "Il suono ha bisogno di materia per passare avanti la compressione: nel vuoto non si propaga, nella maggior parte dei liquidi e dei solidi è più veloce che nell'aria."
+        "it": "Il suono ha bisogno di materia per passarsi la compressione: nel vuoto non si propaga, nella maggior parte di liquidi e solidi è più veloce che nell'aria."
       },
       "wrongBelief": {
         "en": "Sound can cross empty space, and it is slowest in solid things because they are dense.",
@@ -1607,9 +1691,18 @@
             },
             "beat": "rule",
             "pattern": "sort-cases",
-            "object": "Cards of materials and places, and three bins: slower than in air, faster than in air, no sound at all.",
-            "action": "Drags each card into a bin and reads why it belongs there.",
-            "surprise": "Dense steel carries sound about seventeen times faster than air, and empty space carries none.",
+            "object": {
+              "en": "Cards of materials and places, and three bins: slower than in air, faster than in air, no sound at all.",
+              "it": "Carte di materiali e di luoghi, e tre contenitori: più lento che nell'aria, più veloce che nell'aria, nessun suono."
+            },
+            "action": {
+              "en": "Drags each card into a bin and reads why it belongs there.",
+              "it": "Trascina ogni carta in un contenitore e legge perché ci va."
+            },
+            "surprise": {
+              "en": "Dense steel carries sound about seventeen times faster than air, and empty space carries none.",
+              "it": "L'acciaio, denso, trasmette il suono circa diciassette volte più in fretta dell'aria, e lo spazio vuoto non ne trasmette affatto."
+            },
             "predict": {
               "q": {
                 "en": "In which of these does sound travel fastest?",
@@ -1829,8 +1922,14 @@
             "it": "Più o meno a che velocità viaggia il suono nell'aria a 20 °C?"
           },
           "options": [
-            "343 m/s",
-            "3 m/s",
+            {
+              "en": "343 m/s",
+              "it": "343 m/s"
+            },
+            {
+              "en": "3 m/s",
+              "it": "3 m/s"
+            },
             {
               "en": "300 000 km/s",
               "it": "300.000 km/s"
@@ -1899,7 +1998,7 @@
           "options": [
             {
               "en": "The tap through the rail arrives before the tap through the air",
-              "it": "Il colpo arriva attraverso la rotaia prima di quello attraverso l'aria"
+              "it": "Il colpo in rotaia arriva prima di quello nell'aria"
             },
             {
               "en": "Both arrive together",
@@ -2142,7 +2241,10 @@
         "longest": 8,
         "pads": [
           {
-            "label": "220 Hz",
+            "label": {
+              "en": "220 Hz",
+              "it": "220 Hz"
+            },
             "sound": {
               "hz": 220,
               "voice": "pluck"
@@ -2150,7 +2252,10 @@
             "colour": "#6f93e0"
           },
           {
-            "label": "330 Hz",
+            "label": {
+              "en": "330 Hz",
+              "it": "330 Hz"
+            },
             "sound": {
               "hz": 330,
               "voice": "pluck"
@@ -2158,7 +2263,10 @@
             "colour": "#4fd1c5"
           },
           {
-            "label": "440 Hz",
+            "label": {
+              "en": "440 Hz",
+              "it": "440 Hz"
+            },
             "sound": {
               "hz": 440,
               "voice": "pluck"
@@ -2166,7 +2274,10 @@
             "colour": "#ffcf5a"
           },
           {
-            "label": "660 Hz",
+            "label": {
+              "en": "660 Hz",
+              "it": "660 Hz"
+            },
             "sound": {
               "hz": 660,
               "voice": "pluck"
