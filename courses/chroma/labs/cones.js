@@ -1,13 +1,11 @@
 // Cone Cave (deep dive): why three numbers are enough. Two different lights, one colour.
 import { slider } from '../../../engine/src/lab/shell.js';
-import { canvasPane, rgbCss, L, lang } from '../../../engine/src/lab/kit.js';
+import { canvasPane, rgbCss, L, lang, num } from '../../../engine/src/lab/kit.js';
 
 // Simplified cone sensitivities: bell curves at roughly the right places. Good for the idea, not for measurement.
 const bell = (peak, width) => (nm) => Math.exp(-((nm - peak) ** 2) / (2 * width * width));
 const CONES = [['L', bell(565, 48), '#ff7a6b'], ['M', bell(540, 42), '#7ddc8a'], ['S', bell(445, 26), '#6f93e0']];
 const RED = 630, GREEN = 535;
-// Read-outs: a decimal point in English, a decimal comma in Italian.
-const num = (x, d) => (lang() === 'it' ? x.toFixed(d).replace('.', ',') : x.toFixed(d));
 // One function turns cone signals into a screen colour, for both lights: equal signals give equal swatches by construction.
 const seen = ([LY, M]) => { const q = M / Math.max(LY, 1e-6), k = Math.min(1, (LY + M) / 1.5); return [255 * k * Math.max(0, Math.min(1, 1.9 - 1.3 * q)), 255 * k * Math.max(0, Math.min(1, 1.9 * q - 0.25)), 0]; };
 const hue = (nm) => (nm < 490 ? [0, (nm - 440) * 5, 255] : nm < 510 ? [0, 255, (510 - nm) * 12] : nm < 580 ? [(nm - 510) * 3.6, 255, 0] : nm < 645 ? [255, (645 - nm) * 3.9, 0] : [255, 0, 0]).map((v) => Math.max(0, Math.min(255, v)));
