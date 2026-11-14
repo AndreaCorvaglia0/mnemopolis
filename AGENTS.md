@@ -17,7 +17,7 @@ tell what the subject is.
 
 Rules that hold everywhere:
 
-- Speak to the user in their language. Write the course in the language of the brief.
+- Speak to the user in their language. Write the course in the language of the brief; a bilingual course (`"languages": ["en", "it"]`, texts as `{ "en": ..., "it": ... }`) writes each language natively (`engine/docs/SCHEMA.md`, "Languages").
 - Accuracy first: nothing reaches the learner that does not rest on a source.
 - The brief records two independent settings: size (how much content) and care (light, standard
   or curated: how much effort per unit). Care changes breadth and polish, never accuracy.

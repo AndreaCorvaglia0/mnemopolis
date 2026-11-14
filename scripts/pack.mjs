@@ -21,7 +21,7 @@ if (!existsSync(path.join(dir, 'course.json'))) { console.error(`No course.json 
 if (!existsSync(playerPath)) { console.error(`No player at ${playerPath}. Build it once with: npm run build:player (or pass --player <file>, e.g. the player.html of the project's /play/ page)`); process.exit(2); }
 
 const { validateCourse } = await import(pathToFileURL(path.join(root, 'skills', 'knowledge-base', 'scripts', 'validate.mjs')).href);
-const { makePayload, insertPayload } = await import(pathToFileURL(path.join(root, 'engine', 'src', 'course', 'packing.js')).href);
+const { makePayload, insertPayload, titleOf } = await import(pathToFileURL(path.join(root, 'engine', 'src', 'course', 'packing.js')).href);
 const eng = (rel, pick) => import(pathToFileURL(path.join(root, 'engine', 'src', rel)).href).then(pick).catch(() => null);
 
 const read = (f) => readFileSync(path.join(dir, f), 'utf8');
@@ -58,4 +58,4 @@ if (errors.length) { console.log(`\n${errors.length} errors in the lab code: not
 out ||= path.join(root, 'engine', 'dist', `${slug}.html`);
 const html = insertPayload(readFileSync(playerPath, 'utf8'), payload);
 writeFileSync(out, html);
-console.log(`${course.title}: ${Object.keys(labs).length} lab files, ${Object.keys(games).length} game files, ${course.concepts.reduce((n, p) => n + (p.lab?.stations || []).filter((s) => s.ready).length, 0)} ready-made stations -> ${path.relative(process.cwd(), out)} (${(html.length / 1024 / 1024).toFixed(2)} MB)`);
+console.log(`${titleOf(course)}: ${Object.keys(labs).length} lab files, ${Object.keys(games).length} game files, ${course.concepts.reduce((n, p) => n + (p.lab?.stations || []).filter((s) => s.ready).length, 0)} ready-made stations -> ${path.relative(process.cwd(), out)} (${(html.length / 1024 / 1024).toFixed(2)} MB)`);

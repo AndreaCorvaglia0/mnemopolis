@@ -22,7 +22,7 @@ async function digest(file) {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message.slice(0, 300)));
   page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text().slice(0, 300)); });
-  await page.goto(`file://${path.resolve(file)}?lite&test`);
+  await page.goto(`file://${path.resolve(file)}?lite&test${/^(en|it)$/.test(process.env.LANG || '') ? `&lang=${process.env.LANG}` : ''}`); // LANG=it: the Italian side of a bilingual course
   for (let i = 0; i < 40 && !(await page.evaluate(() => !!window.__hb?.content)); i++) await sleep(500);
   if (!(await page.evaluate(() => !!window.__hb?.content))) { await browser.close(); throw new Error(`${file} did not start: ${errors.join(' | ') || 'no error reported'}`); }
   await sleep(1500);

@@ -15,6 +15,8 @@
 //   power    : atom ( '^' unary )?                                      right-associative; -2^2 = -4
 //   atom     : number | name | name '(' args ')' | '(' compare ')'
 // Numbers: 12, 0.5, .5, 1e3. Names: letters, digits, _ (not first). Constants: pi, e.
+import { LANG } from '../../course/_data.js';
+
 export const FUNCS = {
   min: [1, 8, Math.min], max: [1, 8, Math.max], abs: [1, 1, Math.abs], sqrt: [1, 1, Math.sqrt],
   exp: [1, 1, Math.exp], log: [1, 1, Math.log], log10: [1, 1, Math.log10], sin: [1, 1, Math.sin],
@@ -150,10 +152,13 @@ export function template(text, names = []) {
 }
 
 // numbers for people: d decimals, or a sensible number of them; thin minus sign
-export function fmt(x, d = null) {
+// A number for reading: d digits (null: as many as the size needs), a true minus sign, and the
+// decimal comma in Italian ("1,14"). `lang` defaults to the active language; lab code gets this as num().
+export function fmt(x, d = null, lang = LANG) {
   if (!Number.isFinite(x)) return '–';
   if (d == null) { const a = Math.abs(x); d = a >= 100 ? 0 : a >= 10 ? 1 : a >= 1 ? 2 : a === 0 ? 0 : 3; }
   let s = x.toFixed(d);
   if (/^-0(\.0*)?$/.test(s)) s = s.slice(1);
-  return s.replace('-', '−');
+  s = s.replace('-', '−');
+  return lang === 'it' ? s.replace('.', ',') : s;
 }

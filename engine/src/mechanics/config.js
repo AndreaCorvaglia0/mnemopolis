@@ -25,8 +25,8 @@ export function lifeConfig(world = WORLD, nolife = q.has('nolife')) {
 export const LIFE = lifeConfig();
 
 // The ACTIVE language, 'en' or 'it': chosen once at boot (?lang=, the saved choice, the browser, the
-// course's own `language`; course/localise.js) and resolved in course/_data.js. Never read
-// DATA.language for this: in a bilingual course it is the default, not what the player reads.
+// course's own `language`; course/localise.js) and resolved in course/_data.js. Never take
+// it from the course's own `language` field: in a bilingual course that is only the default.
 export const LANG = ACTIVE;
 // a registry entry { en, it } -> the string (or list) in the course language
 export const tr = (v, lang = LANG) => (v && typeof v === 'object' && !Array.isArray(v) ? v[lang] ?? v.en : v);
