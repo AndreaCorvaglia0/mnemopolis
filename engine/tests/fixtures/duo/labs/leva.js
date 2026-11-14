@@ -1,6 +1,6 @@
 // Casa della Leva (fixture, bilingual: the caption comes from L): an adult and a child on a seesaw.
-import { slider } from '../../../../src/lab/shell.js';
-import { canvasPane, L } from '../../../../src/lab/kit.js';
+import { slider } from '../../../../../engine/src/lab/shell.js';
+import { canvasPane, L } from '../../../../../engine/src/lab/kit.js';
 
 async function altalena(ctx) {
   const pane = canvasPane(ctx.stage, 720, 400, L('Move the child along the axis.', 'Sposta il bambino lungo l\'asse.'), { portrait: [480, 420] });

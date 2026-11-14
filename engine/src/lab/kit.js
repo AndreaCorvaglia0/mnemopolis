@@ -4,6 +4,7 @@ import { sfx } from '../systems/audio.js';
 import { hand } from './hands.js';
 import { sound } from '../systems/sound/lab.js';
 import { LANG } from '../course/_data.js';
+import { fmt } from './patterns/expr.js';
 import { makeL } from '../course/localise.js';
 
 // The active language, for lab and game code (chosen once at boot; see ENGINE.md, "Languages").
@@ -13,6 +14,9 @@ import { makeL } from '../course/localise.js';
 // Use it for texts that the lab code writes itself; text from course.json arrives already resolved.
 export const lang = () => LANG;
 export const L = makeL(LANG);
+// num(1.136, 2) -> '1.14' in English, '1,14' in Italian: use it for every number a station writes (the
+// ready-made patterns already do). Same as fmt; digits null picks them from the size.
+export const num = (value, digits = null) => fmt(value, digits);
 
 // A canvas that fills the stage. The station draws in its own units (w x hgt); the pane scales
 // that box to the largest size that fits the stage, keeps its proportions, centres it, and lets

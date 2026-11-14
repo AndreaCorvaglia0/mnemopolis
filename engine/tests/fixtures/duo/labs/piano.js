@@ -1,6 +1,6 @@
 // Bottega delle Rampe (fixture, Italian): a ramp to a step 1 m high, a crate of 100 N.
-import { slider } from '../../../../src/lab/shell.js';
-import { canvasPane } from '../../../../src/lab/kit.js';
+import { slider } from '../../../../../engine/src/lab/shell.js';
+import { canvasPane } from '../../../../../engine/src/lab/kit.js';
 
 async function rampa(ctx) {
   const pane = canvasPane(ctx.stage, 720, 400, 'Allunga la rampa.', { portrait: [480, 420] });

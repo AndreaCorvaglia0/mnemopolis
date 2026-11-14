@@ -107,7 +107,7 @@ Import from `'../../../engine/src/lab/kit.js'`:
 | `shuffle(list, seed)`, `hit(list, x, y)` | A deterministic shuffle (never the identity); the item under a point (`{x, y, w, h}` or `{x, y, r}`). |
 | `compile(expr, names)`, `template(text, names)`, `fmt(x, d)` | The expression language below, from code. |
 | `sfx.tick()`, `sfx.plop()`, `sfx.chime()`, `sfx.thud()`, `sfx.reveal()` | Short sounds, for a snap or an arrival. |
-| `lang()`, `L(en, it)` | The active language of a bilingual course (below). |
+| `lang()`, `L(en, it)`, `num(x, digits)` | The active language of a bilingual course (below); `num` writes a number with its decimal mark (`1,14` in Italian): use it for every number your code puts in a text. |
 | `canvasPane`, `draggable`, `slider`, `seg`, `readout`, `h`, `rgbCss`, `hslToRgb` | The older pieces (`engine/docs/SCHEMA.md`), still there. |
 | `sliderReveal`, `compare`, `sort`, `order` | The ready-made patterns as functions (below). |
 
@@ -124,10 +124,11 @@ falling back to `en` when `it` is missing or empty (`L({ en, it })` works too). 
 courses need none of this.
 
 ```js
-import { canvasPane, button, L } from '../../../engine/src/lab/kit.js';
+import { canvasPane, button, L, num } from '../../../engine/src/lab/kit.js';
 // ...
 button(ctx, L('Show the real curve', 'Mostra la curva vera'), show);
-d.text(L(`${n} samples`, `${n} campioni`), 40, 30, { size: 18 });
+d.text(L(`${num(t, 2)} ms`, `${num(t, 2)} ms`), 40, 30, { size: 18 }); // 1.14 ms, 1,14 ms
+d.text(L(`${n} samples`, `${n} campioni`), 40, 60, { size: 18 });
 ```
 
 ### The import surface

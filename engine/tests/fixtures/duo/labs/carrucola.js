@@ -1,6 +1,6 @@
 // Casa di Gino (fixture, Italian): a fixed and a movable pulley lifting 100 N.
-import { seg } from '../../../../src/lab/shell.js';
-import { canvasPane } from '../../../../src/lab/kit.js';
+import { seg } from '../../../../../engine/src/lab/shell.js';
+import { canvasPane } from '../../../../../engine/src/lab/kit.js';
 
 async function paranco(ctx) {
   const pane = canvasPane(ctx.stage, 720, 400, '', { portrait: [480, 420] });

@@ -14,7 +14,7 @@ import { localise } from './localise.js';
 // The import surface of lab code in a packed game: the path after engine/src/ -> what it is.
 export const KIT_MODULES = {
   'lab/shell.js': 'the lab frame\'s controls: h, seg, slider, readout, predict, TEXT, LANG',
-  'lab/kit.js': 'canvasPane, draggable, rgbCss, hslToRgb, predict, lang and L (the active language), and the helpers for authors (tasks, expr, draw, controls, layout, patterns)',
+  'lab/kit.js': 'canvasPane, draggable, rgbCss, hslToRgb, predict, lang, L and num (the active language, numbers with its decimal mark), and the helpers for authors (tasks, expr, draw, controls, layout, patterns)',
   'lab/patterns/index.js': 'the ready-made patterns as functions (sliderReveal, compare, sort, order, ...) and their helpers',
   'systems/audio.js': 'sfx: short sounds (tick, plop, chime, reveal, thud...)',
 };

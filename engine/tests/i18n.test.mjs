@@ -256,3 +256,12 @@ test('nothing in the engine takes the player\'s language from the course\'s `lan
   const bad = files.filter((f) => !allowed.some((a) => f.endsWith(a))).filter((f) => /\b(DATA|course|COURSE)\??\.language\b/.test(rd(f, 'utf8')));
   assert.deepEqual(bad, [], 'read LANG (mechanics/config.js) instead');
 });
+
+test('numbers: fmt writes a decimal comma in Italian and a point in English; minus and rounding are unchanged', async () => {
+  const { fmt } = await import('../src/lab/patterns/expr.js');
+  assert.equal(fmt(1.136, 2, 'it'), '1,14'); assert.equal(fmt(1.136, 2, 'en'), '1.14');
+  assert.equal(fmt(-0.5, 1, 'it'), '−0,5'); assert.equal(fmt(-0.001, 1, 'it'), '0,0');
+  assert.equal(fmt(1234, null, 'it'), '1234'); assert.equal(fmt(0, null, 'it'), '0');
+  assert.equal(fmt(NaN, 1, 'it'), '–');
+  assert.equal(fmt(2.5), fmt(2.5, null, (await import('../src/course/_data.js')).LANG));
+});
