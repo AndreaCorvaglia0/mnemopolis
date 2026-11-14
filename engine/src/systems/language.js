@@ -33,12 +33,12 @@ export const languageSettings = () => (multilingual()
   ? [{ label: 'Language · Lingua', on: () => true, value: () => LANG_NAMES[LANG], toggle: () => { setLanguage(nextOf()); } }]
   : []);
 
-// A small EN / IT switch on the title screen (HTML, above the canvas). Returns a function that removes it.
+// A small EN / IT switch on the title screen (HTML, above the canvas, below every panel: labs and cinema cover it). Returns a function that removes it.
 export function mountTitleSwitch(doc = typeof document !== 'undefined' ? document : null) {
   if (!doc || !multilingual()) return () => {};
   const box = doc.createElement('div');
   box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Language · Lingua'); box.dataset.langSwitch = '1';
-  box.style.cssText = 'position:fixed;top:12px;right:12px;z-index:30;display:flex;gap:6px;font:600 14px/1 system-ui,sans-serif';
+  box.style.cssText = 'position:fixed;top:12px;right:12px;z-index:5;display:flex;gap:6px;font:600 14px/1 system-ui,sans-serif';
   for (const l of LANGUAGES) {
     const b = doc.createElement('button');
     b.type = 'button'; b.textContent = l.toUpperCase(); b.lang = l; b.title = LANG_NAMES[l]; b.setAttribute('aria-pressed', String(l === LANG)); b.dataset.lang = l;
