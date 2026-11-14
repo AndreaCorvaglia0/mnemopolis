@@ -197,216 +197,525 @@
       "id": "string",
       "theme": "sound",
       "type": "mechanism",
-      "name": "A string and its pitch",
-      "place": "Luthier's House",
-      "sign": "LUTHIER",
+      "name": {
+        "en": "A string and its pitch",
+        "it": "La corda e la sua altezza"
+      },
+      "place": {
+        "en": "Luthier's House",
+        "it": "Casa del Liutaio"
+      },
+      "sign": {
+        "en": "LUTHIER",
+        "it": "LIUTAIO"
+      },
       "emblem": "wave",
       "expert": {
         "name": "Aldo",
-        "trade": "luthier",
+        "trade": {
+          "en": "luthier",
+          "it": "liutaio"
+        },
         "temper": "craftsman",
-        "line": "I measure every fret from the nut. The twelfth always lands in the middle of the string, and the note there is the open note again, one floor up."
+        "line": {
+          "en": "I measure every fret from the nut. The twelfth always lands in the middle of the string, and the note there is the open note again, one floor up.",
+          "it": "Misuro ogni tasto a partire dal capotasto. Il dodicesimo cade sempre a metà della corda, e la nota che esce lì è di nuovo quella a vuoto, un piano più su."
+        }
       },
-      "objective": "Predict how the pitch of a string changes when it is shortened or tightened, and find the octave.",
-      "idea": "A plucked string vibrates a fixed number of times per second; a shorter or tighter string vibrates faster, and half the length gives twice the frequency.",
-      "wrongBelief": "Halving the string gives some note a little higher, not twice the frequency; and the octave is a different note eight steps up, not the same note again.",
+      "objective": {
+        "en": "Predict how the pitch of a string changes when it is shortened or tightened, and find the octave.",
+        "it": "Prevedere come cambia l'altezza di una corda quando si accorcia o si tende, e trovare l'ottava."
+      },
+      "idea": {
+        "en": "A plucked string vibrates a fixed number of times per second; a shorter or tighter string vibrates faster, and half the length gives twice the frequency.",
+        "it": "Una corda pizzicata vibra un numero fisso di volte al secondo; una corda più corta o più tesa vibra più in fretta, e a metà lunghezza la frequenza raddoppia."
+      },
+      "wrongBelief": {
+        "en": "Halving the string gives some note a little higher, not twice the frequency; and the octave is a different note eight steps up, not the same note again.",
+        "it": "Dimezzando la corda si ottiene una nota appena più acuta, non il doppio della frequenza; e l'ottava è una nota diversa, otto gradini più su, non la stessa nota di nuovo."
+      },
       "anchor": {
         "type": "example",
-        "text": "The 12th fret, the one with two dots on most guitars, sits exactly halfway between the nut and the bridge."
+        "text": {
+          "en": "The 12th fret, the one with two dots on most guitars, sits exactly halfway between the nut and the bridge.",
+          "it": "Il 12° tasto, quello con i due puntini sulla maggior parte delle chitarre, si trova esattamente a metà tra il capotasto e il ponte."
+        }
       },
-      "application": "Every note a guitar plays comes from these two quantities: the tuning pegs change the tension of each string, and the frets change its vibrating length.",
+      "application": {
+        "en": "Every note a guitar plays comes from these two quantities: the tuning pegs change the tension of each string, and the frets change its vibrating length.",
+        "it": "Ogni nota di una chitarra nasce da queste due grandezze: le meccaniche cambiano la tensione di ciascuna corda e i tasti ne cambiano la lunghezza che vibra."
+      },
       "remember": [
-        "Frequency is the number of vibrations per second, in hertz; a higher frequency is a higher note.",
-        "A shorter, tighter or lighter string vibrates faster and sounds higher.",
-        "Half the length gives twice the frequency: the octave, which sounds like the same note higher and has the same name."
+        {
+          "en": "Frequency is the number of vibrations per second, in hertz; a higher frequency is a higher note.",
+          "it": "La frequenza è il numero di vibrazioni al secondo, misurato in hertz; una frequenza più alta è una nota più acuta."
+        },
+        {
+          "en": "A shorter, tighter or lighter string vibrates faster and sounds higher.",
+          "it": "Una corda più corta, più tesa o più leggera vibra più in fretta e suona più acuta."
+        },
+        {
+          "en": "Half the length gives twice the frequency: the octave, which sounds like the same note higher and has the same name.",
+          "it": "A metà lunghezza la frequenza raddoppia: è l'ottava, che suona come la stessa nota più acuta e ha lo stesso nome."
+        }
       ],
       "explain": {
-        "q": "Why is the 12th fret in the middle of the string, and not at the end of the neck?",
-        "a": "The 12th fret gives the octave, which is twice the frequency of the open string. A string's frequency doubles when its vibrating length is halved, so the fret that gives the octave has to sit halfway between the nut and the bridge."
+        "q": {
+          "en": "Why is the 12th fret in the middle of the string, and not at the end of the neck?",
+          "it": "Perché il 12° tasto sta a metà della corda e non in fondo al manico?"
+        },
+        "a": {
+          "en": "The 12th fret gives the octave, which is twice the frequency of the open string. A string's frequency doubles when its vibrating length is halved, so the fret that gives the octave has to sit halfway between the nut and the bridge.",
+          "it": "Il 12° tasto dà l'ottava, cioè il doppio della frequenza della corda a vuoto. La frequenza di una corda raddoppia quando la lunghezza che vibra si dimezza, quindi il tasto che dà l'ottava deve stare a metà strada tra il capotasto e il ponte."
+        }
       },
       "lab": {
-        "title": "The string",
+        "title": {
+          "en": "The string",
+          "it": "La corda"
+        },
         "stations": [
           {
             "id": "pluck",
-            "tab": "Half a string",
-            "goal": "A shorter string vibrates faster: half the length gives twice the frequency, the same note an octave higher.",
+            "tab": {
+              "en": "Half a string",
+              "it": "Mezza corda"
+            },
+            "goal": {
+              "en": "A shorter string vibrates faster: half the length gives twice the frequency, the same note an octave higher.",
+              "it": "Una corda più corta vibra più in fretta: a metà lunghezza la frequenza raddoppia e la nota è la stessa, un'ottava più su."
+            },
             "beat": "ground",
             "pattern": "cause-effect",
-            "object": "One guitar string from the nut to the bridge, a fretting finger and a tuning peg.",
-            "action": "Plucks the string, slides the finger along it and turns the peg.",
-            "surprise": "With the finger at the exact middle the read-out shows twice the open frequency, and the note sounds like the open note, higher.",
+            "object": {
+              "en": "One guitar string from the nut to the bridge, a fretting finger and a tuning peg.",
+              "it": "Una corda di chitarra dal capotasto al ponte, un dito che la preme e una meccanica per accordarla."
+            },
+            "action": {
+              "en": "Plucks the string, slides the finger along it and turns the peg.",
+              "it": "Pizzica la corda, fa scorrere il dito lungo di essa e gira la meccanica."
+            },
+            "surprise": {
+              "en": "With the finger at the exact middle the read-out shows twice the open frequency, and the note sounds like the open note, higher.",
+              "it": "Con il dito esattamente a metà il valore letto è il doppio della frequenza a vuoto, e la nota suona come quella a vuoto, ma più acuta."
+            },
             "predict": {
-              "q": "Press this string at exactly half its length and pluck it. Its frequency becomes...",
+              "q": {
+                "en": "Press this string at exactly half its length and pluck it. Its frequency becomes...",
+                "it": "Premi questa corda esattamente a metà della sua lunghezza e pizzicala. La sua frequenza diventa..."
+              },
               "options": [
-                "a little higher, about 1.1 times",
-                "one and a half times",
-                "twice",
-                "four times"
+                {
+                  "en": "a little higher, about 1.1 times",
+                  "it": "un po' più alta, circa 1,1 volte"
+                },
+                {
+                  "en": "one and a half times",
+                  "it": "una volta e mezza"
+                },
+                {
+                  "en": "twice",
+                  "it": "il doppio"
+                },
+                {
+                  "en": "four times",
+                  "it": "quattro volte"
+                }
               ],
               "answer": 2,
-              "why": "The frequency of a string is inversely proportional to its vibrating length, so half the length vibrates twice as fast."
+              "why": {
+                "en": "The frequency of a string is inversely proportional to its vibrating length, so half the length vibrates twice as fast.",
+                "it": "La frequenza di una corda è inversamente proporzionale alla lunghezza che vibra, quindi a metà lunghezza la corda vibra due volte più in fretta."
+              }
             },
             "controls": [
-              "Tension of the string, turned with the tuning peg"
+              {
+                "en": "Tension of the string, turned with the tuning peg",
+                "it": "Tensione della corda, regolata con la meccanica"
+              }
             ],
             "tries": [
-              "Pluck the open string, then press it at the middle of its length and pluck again.",
-              "Turn the peg until the open string reads 110 Hz, the A of standard tuning."
+              {
+                "en": "Pluck the open string, then press it at the middle of its length and pluck again.",
+                "it": "Pizzica la corda a vuoto, poi premila a metà della sua lunghezza e pizzica di nuovo."
+              },
+              {
+                "en": "Turn the peg until the open string reads 110 Hz, the A of standard tuning.",
+                "it": "Gira la meccanica finché la corda a vuoto segna 110 Hz, il La (A) dell'accordatura standard."
+              }
             ],
-            "takeaway": "A string sounds higher when it is <b>shorter</b>, <b>tighter</b> or lighter. <b>Half the length gives twice the frequency</b>, which is the octave: it sounds like the same note higher and has the same name, so the 12th fret sits in the middle of the string.",
-            "source": "The frequency is computed live from the vibrating length and the tension with the standard formula for a stretched string (UNSW Music Acoustics), for a 650 mm string. The tone is synthesised from the string's harmonics. The drawing shows the vibration slowed down about a hundred times."
+            "takeaway": {
+              "en": "A string sounds higher when it is <b>shorter</b>, <b>tighter</b> or lighter. <b>Half the length gives twice the frequency</b>, which is the octave: it sounds like the same note higher and has the same name, so the 12th fret sits in the middle of the string.",
+              "it": "Una corda suona più acuta quando è <b>più corta</b>, <b>più tesa</b> o più leggera. <b>A metà lunghezza la frequenza raddoppia</b>, ed è l'ottava: suona come la stessa nota più acuta e ha lo stesso nome, per questo il 12° tasto sta a metà della corda."
+            },
+            "source": {
+              "en": "The frequency is computed live from the vibrating length and the tension with the standard formula for a stretched string (UNSW Music Acoustics), for a 650 mm string. The tone is synthesised from the string's harmonics. The drawing shows the vibration slowed down about a hundred times.",
+              "it": "La frequenza è calcolata in tempo reale dalla lunghezza che vibra e dalla tensione, con la formula standard della corda tesa (UNSW Music Acoustics), per una corda di 650 mm. Il suono è sintetizzato a partire dalle armoniche della corda. Il disegno mostra la vibrazione rallentata di circa cento volte."
+            }
           },
           {
             "id": "harmonics",
-            "tab": "Touch, don't press",
+            "tab": {
+              "en": "Touch, don't press",
+              "it": "Sfiora, non premere"
+            },
             "advanced": true,
-            "goal": "A string vibrates in halves, thirds and quarters at once; touching it at 1/2, 1/3 or 1/4 keeps only one of those vibrations.",
+            "goal": {
+              "en": "A string vibrates in halves, thirds and quarters at once; touching it at 1/2, 1/3 or 1/4 keeps only one of those vibrations.",
+              "it": "Una corda vibra contemporaneamente in metà, terzi e quarti; sfiorandola a 1/2, 1/3 o 1/4 resta una sola di queste vibrazioni."
+            },
             "beat": "twist",
             "pattern": "predict-test",
-            "object": "The same string, drawn with its first four ways of vibrating, and a fingertip that touches without pressing.",
-            "action": "Touches the string lightly at a point and plucks.",
-            "surprise": "Touching above fret 7 does not give the fret-7 note: it gives three times the open frequency, an octave and a fifth up.",
+            "object": {
+              "en": "The same string, drawn with its first four ways of vibrating, and a fingertip that touches without pressing.",
+              "it": "La stessa corda, disegnata con i suoi primi quattro modi di vibrare, e un polpastrello che la sfiora senza premerla."
+            },
+            "action": {
+              "en": "Touches the string lightly at a point and plucks.",
+              "it": "Sfiora leggermente la corda in un punto e la pizzica."
+            },
+            "surprise": {
+              "en": "Touching above fret 7 does not give the fret-7 note: it gives three times the open frequency, an octave and a fifth up.",
+              "it": "Sfiorando sopra il tasto 7 non si ottiene la nota del tasto 7: si ottiene il triplo della frequenza a vuoto, un'ottava più una quinta sopra."
+            },
             "predict": {
-              "q": "Touch the string lightly above fret 7, about a third of its length, and pluck. You hear...",
+              "q": {
+                "en": "Touch the string lightly above fret 7, about a third of its length, and pluck. You hear...",
+                "it": "Sfiora leggermente la corda sopra il tasto 7, a circa un terzo della sua lunghezza, e pizzica. Senti..."
+              },
               "options": [
-                "the note of fret 7, as if pressed",
-                "three times the open frequency, an octave and a fifth up",
-                "nothing, the touch stops the string"
+                {
+                  "en": "the note of fret 7, as if pressed",
+                  "it": "la nota del tasto 7, come se fosse premuta"
+                },
+                {
+                  "en": "three times the open frequency, an octave and a fifth up",
+                  "it": "il triplo della frequenza a vuoto, un'ottava più una quinta sopra"
+                },
+                {
+                  "en": "nothing, the touch stops the string",
+                  "it": "niente, il tocco ferma la corda"
+                }
               ],
               "answer": 1,
-              "why": "A light touch makes a still point there, and only the vibrations with a still point at a third of the length survive: the third harmonic, at three times the frequency."
+              "why": {
+                "en": "A light touch makes a still point there, and only the vibrations with a still point at a third of the length survive: the third harmonic, at three times the frequency.",
+                "it": "Un tocco leggero crea in quel punto un nodo, cioè un punto fermo, e sopravvivono solo le vibrazioni che hanno un nodo a un terzo della lunghezza: la terza armonica, con una frequenza tripla."
+              }
             },
             "controls": [],
             "tries": [
-              "Touch the string above fret 12 and pluck.",
-              "Touch above fret 7 and read the frequency of what is left.",
-              "Find the harmonic above fret 5."
+              {
+                "en": "Touch the string above fret 12 and pluck.",
+                "it": "Sfiora la corda sopra il tasto 12 e pizzica."
+              },
+              {
+                "en": "Touch above fret 7 and read the frequency of what is left.",
+                "it": "Sfiora sopra il tasto 7 e leggi la frequenza di ciò che resta."
+              },
+              {
+                "en": "Find the harmonic above fret 5.",
+                "it": "Trova l'armonico sopra il tasto 5."
+              }
             ],
-            "takeaway": "A plucked string vibrates as a whole and in 2, 3, 4… parts at once, sounding its <b>harmonics</b> at 2, 3, 4… times the open frequency. Touching it at 1/2, 1/3 or 1/4 of its length keeps only the harmonics with a still point there: above <b>fret 12</b> the 2nd, above <b>fret 7</b> the 3rd, above <b>fret 5</b> the 4th.",
-            "source": "Harmonic frequencies computed live as whole multiples of the open frequency (UNSW Music Acoustics). Frets 7 and 5 lie within half a millimetre of a third and a quarter of the string, so the touch points are drawn at the frets."
+            "takeaway": {
+              "en": "A plucked string vibrates as a whole and in 2, 3, 4… parts at once, sounding its <b>harmonics</b> at 2, 3, 4… times the open frequency. Touching it at 1/2, 1/3 or 1/4 of its length keeps only the harmonics with a still point there: above <b>fret 12</b> the 2nd, above <b>fret 7</b> the 3rd, above <b>fret 5</b> the 4th.",
+              "it": "Una corda pizzicata vibra intera e in 2, 3, 4… parti insieme, e fa sentire le sue <b>armoniche</b> a 2, 3, 4… volte la frequenza a vuoto. Sfiorandola a 1/2, 1/3 o 1/4 della lunghezza restano solo le armoniche che hanno un nodo in quel punto: sopra il <b>tasto 12</b> la 2ª, sopra il <b>tasto 7</b> la 3ª, sopra il <b>tasto 5</b> la 4ª."
+            },
+            "source": {
+              "en": "Harmonic frequencies computed live as whole multiples of the open frequency (UNSW Music Acoustics). Frets 7 and 5 lie within half a millimetre of a third and a quarter of the string, so the touch points are drawn at the frets.",
+              "it": "Frequenze delle armoniche calcolate in tempo reale come multipli interi della frequenza a vuoto (UNSW Music Acoustics). I tasti 7 e 5 cadono a meno di mezzo millimetro da un terzo e da un quarto della corda, perciò i punti di contatto sono disegnati sui tasti."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "A note is a number of vibrations per second",
-          "text": "When a string is plucked it swings back and forth many times each second, and each swing pushes the air, which carries the push to the ear. The number of swings per second is the frequency, measured in hertz (Hz), and the ear hears a higher frequency as a higher note. The open A string of a guitar vibrates 110 times per second, and the A that orchestras tune to vibrates 440 times."
+          "title": {
+            "en": "A note is a number of vibrations per second",
+            "it": "Una nota è un numero di vibrazioni al secondo"
+          },
+          "text": {
+            "en": "When a string is plucked it swings back and forth many times each second, and each swing pushes the air, which carries the push to the ear. The number of swings per second is the frequency, measured in hertz (Hz), and the ear hears a higher frequency as a higher note. The open A string of a guitar vibrates 110 times per second, and the A that orchestras tune to vibrates 440 times.",
+            "it": "Quando una corda viene pizzicata oscilla avanti e indietro molte volte al secondo, e a ogni oscillazione spinge l'aria, che porta la spinta fino all'orecchio. Il numero di oscillazioni al secondo è la frequenza, misurata in hertz (Hz), e l'orecchio sente una frequenza più alta come una nota più acuta. La corda di La (A) a vuoto di una chitarra vibra 110 volte al secondo, mentre il La a cui si accordano le orchestre ne vibra 440."
+          }
         },
         {
-          "title": "Length, tension and weight",
-          "text": "Three things set the frequency of a string. A shorter string vibrates faster, which is why pressing a fret raises the note; a tighter string vibrates faster, which is what the tuning peg changes; and a heavier string vibrates more slowly, which is why the low strings are thick. Frequency grows with the square root of the tension, so a string must be pulled four times as hard to sound twice as high, while halving its length is enough to do the same."
+          "title": {
+            "en": "Length, tension and weight",
+            "it": "Lunghezza, tensione e peso"
+          },
+          "text": {
+            "en": "Three things set the frequency of a string. A shorter string vibrates faster, which is why pressing a fret raises the note; a tighter string vibrates faster, which is what the tuning peg changes; and a heavier string vibrates more slowly, which is why the low strings are thick. Frequency grows with the square root of the tension, so a string must be pulled four times as hard to sound twice as high, while halving its length is enough to do the same.",
+            "it": "Tre grandezze fissano la frequenza di una corda. Una corda più corta vibra più in fretta, ed è per questo che premere un tasto alza la nota; una corda più tesa vibra più in fretta, ed è ciò che cambiano le meccaniche; una corda più pesante vibra più lentamente, ed è per questo che le corde basse sono grosse. La frequenza cresce con la radice quadrata della tensione, quindi una corda va tirata quattro volte più forte per suonare il doppio più acuta, mentre per ottenere lo stesso effetto basta dimezzarne la lunghezza."
+          }
         },
         {
-          "title": "The octave",
-          "text": "Halving the vibrating length doubles the frequency, and two notes whose frequencies are in the ratio 2 to 1 sound so alike that music gives them the same name. This interval is the octave, and on a guitar it lies at the 12th fret, in the middle of the string. Guitar music is written an octave higher than it sounds, so the open A string sounds at 110 Hz, an octave below the note written for it."
+          "title": {
+            "en": "The octave",
+            "it": "L'ottava"
+          },
+          "text": {
+            "en": "Halving the vibrating length doubles the frequency, and two notes whose frequencies are in the ratio 2 to 1 sound so alike that music gives them the same name. This interval is the octave, and on a guitar it lies at the 12th fret, in the middle of the string. Guitar music is written an octave higher than it sounds, so the open A string sounds at 110 Hz, an octave below the note written for it.",
+            "it": "Dimezzando la lunghezza che vibra la frequenza raddoppia, e due note le cui frequenze stanno nel rapporto 2 a 1 suonano così simili che la musica dà loro lo stesso nome. Questo intervallo è l'ottava, che sulla chitarra si trova al 12° tasto, a metà della corda. La musica per chitarra si scrive un'ottava più in alto di come suona, quindi la corda di La (A) a vuoto suona a 110 Hz, un'ottava sotto la nota scritta per essa."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "A string vibrates 196 times per second. Its frequency is...",
+          "q": {
+            "en": "A string vibrates 196 times per second. Its frequency is...",
+            "it": "Una corda vibra 196 volte al secondo. La sua frequenza è..."
+          },
           "options": [
             "196 Hz",
-            "196 seconds",
+            {
+              "en": "196 seconds",
+              "it": "196 secondi"
+            },
             "1/196 Hz"
           ],
           "answer": 0,
-          "why": "Frequency counts vibrations per second, and one vibration per second is one hertz.",
+          "why": {
+            "en": "Frequency counts vibrations per second, and one vibration per second is one hertz.",
+            "it": "La frequenza conta le vibrazioni al secondo, e una vibrazione al secondo è un hertz."
+          },
           "traps": [
             null,
-            "Seconds measure how long something lasts; the number of vibrations in each second is a rate, which is counted in hertz.",
-            "One over the frequency is the time of one vibration, measured in seconds; the frequency itself is the count per second, 196 Hz."
+            {
+              "en": "Seconds measure how long something lasts; the number of vibrations in each second is a rate, which is counted in hertz.",
+              "it": "I secondi misurano quanto dura qualcosa; il numero di vibrazioni in ogni secondo è una frequenza, che si conta in hertz."
+            },
+            {
+              "en": "One over the frequency is the time of one vibration, measured in seconds; the frequency itself is the count per second, 196 Hz.",
+              "it": "Uno diviso la frequenza è la durata di una vibrazione, misurata in secondi; la frequenza stessa è il conteggio al secondo, cioè 196 Hz."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "Which change makes a string sound higher?",
+          "q": {
+            "en": "Which change makes a string sound higher?",
+            "it": "Quale cambiamento rende più acuta una corda?"
+          },
           "options": [
-            "A longer vibrating length",
-            "A heavier string",
-            "Less tension",
-            "More tension"
+            {
+              "en": "A longer vibrating length",
+              "it": "Una lunghezza vibrante maggiore"
+            },
+            {
+              "en": "A heavier string",
+              "it": "Una corda più pesante"
+            },
+            {
+              "en": "Less tension",
+              "it": "Meno tensione"
+            },
+            {
+              "en": "More tension",
+              "it": "Più tensione"
+            }
           ],
           "answer": 3,
-          "why": "A tighter string pulls back harder when it is bent, so it swings faster and its frequency rises.",
+          "why": {
+            "en": "A tighter string pulls back harder when it is bent, so it swings faster and its frequency rises.",
+            "it": "Una corda più tesa tira indietro con più forza quando viene spostata, quindi oscilla più in fretta e la sua frequenza sale."
+          },
           "traps": [
-            "A longer string has further to travel in each swing, so it vibrates more slowly and sounds lower, as the open string does compared with a fretted one.",
-            "Heavier strings are the thick bass strings, because extra mass slows the vibration and lowers the note.",
-            "Loosening the peg is how a string is tuned down, since less tension lets it swing more slowly.",
+            {
+              "en": "A longer string has further to travel in each swing, so it vibrates more slowly and sounds lower, as the open string does compared with a fretted one.",
+              "it": "Una corda più lunga ha più strada da percorrere a ogni oscillazione, quindi vibra più lentamente e suona più grave, come la corda a vuoto rispetto a una premuta."
+            },
+            {
+              "en": "Heavier strings are the thick bass strings, because extra mass slows the vibration and lowers the note.",
+              "it": "Le corde più pesanti sono le corde grosse dei bassi, perché la massa in più rallenta la vibrazione e abbassa la nota."
+            },
+            {
+              "en": "Loosening the peg is how a string is tuned down, since less tension lets it swing more slowly.",
+              "it": "Allentare la meccanica è il modo di accordare una corda più in basso, perché con meno tensione la corda oscilla più lentamente."
+            },
             null
           ]
         },
         {
           "level": 1,
-          "q": "Pressing a string exactly at the middle of its length gives...",
+          "q": {
+            "en": "Pressing a string exactly at the middle of its length gives...",
+            "it": "Premere una corda esattamente a metà della sua lunghezza dà..."
+          },
           "options": [
-            "half the frequency",
-            "the same note an octave higher",
-            "a note one fret higher",
-            "a note one and a half times higher"
+            {
+              "en": "half the frequency",
+              "it": "metà della frequenza"
+            },
+            {
+              "en": "the same note an octave higher",
+              "it": "la stessa nota un'ottava più acuta"
+            },
+            {
+              "en": "a note one fret higher",
+              "it": "una nota un tasto più in alto"
+            },
+            {
+              "en": "a note one and a half times higher",
+              "it": "una nota con frequenza una volta e mezza maggiore"
+            }
           ],
           "answer": 1,
-          "why": "Half the length vibrates twice as fast, and a frequency twice as high is the octave, the same note name one octave up.",
+          "why": {
+            "en": "Half the length vibrates twice as fast, and a frequency twice as high is the octave, the same note name one octave up.",
+            "it": "A metà lunghezza la corda vibra due volte più in fretta, e una frequenza doppia è l'ottava, lo stesso nome di nota un'ottava sopra."
+          },
           "traps": [
-            "Halving the string might seem to halve everything, but a shorter string vibrates faster, so the frequency doubles instead.",
+            {
+              "en": "Halving the string might seem to halve everything, but a shorter string vibrates faster, so the frequency doubles instead.",
+              "it": "Dimezzare la corda può far pensare che si dimezzi tutto, ma una corda più corta vibra più in fretta, quindi la frequenza raddoppia."
+            },
             null,
-            "One fret is a small step near the nut; the middle of the string is twelve frets up, at the 12th fret.",
-            "One and a half times the frequency is a fifth, which needs two thirds of the string, at fret 7, not half of it."
+            {
+              "en": "One fret is a small step near the nut; the middle of the string is twelve frets up, at the 12th fret.",
+              "it": "Un tasto è un passo piccolo vicino al capotasto; la metà della corda sta dodici tasti più in su, al 12° tasto."
+            },
+            {
+              "en": "One and a half times the frequency is a fifth, which needs two thirds of the string, at fret 7, not half of it.",
+              "it": "Una frequenza una volta e mezza maggiore è una quinta, che richiede due terzi della corda, al tasto 7, e non la metà."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "The open D string sounds 146.83 Hz. What does it sound at the 12th fret?",
+          "q": {
+            "en": "The open D string sounds 146.83 Hz. What does it sound at the 12th fret?",
+            "it": "La corda di Re (D) a vuoto suona a 146,83 Hz. Che frequenza ha al 12° tasto?"
+          },
           "options": [
-            "73.4 Hz",
-            "158.8 Hz",
-            "293.7 Hz",
-            "587.3 Hz"
+            {
+              "en": "73.4 Hz",
+              "it": "73,4 Hz"
+            },
+            {
+              "en": "158.8 Hz",
+              "it": "158,8 Hz"
+            },
+            {
+              "en": "293.7 Hz",
+              "it": "293,7 Hz"
+            },
+            {
+              "en": "587.3 Hz",
+              "it": "587,3 Hz"
+            }
           ],
           "answer": 2,
-          "why": "The 12th fret halves the vibrating length, which doubles the frequency: 2 × 146.83 Hz is about 293.7 Hz.",
+          "why": {
+            "en": "The 12th fret halves the vibrating length, which doubles the frequency: 2 × 146.83 Hz is about 293.7 Hz.",
+            "it": "Il 12° tasto dimezza la lunghezza che vibra, e così raddoppia la frequenza: 2 × 146,83 Hz fa circa 293,7 Hz."
+          },
           "traps": [
-            "Halving the frequency would need twice the length, which a fret cannot give; pressing a fret always shortens the string and raises the note.",
-            "Adding twelve hertz confuses twelve frets with twelve hertz; each fret multiplies the frequency, and twelve of them double it.",
+            {
+              "en": "Halving the frequency would need twice the length, which a fret cannot give; pressing a fret always shortens the string and raises the note.",
+              "it": "Per dimezzare la frequenza servirebbe una corda lunga il doppio, cosa che un tasto non può dare; premere un tasto accorcia sempre la corda e alza la nota."
+            },
+            {
+              "en": "Adding twelve hertz confuses twelve frets with twelve hertz; each fret multiplies the frequency, and twelve of them double it.",
+              "it": "Aggiungere dodici hertz confonde dodici tasti con dodici hertz; ogni tasto moltiplica la frequenza, e dodici tasti la raddoppiano."
+            },
             null,
-            "Four times the frequency is two octaves, at a quarter of the length, which is beyond the end of most fretboards."
+            {
+              "en": "Four times the frequency is two octaves, at a quarter of the length, which is beyond the end of most fretboards.",
+              "it": "Una frequenza quadrupla sono due ottave, a un quarto della lunghezza, oltre la fine della maggior parte delle tastiere."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "A guitarist tunes a string up from 104 Hz to 110 Hz. What did they change?",
+          "q": {
+            "en": "A guitarist tunes a string up from 104 Hz to 110 Hz. What did they change?",
+            "it": "Un chitarrista accorda una corda da 104 Hz a 110 Hz. Che cosa ha cambiato?"
+          },
           "options": [
-            "They tightened the string with the peg",
-            "They pressed a fret",
-            "They plucked harder",
-            "They loosened the string with the peg"
+            {
+              "en": "They tightened the string with the peg",
+              "it": "Ha teso la corda con la meccanica"
+            },
+            {
+              "en": "They pressed a fret",
+              "it": "Ha premuto un tasto"
+            },
+            {
+              "en": "They plucked harder",
+              "it": "Ha pizzicato più forte"
+            },
+            {
+              "en": "They loosened the string with the peg",
+              "it": "Ha allentato la corda con la meccanica"
+            }
           ],
           "answer": 0,
-          "why": "Tuning changes the tension of the open string; more tension makes it vibrate faster, so the frequency rises from 104 to 110 Hz.",
+          "why": {
+            "en": "Tuning changes the tension of the open string; more tension makes it vibrate faster, so the frequency rises from 104 to 110 Hz.",
+            "it": "L'accordatura cambia la tensione della corda a vuoto; con più tensione la corda vibra più in fretta, e la frequenza sale da 104 a 110 Hz."
+          },
           "traps": [
             null,
-            "Pressing a fret does raise the note, but tuning sets the open string, which nothing presses.",
-            "Plucking harder makes the note louder because the string swings wider, while the number of swings per second stays almost the same.",
-            "Loosening lets the string vibrate more slowly, which would lower it below 104 Hz instead of raising it."
+            {
+              "en": "Pressing a fret does raise the note, but tuning sets the open string, which nothing presses.",
+              "it": "Premere un tasto alza davvero la nota, ma l'accordatura regola la corda a vuoto, che nessun dito preme."
+            },
+            {
+              "en": "Plucking harder makes the note louder because the string swings wider, while the number of swings per second stays almost the same.",
+              "it": "Pizzicare più forte rende la nota più forte perché la corda oscilla più ampia, mentre il numero di oscillazioni al secondo resta quasi uguale."
+            },
+            {
+              "en": "Loosening lets the string vibrate more slowly, which would lower it below 104 Hz instead of raising it.",
+              "it": "Allentando, la corda vibra più lentamente, quindi scenderebbe sotto i 104 Hz invece di salire."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "A ukulele string is 35 cm long and a guitar string 65 cm. Why do the guitar's frets sit further apart?",
+          "q": {
+            "en": "A ukulele string is 35 cm long and a guitar string 65 cm. Why do the guitar's frets sit further apart?",
+            "it": "Una corda di ukulele è lunga 35 cm e una di chitarra 65 cm. Perché i tasti della chitarra sono più distanziati?"
+          },
           "options": [
-            "Guitar notes are more widely spaced in pitch",
-            "Each fret removes the same fraction of the string, and the guitar's string is longer",
-            "Guitar frets are spaced by equal distances, ukulele frets are not",
-            "The ukulele uses a different set of twelve notes"
+            {
+              "en": "Guitar notes are more widely spaced in pitch",
+              "it": "Le note della chitarra sono più distanti tra loro in altezza"
+            },
+            {
+              "en": "Each fret removes the same fraction of the string, and the guitar's string is longer",
+              "it": "Ogni tasto toglie la stessa frazione di corda, e la corda della chitarra è più lunga"
+            },
+            {
+              "en": "Guitar frets are spaced by equal distances, ukulele frets are not",
+              "it": "I tasti della chitarra sono a distanze uguali, quelli dell'ukulele no"
+            },
+            {
+              "en": "The ukulele uses a different set of twelve notes",
+              "it": "L'ukulele usa un altro insieme di dodici note"
+            }
           ],
           "answer": 1,
-          "why": "A half step always multiplies the frequency by the same factor, so each fret shortens the string by the same fraction of what is left; the same fraction of a longer string is a longer distance.",
+          "why": {
+            "en": "A half step always multiplies the frequency by the same factor, so each fret shortens the string by the same fraction of what is left; the same fraction of a longer string is a longer distance.",
+            "it": "Un semitono moltiplica sempre la frequenza per lo stesso fattore, quindi ogni tasto accorcia la corda della stessa frazione di ciò che resta; la stessa frazione di una corda più lunga è una distanza maggiore."
+          },
           "traps": [
-            "Both instruments step by the same half step per fret, so the pitch steps are identical and only the string lengths differ.",
+            {
+              "en": "Both instruments step by the same half step per fret, so the pitch steps are identical and only the string lengths differ.",
+              "it": "I due strumenti salgono dello stesso semitono a ogni tasto, quindi i passi di altezza sono identici e cambia solo la lunghezza delle corde."
+            },
             null,
-            "On both instruments the frets get closer towards the body, because each removes a fixed fraction, never a fixed distance.",
-            "Both use the same twelve notes; what makes the spacing different is only the length of the string being divided."
+            {
+              "en": "On both instruments the frets get closer towards the body, because each removes a fixed fraction, never a fixed distance.",
+              "it": "In entrambi gli strumenti i tasti si avvicinano verso la cassa, perché ciascuno toglie una frazione fissa e mai una distanza fissa."
+            },
+            {
+              "en": "Both use the same twelve notes; what makes the spacing different is only the length of the string being divided.",
+              "it": "Entrambi usano le stesse dodici note; ciò che cambia la spaziatura è solo la lunghezza della corda da dividere."
+            }
           ]
         }
       ],
@@ -421,19 +730,28 @@
         {
           "title": "UNSW Music Acoustics: Strings, standing waves and harmonics",
           "url": "https://newt.phys.unsw.edu.au/jw/strings.html",
-          "why": "The physics of a vibrating string, with animations of its harmonics."
+          "why": {
+            "en": "The physics of a vibrating string, with animations of its harmonics.",
+            "it": "La fisica di una corda che vibra, con animazioni delle sue armoniche (in inglese)."
+          }
         },
         {
           "title": "UNSW Music Acoustics: How does a guitar work?",
           "url": "https://newt.phys.unsw.edu.au/~jw/guitarintro.html",
-          "why": "How the string, the bridge and the body turn a vibration into the sound of a guitar."
+          "why": {
+            "en": "How the string, the bridge and the body turn a vibration into the sound of a guitar.",
+            "it": "Come la corda, il ponte e la cassa trasformano una vibrazione nel suono della chitarra (in inglese)."
+          }
         }
       ],
       "riddles": [
         {
           "id": "aldo-safe",
           "kind": "safe",
-          "clue": "Safe code: what the A string sings at the fret with two dots. In Hz. Don't write it on the door again. A.",
+          "clue": {
+            "en": "Safe code: what the A string sings at the fret with two dots. In Hz. Don't write it on the door again. A.",
+            "it": "Codice della cassaforte: ciò che canta la corda di La (A) al tasto con i due puntini. In Hz. Non riscriverlo ancora sulla porta. A."
+          },
           "answer": 220,
           "type": "number",
           "tolerance": 1,
@@ -442,7 +760,10 @@
             "station": "pluck"
           },
           "inside": {
-            "note": "Aldo's fret rule, pencilled inside the door. Each fret shortens the remaining string by the same fraction, which is why the frets crowd together towards the body. The old makers divided the remaining length by 18; the exact divisor, from the twelfth root of two, is 17.817, so the first fret of a 650 mm string sits 36.5 mm from the nut and the 12th at 325 mm.",
+            "note": {
+              "en": "Aldo's fret rule, pencilled inside the door. Each fret shortens the remaining string by the same fraction, which is why the frets crowd together towards the body. The old makers divided the remaining length by 18; the exact divisor, from the twelfth root of two, is 17.817, so the first fret of a 650 mm string sits 36.5 mm from the nut and the 12th at 325 mm.",
+              "it": "La regola dei tasti di Aldo, scritta a matita dentro lo sportello. Ogni tasto accorcia la corda rimasta della stessa frazione, ed è per questo che i tasti si infittiscono verso la cassa. I vecchi costruttori dividevano la lunghezza rimasta per 18; il divisore esatto, ricavato dalla radice dodicesima di due, è 17,817, perciò il primo tasto di una corda di 650 mm sta a 36,5 mm dal capotasto e il 12° a 325 mm."
+            },
             "station": "harmonics",
             "coins": 15
           }
@@ -453,141 +774,333 @@
       "id": "beats",
       "theme": "sound",
       "type": "mechanism",
-      "name": "Two notes together",
-      "place": "Tuner's House",
-      "sign": "TUNER",
+      "name": {
+        "en": "Two notes together",
+        "it": "Due note insieme"
+      },
+      "place": {
+        "en": "Tuner's House",
+        "it": "Casa dell'Accordatore"
+      },
+      "sign": {
+        "en": "TUNER",
+        "it": "ACCORDO"
+      },
       "emblem": "heart",
       "expert": {
         "name": "Ilse",
-        "trade": "tuner",
+        "trade": {
+          "en": "tuner",
+          "it": "accordatrice"
+        },
         "temper": "absent",
-        "line": "Two strings that nearly agree pulse against each other, wah, wah, wah. I turn the pin until the pulse slows down and stops. Where was I?"
+        "line": {
+          "en": "Two strings that nearly agree pulse against each other, wah, wah, wah. I turn the pin until the pulse slows down and stops. Where was I?",
+          "it": "Due corde che quasi si accordano pulsano l'una contro l'altra, uà, uà, uà. Giro il piolo finché la pulsazione rallenta e si ferma. A che punto ero?"
+        }
       },
-      "objective": "Explain why two close notes beat, and why notes in a simple frequency ratio sound smooth together.",
-      "idea": "Two close frequencies beat at their difference; the beating stops when the frequencies match, or when the strings' harmonics match, as at the octave 2:1 and fifth 3:2.",
-      "wrongBelief": "Two notes played together sit side by side without affecting each other, and whether a pair sounds smooth or rough is only a matter of taste, unrelated to their frequencies.",
+      "objective": {
+        "en": "Explain why two close notes beat, and why notes in a simple frequency ratio sound smooth together.",
+        "it": "Spiegare perché due note vicine danno battimenti e perché le note in un rapporto semplice tra le frequenze suonano bene insieme."
+      },
+      "idea": {
+        "en": "Two close frequencies beat at their difference; the beating stops when the frequencies match, or when the strings' harmonics match, as at the octave 2:1 and fifth 3:2.",
+        "it": "Due frequenze vicine battono alla loro differenza; il battimento scompare quando le frequenze coincidono, o quando coincidono le armoniche delle corde, come nell'ottava 2:1 e nella quinta 3:2."
+      },
+      "wrongBelief": {
+        "en": "Two notes played together sit side by side without affecting each other, and whether a pair sounds smooth or rough is only a matter of taste, unrelated to their frequencies.",
+        "it": "Due note suonate insieme stanno una accanto all'altra senza influenzarsi, e se una coppia suona liscia o aspra è solo questione di gusto, senza relazione con le frequenze."
+      },
       "anchor": {
         "type": "analogy",
-        "text": "Two people walking side by side with slightly different strides: their steps fall together, drift apart and fall together again, at a rate set by the difference between their paces.",
-        "limits": "Footsteps are separate events, while two sound waves add up continuously into one wave, so what the ear hears is one tone whose loudness swells and fades."
+        "text": {
+          "en": "Two people walking side by side with slightly different strides: their steps fall together, drift apart and fall together again, at a rate set by the difference between their paces.",
+          "it": "Due persone che camminano affiancate con passi leggermente diversi: i loro passi cadono insieme, si allontanano e tornano a cadere insieme, con una cadenza fissata dalla differenza tra le due andature."
+        },
+        "limits": {
+          "en": "Footsteps are separate events, while two sound waves add up continuously into one wave, so what the ear hears is one tone whose loudness swells and fades.",
+          "it": "I passi sono eventi separati, mentre due onde sonore si sommano con continuità in un'unica onda, quindi l'orecchio sente un solo suono il cui volume cresce e cala."
+        }
       },
-      "application": "Guitarists and piano tuners tune by ear this way: they play two notes that should agree and turn the peg until the beating slows down and stops.",
+      "application": {
+        "en": "Guitarists and piano tuners tune by ear this way: they play two notes that should agree and turn the peg until the beating slows down and stops.",
+        "it": "I chitarristi e gli accordatori di pianoforti accordano a orecchio in questo modo: suonano due note che dovrebbero coincidere e girano il piolo finché i battimenti rallentano e si fermano."
+      },
       "remember": [
-        "Two notes a few hertz apart beat: the sound swells and fades as many times per second as their difference in hertz.",
-        "A plucked string also sounds its harmonics, at 2, 3, 4 and more times its frequency.",
-        "At simple ratios such as 2:1 and 3:2 some harmonics of the two notes coincide, so they stop beating and the pair sounds smooth."
+        {
+          "en": "Two notes a few hertz apart beat: the sound swells and fades as many times per second as their difference in hertz.",
+          "it": "Due note distanti pochi hertz danno battimenti: il suono cresce e cala tante volte al secondo quanti sono gli hertz della loro differenza."
+        },
+        {
+          "en": "A plucked string also sounds its harmonics, at 2, 3, 4 and more times its frequency.",
+          "it": "Una corda pizzicata fa sentire anche le sue armoniche, a 2, 3, 4 e più volte la sua frequenza."
+        },
+        {
+          "en": "At simple ratios such as 2:1 and 3:2 some harmonics of the two notes coincide, so they stop beating and the pair sounds smooth.",
+          "it": "Nei rapporti semplici, come 2:1 e 3:2, alcune armoniche delle due note coincidono, quindi i battimenti scompaiono e la coppia suona liscia."
+        }
       ],
       "explain": {
-        "q": "A friend tunes the A string against the 5th fret of the low E and hears a wah-wah-wah that slows down as they turn the peg. What is happening, and when should they stop?",
-        "a": "The fretted note and the open A are two slightly different frequencies, so their waves add up into one sound that swells and fades at the difference between them. As the peg brings the two closer the difference shrinks and the beats slow down, and when the beats stop the two frequencies are equal."
+        "q": {
+          "en": "A friend tunes the A string against the 5th fret of the low E and hears a wah-wah-wah that slows down as they turn the peg. What is happening, and when should they stop?",
+          "it": "Un amico accorda la corda di La (A) sul 5° tasto del Mi (E) basso e sente un uà-uà-uà che rallenta mentre gira il piolo. Che cosa sta succedendo, e quando deve fermarsi?"
+        },
+        "a": {
+          "en": "The fretted note and the open A are two slightly different frequencies, so their waves add up into one sound that swells and fades at the difference between them. As the peg brings the two closer the difference shrinks and the beats slow down, and when the beats stop the two frequencies are equal.",
+          "it": "La nota premuta e il La a vuoto hanno due frequenze leggermente diverse, quindi le loro onde si sommano in un unico suono che cresce e cala alla differenza tra le due. Man mano che il piolo avvicina le due frequenze la differenza si riduce e i battimenti rallentano, e quando i battimenti si fermano le due frequenze sono uguali."
+        }
       },
       "callbacks": [
         {
           "to": "string",
-          "how": "As at the Luthier's House the octave is twice the frequency; here it is also the ratio at which the harmonics of two strings line up and stop beating."
+          "how": {
+            "en": "As at the Luthier's House the octave is twice the frequency; here it is also the ratio at which the harmonics of two strings line up and stop beating.",
+            "it": "Come nella Casa del Liutaio l'ottava è il doppio della frequenza; qui è anche il rapporto a cui le armoniche di due corde si allineano e smettono di battere."
+          }
         }
       ],
       "lab": {
-        "title": "Two strings",
+        "title": {
+          "en": "Two strings",
+          "it": "Due corde"
+        },
         "stations": [
           {
             "id": "wobble",
-            "tab": "The wobble",
-            "goal": "Two close notes beat at the difference of their frequencies; the beating stops when they match, and again where their harmonics match.",
+            "tab": {
+              "en": "The wobble",
+              "it": "L'ondeggiare"
+            },
+            "goal": {
+              "en": "Two close notes beat at the difference of their frequencies; the beating stops when they match, and again where their harmonics match.",
+              "it": "Due note vicine battono alla differenza delle loro frequenze; il battimento si ferma quando coincidono, e di nuovo dove coincidono le loro armoniche."
+            },
             "beat": "ground",
             "pattern": "predict-test",
-            "object": "Two strings sounding together: the wave they make together, and a ruler of harmonics for each string.",
-            "action": "Slides the frequency of the second string, first close to the first one, then far above it.",
-            "surprise": "The beating slows down and stops at unison, and stops again far away, at one and a half times the frequency, where the third harmonic of one string meets the second harmonic of the other.",
+            "object": {
+              "en": "Two strings sounding together: the wave they make together, and a ruler of harmonics for each string.",
+              "it": "Due corde che suonano insieme: l'onda che formano insieme e un righello delle armoniche per ciascuna corda."
+            },
+            "action": {
+              "en": "Slides the frequency of the second string, first close to the first one, then far above it.",
+              "it": "Fa scorrere la frequenza della seconda corda, prima vicino alla prima, poi molto più in alto."
+            },
+            "surprise": {
+              "en": "The beating slows down and stops at unison, and stops again far away, at one and a half times the frequency, where the third harmonic of one string meets the second harmonic of the other.",
+              "it": "Il battimento rallenta e si ferma all'unisono, e si ferma di nuovo lontano, a una volta e mezza la frequenza, dove la terza armonica di una corda incontra la seconda dell'altra."
+            },
             "predict": {
-              "q": "String B sounds 3 Hz above string A, which is at 110 Hz. Played together you hear...",
+              "q": {
+                "en": "String B sounds 3 Hz above string A, which is at 110 Hz. Played together you hear...",
+                "it": "La corda B suona 3 Hz sopra la corda A, che è a 110 Hz. Suonate insieme senti..."
+              },
               "options": [
-                "two separate notes side by side",
-                "one note that swells and fades three times a second",
-                "one steady note, slightly louder"
+                {
+                  "en": "two separate notes side by side",
+                  "it": "due note separate, una accanto all'altra"
+                },
+                {
+                  "en": "one note that swells and fades three times a second",
+                  "it": "una nota che cresce e cala tre volte al secondo"
+                },
+                {
+                  "en": "one steady note, slightly louder",
+                  "it": "una nota costante, un po' più forte"
+                }
               ],
               "answer": 1,
-              "why": "The two waves fall into step and out of step three times a second, so their sum grows loud and soft at the difference of the two frequencies."
+              "why": {
+                "en": "The two waves fall into step and out of step three times a second, so their sum grows loud and soft at the difference of the two frequencies.",
+                "it": "Le due onde entrano ed escono dal passo tre volte al secondo, quindi la loro somma diventa forte e debole alla differenza delle due frequenze."
+              }
             },
             "controls": [
-              "Frequency of string B, with fine steps of a tenth of a hertz"
+              {
+                "en": "Frequency of string B, with fine steps of a tenth of a hertz",
+                "it": "Frequenza della corda B, con passi fini di un decimo di hertz"
+              }
             ],
             "tries": [
-              "Bring string B down to string A until the beating stops.",
-              "Slide string B far above A and find the place where the wave becomes steady again."
+              {
+                "en": "Bring string B down to string A until the beating stops.",
+                "it": "Porta la corda B verso la corda A finché il battimento si ferma."
+              },
+              {
+                "en": "Slide string B far above A and find the place where the wave becomes steady again.",
+                "it": "Fai scorrere la corda B molto sopra la A e trova il punto in cui l'onda torna costante."
+              }
             ],
-            "takeaway": "Two notes add into one wave whose loudness <b>beats</b> at the <b>difference</b> of their frequencies. A string also sounds its <b>harmonics</b>, at 2, 3, 4… times its frequency, and when two notes stand in a <b>simple ratio</b> such as 2:1 or 3:2 some of those harmonics coincide, so the beating stops and the pair sounds <b>smooth</b>.",
-            "source": "Computed live: each string is drawn and heard as the sum of its first six harmonics; the beat rate shown is the difference between the closest pair of harmonics. The ratio 3:2 is exact here; a guitar's fifth is very slightly narrower (upstairs)."
+            "takeaway": {
+              "en": "Two notes add into one wave whose loudness <b>beats</b> at the <b>difference</b> of their frequencies. A string also sounds its <b>harmonics</b>, at 2, 3, 4… times its frequency, and when two notes stand in a <b>simple ratio</b> such as 2:1 or 3:2 some of those harmonics coincide, so the beating stops and the pair sounds <b>smooth</b>.",
+              "it": "Due note si sommano in un'unica onda il cui volume <b>batte</b> alla <b>differenza</b> delle loro frequenze. Una corda fa sentire anche le sue <b>armoniche</b>, a 2, 3, 4… volte la sua frequenza, e quando due note stanno in un <b>rapporto semplice</b> come 2:1 o 3:2 alcune di queste armoniche coincidono, quindi il battimento si ferma e la coppia suona <b>liscia</b>."
+            },
+            "source": {
+              "en": "Computed live: each string is drawn and heard as the sum of its first six harmonics; the beat rate shown is the difference between the closest pair of harmonics. The ratio 3:2 is exact here; a guitar's fifth is very slightly narrower (upstairs).",
+              "it": "Calcolato in tempo reale: ogni corda è disegnata e ascoltata come somma delle sue prime sei armoniche; il ritmo dei battimenti mostrato è la differenza tra la coppia di armoniche più vicina. Qui il rapporto 3:2 è esatto; la quinta di una chitarra è appena un po' più stretta (al piano di sopra)."
+            }
           },
           {
             "id": "third",
-            "tab": "The guitar's third",
+            "tab": {
+              "en": "The guitar's third",
+              "it": "La terza della chitarra"
+            },
             "advanced": true,
-            "goal": "A guitar's major third is wider than the pure ratio 5:4, so its harmonics miss each other and beat about nine times a second.",
+            "goal": {
+              "en": "A guitar's major third is wider than the pure ratio 5:4, so its harmonics miss each other and beat about nine times a second.",
+              "it": "La terza maggiore della chitarra è più larga del rapporto puro 5:4, quindi le sue armoniche non coincidono e battono circa nove volte al secondo."
+            },
             "beat": "twist",
             "pattern": "contrast",
-            "object": "The notes A and C♯ sounding together, with their 5th and 4th harmonics side by side.",
-            "action": "Switches the third between the pure ratio 5:4 and the guitar's equal-tempered third.",
-            "surprise": "The pure third is smooth, while the third every guitar plays beats quickly: about nine beats a second at this pitch.",
+            "object": {
+              "en": "The notes A and C♯ sounding together, with their 5th and 4th harmonics side by side.",
+              "it": "Le note La e Do♯ (A e C♯) che suonano insieme, con la loro 5ª e 4ª armonica una accanto all'altra."
+            },
+            "action": {
+              "en": "Switches the third between the pure ratio 5:4 and the guitar's equal-tempered third.",
+              "it": "Passa la terza dal rapporto puro 5:4 alla terza del temperamento equabile della chitarra."
+            },
+            "surprise": {
+              "en": "The pure third is smooth, while the third every guitar plays beats quickly: about nine beats a second at this pitch.",
+              "it": "La terza pura è liscia, mentre la terza che suona ogni chitarra batte in fretta: circa nove battimenti al secondo a questa altezza."
+            },
             "predict": {
-              "q": "The guitar's major third from A (220 Hz) to C♯, compared with the pure ratio 5:4, is...",
+              "q": {
+                "en": "The guitar's major third from A (220 Hz) to C♯, compared with the pure ratio 5:4, is...",
+                "it": "La terza maggiore della chitarra da La (220 Hz) a Do♯, confrontata con il rapporto puro 5:4, è..."
+              },
               "options": [
-                "exactly 5:4",
-                "a little wider, so it beats",
-                "a little narrower, so it beats"
+                {
+                  "en": "exactly 5:4",
+                  "it": "esattamente 5:4"
+                },
+                {
+                  "en": "a little wider, so it beats",
+                  "it": "un po' più larga, quindi batte"
+                },
+                {
+                  "en": "a little narrower, so it beats",
+                  "it": "un po' più stretta, quindi batte"
+                }
               ],
               "answer": 1,
-              "why": "Four equal half steps multiply the frequency by 1.260, slightly more than 1.25, so the guitar's C♯ is 277.2 Hz instead of 275 Hz."
+              "why": {
+                "en": "Four equal half steps multiply the frequency by 1.260, slightly more than 1.25, so the guitar's C♯ is 277.2 Hz instead of 275 Hz.",
+                "it": "Quattro semitoni uguali moltiplicano la frequenza per 1,260, un po' più di 1,25, quindi il Do♯ della chitarra è a 277,2 Hz invece che a 275 Hz."
+              }
             },
             "controls": [
-              "Tuning of the third: pure 5:4 or equal-tempered"
+              {
+                "en": "Tuning of the third: pure 5:4 or equal-tempered",
+                "it": "Intonazione della terza: pura 5:4 o equabile"
+              }
             ],
             "tries": [
-              "Play the guitar's third and read the beats between the two harmonics.",
-              "Switch to the pure 5:4 third and compare."
+              {
+                "en": "Play the guitar's third and read the beats between the two harmonics.",
+                "it": "Suona la terza della chitarra e leggi i battimenti tra le due armoniche."
+              },
+              {
+                "en": "Switch to the pure 5:4 third and compare.",
+                "it": "Passa alla terza pura 5:4 e confronta."
+              }
             ],
-            "takeaway": "Twelve equal half steps make the guitar's fifth almost exactly 3:2 (1.498), but its major third <b>1.260</b> instead of <b>1.25</b>. At A3 the 5th harmonic of A and the 4th of C♯ then differ by about 9 Hz and beat. This compromise, <b>equal temperament</b>, gives up pure thirds so that every key sounds the same and any fret works in any key.",
-            "source": "Frequencies computed live: A3 = 220 Hz, the pure third 275 Hz, the equal-tempered C♯4 277.18 Hz (UNSW Music Acoustics). Each note is the sum of its first six harmonics."
+            "takeaway": {
+              "en": "Twelve equal half steps make the guitar's fifth almost exactly 3:2 (1.498), but its major third <b>1.260</b> instead of <b>1.25</b>. At A3 the 5th harmonic of A and the 4th of C♯ then differ by about 9 Hz and beat. This compromise, <b>equal temperament</b>, gives up pure thirds so that every key sounds the same and any fret works in any key.",
+              "it": "Dodici semitoni uguali rendono la quinta della chitarra quasi esattamente 3:2 (1,498), ma la sua terza maggiore <b>1,260</b> invece di <b>1,25</b>. Sul La3 la 5ª armonica del La e la 4ª del Do♯ differiscono allora di circa 9 Hz e battono. Questo compromesso, il <b>temperamento equabile</b>, rinuncia alle terze pure perché ogni tonalità suoni allo stesso modo e ogni tasto vada bene in ogni tonalità."
+            },
+            "source": {
+              "en": "Frequencies computed live: A3 = 220 Hz, the pure third 275 Hz, the equal-tempered C♯4 277.18 Hz (UNSW Music Acoustics). Each note is the sum of its first six harmonics.",
+              "it": "Frequenze calcolate in tempo reale: La3 = 220 Hz, terza pura 275 Hz, Do♯4 equabile 277,18 Hz (UNSW Music Acoustics). Ogni nota è la somma delle sue prime sei armoniche."
+            }
           },
           {
             "id": "tuneup",
-            "tab": "Tune by ear",
+            "tab": {
+              "en": "Tune by ear",
+              "it": "Accorda a orecchio"
+            },
             "advanced": true,
-            "goal": "Tuning by ear means removing beats: turn the peg until the wobble between two notes that should agree slows down and stops.",
+            "goal": {
+              "en": "Tuning by ear means removing beats: turn the peg until the wobble between two notes that should agree slows down and stops.",
+              "it": "Accordare a orecchio vuol dire togliere i battimenti: gira il piolo finché l'ondeggiare tra due note che dovrebbero coincidere rallenta e si ferma."
+            },
             "beat": "sandbox",
             "pattern": "match",
-            "object": "The low E string pressed at fret 5 and the open A string, slightly out of tune.",
-            "action": "Turns the peg of the A string while both notes sound.",
-            "surprise": "The ear finds the right spot without any number: the beats get slower and slower and stop.",
+            "object": {
+              "en": "The low E string pressed at fret 5 and the open A string, slightly out of tune.",
+              "it": "La corda del Mi (E) basso premuta al tasto 5 e la corda di La (A) a vuoto, leggermente scordata."
+            },
+            "action": {
+              "en": "Turns the peg of the A string while both notes sound.",
+              "it": "Gira il piolo della corda di La mentre le due note suonano."
+            },
+            "surprise": {
+              "en": "The ear finds the right spot without any number: the beats get slower and slower and stop.",
+              "it": "L'orecchio trova il punto giusto senza alcun numero: i battimenti diventano sempre più lenti e si fermano."
+            },
             "controls": [
-              "The peg of the A string"
+              {
+                "en": "The peg of the A string",
+                "it": "Il piolo della corda di La (A)"
+              }
             ],
             "tries": [
-              "Turn the peg until the two notes beat less than once a second."
+              {
+                "en": "Turn the peg until the two notes beat less than once a second.",
+                "it": "Gira il piolo finché le due note battono meno di una volta al secondo."
+              }
             ],
-            "takeaway": "The fifth fret of each string gives the note of the next open string (four frets on the G string), so a guitarist can tune <b>by beats</b>: play both, listen for the wobble and turn the peg until it <b>stops</b>, without a tuner.",
-            "source": "Computed live: the fretted E-string note is 110 Hz, the A string starts a few hertz away, and the beat rate shown is the difference between the two frequencies."
+            "takeaway": {
+              "en": "The fifth fret of each string gives the note of the next open string (four frets on the G string), so a guitarist can tune <b>by beats</b>: play both, listen for the wobble and turn the peg until it <b>stops</b>, without a tuner.",
+              "it": "Il quinto tasto di ogni corda dà la nota della corda a vuoto successiva (il quarto sulla corda di Sol), quindi un chitarrista può accordare <b>per battimenti</b>: suona entrambe, ascolta l'ondeggiare e gira il piolo finché si <b>ferma</b>, senza bisogno di un accordatore."
+            },
+            "source": {
+              "en": "Computed live: the fretted E-string note is 110 Hz, the A string starts a few hertz away, and the beat rate shown is the difference between the two frequencies.",
+              "it": "Calcolato in tempo reale: la nota premuta sulla corda di Mi (E) è 110 Hz, la corda di La parte a pochi hertz di distanza e il ritmo dei battimenti mostrato è la differenza tra le due frequenze."
+            }
           }
         ]
       },
       "page": [
         {
-          "title": "Two waves become one",
-          "text": "Two strings sounding together do not reach the ear as two separate vibrations: their pushes on the air add up, so the ear receives one wave. When the two frequencies are close, the waves drift in and out of step, and the sum grows loud when they agree and soft when they cancel. This slow swelling is called beating, and it happens as many times per second as the difference between the two frequencies, so 110 Hz and 113 Hz beat three times a second."
+          "title": {
+            "en": "Two waves become one",
+            "it": "Due onde diventano una"
+          },
+          "text": {
+            "en": "Two strings sounding together do not reach the ear as two separate vibrations: their pushes on the air add up, so the ear receives one wave. When the two frequencies are close, the waves drift in and out of step, and the sum grows loud when they agree and soft when they cancel. This slow swelling is called beating, and it happens as many times per second as the difference between the two frequencies, so 110 Hz and 113 Hz beat three times a second.",
+            "it": "Due corde che suonano insieme non arrivano all'orecchio come due vibrazioni separate: le loro spinte sull'aria si sommano, quindi l'orecchio riceve un'unica onda. Quando le due frequenze sono vicine le onde entrano ed escono dal passo, e la somma diventa forte quando si accordano e debole quando si annullano. Questo lento crescere e calare si chiama battimento, e avviene tante volte al secondo quante sono gli hertz di differenza tra le due frequenze, perciò 110 Hz e 113 Hz battono tre volte al secondo."
+          }
         },
         {
-          "title": "Harmonics and smooth pairs",
-          "text": "A plucked string vibrates as a whole and in halves, thirds and quarters at the same time, so it sounds a set of harmonics at two, three, four and more times its frequency. When two notes are in a simple ratio, such as 2 to 1 or 3 to 2, some of their harmonics fall on the same frequency, which is why they stop beating and the pair sounds smooth. When the ratio is slightly off, those near-coinciding harmonics beat slowly, and this is the wobble that tuners listen for."
+          "title": {
+            "en": "Harmonics and smooth pairs",
+            "it": "Armoniche e coppie lisce"
+          },
+          "text": {
+            "en": "A plucked string vibrates as a whole and in halves, thirds and quarters at the same time, so it sounds a set of harmonics at two, three, four and more times its frequency. When two notes are in a simple ratio, such as 2 to 1 or 3 to 2, some of their harmonics fall on the same frequency, which is why they stop beating and the pair sounds smooth. When the ratio is slightly off, those near-coinciding harmonics beat slowly, and this is the wobble that tuners listen for.",
+            "it": "Una corda pizzicata vibra intera e insieme in metà, terzi e quarti, quindi fa sentire una serie di armoniche a due, tre, quattro e più volte la sua frequenza. Quando due note stanno in un rapporto semplice, come 2 a 1 o 3 a 2, alcune delle loro armoniche cadono sulla stessa frequenza, ed è per questo che smettono di battere e la coppia suona liscia. Quando il rapporto è appena sbagliato, quelle armoniche quasi coincidenti battono lentamente, e questo è l'ondeggiare che gli accordatori cercano di ascoltare."
+          }
         },
         {
-          "title": "Physics and taste",
-          "text": "The beating of close harmonics is physics, and it explains why the octave and the fifth sound clean on any instrument with harmonics. Whether a pair sounds pleasant is also learnt, because listeners who grew up far from Western music have rated smooth and rough chords as equally pleasant. The ratios explain which pairs are smooth, while musical culture decides how much people like them."
+          "title": {
+            "en": "Physics and taste",
+            "it": "Fisica e gusto"
+          },
+          "text": {
+            "en": "The beating of close harmonics is physics, and it explains why the octave and the fifth sound clean on any instrument with harmonics. Whether a pair sounds pleasant is also learnt, because listeners who grew up far from Western music have rated smooth and rough chords as equally pleasant. The ratios explain which pairs are smooth, while musical culture decides how much people like them.",
+            "it": "Il battimento delle armoniche vicine è fisica, e spiega perché l'ottava e la quinta suonano pulite su qualsiasi strumento con armoniche. Che una coppia piaccia dipende però anche dall'apprendimento, perché ascoltatori cresciuti lontano dalla musica occidentale hanno giudicato ugualmente gradevoli gli accordi lisci e quelli aspri. I rapporti spiegano quali coppie sono lisce, mentre la cultura musicale decide quanto piacciono."
+          }
         }
       ],
       "questions": [
         {
           "level": 1,
-          "q": "Two strings sound 220 Hz and 224 Hz together. How many beats a second do you hear?",
+          "q": {
+            "en": "Two strings sound 220 Hz and 224 Hz together. How many beats a second do you hear?",
+            "it": "Due corde suonano insieme a 220 Hz e 224 Hz. Quanti battimenti al secondo senti?"
+          },
           "options": [
             "2",
             "4",
@@ -595,100 +1108,241 @@
             "444"
           ],
           "answer": 1,
-          "why": "The beat rate is the difference of the two frequencies: 224 − 220 = 4 beats per second.",
+          "why": {
+            "en": "The beat rate is the difference of the two frequencies: 224 − 220 = 4 beats per second.",
+            "it": "Il ritmo dei battimenti è la differenza delle due frequenze: 224 − 220 = 4 battimenti al secondo."
+          },
           "traps": [
-            "Halving the difference is a common slip; each time the two waves fall back into step there is one beat, and that happens four times a second here.",
+            {
+              "en": "Halving the difference is a common slip; each time the two waves fall back into step there is one beat, and that happens four times a second here.",
+              "it": "Dimezzare la differenza è uno scivolone comune; a ogni ritorno in passo delle due onde c'è un battimento, e qui succede quattro volte al secondo."
+            },
             null,
-            "224 Hz is the pitch of one of the strings, while beats are the slow swelling of the sum, at the difference between the two.",
-            "Adding the frequencies gives a number of no musical use here; the waves fall in and out of step at their difference, 4 Hz."
+            {
+              "en": "224 Hz is the pitch of one of the strings, while beats are the slow swelling of the sum, at the difference between the two.",
+              "it": "224 Hz è l'altezza di una delle corde, mentre i battimenti sono il lento crescere e calare della somma, alla differenza tra le due."
+            },
+            {
+              "en": "Adding the frequencies gives a number of no musical use here; the waves fall in and out of step at their difference, 4 Hz.",
+              "it": "Sommare le frequenze dà un numero senza utilità musicale; le onde entrano ed escono dal passo alla loro differenza, 4 Hz."
+            }
           ]
         },
         {
           "level": 1,
-          "q": "A plucked string at 100 Hz also sounds harmonics at...",
+          "q": {
+            "en": "A plucked string at 100 Hz also sounds harmonics at...",
+            "it": "Una corda pizzicata a 100 Hz fa sentire anche armoniche a..."
+          },
           "options": [
-            "50, 25 and 12.5 Hz",
-            "101, 102 and 103 Hz",
-            "200, 300 and 400 Hz"
+            {
+              "en": "50, 25 and 12.5 Hz",
+              "it": "50, 25 e 12,5 Hz"
+            },
+            {
+              "en": "101, 102 and 103 Hz",
+              "it": "101, 102 e 103 Hz"
+            },
+            {
+              "en": "200, 300 and 400 Hz",
+              "it": "200, 300 e 400 Hz"
+            }
           ],
           "answer": 2,
-          "why": "The string vibrates in halves, thirds and quarters as well as whole, which gives whole multiples of its frequency: 200, 300, 400 Hz and more.",
+          "why": {
+            "en": "The string vibrates in halves, thirds and quarters as well as whole, which gives whole multiples of its frequency: 200, 300, 400 Hz and more.",
+            "it": "La corda vibra in metà, terzi e quarti oltre che intera, e questo dà multipli interi della sua frequenza: 200, 300, 400 Hz e oltre."
+          },
           "traps": [
-            "Halving the frequency again and again would need a longer string; the parts of a vibrating string are shorter than the string, so they vibrate faster.",
-            "Steps of one hertz would be almost the same note; the harmonics are whole multiples, two, three and four times 100 Hz.",
+            {
+              "en": "Halving the frequency again and again would need a longer string; the parts of a vibrating string are shorter than the string, so they vibrate faster.",
+              "it": "Dimezzare la frequenza più volte richiederebbe una corda più lunga; le parti di una corda che vibra sono più corte della corda, quindi vibrano più in fretta."
+            },
+            {
+              "en": "Steps of one hertz would be almost the same note; the harmonics are whole multiples, two, three and four times 100 Hz.",
+              "it": "Passi di un hertz darebbero quasi la stessa nota; le armoniche sono multipli interi, due, tre e quattro volte 100 Hz."
+            },
             null
           ]
         },
         {
           "level": 1,
-          "q": "Why do a note and its octave sound so smooth together?",
+          "q": {
+            "en": "Why do a note and its octave sound so smooth together?",
+            "it": "Perché una nota e la sua ottava suonano così lisce insieme?"
+          },
           "options": [
-            "The ear hears only the lower one",
-            "Their harmonics coincide",
-            "Their frequencies are almost equal",
-            "They are played more quietly"
+            {
+              "en": "The ear hears only the lower one",
+              "it": "L'orecchio sente solo la più grave"
+            },
+            {
+              "en": "Their harmonics coincide",
+              "it": "Le loro armoniche coincidono"
+            },
+            {
+              "en": "Their frequencies are almost equal",
+              "it": "Le loro frequenze sono quasi uguali"
+            },
+            {
+              "en": "They are played more quietly",
+              "it": "Sono suonate più piano"
+            }
           ],
           "answer": 1,
-          "why": "At 2:1 the harmonics of the upper note (2f, 4f, 6f…) all fall on harmonics of the lower note, so no pair of close harmonics is left to beat.",
+          "why": {
+            "en": "At 2:1 the harmonics of the upper note (2f, 4f, 6f…) all fall on harmonics of the lower note, so no pair of close harmonics is left to beat.",
+            "it": "A 2:1 le armoniche della nota acuta (2f, 4f, 6f…) cadono tutte su armoniche della nota grave, quindi non resta nessuna coppia di armoniche vicine che possa battere."
+          },
           "traps": [
-            "The upper note is clearly audible; it blends because its harmonics land exactly on the lower note's harmonics.",
+            {
+              "en": "The upper note is clearly audible; it blends because its harmonics land exactly on the lower note's harmonics.",
+              "it": "La nota acuta si sente benissimo; si fonde perché le sue armoniche cadono esattamente sulle armoniche della nota grave."
+            },
             null,
-            "An octave is twice the frequency, far from equal; the smoothness comes from the harmonics coinciding, not from the notes being close.",
-            "Loudness has nothing to do with it; an octave played loud sounds just as smooth, because its harmonics still coincide."
+            {
+              "en": "An octave is twice the frequency, far from equal; the smoothness comes from the harmonics coinciding, not from the notes being close.",
+              "it": "Un'ottava è il doppio della frequenza, ben lontana dall'uguaglianza; la levigatezza viene dalla coincidenza delle armoniche, non dalla vicinanza delle note."
+            },
+            {
+              "en": "Loudness has nothing to do with it; an octave played loud sounds just as smooth, because its harmonics still coincide.",
+              "it": "Il volume non c'entra; un'ottava suonata forte suona altrettanto liscia, perché le sue armoniche coincidono comunque."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Tuning the A string against the low E at fret 5, you hear beats getting faster as you tighten the peg. What should you do?",
+          "q": {
+            "en": "Tuning the A string against the low E at fret 5, you hear beats getting faster as you tighten the peg. What should you do?",
+            "it": "Accordando la corda di La (A) sul Mi (E) basso al tasto 5, senti battimenti sempre più veloci mentre tendi il piolo. Che cosa devi fare?"
+          },
           "options": [
-            "Keep tightening until the beats are very fast",
-            "Loosen the peg until the beats slow down and stop",
-            "Pluck harder so the beats disappear",
-            "Stop now: fast beats mean nearly in tune"
+            {
+              "en": "Keep tightening until the beats are very fast",
+              "it": "Continuare a tendere finché i battimenti sono molto veloci"
+            },
+            {
+              "en": "Loosen the peg until the beats slow down and stop",
+              "it": "Allentare il piolo finché i battimenti rallentano e si fermano"
+            },
+            {
+              "en": "Pluck harder so the beats disappear",
+              "it": "Pizzicare più forte in modo che i battimenti spariscano"
+            },
+            {
+              "en": "Stop now: fast beats mean nearly in tune",
+              "it": "Fermarsi ora: battimenti veloci vogliono dire quasi accordato"
+            }
           ],
           "answer": 1,
-          "why": "Faster beats mean a larger difference between the frequencies, so tightening is moving the A string away from the fretted note; loosening brings it back until the difference, and the beating, is zero.",
+          "why": {
+            "en": "Faster beats mean a larger difference between the frequencies, so tightening is moving the A string away from the fretted note; loosening brings it back until the difference, and the beating, is zero.",
+            "it": "Battimenti più veloci vogliono dire una differenza maggiore tra le frequenze, quindi tendere allontana la corda di La dalla nota premuta; allentare la riporta indietro finché la differenza, e il battimento, è zero."
+          },
           "traps": [
-            "Very fast beats are a large difference in frequency, so the string is moving further out of tune, not closer.",
+            {
+              "en": "Very fast beats are a large difference in frequency, so the string is moving further out of tune, not closer.",
+              "it": "Battimenti molto veloci sono una grande differenza di frequenza, quindi la corda si sta scordando di più, non avvicinando."
+            },
             null,
-            "Plucking harder changes the loudness, while the beat rate depends only on the difference between the frequencies.",
-            "Fast beats mean a big gap between the two notes; in tune is where the beats slow down and vanish."
+            {
+              "en": "Plucking harder changes the loudness, while the beat rate depends only on the difference between the frequencies.",
+              "it": "Pizzicare più forte cambia il volume, mentre il ritmo dei battimenti dipende solo dalla differenza tra le frequenze."
+            },
+            {
+              "en": "Fast beats mean a big gap between the two notes; in tune is where the beats slow down and vanish.",
+              "it": "Battimenti veloci vogliono dire un grande scarto tra le due note; l'accordatura giusta è dove i battimenti rallentano e svaniscono."
+            }
           ]
         },
         {
           "level": 2,
-          "q": "Notes at 200 Hz and 300 Hz sound together. Which of their harmonics coincide first?",
+          "q": {
+            "en": "Notes at 200 Hz and 300 Hz sound together. Which of their harmonics coincide first?",
+            "it": "Note a 200 Hz e 300 Hz suonano insieme. Quali delle loro armoniche coincidono per prime?"
+          },
           "options": [
-            "The 2nd harmonic of the lower and the 1st of the upper",
-            "The 3rd harmonic of the lower and the 2nd of the upper",
-            "None, the ratio is not 2:1",
-            "The 4th harmonic of the lower and the 3rd of the upper"
+            {
+              "en": "The 2nd harmonic of the lower and the 1st of the upper",
+              "it": "La 2ª armonica della grave e la 1ª dell'acuta"
+            },
+            {
+              "en": "The 3rd harmonic of the lower and the 2nd of the upper",
+              "it": "La 3ª armonica della grave e la 2ª dell'acuta"
+            },
+            {
+              "en": "None, the ratio is not 2:1",
+              "it": "Nessuna, il rapporto non è 2:1"
+            },
+            {
+              "en": "The 4th harmonic of the lower and the 3rd of the upper",
+              "it": "La 4ª armonica della grave e la 3ª dell'acuta"
+            }
           ],
           "answer": 1,
-          "why": "The ratio is 3:2, so 3 × 200 Hz and 2 × 300 Hz both give 600 Hz, the first shared harmonic.",
+          "why": {
+            "en": "The ratio is 3:2, so 3 × 200 Hz and 2 × 300 Hz both give 600 Hz, the first shared harmonic.",
+            "it": "Il rapporto è 3:2, quindi 3 × 200 Hz e 2 × 300 Hz danno entrambi 600 Hz, la prima armonica in comune."
+          },
           "traps": [
-            "The 2nd harmonic of 200 Hz is 400 Hz, which does not match 300 Hz; that pairing belongs to the octave.",
+            {
+              "en": "The 2nd harmonic of 200 Hz is 400 Hz, which does not match 300 Hz; that pairing belongs to the octave.",
+              "it": "La 2ª armonica di 200 Hz è 400 Hz, che non coincide con 300 Hz; quell'abbinamento appartiene all'ottava."
+            },
             null,
-            "Harmonics can coincide at any simple ratio, and 3:2 makes them meet at 600 Hz.",
-            "Four times 200 is 800 and three times 300 is 900, which differ; the first meeting is at 600 Hz."
+            {
+              "en": "Harmonics can coincide at any simple ratio, and 3:2 makes them meet at 600 Hz.",
+              "it": "Le armoniche possono coincidere in qualsiasi rapporto semplice, e il 3:2 le fa incontrare a 600 Hz."
+            },
+            {
+              "en": "Four times 200 is 800 and three times 300 is 900, which differ; the first meeting is at 600 Hz.",
+              "it": "Quattro volte 200 fa 800 e tre volte 300 fa 900, che sono diversi; il primo incontro è a 600 Hz."
+            }
           ]
         },
         {
           "level": 3,
-          "q": "People raised far from Western music rated rough and smooth chords as equally pleasant. What does this show about the ratios?",
+          "q": {
+            "en": "People raised far from Western music rated rough and smooth chords as equally pleasant. What does this show about the ratios?",
+            "it": "Persone cresciute lontano dalla musica occidentale hanno giudicato ugualmente gradevoli accordi aspri e lisci. Che cosa mostra questo sui rapporti?"
+          },
           "options": [
-            "Simple ratios do not make harmonics coincide for them",
-            "Beats are heard only by trained Western ears",
-            "Simple ratios make chords smoother for everyone, but liking smoothness is partly learnt",
-            "Consonance has nothing to do with frequency"
+            {
+              "en": "Simple ratios do not make harmonics coincide for them",
+              "it": "I rapporti semplici per loro non fanno coincidere le armoniche"
+            },
+            {
+              "en": "Beats are heard only by trained Western ears",
+              "it": "I battimenti li sentono solo orecchie occidentali allenate"
+            },
+            {
+              "en": "Simple ratios make chords smoother for everyone, but liking smoothness is partly learnt",
+              "it": "I rapporti semplici rendono gli accordi più lisci per tutti, ma il piacere della levigatezza è in parte appreso"
+            },
+            {
+              "en": "Consonance has nothing to do with frequency",
+              "it": "La consonanza non ha niente a che fare con la frequenza"
+            }
           ],
           "answer": 2,
-          "why": "The coinciding harmonics are physics and happen for every listener, but the preference for smooth pairs depends strongly on the music people grew up with.",
+          "why": {
+            "en": "The coinciding harmonics are physics and happen for every listener, but the preference for smooth pairs depends strongly on the music people grew up with.",
+            "it": "La coincidenza delle armoniche è fisica e avviene per ogni ascoltatore, ma la preferenza per le coppie lisce dipende molto dalla musica con cui si è cresciuti."
+          },
           "traps": [
-            "Harmonics coincide in the air, before any ear hears them, so the physics is the same for every listener.",
-            "Beating is a property of the sound wave, which anyone with normal hearing can detect; what differs is how pleasant it is judged.",
+            {
+              "en": "Harmonics coincide in the air, before any ear hears them, so the physics is the same for every listener.",
+              "it": "Le armoniche coincidono nell'aria, prima che un orecchio le senta, quindi la fisica è la stessa per ogni ascoltatore."
+            },
+            {
+              "en": "Beating is a property of the sound wave, which anyone with normal hearing can detect; what differs is how pleasant it is judged.",
+              "it": "Il battimento è una proprietà dell'onda sonora, che chiunque abbia un udito normale può percepire; a cambiare è quanto lo si giudica gradevole."
+            },
             null,
-            "Smooth and rough pairs differ physically by their ratios; the study shows only that the liking for smoothness is learnt."
+            {
+              "en": "Smooth and rough pairs differ physically by their ratios; the study shows only that the liking for smoothness is learnt.",
+              "it": "Le coppie lisce e quelle aspre differiscono fisicamente per i loro rapporti; lo studio mostra soltanto che il piacere della levigatezza è appreso."
+            }
           ]
         }
       ],
@@ -703,24 +1357,36 @@
         {
           "title": "OpenStax University Physics: 17.6 Beats",
           "url": "https://openstax.org/books/university-physics-volume-1/pages/17-6-beats",
-          "why": "The textbook derivation of beats, with the tuning-fork example."
+          "why": {
+            "en": "The textbook derivation of beats, with the tuning-fork example.",
+            "it": "La derivazione dei battimenti in un manuale universitario, con l'esempio dei diapason (in inglese)."
+          }
         },
         {
           "title": "UNSW Music Acoustics: temperament and just intonation",
           "url": "https://newt.phys.unsw.edu.au/jw/musFAQ.html",
-          "why": "Why equal temperament favours the fifth and sacrifices the third, explained by a physicist who plays."
+          "why": {
+            "en": "Why equal temperament favours the fifth and sacrifices the third, explained by a physicist who plays.",
+            "it": "Perché il temperamento equabile favorisce la quinta e sacrifica la terza, spiegato da un fisico che suona (in inglese)."
+          }
         },
         {
           "title": "McDermott et al. (2016) in Nature",
           "url": "https://pubmed.ncbi.nlm.nih.gov/27409816/",
-          "why": "The study showing that preferring consonance depends on musical culture."
+          "why": {
+            "en": "The study showing that preferring consonance depends on musical culture.",
+            "it": "Lo studio che mostra come la preferenza per la consonanza dipenda dalla cultura musicale (in inglese)."
+          }
         }
       ],
       "riddles": [
         {
           "id": "ilse-safe",
           "kind": "safe",
-          "clue": "Note to self: where string B goes quiet again, far above my 110. In Hz, no decimals. I.",
+          "clue": {
+            "en": "Note to self: where string B goes quiet again, far above my 110. In Hz, no decimals. I.",
+            "it": "Promemoria: dove la corda B torna silenziosa, ben sopra i miei 110. In Hz, senza decimali. I."
+          },
           "answer": 165,
           "type": "number",
           "tolerance": 1,
@@ -729,7 +1395,10 @@
             "station": "wobble"
           },
           "inside": {
-            "note": "Ilse's tuning card. The pure fifth above A 110 is 165 Hz, but the E string of a tuned guitar is 164.81 Hz, a hair narrower, because the guitar divides the octave into twelve equal steps. Its fifth beats about once every three seconds, too slowly to bother anyone; the guitar's major third is another matter.",
+            "note": {
+              "en": "Ilse's tuning card. The pure fifth above A 110 is 165 Hz, but the E string of a tuned guitar is 164.81 Hz, a hair narrower, because the guitar divides the octave into twelve equal steps. Its fifth beats about once every three seconds, too slowly to bother anyone; the guitar's major third is another matter.",
+              "it": "La scheda di accordatura di Ilse. La quinta pura sopra il La 110 è 165 Hz, ma la corda di Mi (E) di una chitarra accordata è 164,81 Hz, un soffio più stretta, perché la chitarra divide l'ottava in dodici passi uguali. La sua quinta batte circa una volta ogni tre secondi, troppo piano per dare fastidio a qualcuno; la terza maggiore della chitarra è un altro discorso."
+            },
             "station": "third",
             "coins": 15
           }
