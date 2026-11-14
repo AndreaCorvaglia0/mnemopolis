@@ -1,24 +1,50 @@
 // Port Octave: what every station shares. Notes and frequencies, the guitar's tuning, and two
 // drawings used across the houses: the neck (frets placed by the twelfth root of two) and the dial
 // of the twelve notes. Pure drawing on the kit's ink (d) and plain numbers; no state of its own.
-import { C, alpha } from '../../../../engine/src/lab/kit.js';
+import { C, alpha, L, lang, sound as kit } from '../../../../engine/src/lab/kit.js';
 
 // ---- notes: a note is a MIDI number (A4 = 69 = 440 Hz, equal temperament; UNSW Music Acoustics)
+// Two naming systems. The letters (C D E F G A B) are what a guitarist meets on a neck, a chord chart
+// or a tuner; in Italian the course teaches with Do Re Mi Fa Sol La Si and shows the letter alongside.
+// SHARPS and FLATS are the letter tables; the Italian names come from the kit's sound API
+// (sound.name, notes.js) and are only dressed with the musical signs.
 export const SHARPS = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
 export const FLATS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
 export const hz = (m) => 440 * 2 ** ((m - 69) / 12);
 export const pc = (m) => ((m % 12) + 12) % 12;                       // pitch class 0 (C) .. 11 (B)
-export const nameOf = (m, flats = false) => (flats ? FLATS : SHARPS)[pc(m)];
+export const isIt = () => lang() === 'it';
+// the Italian name of a pitch class: from the sound API, with the signs of the page (# -> ♯)
+const itSharp = (p) => kit.name(60 + pc(p), 'it', { sharp: true, octave: false }).replace(/#/g, '♯');
+// the name of a note in the course language; flats: spelled with flats (the API spells black keys with
+// sharps, or with a mix of flats and sharps, so the flat is the natural note above with a ♭)
+export const nameOf = (m, flats = false) => {
+  if (!isIt()) return (flats ? FLATS : SHARPS)[pc(m)];
+  const n = itSharp(m);
+  return flats && n.includes('♯') ? `${itSharp(m + 1)}♭` : n;
+};
+// the letter name, always (neck diagrams, chord symbols, string names)
+export const letterOf = (m, flats = false) => (flats ? FLATS : SHARPS)[pc(m)];
+// a label in either system -> its letter: 'Sol♯' -> 'G♯', 'F♯' stays
+const IT_BASE = { Do: 'C', Re: 'D', Mi: 'E', Fa: 'F', Sol: 'G', La: 'A', Si: 'B' };
+export const toLetter = (label) => String(label).replace(/^(Sol|Do|Re|Mi|Fa|La|Si)/, (b) => IT_BASE[b]);
+// "Fa♯ (F♯)" in Italian, "F♯" in English
+export const both = (m, flats = false) => (isIt() ? `${nameOf(m, flats)} (${letterOf(m, flats)})` : letterOf(m, flats));
+export const bothLabel = (label) => (isIt() ? `${label} (${toLetter(label)})` : label);
 export const fullName = (m, flats = false) => `${nameOf(m, flats)}${Math.floor(m / 12) - 1}`;
 export const isLetter = (m) => !SHARPS[pc(m)].includes('♯');
-export const fmtHz = (f) => (f >= 100 ? f.toFixed(1) : f.toFixed(2));
+// decimal comma in Italian, in every read-out of a drawing as in the running text
+export const dec = (s) => (isIt() ? String(s).replace(/(\d)\.(\d)/g, '$1,$2') : String(s));
+export const nf = (v, n) => dec(v.toFixed(n));
+export const fmtHz = (f) => dec(f >= 100 ? f.toFixed(1) : f.toFixed(2));
 // standard tuning, low to high: E2 A2 D3 G3 B3 E4 (82.41 ... 329.63 Hz)
 export const TUNING = [40, 45, 50, 55, 59, 64];
-export const STRING_NAMES = ['E', 'A', 'D', 'G', 'B', 'E'];
+export const STRING_NAMES = ['E', 'A', 'D', 'G', 'B', 'E'];   // letters, as on a tuner
 export const SEMITONE = 2 ** (1 / 12);
 // the major-scale pattern in half steps from the root, and the steps themselves
 export const MAJOR = [0, 2, 4, 5, 7, 9, 11];
-export const STEPS = ['W', 'W', 'H', 'W', 'W', 'W', 'H'];
+export const STEPS = ['W', 'W', 'H', 'W', 'W', 'W', 'H'];       // the pattern as data (W whole, H half)
+// the same, as written on the page: W W H in English, T T S (tono, semitono) in Italian
+export const stepName = (x) => (x === 'W' ? L('W', 'T') : L('H', 'S'));
 // a major key's notes as names, spelled with sharps for sharp keys and flats for F, B♭...
 const FLAT_KEYS = new Set([5, 10, 3, 8, 1]); // F, B♭, E♭, A♭, D♭
 export const keyNames = (root) => MAJOR.map((s) => nameOf(root + s, FLAT_KEYS.has(pc(root))));
@@ -87,13 +113,21 @@ export function dialGeom(cx, cy, r, { order = 1, start = 0 } = {}) {
     pick(x, y) { if (Math.hypot(x - cx, y - cy) < r * 0.35) return null; let a = Math.atan2(y - cy, x - cx) + Math.PI / 2; if (a < 0) a += Math.PI * 2; const i = Math.round((a / (Math.PI * 2)) * 12) % 12; for (let p = 0; p < 12; p++) if (idx(p) === i) return p; return null; } };
 }
 export function drawDial(d, D, { lit = new Set(), gold = new Set(), flats = false, names = null, small = false } = {}) {
-  d.circle(D.cx, D.cy, D.r * 1.18, { fill: C.card, stroke: C.line2, width: 2 });
+  const it = isIt();
+  d.circle(D.cx, D.cy, D.r * (it ? 1.3 : 1.18), { fill: C.card, stroke: C.line2, width: 2 });
   const fs = small ? 16 : Math.max(16, D.r * 0.15);
   for (let p = 0; p < 12; p++) {
     const [x, y] = D.at(p), letter = !SHARPS[p].includes('♯'), on = lit.has(p), g = gold.has(p);
-    const rr = Math.max(fs * 0.95, D.r * (letter ? 0.15 : 0.12));
+    // in Italian each disc holds the Italian name and, under it, the letter ("La" over "A")
+    const rr = it ? Math.max(23, D.r * (letter ? 0.235 : 0.215)) : Math.max(fs * 0.95, D.r * (letter ? 0.15 : 0.12));
     d.circle(x, y, rr, { fill: g ? C.gold : on ? C.acc : letter ? C.card2 : '#151b27', stroke: on || g ? null : C.line2, width: 1.5 });
-    const label = names ? names[p] : (flats ? FLATS : SHARPS)[p];
-    d.text(label, x, y + fs * 0.36, { size: letter ? fs : fs * 0.86, weight: on || g ? 700 : letter ? 600 : 400, color: on || g ? '#04201d' : letter ? C.text : C.muted, align: 'center' });
+    const label = names ? names[p] : nameOf(p, flats);
+    const col = on || g ? '#04201d' : letter ? C.text : C.muted;
+    if (it) {
+      // two lines (name over letter) when the disc holds them at the real text size, else the name alone
+      const sz = d.lineH(16) / 1.25, two = rr >= 1.2 * sz;
+      d.text(label, x, two ? y - 0.1 * sz : y + 0.36 * sz, { size: 16, weight: on || g ? 700 : letter ? 600 : 400, color: col, align: 'center' });
+      if (two) d.text(toLetter(label), x, y + 0.95 * sz, { size: 16, weight: 400, color: on || g ? '#04201d' : C.dim, align: 'center' });
+    } else d.text(label, x, y + fs * 0.36, { size: letter ? fs : fs * 0.86, weight: on || g ? 700 : letter ? 600 : 400, color: col, align: 'center' });
   }
 }

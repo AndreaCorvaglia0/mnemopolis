@@ -1,7 +1,7 @@
 // Port Octave: the sound of the labs, behind one small helper so that the stations do not depend on
 // how sound is made. The stations draw what sounds from the same numbers, so they work with the
 // sound off.
-import { sound as kitSound } from '../../../../engine/src/lab/kit.js';
+import { sound as kitSound, L } from '../../../../engine/src/lab/kit.js';
 
 // The kit's sound (engine/src/systems/sound/lab.js): an exactly tuned Karplus-Strong pluck, sustained
 // tones that glide, the lab's own limited bus, the music ducked while it plays, nothing when muted.
@@ -35,7 +35,7 @@ export function richAt(tones, t, n = 6) {
 
 // One gentle line, once per station, that sound helps here and that the picture is enough without it.
 export function soundNote(ctx) {
-  const t = setTimeout(() => { if (!ctx.alive || ctx.alive()) ctx.nudge?.('Sound helps here: turn the volume up a little. With it off, the picture shows the same thing.', 6000); }, 1200);
+  const t = setTimeout(() => { if (!ctx.alive || ctx.alive()) ctx.nudge?.(L('Sound helps here: turn the volume up a little. With it off, the picture shows the same thing.', 'Qui il suono aiuta: alza un po\' il volume. Senza suono, il disegno mostra la stessa cosa.'), 6000); }, 1200);
   ctx.onCleanup?.(() => clearTimeout(t));
 }
 
