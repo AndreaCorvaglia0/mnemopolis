@@ -3453,20 +3453,28 @@
           {
             "items": [
               {
-                "en": "red",
-                "it": "rosso"
+                "text": {
+                  "en": "red",
+                  "it": "rosso"
+                }
               },
               {
-                "en": "green",
-                "it": "verde"
+                "text": {
+                  "en": "green",
+                  "it": "verde"
+                }
               },
               {
-                "en": "blue",
-                "it": "blu"
+                "text": {
+                  "en": "blue",
+                  "it": "blu"
+                }
               },
               {
-                "en": "cyan",
-                "it": "ciano"
+                "text": {
+                  "en": "cyan",
+                  "it": "ciano"
+                }
               }
             ],
             "odd": 3,
@@ -3478,17 +3486,25 @@
           {
             "items": [
               {
-                "en": "cyan",
-                "it": "ciano"
-              },
-              "magenta",
-              {
-                "en": "yellow",
-                "it": "giallo"
+                "text": {
+                  "en": "cyan",
+                  "it": "ciano"
+                }
               },
               {
-                "en": "red",
-                "it": "rosso"
+                "text": "magenta"
+              },
+              {
+                "text": {
+                  "en": "yellow",
+                  "it": "giallo"
+                }
+              },
+              {
+                "text": {
+                  "en": "red",
+                  "it": "rosso"
+                }
               }
             ],
             "odd": 3,
@@ -3500,18 +3516,26 @@
           {
             "items": [
               {
-                "en": "red",
-                "it": "rosso"
+                "text": {
+                  "en": "red",
+                  "it": "rosso"
+                }
               },
               {
-                "en": "green",
-                "it": "verde"
+                "text": {
+                  "en": "green",
+                  "it": "verde"
+                }
               },
               {
-                "en": "blue",
-                "it": "blu"
+                "text": {
+                  "en": "blue",
+                  "it": "blu"
+                }
               },
-              "magenta"
+              {
+                "text": "magenta"
+              }
             ],
             "odd": 3,
             "why": {
@@ -3522,17 +3546,25 @@
           {
             "items": [
               {
-                "en": "cyan",
-                "it": "ciano"
-              },
-              "magenta",
-              {
-                "en": "yellow",
-                "it": "giallo"
+                "text": {
+                  "en": "cyan",
+                  "it": "ciano"
+                }
               },
               {
-                "en": "green",
-                "it": "verde"
+                "text": "magenta"
+              },
+              {
+                "text": {
+                  "en": "yellow",
+                  "it": "giallo"
+                }
+              },
+              {
+                "text": {
+                  "en": "green",
+                  "it": "verde"
+                }
               }
             ],
             "odd": 3,
@@ -3544,20 +3576,28 @@
           {
             "items": [
               {
-                "en": "red",
-                "it": "rosso"
+                "text": {
+                  "en": "red",
+                  "it": "rosso"
+                }
               },
               {
-                "en": "green",
-                "it": "verde"
+                "text": {
+                  "en": "green",
+                  "it": "verde"
+                }
               },
               {
-                "en": "blue",
-                "it": "blu"
+                "text": {
+                  "en": "blue",
+                  "it": "blu"
+                }
               },
               {
-                "en": "yellow",
-                "it": "giallo"
+                "text": {
+                  "en": "yellow",
+                  "it": "giallo"
+                }
               }
             ],
             "odd": 3,
@@ -3569,17 +3609,25 @@
           {
             "items": [
               {
-                "en": "cyan",
-                "it": "ciano"
-              },
-              "magenta",
-              {
-                "en": "yellow",
-                "it": "giallo"
+                "text": {
+                  "en": "cyan",
+                  "it": "ciano"
+                }
               },
               {
-                "en": "blue",
-                "it": "blu"
+                "text": "magenta"
+              },
+              {
+                "text": {
+                  "en": "yellow",
+                  "it": "giallo"
+                }
+              },
+              {
+                "text": {
+                  "en": "blue",
+                  "it": "blu"
+                }
               }
             ],
             "odd": 3,
