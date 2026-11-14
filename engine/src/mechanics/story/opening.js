@@ -7,7 +7,7 @@ import { sfx } from '../../systems/audio.js';
 import { touch } from '../../systems/view.js';
 import { cinema } from './cinema.js';
 import { view } from './paint.js';
-import { harbourPainter } from './scenes/harbour.js';
+import { harbourPainter, DOCK_MS } from './scenes/harbour.js';
 import { titleCard } from './finale.js';
 import { S_WORDS } from './words.js';
 import { tr, fill } from './config.js';
@@ -50,7 +50,7 @@ export async function playOpening(ui) {
     stage = view(c.root, harbourPainter(), { dock: 0, lights: 1, rain: 1, notebook: 1, push: 0.06, pushTime: 30 }); // the notebook already on the quay
     await c.dim(0, 1400);
     c.theme('opening');
-    const docking = stage.fade('dock', 1, 11000);
+    const docking = stage.fade('dock', 1, DOCK_MS);
     for (const line of tr(S_WORDS.opening)) await c.say(line);
     await (c.skipped ? Promise.resolve() : docking);
     stage.set({ dock: 1 });

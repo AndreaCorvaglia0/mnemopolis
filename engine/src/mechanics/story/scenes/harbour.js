@@ -5,6 +5,8 @@
 import { canvas, lin, rad, glow, blobs, rain, rnd, smooth, soften, C } from '../paint.js';
 import { paintShip, Smoke } from './ship.js';
 
+export const DOCK_MS = 18000; // the approach to the quay, start to made fast
+
 export function harbourPainter() {
   let ship = null, shipLen = 0, soft = null, softLit = null, fog = null, fogKey = '';
   const smoke = new Smoke(5);
@@ -15,7 +17,9 @@ export function harbourPainter() {
     const quayX = tall ? W * 0.18 : W * 0.3;
     return { tall, hz, wl, len, quayX };
   };
-  const shipX = (W, G, dock) => { const e = 1 - (1 - dock) ** 3, end = G.tall ? W * 0.04 : G.quayX - G.len * 0.08; return W + 20 - e * (W + 20 - end); };
+  // The ship is already in sight when the scene opens, half a length off her berth, and she comes
+  // alongside slowly, losing way (DOCK_MS for the whole approach): a liner does not rush a quay.
+  const shipX = (W, G, dock) => { const e = 1 - (1 - dock) ** 2, end = G.tall ? W * 0.04 : G.quayX - G.len * 0.08; return end + (1 - e) * G.len * 0.5; };
   return {
     baseKeys: ['beam', 'stars'],
     focus: (W, H) => { const G = geo(W, H); return [W * 0.55, G.wl - G.len * 0.2]; },

@@ -14,7 +14,7 @@ import { COURSE } from '../../data/content.js';
 import { Q } from '../quest/active.js';
 import { cinema, reducedMotion } from './cinema.js';
 import { view } from './paint.js';
-import { harbourPainter } from './scenes/harbour.js';
+import { harbourPainter, DOCK_MS } from './scenes/harbour.js';
 import { objectPainter } from './scenes/objects.js';
 import { lampRoomPainter, registerPainter, pagesPainter, gangwayPainter } from './scenes/ending.js';
 import { startFog } from './fog.js';
@@ -109,7 +109,7 @@ const ENDINGS = {
     // the loop: the last shot is the first shot; the rain begins again
     v = await cut(c, v, harbourPainter(), { dock: 0, lights: 1, rain: 0, notebook: 1, push: 0.06, pushTime: 30 }, 3000);
     v.fade('rain', 1, 4000);
-    v.fade('dock', 1, 11000);
+    v.fade('dock', 1, DOCK_MS);
     c.theme('full');
     await c.say(tr(S_WORDS.opening)[0], { min: 4200 });
     // the title, over it, as at the arrival
