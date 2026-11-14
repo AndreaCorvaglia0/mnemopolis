@@ -383,21 +383,23 @@ async function fine(target, [big, small]) {
     await labBtn(`${d > 0 ? '+' : '−'}${st}`);
   }
 }
+// the labels of Port Octave's buttons in the language of the address (Q='&lang=it')
+const IT = /lang=it/.test(process.env.Q || ''), T = (en, it) => (IT ? it : en);
 Object.assign(RECIPES, {
   'string:pluck': async () => { await tapItem('fret0'); await tapItem('pluck'); await tapItem('fret12'); await tapItem('pluck'); await setSlider(0, 75); },
   'string:harmonics': async () => { for (const m of [12, 7, 5]) { await tapItem(`touch${m}`); await tapItem('pluck'); } },
   'beats:wobble': async () => { await fine(110, [1, 0.1]); await fine(165, [1, 0.1]); },
-  'beats:third': async () => { await segBtn('Guitar'); await labBtn('Play A and'); await segBtn('Pure'); await labBtn('Play A and'); },
+  'beats:third': async () => { await segBtn(T('Guitar', 'Chitarra')); await labBtn(T('Play A and', 'Suona La e')); await segBtn(T('Pure', 'Pura')); await labBtn(T('Play A and', 'Suona La e')); },
   'beats:tuneup': async () => { await fine(2.7, [0.5, 0.05]); await sleep(1500); },
-  'twelve:circle': async () => { for (let k = 0; k < 12; k++) await labBtn('One fret up'); await tapItem('fret3'); },
+  'twelve:circle': async () => { for (let k = 0; k < 12; k++) await labBtn(T('One fret up', 'Un tasto')); await tapItem('fret3'); },
   'twelve:fifthfret': async () => { await tapItem('e5'); await tapItem('g4'); },
-  'scale:stencil': async () => { await tapItem('dial7'); await labBtn('Play the scale'); await tapItem('cell11'); },
-  'scale:relative': async () => { await tapItem('start5'); await labBtn('Play the scale'); await tapItem('step1'); },
-  'pentatonic:box': async () => { await labBtn('Play the box'); await tapItem('low12'); await labBtn('Play the box'); },
-  'fifths:compass': async () => { for (let k = 0; k < 12; k++) await labBtn('One fifth up'); },
-  'triads:stack': async () => { await labBtn('Strum'); await tapItem('minor3'); await labBtn('Strum'); await tapItem('gstring'); },
-  'triads:shapes': async () => { for (const sh of ['C', 'A', 'G', 'D']) { await clickEl('.lx .lab-seg button', sh); await sleep(200); await labBtn('Strum'); } },
-  'keys:family': async () => { for (let j = 0; j < 7; j++) await tapItem(`col${j}`); await segBtn('G major'); await labBtn('Play I'); },
+  'scale:stencil': async () => { await tapItem('dial7'); await labBtn(T('Play the scale', 'Suona la scala')); await tapItem('cell11'); },
+  'scale:relative': async () => { await tapItem('start5'); await labBtn(T('Play the scale', 'Suona la scala')); await tapItem('step1'); },
+  'pentatonic:box': async () => { await labBtn(T('Play the box', 'Suona il box')); await tapItem('low12'); await labBtn(T('Play the box', 'Suona il box')); },
+  'fifths:compass': async () => { for (let k = 0; k < 12; k++) await labBtn(T('One fifth up', 'Una quinta su')); },
+  'triads:stack': async () => { await labBtn(T('Strum', 'Strimpella')); await tapItem('minor3'); await labBtn(T('Strum', 'Strimpella')); await tapItem('gstring'); },
+  'triads:shapes': async () => { for (const sh of ['C', 'A', 'G', 'D']) { await clickEl('.lx .lab-seg button', sh); await sleep(200); await labBtn(T('Strum', 'Strimpella')); } },
+  'keys:family': async () => { for (let j = 0; j < 7; j++) await tapItem(`col${j}`); await segBtn(T('G major', 'Sol maggiore')); await labBtn(T('Play I', 'Suona I')); },
 });
 // context:grey, written plainly: drag the second square onto the first, then the plain wall
 RECIPES['context:grey'] = async () => {
