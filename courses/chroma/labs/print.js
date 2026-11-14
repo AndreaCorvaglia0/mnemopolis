@@ -50,14 +50,14 @@ async function compare(ctx) {
     // side by side on a wide stage, one above the other on an upright one
     const boxes = up ? [[30, 44, 420, 200], [30, 330, 420, 200]] : [[24, 56, 340, 300], [396, 56, 340, 300]];
     const nm = (k) => L(k, NAME[k]);
-    [[light, L('As lights, on a dark wall', 'Come luci, su una parete scura'), [L('dark', 'buio'), ...keys.map((k) => `+ ${nm(k)}`)]], [paint, L('As paints, on white paper', 'Come pitture, su carta bianca'), [L('white', 'bianco'), ...keys.map((k) => L(`− all but ${k}`, `− tutto tranne ${nm(k)}`))]]].forEach(([c, title, terms], i) => {
+    [[light, L('As lights, on a dark wall', 'Come luci, su parete scura'), [L('dark', 'buio'), ...keys.map((k) => `+ ${nm(k)}`)]], [paint, L('As paints, on white paper', 'Come pitture, su bianco'), [L('white', 'bianco'), ...keys.map((k) => L(`− all but ${k}`, `− non ${nm(k)}`))]]].forEach(([c, title, terms], i) => {
       const [x, y, w, hh] = boxes[i];
       g.fillStyle = rgbCss(c); g.fillRect(x, y, w, hh); g.strokeStyle = '#3a4659'; g.lineWidth = 2; g.strokeRect(x, y, w, hh);
       g.fillStyle = '#e8eaf0'; g.font = pane.font(20, 600); g.fillText(title, x, y - 14);
       // the formula wraps between terms when it is wider than its box (the longer the language, the likelier)
       g.fillStyle = '#c9cfdd'; g.font = pane.font(19);
       let line = '', ly = y + hh + 30;
-      terms.forEach((t) => { const next = line ? `${line} ${t}` : t; if (line && g.measureText(next).width > w) { g.fillText(line, x, ly); ly += 26; line = t; } else line = next; });
+      terms.forEach((t) => { const next = line ? `${line} ${t}` : t; if (line && g.measureText(next).width > w) { g.fillText(line, x, ly); ly += Math.max(26, pane.px(22)); line = t; } else line = next; });
       g.fillText(line, x, ly);
     });
     seen.add(keys.length);

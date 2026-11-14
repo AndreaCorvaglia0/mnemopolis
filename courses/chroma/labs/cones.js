@@ -43,11 +43,11 @@ async function match(ctx) {
     g.fillStyle = '#e8eaf0'; g.fillText(L('light A', 'luce A'), l.x0 + 30, ly);
     const lx = l.x0 + 30 + g.measureText(L('light A', 'luce A')).width + 24;
     g.setLineDash([7, 5]); g.strokeStyle = '#ff7a6b'; g.beginPath(); g.moveTo(lx, ly - 6); g.lineTo(lx + 22, ly - 6); g.stroke(); g.strokeStyle = '#7ddc8a'; g.beginPath(); g.moveTo(lx + 28, ly - 6); g.lineTo(lx + 50, ly - 6); g.stroke(); g.setLineDash([]);
-    g.fillText(L('lamp B: red + green', 'lampada B: rosso + verde'), lx + 58, ly);
+    g.fillText(L('lamp B: red + green', 'B: rosso + verde'), lx + 58, ly);
     // cone signals of the two lights, with full names on every bar
     const A = CONES.map(([, f]) => f(v.nm)), B = CONES.map(([, f]) => v.r * f(RED) + v.g * f(GREEN));
     g.fillStyle = '#e8eaf0'; g.font = pane.font(19, 600); g.fillText(L('What the eye keeps', "Ciò che l'occhio conserva"), l.bx, l.by - 14);
-    const name = 92, bh = Math.min(18, (l.row - 10) / 2);
+    const name = lang() === 'it' ? 118 : 92, bh = Math.min(18, (l.row - 10) / 2);
     CONES.forEach(([n, , col], i) => {
       const y = l.by + i * l.row;
       g.fillStyle = col; g.font = pane.font(19, 700); g.fillText(n, l.bx, y + bh + 6);
