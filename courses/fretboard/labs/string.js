@@ -4,8 +4,8 @@
 //              pluck; the vibrating part drawn in slow motion, the frequency computed and heard
 //   harmonics  (upstairs) touch the string lightly: only the harmonics with a still point there
 //              survive (at 1/2, 1/3, 1/4: frets 12, 7, 5)
-import { stage, sliders, button, tasks, animate, C, alpha, clamp } from '../../../engine/src/lab/kit.js';
-import { fretAt, fmtHz } from './lib/music.js';
+import { stage, sliders, button, tasks, animate, C, alpha, clamp, L } from '../../../engine/src/lab/kit.js';
+import { fretAt, fmtHz, nf } from './lib/music.js';
 import { sound, soundNote } from './lib/sound.js';
 
 const LEN = 650;                  // mm, a common classical and steel-string scale length
@@ -38,8 +38,8 @@ function drawString(d, Lay, { k, wave, label = true, touch = null }) {
   d.line([P(Lay, 1, -w), P(Lay, 1, w)], { color: '#eadfca', width: 7, cap: 'butt' });               // saddle
   if (label) {
     for (const m of [5, 7, 12]) { const u = (fretAt(m - 1) + fretAt(m)) / 2; d.text(String(m), ...P(Lay, u, Lay.up ? -w - 18 : w + 22).map((v, i) => v + (i === 1 && Lay.up ? 6 : 0)), { size: 16, color: C.dim, align: 'center' }); }
-    d.text('nut', ...P(Lay, 0, Lay.up ? -w - 26 : -w - 12).map((v, i) => v + (Lay.up && i === 1 ? 5 : 0)), { size: 16, color: C.dim, align: Lay.up ? 'right' : 'center' });
-    d.text('bridge', ...P(Lay, 1, Lay.up ? -w - 28 : -w - 24).map((v, i) => v + (Lay.up && i === 1 ? 5 : 0)), { size: 16, color: C.dim, align: Lay.up ? 'right' : 'center' });
+    d.text(L('nut', 'capotasto'), ...P(Lay, 0, Lay.up ? -w - 26 : -w - 12).map((v, i) => v + (Lay.up && i === 1 ? 5 : 0)), { size: 16, color: C.dim, align: Lay.up ? 'right' : 'center' });
+    d.text(L('bridge', 'ponte'), ...P(Lay, 1, Lay.up ? -w - 28 : -w - 24).map((v, i) => v + (Lay.up && i === 1 ? 5 : 0)), { size: 16, color: C.dim, align: Lay.up ? 'right' : 'center' });
   }
   // the dead part (nut to finger) is still; the vibrating part follows wave(u) in slow motion
   const u0 = fretAt(k);
@@ -55,7 +55,7 @@ async function pluck(ctx) {
   const t = tasks(ctx, [{ select: 'octave' }, { select: 'tuned' }]);
   const s = sound(ctx);
   let k = 0, amp = 0, phase = 0, plucked = false, log = [], openSeen = false;
-  const ctl = sliders(ctx, [{ id: 'T', label: 'Tension (the peg)', min: 50, max: 110, step: 0.1, value: 66, unit: 'N' }], (id, v) => { redrawAll(); if (Math.abs(freq(v) - 110) < 0.5) t.pick('tuned').check(); });
+  const ctl = sliders(ctx, [{ id: 'T', label: L('Tension (the peg)', 'Tensione (la meccanica)'), min: 50, max: 110, step: 0.1, value: 66, unit: 'N' }], (id, v) => { redrawAll(); if (Math.abs(freq(v) - 110) < 0.5) t.pick('tuned').check(); });
   const f = () => freq(ctl.v.T, k);
   const doPluck = () => {
     amp = 1; phase = 0; plucked = true;
@@ -73,25 +73,26 @@ async function pluck(ctx) {
     // the finger, on the string just behind its fret
     const uf = k ? (fretAt(k - 1) * 0.35 + fretAt(k) * 0.65) : 0.0;
     if (k) { const [fx, fy] = P(Lay, uf); d.circle(fx, fy, 19, { fill: alpha(C.acc, 0.85), glow: C.acc }); d.text(String(k), fx, fy + 6, { size: 17, weight: 700, color: C.accInk, align: 'center' }); }
-    else { const [fx, fy] = P(Lay, 0.03, Lay.up ? 58 : 58); d.circle(fx, fy, 19, { fill: alpha(C.acc, 0.5), stroke: C.acc }); d.text('finger', fx, fy + (Lay.up ? 38 : 40), { size: 16, color: C.muted, align: 'center' }); }
+    else { const [fx, fy] = P(Lay, 0.03, Lay.up ? 58 : 58); d.circle(fx, fy, 19, { fill: alpha(C.acc, 0.5), stroke: C.acc }); d.text(L('finger', 'dito'), fx, fy + (Lay.up ? 38 : 40), { size: 16, color: C.muted, align: 'center' }); }
     // where to pluck
     const [px, py] = P(Lay, fretAt(MAXF + 0.6) + (1 - fretAt(MAXF + 0.6)) * 0.42, Lay.up ? 74 : 0);
-    if (!Lay.up) d.text('pluck here', px, py + 70, { size: 16, color: C.gold, align: 'center' }); else d.text('pluck', px + 6, py + 6, { size: 16, color: C.gold });
+    if (!Lay.up) d.text(L('pluck here', 'pizzica qui'), px, py + 70, { size: 16, color: C.gold, align: 'center' }); else d.text(L('pluck', 'pizzica'), px + 6, py + 6, { size: 16, color: C.gold });
     // read-outs: the frequency now, the open string, the length
     const [rx, ry] = Lay.read, lenmm = LEN * (1 - u0);
     const big = Lay.up ? 34 : 40;
     d.text(`${fmtHz(f())} Hz`, rx, ry, { size: big, weight: 700, color: plucked ? C.gold : C.text });
-    d.text(Lay.up ? `${Math.round(lenmm)} mm${k ? `, fret ${k}` : ', open'}` : `vibrating length ${Math.round(lenmm)} mm${k ? `, fret ${k}` : ', open'}`, rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 400 });
-    if (!Lay.up) d.text(`open string: ${fmtHz(freq(ctl.v.T))} Hz   ·   tension ${ctl.v.T.toFixed(1)} N`, 450, ry, { size: 17, color: C.muted, max: 350 });
-    else d.text(`open: ${fmtHz(freq(ctl.v.T))} Hz`, rx, ry + 58, { size: 17, color: C.muted });
+    const where = k ? L(`, fret ${k}`, `, tasto ${k}`) : L(', open', ', a vuoto');
+    d.text(Lay.up ? `${Math.round(lenmm)} mm${where}` : `${L('vibrating length', 'lunghezza che vibra')} ${Math.round(lenmm)} mm${where}`, rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 400 });
+    if (!Lay.up) d.text(`${L('open string', 'corda a vuoto')}: ${fmtHz(freq(ctl.v.T))} Hz   ·   ${L('tension', 'tensione')} ${nf(ctl.v.T, 1)} N`, 450, ry, { size: 17, color: C.muted, max: 350 });
+    else d.text(`${L('open', 'a vuoto')}: ${fmtHz(freq(ctl.v.T))} Hz`, rx, ry + 58, { size: 17, color: C.muted });
     // the last plucks, so the two can be compared
     const lx = Lay.up ? 230 : 70, ly = Lay.up ? 220 : 330;
-    if (log.length) d.text('plucked', lx, ly, { size: 16, color: C.dim });
+    if (log.length) d.text(L('plucked', 'pizzicate'), lx, ly, { size: 16, color: C.dim });
     log.forEach((e, i) => {
       const ratio = e.f / e.open, y = ly + 30 + i * (Lay.up ? 58 : 34);
-      const a = i ? 0.6 : 1, label = `${e.k ? `fret ${e.k}` : 'open'}: ${fmtHz(e.f)} Hz`;
-      if (Lay.up) { d.text(label, lx, y, { size: 18, weight: 600, color: C.text, alpha: a }); d.text(`× ${ratio.toFixed(2)} the open string`, lx, y + 24, { size: 16, color: ratio > 1.995 && ratio < 2.005 ? C.gold : C.muted, alpha: a }); }
-      else d.text(`${label}   (${Math.round(LEN * 2 ** (-e.k / 12))} mm, × ${ratio.toFixed(2)} the open string)`, lx, y, { size: 18, weight: i ? 400 : 600, color: ratio > 1.995 && ratio < 2.005 ? C.gold : C.text, alpha: a, max: 680 });
+      const a = i ? 0.6 : 1, label = `${e.k ? L(`fret ${e.k}`, `tasto ${e.k}`) : L('open', 'a vuoto')}: ${fmtHz(e.f)} Hz`;
+      if (Lay.up) { d.text(label, lx, y, { size: 18, weight: 600, color: C.text, alpha: a }); d.text(`× ${nf(ratio, 2)} ${L('the open string', 'la corda a vuoto')}`, lx, y + 24, { size: 16, color: ratio > 1.995 && ratio < 2.005 ? C.gold : C.muted, alpha: a }); }
+      else d.text(`${label}   (${Math.round(LEN * 2 ** (-e.k / 12))} mm, × ${nf(ratio, 2)} ${L('the open string', 'la corda a vuoto')})`, lx, y, { size: 18, weight: i ? 400 : 600, color: ratio > 1.995 && ratio < 2.005 ? C.gold : C.text, alpha: a, max: 680 });
     });
     void fv;
   });
@@ -106,7 +107,7 @@ async function pluck(ctx) {
     if (ph === 'down' && u > body) { doPluck(); return; }
     if (u <= body + 0.01 && ph !== 'up') { const nk = fretOfU(clamp(u, 0, body)); if (nk !== k) { k = nk; amp = 0; view.redraw(); } }
   });
-  button(ctx, 'Pluck the string', doPluck, { primary: true });
+  button(ctx, L('Pluck the string', 'Pizzica la corda'), doPluck, { primary: true });
   ctx.hint((i) => { const Lay = layout(view.pane); return i === 0 ? (openSeen ? P(Lay, (fretAt(11) + fretAt(12)) / 2) : P(Lay, 0.82)) : ctl.el.T; });
   view.pane.items = [{ c: 'pluck', ...xy(P(layout(view.pane), 0.82)) }];
   const items = () => { const Lay = layout(view.pane); return [{ c: 'pluck', ...xy(P(Lay, 0.84)) }, ...Array.from({ length: 13 }, (_, j) => ({ c: `fret${j}`, ...xy(P(Lay, j ? (fretAt(j - 1) + fretAt(j)) / 2 : 0.004)) }))]; };
@@ -138,10 +139,10 @@ async function harmonics(ctx) {
     drawString(d, Lay, { k: 0, wave, touch });
     const [rx, ry] = Lay.read;
     const fret = touch == null ? null : (() => { let b = 0, e = 9; for (let j = 1; j <= MAXF; j++) { const dd = Math.abs(fretAt(j) - touch); if (dd < e) { e = dd; b = j; } } return b; })();
-    if (last && last.n) { d.text(`${F0 * last.n} Hz`, rx, ry, { size: Lay.up ? 34 : 40, weight: 700, color: C.gold }); d.text(Lay.up ? `${last.n} × ${F0} Hz` : `harmonic ${last.n}: ${last.n} × the open ${F0} Hz`, rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 420 }); }
-    else if (last) { d.text('almost silent', rx, ry, { size: Lay.up ? 30 : 36, weight: 700, color: C.bad }); d.text('no harmonic has a still point here', rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 420 }); }
-    else { d.text(`open string ${F0} Hz`, rx, ry, { size: Lay.up ? 28 : 34, weight: 700 }); }
-    if (touch != null) { if (Lay.up) { d.text(`touching at ${(touch * 100).toFixed(1)}%`, 230, 214, { size: 17, color: C.text }); d.text(`above fret ${fret}`, 230, 240, { size: 17, color: C.text }); } else d.text(`touching at ${(touch * 100).toFixed(1)}% of the string, above fret ${fret}`, 70, 330, { size: 17, color: C.text, max: 660 }); }
+    if (last && last.n) { d.text(`${F0 * last.n} Hz`, rx, ry, { size: Lay.up ? 34 : 40, weight: 700, color: C.gold }); d.text(Lay.up ? `${last.n} × ${F0} Hz` : L(`harmonic ${last.n}: ${last.n} × the open ${F0} Hz`, `armonica ${last.n}: ${last.n} × i ${F0} Hz a vuoto`), rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 420 }); }
+    else if (last) { d.text(L('almost silent', 'quasi silenzio'), rx, ry, { size: Lay.up ? 30 : 36, weight: 700, color: C.bad }); d.text(L('no harmonic has a still point here', 'nessuna armonica ha un nodo qui'), rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 420 }); }
+    else { d.text(`${L('open string', 'corda a vuoto')} ${F0} Hz`, rx, ry, { size: Lay.up ? 28 : 34, weight: 700 }); }
+    if (touch != null) { if (Lay.up) { d.text(L(`touching at ${(touch * 100).toFixed(1)}%`, `tocco al ${nf(touch * 100, 1)}%`), 230, 214, { size: 17, color: C.text }); d.text(L(`above fret ${fret}`, `sopra il tasto ${fret}`), 230, 240, { size: 17, color: C.text }); } else d.text(L(`touching at ${(touch * 100).toFixed(1)}% of the string, above fret ${fret}`, `tocco al ${nf(touch * 100, 1)}% della corda, sopra il tasto ${fret}`), 70, 330, { size: 17, color: C.text, max: 660 }); }
     // the first four ways the string can vibrate; those with a still point at the touch are lit
     const bx = Lay.up ? 230 : 70, by = Lay.up ? 300 : 370, bw = Lay.up ? 230 : 160, gap = Lay.up ? 72 : 0;
     for (let m = 1; m <= 4; m++) {
@@ -151,7 +152,7 @@ async function harmonics(ctx) {
       const pts = []; for (let i = 0; i <= 40; i++) pts.push([x0 + (bw * i) / 40, y0 + 22 + Math.sin(m * Math.PI * i / 40) * 14]);
       const pts2 = pts.map(([x, y]) => [x, 2 * (y0 + 22) - y]);
       d.line(pts, { color: col, width: 2.5, alpha: kept ? 1 : 0.35 }); d.line(pts2, { color: col, width: 2.5, alpha: kept ? 0.6 : 0.2 });
-      d.text(`${m === 1 ? 'whole' : `in ${m}`}: ${m * F0} Hz`, x0, y0 + 60, { size: 16, color: kept ? C.text : C.dim });
+      d.text(`${m === 1 ? L('whole', 'intera') : L(`in ${m}`, `in ${m} parti`)}: ${m * F0} Hz`, x0, y0 + 60, { size: 16, color: kept ? C.text : C.dim });
       if (touch != null && m > 1) d.line([[x0 + bw * touch, y0 + 4], [x0 + bw * touch, y0 + 40]], { color: C.gold, width: 2, dash: [3, 3] });
     }
   });
@@ -161,8 +162,8 @@ async function harmonics(ctx) {
     if (ph === 'down' && u > body) { doPluck(); return; }
     if (ph !== 'up' && u > 0.01 && u <= body) { touch = u; amp = 0; view.redraw(); }
   });
-  button(ctx, 'Pluck the string', doPluck, { primary: true });
-  button(ctx, 'Take the finger off', () => { touch = null; view.redraw(); });
+  button(ctx, L('Pluck the string', 'Pizzica la corda'), doPluck, { primary: true });
+  button(ctx, L('Take the finger off', 'Togli il dito'), () => { touch = null; view.redraw(); });
   const above = (m) => fretAt(m);
   ctx.hint((i) => P(layout(view.pane), above([12, 7, 5][i] ?? 12)));
   soundNote(ctx);
