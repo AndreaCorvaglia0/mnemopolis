@@ -1,6 +1,6 @@
 # The world branch: a study aid that builds its own towns (plan)
 
-Status: **planned, nothing built, not started** (the owner keeps it in the plan for now; the technical trial waits for his go). This page fixes the idea and the order of work. The catalogue
+Status: **chosen as the next line of work (14 Nov 2026); nothing built yet.** Compartments and phases below. This page fixes the idea and the order of work. The catalogue
 (`docs/SITE.md`) and the full method (`skills/`) stay as they are; this is a second way to use the
 same engine.
 
@@ -67,16 +67,25 @@ does not suit a nine-year-old doing homework:
 To decide when designing: whether the children's register is a `world.json` profile of the same
 game (story off, new strings, new duel skin) or a separate set of mechanics. First guess: a profile.
 
-## Architecture (first sketch)
+## Compartments (who knows what)
 
-- **Town** = a small `course.json` (the existing format, a strict subset) plus optional lab code.
-- **World** = a list of towns with their order and routes, per-player progress, one notebook.
-- **Storage** = the artifact's own store: towns private to their builder by default; sharing a
-  town with others (a class, a sibling) as a later, explicit choice. Playing a town already built
-  costs nothing.
-- **Engine** = the prebuilt player, extended to switch town without a reload and to draw the chart.
-- **Builder** = a module of the page: the conversation, the calls to the model with tools, the
-  adult's check, the save.
+Seven parts, each with one job and a written contract. The rule that keeps it from becoming one
+lump: **the builder and the engine never import each other; they meet only in the town format.**
+
+| Part | Job | Knows about | Lives in |
+|---|---|---|---|
+| 1. Town format | What a small town is: a strict subset of `course.json`, its schema, the validator's "kids" rules | nothing else | `skills/knowledge-base/schema`, `scripts/` |
+| 2. Player | Plays one town | the format | `engine/` (as today) |
+| 3. Children's profile | Companion, friendly fights, points, the progression always on screen; the catalogue's story off | the player's state contract | `engine/src/mechanics/kids/`, switched by `world.json` (`profile: "kids"`) |
+| 4. World | The sea chart, routes, changing town, what is shared between towns (companion, coins, seals, the fog coming back) | player, store | `engine/src/atlas/` |
+| 5. Store | Save and load towns and progress, behind one interface | nothing else | `engine/src/store/`: one implementation on the browser's storage (development, public player), one on the artifact's store |
+| 6. Builder | The conversation, the prompts, the model's tools, the adult's check; gives back a town that passes the validator | the format, the validator, the catalogue of lab patterns; the model only through an `ask()` interface with two implementations (the artifact's, and a recorded one for tests) | `builder/` (its own folder and tests, not part of the engine) |
+| 7. Artifact shell | Wires builder, store and player; declares what the page may do | everything; as thin as possible | `apps/world/` |
+
+Consequences: the player and the world can be built and tested with hand-made towns and the
+browser's storage, with no model and no artifact; the builder can be tested with recorded answers
+and no game; only the shell needs the real artifact. The catalogue's courses never see any of it
+(the profile is a switch; CI keeps playing Chroma Town to the end on every change).
 
 ## Unknowns to try first (a small technical trial)
 
@@ -86,15 +95,22 @@ game (story off, new strings, new duel skin) or a separate set of mechanics. Fir
 3. Is the store enough for towns with photos and lab code (sizes, limits)?
 4. Does the game run well inside the artifact viewer on a phone (sound, touch, full screen)?
 
-## Order of work
+## Phases (each ends with something the owner plays or uses)
 
-1. The trial above; write down the answers here.
-2. One children's town built by hand in the small format (the target the builder must hit), with
-   the children's register as a profile.
-3. The builder inside the page, patterns only; the adult's check.
-4. The world: chart, routes, switching town, one notebook and tally.
-5. Labs to measure, if the trial allows; more patterns in any case.
-6. Sharing towns; the catalogue open to contributed courses (rules for a pull request, review).
+| Phase | Work | Done when |
+|---|---|---|
+| 0. Trial | Throw-away code in `spikes/`, never merged into the engine: the four unknowns above | The answers are written here, with a yes or no on labs made to measure |
+| 1. The golden town | The town format and its rules; one children's town made by hand (the target the builder must hit later), played with the engine as it is | The owner plays it on a phone; the format is frozen |
+| 2. The children's profile | Companion, fights, points, progression; simulated children and parents (small models) on screenshots | The same town reads as a children's game; the design page for the fiction is approved first |
+| 3. World and store | A second hand-made town; the chart, the ship between islands, shared progress, the fog coming back (spaced repetition); browser storage | The owner sails between two islands and finds his progress the next day |
+| 4. Builder | Conversation, prompts, tools, the adult's check; patterns only; first with recorded answers, then the real model | A town built from a photo of a school book passes the validator and is worth playing |
+| 5. The artifact | The shell, the artifact's store, starting a world from nothing, export for the public player if the trial allows | A new person opens the artifact and gets a first island without help |
+| 6. Beyond | Labs made to measure (if the trial said yes), more patterns, sharing towns | separately planned |
+
+Rules of work for every phase: a short design page approved before code (`docs/world/<n>-<name>.md`);
+one theme per phase; at most two agents at once, each owning its folders; the contracts above
+change only by editing this page first; a phase is not closed until its "done when" is met on a
+real phone.
 
 ## Decided with the owner (14 Nov 2026)
 
