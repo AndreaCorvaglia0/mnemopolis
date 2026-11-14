@@ -6,6 +6,9 @@
   "title": "Chroma Town",
   "subject": "How colour works",
   "bigIdea": "Colour is three numbers: three lights on a screen, three signals in the eye.",
+  "pitch": "Mix light, read a colour with three dials, and see why the same colour can fool you.",
+  "tags": ["science", "colour", "screens"],
+  "level": "introductory",
   "learner": "A curious adult with no background in colour science who uses screens and printers every day.",
   "goals": [
     "Predict the result of mixing coloured lights.",

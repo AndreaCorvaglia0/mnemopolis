@@ -5,3 +5,4 @@ shots/
 engine/src/course/_active.js
 engine/src/course/_data.js
 .player-build/
+site/
