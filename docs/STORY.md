@@ -34,7 +34,7 @@ offended to have been helped). Never grim, never mocking the learner.
 | 3 | The notebook | Found on the quay, tally marks scratched on its cover. One legible line points to house 1. It becomes the whole menu (below); the tracker is the short form of its latest entry | The guide, in fiction |
 | 4 | Remembering | In a house: the lab sets their instruments working again; then you help the owner remember | Replaces the duel (see below) |
 | 5 | Mementos | Upstairs in each core house, one object of yours: never explained, each a little more personal | The mystery turns from "what happened to them" to "who was here" |
-| 6 | The town warms | With each house: a window lit, the rain a little thinner, people a little kinder, the music a little fuller | Progress you can see and hear |
+| 6 | The town warms | With each house: a window lit, people a little kinder, the music a little fuller | Progress you can see and hear |
 | 7 | The lighthouse | Unmarked, in plain sight from the start, dark: it stands where the League hall stood, on the square. The pages together say where to go and what to say at its door | The League, hidden in plain sight |
 | 8 | The keeper | At the top, hooded, the one who keeps the forgetting. The final test, on everything. The keeper stays hooded: you never see a face, yours or another | The exam |
 | 9 | The register | The keeper lights the lamp: "What you are looking for was never here." "It came with you, on the ship." On the desk the arrivals register lies open: the same name, yours, signed down the page, the dates going back, the last line empty. One line: "That is my signature." | Change of frame: the town is a memory palace, yours, and you have been here before |
