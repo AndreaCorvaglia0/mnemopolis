@@ -678,6 +678,49 @@ for (const [hi, id] of coreIds.entries()) {
   }
   if (hi === 1) await menu('mid');
 }
+// a mini-game (mechanics/games/): walk to a game's object in town (or be carried there), Space or a
+// tap, play it through with right answers, and check the coins and the saved best
+{
+  const gi = await ev(() => __hb.xp.games());
+  const spot = gi.town.find((t) => gi.games.find((g) => g.id === t.id)?.open);
+  if (!gi.games.length) log('== no mini-games in this course');
+  else if (!spot) fail(`no open game in town: ${JSON.stringify(gi.games)}`);
+  else {
+    const g = gi.games.find((x) => x.id === spot.id);
+    log(`== a mini-game: ${g.id} (${g.kind}) on ${spot.object} at ${spot.x},${spot.y}`);
+    const before = (await S()).insight;
+    if (FAST) await carryTo(spot.stand[0], spot.stand[1]);
+    await walkTo(spot.x, spot.y, `the ${spot.object}`);
+    if (!(await ev(() => !!document.querySelector('.gm')))) { await settle(); await ev((x, y) => { const s = __game.scene.getScene('Town'); const dx = x - s.player.tx, dy = y - s.player.ty; s.player.face(dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up'); return 1; }, spot.x, spot.y); if (PHONE) { const t = await tilePage(spot.x, spot.y); await tap(...t); } else await key('Space'); }
+    const opened = await until(() => document.querySelector('.gm')?.__game?.phase === 'intro', `the game ${g.id} to open`, 20000).catch(() => null);
+    if (!opened) fail(`the game ${g.id} did not open`);
+    else {
+      await shot(`game-${g.id}-start`);
+      if (PHONE) await clickEl('.gm-btn.primary'); else await key('Enter');
+      await until(() => document.querySelector('.gm')?.__game?.phase === 'round', `a round of ${g.id}`, 20000);
+      let rounds = 0;
+      for (let i = 0; i < 80; i++) {
+        const st = await ev(() => { const r = document.querySelector('.gm'); return r ? { phase: r.__game.phase, busy: r.__game.busy } : { phase: 'closed' }; });
+        if (st.phase !== 'round') break;
+        if (st.busy) { await sleep(200); continue; }
+        await ev(() => { document.querySelector('.gm').__game.bot(true); return 1; }); rounds++;
+        await sleep(g.kind === 'sequence' || g.kind === 'match-fast' ? 1800 : 900);
+      }
+      await until(() => document.querySelector('.gm')?.__game?.phase === 'result', `the result of ${g.id}`, 40000);
+      const res = await ev(() => document.querySelector('.gm').__result || null);
+      await shot(`game-${g.id}-result`);
+      if (PHONE) await clickEl('.gm-btn.primary'); else await key('Enter');
+      await until(() => !document.querySelector('.gm'), 'the game to close', 10000);
+      const after = await S(), best = await ev((id) => __hb.state.xp?.games?.[id]?.best, g.id);
+      log(`   ${g.id}: ${rounds} rounds, score ${res?.score}, ${res?.right} right, coins ${before} -> ${after.insight}, best saved ${best}`);
+      if (!res || !(res.score > 0)) fail(`${g.id}: no score`);
+      if (after.insight - before !== res?.coins) fail(`${g.id}: coins ${after.insight - before}, the result said ${res?.coins}`);
+      if (best !== res?.score) fail(`${g.id}: best ${best}, score ${res?.score}`);
+    }
+    await waitIdle();
+  }
+}
+
 // the League
 log('== the League');
 await checkTracker({ kind: 'league' }, 'all houses done');

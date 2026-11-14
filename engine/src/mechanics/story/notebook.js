@@ -12,6 +12,7 @@
 //            chance; the coins as a tally.
 // openNotebook({ tab, settings, touch }) has the contract of quest/menu.js openMenu: it resolves
 // with 'ending' (see the ending again) or undefined. With "story": false the plain menu stays.
+import { uiSound } from '../../systems/sound/index.js';
 import { XP_ON, tierNow, tierWord, marginLine, toldList, xpNow, TIERS, XLINES, trLine, progressNow } from '../experience/active.js';
 import { gamesFound } from '../games/active.js';
 import { G_WORDS } from '../games/strings.js';
@@ -330,14 +331,15 @@ function thumb(kind) {
 // the tier as a small ink drawing: a lamp whose rays grow with the tier (0 to 4), the current one
 // pencilled in part (how far into it); hand-drawn wobble, no numbers
 function tierMark(i, part = 0) {
-  const rays = [];
-  for (let k = 0; k < 8; k++) {
-    const a = (Math.PI * 2 * k) / 8 - Math.PI / 2, on = k < i * 2, half = !on && k < i * 2 + Math.round(part * 2);
-    if (!on && !half) continue;
-    const r0 = 9.5, r1 = on ? 18 : 14, w = (k % 3) * 0.4;
-    rays.push(`<path d="M${(22 + r0 * Math.cos(a)).toFixed(1)} ${(22 + r0 * Math.sin(a)).toFixed(1)} L${(22 + r1 * Math.cos(a + 0.05)).toFixed(1)} ${(22 + r1 * Math.sin(a + 0.05) + w).toFixed(1)}" stroke="${on ? INK : PENCIL}" stroke-width="${on ? 2 : 1.4}" stroke-linecap="round" fill="none"/>`);
+  // rays spread evenly around a little lamp: none at the arrival, two per tier after, eight at home;
+  // the next pair pencilled in, short, as one gets closer to the next tier
+  const n = i * 2, next = i < 4 && part > 0.34 ? 2 : 0, all = n + next, rays = [];
+  for (let k = 0; k < all; k++) {
+    const a = (Math.PI * 2 * k) / Math.max(1, all) - Math.PI / 2 + 0.2, on = k < n;
+    const r0 = 10.5, r1 = on ? 19 : 14.5, w = ((k * 7) % 3) * 0.35;
+    rays.push(`<path d="M${(22 + r0 * Math.cos(a)).toFixed(1)} ${(22 + r0 * Math.sin(a)).toFixed(1)} L${(22 + r1 * Math.cos(a + 0.04)).toFixed(1)} ${(22 + r1 * Math.sin(a + 0.04) + w).toFixed(1)}" stroke="${on ? INK : PENCIL}" stroke-width="${on ? 2.2 : 1.3}" stroke-linecap="round" fill="none"/>`);
   }
-  return `<svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 14.2 C26.6 14 30 17.6 29.8 22.2 C29.6 26.6 26 30.1 21.6 29.8 C17.3 29.5 14.1 26 14.3 21.7 C14.5 17.6 17.8 14.4 22 14.2 Z" fill="${i ? 'rgba(255,207,90,0.45)' : 'none'}" stroke="${INK}" stroke-width="1.8"/>${rays.join('')}</svg>`;
+  return `<svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 14.6 C26.4 14.4 29.6 17.8 29.4 22.1 C29.2 26.3 25.8 29.6 21.7 29.4 C17.6 29.1 14.6 25.8 14.8 21.7 C15 17.8 18 14.8 22 14.6 Z" fill="${i ? `rgba(255,207,90,${0.25 + i * 0.12})` : 'none'}" stroke="${INK}" stroke-width="1.8"/>${rays.join('')}</svg>`;
 }
 
 function tally(n) {
@@ -427,9 +429,10 @@ export function openNotebook({ tab = null, settings = [], touch = false } = {}) 
   document.body.append(root);
   // on a phone, one page at a time: a hand-written "next page" at the foot of each
   const turn = (to) => h('div', { class: 'nbk-turn' }, h('button', { type: 'button', class: 'nbk-btn', onclick: () => page(to) }, to ? `${tr(N.nextPage)} →` : `← ${tr(N.prevPage)}`));
-  const page = (p) => { spread.dataset.p = String(p); (p ? right : left).scrollTop = 0; root.dataset.page = String(p); };
+  const page = (p) => { if (root.dataset.page != null && root.dataset.page !== String(p)) uiSound('page'); spread.dataset.p = String(p); (p ? right : left).scrollTop = 0; root.dataset.page = String(p); };
   const done = (v) => { result = v; finish(); };
   function show(t) {
+    if (root.dataset.tab && root.dataset.tab !== t) uiSound('tab');
     cur = t;
     btns.forEach((b, i) => b.setAttribute('aria-selected', String(TABS[i] === t)));
     const phone = window.innerWidth <= 760, pw = phone ? window.innerWidth - 64 : Math.min(window.innerWidth - 48, 1276) / 2 - 100;
@@ -441,11 +444,12 @@ export function openNotebook({ tab = null, settings = [], touch = false } = {}) 
     page(0);
     root.dataset.tab = t;
   }
+  uiSound('open');
   show(cur);
   left.focus();
   root.dataset.ready = '1';
   return new Promise((resolve) => {
-    finish = () => { window.removeEventListener('keydown', key, true); root.remove(); resolve(result); };
+    finish = () => { window.removeEventListener('keydown', key, true); root.remove(); uiSound('close'); resolve(result); };
     const key = (e) => {
       if (busy) return;
       if (!panel.hidden && e.key === 'Escape') { e.preventDefault(); setOpen(false); setBtn.focus(); return; }

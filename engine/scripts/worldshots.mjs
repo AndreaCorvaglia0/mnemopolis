@@ -61,7 +61,7 @@ async function run(phone) {
   await page.goto(url); await ev(() => localStorage.clear()); await page.goto(url);
   await until(() => !!(window.__hb && __game.scene.getScene('UI')?.ready && __game.scene.getScene('Town')?.player), 'the game again', 90000);
   await sleep(1200); await key('Space'); await sleep(2000); await closeAll();
-  await ev(() => { __hb.story.at(1); return 1; });
+  await ev(() => { __hb.story.arrive(); return 1; }); // arrived, nothing done: every withheld line is above the tier
   const teller = Object.keys(info.who).find((k) => !k.startsWith('host:') && info.npcs.includes(k) && k !== 'guide') || Object.keys(info.who).find((k) => !k.startsWith('host:'));
   if (teller) {
     const tierOf = await ev((k) => __hb.xp.withheld(k)?.line.tier, teller);

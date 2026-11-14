@@ -126,8 +126,19 @@ export function moodSetting() {
 }
 
 // ---- the motif and the duel's pulse, as sound effects (the callers already import sfx)
+// The small interface sounds of before (square-wave blips) now come from the designed set (ui.js),
+// in the course's key; the bigger events (stamp, encounter, gate, whoosh) keep their own.
 export const sfx = {
   ...fx.sfx,
+  blip: () => uiSound('tab', { gain: 0.7 }),
+  select: () => uiSound('button'),
+  confirm: () => uiSound('toggleOn'),
+  tick: () => uiSound('detent', { v: 0.5 }),
+  door: () => uiSound('door'),
+  page: () => uiSound('page'),
+  right: () => uiSound('right'),
+  wrong: () => uiSound('wrong'),
+  reveal: () => uiSound('find'),
   ui: uiSound,
   // secret | lock | cat | key | ending. Without music the old chime says it instead.
   motif: (kind) => { if (scape && playing() && ctx.state === 'running') scape.cue(kind); else if (kind !== 'ending') fx.sfx.chime(); },

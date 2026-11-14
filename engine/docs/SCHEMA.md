@@ -198,5 +198,5 @@ people's remarks about it, withheld lines and the door that knows you (the town 
 `sound(ctx)` from `lab/kit.js`: tones, a plucked string, a soft piano, a bell, chords (equal or just),
 beats, sustained tones for sliders, a scope to draw what sounds. Stopped when the station closes;
 the ambient music ducks while it plays. The kit's controls click and tick by themselves;
-`stage(ctx, sizes, draw, { quiet: true })` or `ctx.quiet()` silences them. Details and an example:
+`stage(ctx, { wide, tall, quiet: true }, draw)` or `ctx.quiet()` silences them. Details and an example:
 `references/10-games.md`, "Sound for labs and games".

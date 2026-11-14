@@ -30,8 +30,8 @@ owner), or anything the learner has not met yet. A game never teaches a new fact
 it must already be in the concept's page, lab or questions, and must not contradict them. This is
 the author's duty; the validator cannot check meaning.
 
-Two or three games are plenty for a course; one per concept is the most. Games are never
-required: the notebook never lists them, the ending never waits for them.
+Two to five games are plenty for a course; one or two per concept, three at most (the validator
+warns above). Games are never required: the notebook never lists them, the ending never waits for them.
 
 ## A game in `course.json`
 
@@ -418,11 +418,13 @@ async function beats(ctx) {
 | `s.stopAll()` | silence (also done when the station closes) |
 | `s.scope()` | `{ wave(n), spectrum(n), sounding() }`: from an analyser, or computed from what is playing when sound is off |
 | `s.on` | false when the learner switched sound off: draw anyway |
-| `sound.note('A4')` / `sound.midi('A4')` / `sound.name(69, lang)` | 440 / 69 / "A4" or "La4" |
+| `sound.note('A4')` / `sound.midi('A4')` / `sound.name(69, lang)` | 440 / 69 / "A4" or "La4" (also `s.note`, `s.midi` on the bound object, e.g. `g.sound.note`) |
 | `sound.interval(7, lang)` | "perfect fifth" / "quinta giusta" |
 | `sound.ratio('fifth')` | 3/2 (just intervals by name) |
 
 Levels are safe by construction: a limiter, a ceiling well below the music's motif, gentle
 attacks, the ambient music ducked while a lab plays sound. Controls of the kit (sliders, buttons,
 drags, sorting snaps, task ticks) make small sounds by themselves; a station that wants silence
-passes `{ quiet: true }` to `stage`, or calls `ctx.quiet()`.
+writes `stage(ctx, { wide, tall, quiet: true }, draw)`, or calls `ctx.quiet()`.
+
+The pocket demo has a complete custom game: `courses/pocket-demo/games/times.js`.
