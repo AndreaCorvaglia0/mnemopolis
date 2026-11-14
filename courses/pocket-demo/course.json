@@ -617,7 +617,7 @@
           },
           "text": {
             "en": "For every wave, speed = frequency × wavelength. In air at 20 °C sound travels at about 343 m/s whatever its frequency, so a higher frequency must have a shorter wavelength: at 343 Hz one squeeze-and-stretch is 1 m long, at 686 Hz it is 0.5 m.",
-            "it": "Per ogni onda vale la relazione velocità = frequenza × lunghezza d'onda. Nell'aria a 20 °C il suono viaggia a circa 343 m/s qualunque sia la sua frequenza, quindi a una frequenza più alta deve corrispondere una lunghezza d'onda più corta: a 343 Hz una compressione con la sua rarefazione è lunga 1 m, a 686 Hz è lunga 0,5 m."
+            "it": "Per ogni onda vale la relazione velocità = frequenza × lunghezza d'onda. Nell'aria a 20 °C il suono viaggia a circa 343 m/s qualunque sia la sua frequenza, quindi a una frequenza più alta deve corrispondere una lunghezza d'onda più corta: a 343 Hz una compressione con la sua rarefazione è lunga 1 m, a 686 Hz è lunga 0,5 m."
           }
         }
       ],
@@ -813,7 +813,7 @@
             },
             "source": {
               "en": "The real curve is computed live as 343 m/s divided by the frequency, for air at 20 °C (OpenStax). Your sketch is only compared, never scored as right or wrong.",
-              "it": "La curva reale è calcolata in tempo reale come 343 m/s diviso la frequenza, per aria a 20 °C (OpenStax). Il tuo disegno viene soltanto confrontato, mai valutato come giusto o sbagliato."
+              "it": "La curva reale è calcolata in tempo reale come 343 m/s diviso la frequenza, per aria a 20 °C (OpenStax). Il tuo disegno viene soltanto confrontato, mai valutato come giusto o sbagliato."
             }
           }
         ]
@@ -971,7 +971,7 @@
           "level": 2,
           "q": {
             "en": "What is the wavelength of a 343 Hz sound in air at 20 °C, where sound travels at 343 m/s?",
-            "it": "Qual è la lunghezza d'onda di un suono a 343 Hz nell'aria a 20 °C, dove il suono viaggia a 343 m/s?"
+            "it": "Qual è la lunghezza d'onda di un suono a 343 Hz nell'aria a 20 °C, dove il suono viaggia a 343 m/s?"
           },
           "options": [
             {
@@ -1619,7 +1619,7 @@
         },
         {
           "en": "In air at 20 °C about 343 m/s; in water about 1480 m/s; in steel about 5960 m/s.",
-          "it": "Nell'aria a 20 °C circa 343 m/s; nell'acqua circa 1480 m/s; nell'acciaio circa 5960 m/s."
+          "it": "Nell'aria a 20 °C circa 343 m/s; nell'acqua circa 1480 m/s; nell'acciaio circa 5960 m/s."
         }
       ],
       "explain": {
@@ -1650,7 +1650,7 @@
           },
           "text": {
             "en": "Sound typically travels slowest in gases, faster in liquids and fastest in solids, because their particles interact more strongly. Approximate speeds: air 343 m/s at 20 °C, fresh water 1480 m/s, steel 5960 m/s. Among gases a light one carries it faster: helium about 965 m/s and carbon dioxide about 259 m/s, both at 0 °C, where air gives 331 m/s.",
-            "it": "Di solito il suono viaggia più lentamente nei gas, più in fretta nei liquidi e più in fretta ancora nei solidi, perché le loro particelle interagiscono più fortemente. Le velocità approssimative sono: aria 343 m/s a 20 °C, acqua dolce 1480 m/s, acciaio 5960 m/s. Tra i gas, uno leggero lo trasmette più in fretta: l'elio circa 965 m/s e l'anidride carbonica circa 259 m/s, entrambi a 0 °C, dove l'aria dà 331 m/s."
+            "it": "Di solito il suono viaggia più lentamente nei gas, più in fretta nei liquidi e più in fretta ancora nei solidi, perché le loro particelle interagiscono più fortemente. Le velocità approssimative sono: aria 343 m/s a 20 °C, acqua dolce 1480 m/s, acciaio 5960 m/s. Tra i gas, uno leggero lo trasmette più in fretta: l'elio circa 965 m/s e l'anidride carbonica circa 259 m/s, entrambi a 0 °C, dove l'aria dà 331 m/s."
           }
         }
       ],
@@ -1859,7 +1859,7 @@
                   "bin": "fast",
                   "why": {
                     "en": "about 965 m/s at 0 °C, where air gives 331 m/s: light molecules pass the squeeze faster.",
-                    "it": "circa 965 m/s a 0 °C, dove l'aria dà 331 m/s: le molecole leggere passano la compressione più in fretta."
+                    "it": "circa 965 m/s a 0 °C, dove l'aria dà 331 m/s: le molecole leggere passano la compressione più in fretta."
                   }
                 },
                 {
@@ -1872,7 +1872,7 @@
                   "bin": "slow",
                   "why": {
                     "en": "about 259 m/s at 0 °C, where air gives 331 m/s: heavier molecules, slower squeeze.",
-                    "it": "circa 259 m/s a 0 °C, dove l'aria dà 331 m/s: molecole più pesanti, compressione più lenta."
+                    "it": "circa 259 m/s a 0 °C, dove l'aria dà 331 m/s: molecole più pesanti, compressione più lenta."
                   }
                 }
               ]
@@ -1922,7 +1922,7 @@
           "level": 1,
           "q": {
             "en": "About how fast does sound travel in air at 20 °C?",
-            "it": "Più o meno a che velocità viaggia il suono nell'aria a 20 °C?"
+            "it": "Più o meno a che velocità viaggia il suono nell'aria a 20 °C?"
           },
           "options": [
             {
