@@ -161,14 +161,30 @@ misses the character remembers it, so nobody is stuck there.
 
 ## Endings (planned)
 
-Not designed yet, not built: a plan note. The bitter ending with the identical loop is the ending
-of a player who did only the main path. Depending on score and completion (the side missions:
-locks opened, upper floors, hidden buildings, secrets, houses kept from the fog) there could be
-happier endings, for example: the notebook is kept instead of torn; the purser's line changes; the
-crossing is remembered. One function of the state chooses the ending, `endingOf` in
-`engine/src/mechanics/story/logic.js`, and today it always answers `'loop'`; each answer has its
-sequence in `ENDINGS` in `finale.js`. A new ending is a new answer there and a new entry here,
-nothing else.
+Not built: a plan note, now with its triggers fixed. The bitter ending with the identical loop is the
+ending of a player who did only the main path, and today it is the only one. One function of the
+state chooses the ending, `endingOf(state, { tier, completion })` in
+`engine/src/mechanics/story/logic.js`; its inputs are the player's experience tier (arrival, passing,
+settling, known, home: `engine/docs/ENGINE.md`, "Experience") and the completion, the share of the
+optional things done (extra houses, locks, advanced stations, secrets, games played, the fog cleared
+after an ending). The rules are data there, `ENDING_RULES`, checked by the tests:
+
+| Ending | Triggered by | What it would be |
+|---|---|---|
+| **good** | tier `home`, completion at least 0.8, and at least one house brought back from the returning fog | the notebook is kept instead of torn; the ship leaves with its lights on; the crossing is remembered |
+| **hope** | tier `known`, completion at least 0.5 | the loop, but one page stays in your pocket; the purser does not ask "Another round" |
+| **loop** | anything else | built: the bitter, identical loop |
+
+Until an ending is built, `endingOf` answers `loop` (`BUILT_ENDINGS`); `plannedEnding` says what the
+rules would choose. Meanwhile the loop **acknowledges** the tier in two lines and changes no event:
+the keeper at the lamp ("Short, this time." / "You stayed longer this time. Not long enough." /
+"Longer than ever. There may be another way out of this."), the purser after "Another round, <name>?"
+("Quick, this time." / "You stayed a little longer, I see." / "You stayed long this time. Almost long
+enough."). After the ending the player may stay, gather experience and climb the lighthouse again:
+the keeper speaks by tier ("Still here. Good." ... "Almost. There are rooms you haven't opened.")
+and names, vaguely, the kind of thing most missing. Constancy pays: that is the lesson about
+learning the endings will tell. A new ending is a new entry in `ENDINGS` (`finale.js`), its name in
+`BUILT_ENDINGS`, and nothing else.
 
 ## What changes in the game
 

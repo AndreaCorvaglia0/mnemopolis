@@ -108,8 +108,10 @@ export function uncovered(course, labs = {}) {
 
 // Everything the player needs, from the files of a course folder. Returns { payload, errors, warnings }.
 //   files: { course: object, world?: object, labs?: { conceptId: source }, anims?: source, slug? }
-export function makePayload({ course, world = {}, labs = {}, anims = null, slug = null }) {
-  const errors = [], warnings = [], out = {};
+export function makePayload({ course, world = {}, labs = {}, anims = null, slug = null, games = {} }) {
+  const errors = [], warnings = [], out = {}, gout = {};
+  for (const [id, src] of Object.entries(games)) { const r = rewriteImports(src, `games/${id}.js`); errors.push(...r.errors); gout[id] = r.code; }
+  for (const g of course.games || []) if (g?.kind === 'custom' && !games[g.id]) errors.push(`game "${g.id}" is custom but games/${g.id}.js is missing`);
   for (const [id, src] of Object.entries(labs)) {
     const r = rewriteImports(src, `labs/${id}.js`);
     errors.push(...r.errors); out[id] = r.code;
@@ -120,7 +122,7 @@ export function makePayload({ course, world = {}, labs = {}, anims = null, slug 
   if (cov.missing.length) errors.push(`${cov.missing.length === 1 ? 'This station has' : 'These stations have'} no code and no "ready" pattern: ${cov.missing.join(', ')}. Write them in labs/<conceptId>.js (export default { <stationId>: mount }) or give the station "ready": { "kind": ... }.`);
   cov.unknownFiles.forEach((f) => warnings.push(`labs/${f}.js: no concept "${f}" with a lab in course.json; the file is ignored`));
   cov.unread.forEach((f) => warnings.push(`labs/${f}.js: its default export is not an object literal, so its stations could not be checked before playing`));
-  return { payload: { v: 1, slug: slug || course.id || 'course', course, world: world || {}, labs: out, anims: a }, errors, warnings };
+  return { payload: { v: 1, slug: slug || course.id || 'course', course, world: world || {}, labs: out, anims: a, games: gout }, errors, warnings };
 }
 
 // JSON that is safe inside <script>: no "</script", no "<!--"

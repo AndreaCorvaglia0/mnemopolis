@@ -5,6 +5,7 @@
 import { canvasPane } from '../kit.js';
 import { h, slider, seg } from '../shell.js';
 import { sfx } from '../../systems/audio.js';
+import { hand, setQuiet } from '../hands.js';
 import { ink, reduced } from './draw.js';
 import { record, noteValue, tracker } from './when.js';
 import { fmt } from './expr.js';
@@ -15,7 +16,8 @@ import { fmt } from './expr.js';
 // { fluid: true }: the box keeps the width of `wide` or `tall` and takes the height of the real stage
 // (within 0.7 and 2 times the given height), so that a short stage (a phone with the result sheet
 // open) is not letterboxed into tiny text. Lay out from pane.W and pane.H.
-export function stage(ctx, { wide = [760, 480], tall = [480, 600], caption = '', fluid = false } = {}, draw = () => {}) {
+export function stage(ctx, { wide = [760, 480], tall = [480, 600], caption = '', fluid = false, quiet = false } = {}, draw = () => {}) {
+  if (quiet) setQuiet(true);
   // a narrow stage keeps the narrow box even when it is short
   const box = fluid ? (bw, bh) => { const up = bh > bw * 0.8 || bw < 560, [W, H] = up ? tall : wide; return [W, Math.round(Math.min(H * 2, Math.max(H * 0.7, (W * bh) / bw))), up]; } : null;
   const pane = canvasPane(ctx.stage, wide[0], wide[1], caption, box ? { box } : { portrait: tall });
@@ -47,7 +49,7 @@ const decimalsOf = (step) => { if (!step) return null; const s = String(step); r
 
 // button(ctx, label, onClick, { primary }): a large button in the controls panel
 export function button(ctx, label, onClick, { primary = false } = {}) {
-  const b = h('button', { type: 'button', class: 'lab-btn', style: `width:100%;font-weight:600;${primary ? 'background:var(--acc);color:var(--acc-ink);border-color:var(--acc)' : ''}`, onclick: () => { sfx.tick(); onClick(b); } }, label);
+  const b = h('button', { type: 'button', class: 'lab-btn', style: `width:100%;font-weight:600;${primary ? 'background:var(--acc);color:var(--acc-ink);border-color:var(--acc)' : ''}`, onclick: () => { hand('button'); onClick(b); } }, label);
   ctx.controls.append(b);
   return b;
 }

@@ -8,6 +8,7 @@ import { C, color, alpha, clamp } from './draw.js';
 import { stage, tasks, animate, spring, shuffle, hit } from './author.js';
 import { fmt } from './expr.js';
 import { sfx } from '../../systems/audio.js';
+import { hand, setQuiet } from '../hands.js';
 
 export function sort(ctx, data, whens = ctx.station?.when) {
   const t = tasks(ctx, whens || []);
@@ -103,7 +104,7 @@ export function sort(ctx, data, whens = ctx.station?.when) {
     if (from === (b?.id ?? null)) return;
     if (from) { const fb = bins.find((x) => x.id === from); fb.n--; fb.sum.to(fb.sum.target - (c.value || 0)); }
     c.at = b ? b.id : null;
-    if (b) { b.n++; b.sum.to(b.sum.target + (c.value || 0)); b.pulse = 1; t.rec.placed[c.id] = b.id; sfx.plop?.(); if (c.why) ctx.nudge?.(`${c.label}: ${c.why}`, 9000); }
+    if (b) { b.n++; b.sum.to(b.sum.target + (c.value || 0)); b.pulse = 1; t.rec.placed[c.id] = b.id; hand('snap'); if (c.why) ctx.nudge?.(`${c.label}: ${c.why}`, 9000); }
     else delete t.rec.placed[c.id];
     const was = allIn;
     allIn = cards.every((x) => x.at);

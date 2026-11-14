@@ -13,6 +13,10 @@ const N = +arg('n', 240), verbose = process.argv.includes('--verbose');
 
 import { course } from './synthetic.mjs';
 import { planLife, checkLife } from '../src/mechanics/plan.js';
+import { planGames, checkGamePlan } from '../src/mechanics/games/place.js';
+import { lifeContext } from '../src/mechanics/context.js';
+const GAMES3 = [{ id: 'a', kind: 'which' }, { id: 'b', kind: 'estimate', object: 'piano' }, { id: 'c', kind: 'sequence' }];
+const gameStats = { towns: 0, placed: 0 };
 
 const life = { towns: 0, obstacles: 0, secrets: 0, animals: 0, min: 99, max: 0, kinds: {} };
 const fails = [], notes = { crowded: 0, unreachable: 0, laneProps: 0, farthest: 0, far: 0, lanesCut: 0, gates: 0, noGate: 0, gateFar: 0, harbours: 0, harbourFar: 0 }, causes = new Map();
@@ -29,6 +33,17 @@ const judge = (label, town, L, theme = null, seed = '') => {
       const n = plan.secrets.filter((s) => s.kind !== 'sealed').length;
       life.towns++; life.obstacles += plan.obstacles.length; life.secrets += n; life.animals += plan.animals.town.length; life.min = Math.min(life.min, n); life.max = Math.max(life.max, n);
       plan.obstacles.forEach((o) => { life.kinds[o.kind] = (life.kinds[o.kind] || 0) + 1; });
+      // mini-games (mechanics/games/place.js): three games in town, around what life placed
+      try {
+        const c = lifeContext(town, L), used = new Set(), solid = c.solid.slice();
+        for (const [x, y] of plan.blocked) solid[c.I(x, y)] = 1;
+        for (const sx of plan.secrets) if (sx.x != null && !sx.room) used.add(`${sx.x},${sx.y}`);
+        for (const o of plan.obstacles) for (const [x, y] of [...o.tiles, ...o.pocket, o.stand]) used.add(`${x},${y}`);
+        const gp = planGames(c, GAMES3, seed, { used, solid }), gp2 = planGames(c, GAMES3, seed, { used, solid });
+        if (JSON.stringify(gp) !== JSON.stringify(gp2)) all.push('games: placement is not deterministic');
+        all.push(...checkGamePlan(c, gp, plan.blocked).map((p) => `games: ${p}`));
+        gameStats.towns++; gameStats.placed += gp.length;
+      } catch (e) { all.push(`games: cannot be planned: ${e.message}`); }
     }
   }
   // the road out of town (world/townMap.js GATE): the champion's tile and the gate must be reachable
@@ -104,4 +119,5 @@ console.log(`\nstress: ${N} courses, ${towns} towns (dressing off, then on in ${
 console.log(`reported, not failed: ${notes.crowded} towns with a house standing beside another door's corridor (districts too close); ${notes.unreachable} houses with an unreachable door; ${notes.lanesCut} lane or plaza tiles cut off from the square; ${notes.laneProps} solid props standing on lane or bridge tiles; farthest door ${notes.farthest} steps; ${notes.far} towns with a door beyond 45 steps`);
 console.log(`road out of town: ${notes.harbours} towns with the story's harbour (the quay at most ${notes.harbourFar} steps from the square), ${notes.gates} towns with a gate (the champion at most ${notes.gateFar} steps from the start), ${notes.noGate} without (their ending plays at the League hall)`);
 console.log(`life: ${life.towns} towns, ${(life.obstacles / life.towns).toFixed(1)} obstacles per town (${Object.entries(life.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}), ${(life.secrets / life.towns).toFixed(1)} secrets per town (${life.min} to ${life.max}, rooms not counted), ${(life.animals / life.towns).toFixed(1)} animals`);
+console.log(`games: ${gameStats.towns} towns, ${(gameStats.placed / Math.max(1, gameStats.towns)).toFixed(2)} of 3 games placed in town per town (the rest offered by a person)`);
 process.exit(bad ? 1 : 0);

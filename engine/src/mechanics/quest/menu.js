@@ -8,6 +8,9 @@
 //
 // openMenu({ tab, settings, touch }) resolves with 'ending' (the player asked to see the ending card
 // again) or undefined. settings: [{ label, value: () => string, on: () => bool, toggle: () => void }].
+import { XP_ON, tierWord, xpNow, toldList, XLINES, trLine } from '../experience/active.js';
+import { gamesFound } from '../games/active.js';
+import { G_WORDS } from '../games/strings.js';
 import { overlay, h } from '../../lab/shell.js';
 import { mindMap } from '../../lab/map.js';
 import { COURSE, PLACE } from '../../data/content.js';
@@ -114,6 +117,10 @@ function mysteries(busy) {
   for (const [t, has] of Object.entries(state.tools || {})) if (has && TOOLS[t]) items.push(h('span', { class: 'qm-item' }, h('i', { 'aria-hidden': 'true' }, '⚒'), tr(TOOLS[t])));
   const kids = [
     h('div', { class: 'qm-coins' }, h('b', {}, String(state.insight || 0)), tr(W.mysteries.coins)),
+    // experience (mechanics/experience/): how the town sees you, what people told you, the games found
+    ...(XP_ON ? [h('div', { class: 'qm-h' }, trLine(XLINES.clues.tier)), h('p', { class: 'qm-more', style: 'text-align:left' }, `${tierWord()} · ${fill(trLine(XLINES.clues.xp), { n: xpNow() })}`),
+      ...(toldList().length ? [h('div', { class: 'qm-h' }, trLine(XLINES.clues.heading)), ...toldList().map((x) => h('p', { class: 'qm-more', style: 'text-align:left' }, x.text))] : [])] : []),
+    ...(gamesFound().length ? [h('div', { class: 'qm-h' }, tr(G_WORDS.found)), ...gamesFound().map((g) => h('p', { class: 'qm-more', style: 'text-align:left' }, g.plays ? fill(tr(G_WORDS.foundRow), { title: tr(g.title), n: g.best }) : fill(tr(G_WORDS.foundNone), { title: tr(g.title) })))] : []),
     h('div', { class: 'qm-h' }, tr(W.mysteries.carry)),
     items.length ? h('div', { class: 'qm-carry' }, items) : h('p', { class: 'qm-more', style: 'text-align:left' }, tr(W.mysteries.nothing)),
   ];

@@ -17,6 +17,7 @@ import { houseDuel, challengeLabel } from '../mechanics/duel/index.js';
 import { w } from '../data/words.js';
 import { STORY } from '../mechanics/story/config.js';
 import { attachStoryRoom } from '../mechanics/story/room.js';
+import { ownerTalk } from '../mechanics/experience/owner.js';
 
 const RW = 15, RH = 11, T = 16; // the size of the standard room
 
@@ -281,10 +282,12 @@ export class Interior extends Phaser.Scene {
     this.master.faceToward(this.player.tx, this.player.ty);
     sfx.select();
     if (this.storyRoom && (await this.storyRoom.talk())) { this.master.face('down'); return; } // the fog came back
-    await ui.converse(m.name, { root: { say: m.hi, options: [
+    const o = await ownerTalk(ui, id, m.name, m.hi); // experience: the owner notices you (mechanics/experience/)
+    await ui.converse(m.name, { root: { say: o.say, options: [
       { label: w('room.openLab'), do: async () => { await ui.lab(id); return 'end'; } },
       { label: w('room.showWall'), do: async () => { await ui.reading(id); return 'end'; } },
       { label: challengeLabel(id), if: () => pool.length >= 2, do: async () => { await this.quizSeries(pool); return 'end'; } },
+      ...o.options,
       { label: w('town.bye') },
     ] } });
     this.master.face('down');

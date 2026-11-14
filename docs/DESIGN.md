@@ -37,7 +37,7 @@ town still hides.
 |---|---|---|---|
 | **Prove** | checking understanding | duels with the experts, then the League | badges, the open road, the ending |
 | **Explore** | going beyond the basics | secrets, locked places, upper floors, hidden buildings | advanced material, discoveries |
-| **Practise** | memory | many small questions: tall grass, passers-by, rematches; after the ending, the returning fog (`STORY.md`) | coins for the town shop |
+| **Practise** | memory | many small questions: tall grass, passers-by, rematches; mini-games; after the ending, the returning fog (`STORY.md`) | coins for the town shop, and experience |
 
 The axes feed each other: practice earns coins, coins buy tools, tools open places (Explore);
 winning a duel earns the owner's key to the upper floor (Explore); what is found upstairs makes
@@ -197,6 +197,16 @@ The game never opens at the full depth of the subject. Depth is reached by climb
   (a lantern, a map of footprints). Prices are tuned so that the first tool costs about ten
   good answers.
 - Questions prefer what was never seen, then what was answered wrong, then the oldest (exists).
+- **Mini-games** (built; `references/10-games.md`): a few short games per course, attached to an
+  object in town, a person or a house's owner, opened only once their concepts are met. Points by
+  difficulty, speed and streaks; a staircase makes them harder after two right and easier after a
+  miss; the best score is kept; coins are halved from the fourth play of the day, so practice pays
+  without farming. Never on the main path, never listed as a task (the notebook's Clues list the ones
+  found, with their best).
+- **Experience** (built; `engine/docs/ENGINE.md`, "Experience"): every coin ever earned plus what
+  coins do not pay (houses, locks, secrets, games, days of coming back), as one number that never
+  goes down, read as five tiers. Spending coins never lowers it. Today people only remark on it, one
+  door and the withheld lines answer to it, and the endings are planned on it (`STORY.md`).
 
 ## Guidance
 

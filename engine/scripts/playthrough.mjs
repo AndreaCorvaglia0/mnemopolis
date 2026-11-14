@@ -70,6 +70,8 @@ async function until(fn, what, ms = 40000, ...args) {
     let v;
     try { v = await page.evaluate(fn, ...args); } catch (e) { v = undefined; }
     if (v) return v;
+    // a person remarks on the player's experience (mechanics/experience/world.js): read it and go on
+    if (await page.evaluate(() => !!__game.scene.getScene('UI')?.announcing).catch(() => false)) { log('   a remark on experience, read'); await page.keyboard.press('Space'); await sleep(500); continue; }
     if (Date.now() - t1 > ms) { await shot(`stuck-${what.replace(/\W+/g, '-').slice(0, 30)}`); throw new Error(`timed out waiting for: ${what}`); }
     await sleep(150);
   }
@@ -145,6 +147,12 @@ async function checkTracker(plan, where) {
 
 // ---------------------------------------------------------------- dialogues
 async function waitIdle(what = 'the game to be free', ms = 40000) {
+  // a person may remark that the player's experience changed (mechanics/experience/world.js): read it, as a player would
+  for (let i = 0; i < 20; i++) {
+    const t = await ev(() => { const ui = __game.scene.getScene('UI'); return ui.announcing && ui.saying ? `${ui.announcing}: ${ui.saying.name}: ${ui.saying.line}` : null; });
+    if (!t) { await sleep(300); if (!(await ev(() => !!__game.scene.getScene('UI').announcing))) break; continue; }
+    log(`   a remark on experience (${t})`); await key('Space'); await sleep(600);
+  }
   return until(() => { const ui = __game.scene.getScene('UI'); const s = __game.scene.getScenes(true).find((x) => x.sys.settings.key !== 'UI'); return !ui.busy && !ui.modals && !document.querySelector('.lx,.dl,.lk,.qe,.qm,.hb-over') && s && !s.locked && !s.leaving && !s.player?.moving; }, what, ms);
 }
 // read through what a person says: Space, or a tap on the box
@@ -224,6 +232,7 @@ async function walkTo(tx, ty, what, { use = true } = {}) {
     await settle();
     const way = await pathTo(tx, ty);
     if (!way) { fail(`no way to ${what} (${tx},${ty}) from ${JSON.stringify((await probe()).p)}`); return false; }
+    if (await ev(() => !!__game.scene.getScene('UI').announcing)) { await waitIdle(); continue; } // a remark on experience first
     const target = await tilePage(tx, ty);
     if (onScreen(target)) {
       if (use || way.length > 1) await tap(...target);
@@ -553,7 +562,7 @@ async function upstairs(id) {
 async function menu(when) {
   if (PHONE) { const at = await ev(() => { const ui = __game.scene.getScene('UI'); const z = ui.btns.list.find((o) => o.type === 'Zone'); const m = ui.hudRight; return __hb.uiToPage(m.x + z.x + z.width / 2, m.y + z.y + z.height / 2); }); await tap(...at); }
   else await key('Tab');
-  await until(() => document.querySelector('.qm'), 'the menu');
+  if (!(await until(() => document.querySelector('.qm'), 'the menu', 6000).catch(() => null))) { await waitIdle(); if (PHONE) { const at = await ev(() => { const ui = __game.scene.getScene('UI'); const z = ui.btns.list.find((o) => o.type === 'Zone'); const m = ui.hudRight; return __hb.uiToPage(m.x + z.x + z.width / 2, m.y + z.y + z.height / 2); }); await tap(...at); } else await key('Tab'); await until(() => document.querySelector('.qm'), 'the menu'); }
   for (const [i, tab] of [[0, 'journey'], [1, 'map'], [2, 'mysteries']]) {
     await clickEl('.qm-tab', null, i);
     await sleep(600);
@@ -678,6 +687,49 @@ for (const [hi, id] of coreIds.entries()) {
   }
   if (hi === 1) await menu('mid');
 }
+// a mini-game (mechanics/games/): walk to a game's object in town (or be carried there), Space or a
+// tap, play it through with right answers, and check the coins and the saved best
+{
+  const gi = await ev(() => __hb.xp.games());
+  const spot = gi.town.find((t) => gi.games.find((g) => g.id === t.id)?.open);
+  if (!gi.games.length) log('== no mini-games in this course');
+  else if (!spot) fail(`no open game in town: ${JSON.stringify(gi.games)}`);
+  else {
+    const g = gi.games.find((x) => x.id === spot.id);
+    log(`== a mini-game: ${g.id} (${g.kind}) on ${spot.object} at ${spot.x},${spot.y}`);
+    const before = (await S()).insight;
+    if (FAST) await carryTo(spot.stand[0], spot.stand[1]);
+    await walkTo(spot.x, spot.y, `the ${spot.object}`);
+    if (!(await ev(() => !!document.querySelector('.gm')))) { await settle(); await ev((x, y) => { const s = __game.scene.getScene('Town'); const dx = x - s.player.tx, dy = y - s.player.ty; s.player.face(dx > 0 ? 'right' : dx < 0 ? 'left' : dy > 0 ? 'down' : 'up'); return 1; }, spot.x, spot.y); if (PHONE) { const t = await tilePage(spot.x, spot.y); await tap(...t); } else await key('Space'); }
+    const opened = await until(() => document.querySelector('.gm')?.__game?.phase === 'intro', `the game ${g.id} to open`, 20000).catch(() => null);
+    if (!opened) fail(`the game ${g.id} did not open`);
+    else {
+      await shot(`game-${g.id}-start`);
+      if (PHONE) await clickEl('.gm-btn.primary'); else await key('Enter');
+      await until(() => document.querySelector('.gm')?.__game?.phase === 'round', `a round of ${g.id}`, 20000);
+      let rounds = 0;
+      for (let i = 0; i < 80; i++) {
+        const st = await ev(() => { const r = document.querySelector('.gm'); return r ? { phase: r.__game.phase, busy: r.__game.busy } : { phase: 'closed' }; });
+        if (st.phase !== 'round') break;
+        if (st.busy) { await sleep(200); continue; }
+        await ev(() => { document.querySelector('.gm').__game.bot(true); return 1; }); rounds++;
+        await sleep(g.kind === 'sequence' || g.kind === 'match-fast' ? 1800 : 900);
+      }
+      await until(() => document.querySelector('.gm')?.__game?.phase === 'result', `the result of ${g.id}`, 40000);
+      const res = await ev(() => document.querySelector('.gm').__result || null);
+      await shot(`game-${g.id}-result`);
+      if (PHONE) await clickEl('.gm-btn.primary'); else await key('Enter');
+      await until(() => !document.querySelector('.gm'), 'the game to close', 10000);
+      const after = await S(), best = await ev((id) => __hb.state.xp?.games?.[id]?.best, g.id);
+      log(`   ${g.id}: ${rounds} rounds, score ${res?.score}, ${res?.right} right, coins ${before} -> ${after.insight}, best saved ${best}`);
+      if (!res || !(res.score > 0)) fail(`${g.id}: no score`);
+      if (after.insight - before !== res?.coins) fail(`${g.id}: coins ${after.insight - before}, the result said ${res?.coins}`);
+      if (best !== res?.score) fail(`${g.id}: best ${best}, score ${res?.score}`);
+    }
+    await waitIdle();
+  }
+}
+
 // the League
 log('== the League');
 await checkTracker({ kind: 'league' }, 'all houses done');
@@ -706,7 +758,12 @@ if (G) {
   await sleep(800);
   await checkTracker({ kind: 'ending' }, 'League won, gate open');
   await shot('gate-open');
-  await walkTo(G.tiles[0][0], G.tiles[0][1], 'the open gate');
+  // a remark on experience may take the first tap (the League raised it): then walk again
+  for (let i = 0; i < 3; i++) {
+    await walkTo(G.tiles[0][0], G.tiles[0][1], 'the open gate');
+    if (await until(() => document.querySelector('.qe'), 'the ending card', 12000).catch(() => null)) break;
+    await waitIdle();
+  }
 } else log('   (this town has no gate: the card opens at the League hall)');
 void gate;
 await until(() => document.querySelector('.qe'), 'the ending card', 30000);

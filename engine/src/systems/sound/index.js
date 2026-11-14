@@ -14,6 +14,7 @@ import { compose, MOODS, MOOD_ORDER } from './theory.js';
 import { mixFor, placeLevels } from './mix.js';
 import { createSoundscape } from './engine.js';
 import { makeSfx } from './sfx.js';
+import { renderUi, DEFAULT_KEY } from './ui.js';
 
 const CFG = WORLD?.music, NO_MUSIC = CFG === false;
 const VOLUME = Math.max(0, Math.min(1, Number(CFG?.volume ?? 0.6)));
@@ -125,8 +126,20 @@ export function moodSetting() {
 }
 
 // ---- the motif and the duel's pulse, as sound effects (the callers already import sfx)
+// The small interface sounds of before (square-wave blips) now come from the designed set (ui.js),
+// in the course's key; the bigger events (stamp, encounter, gate, whoosh) keep their own.
 export const sfx = {
   ...fx.sfx,
+  blip: () => uiSound('tab', { gain: 0.7 }),
+  select: () => uiSound('button'),
+  confirm: () => uiSound('toggleOn'),
+  tick: () => uiSound('detent', { v: 0.5 }),
+  door: () => uiSound('door'),
+  page: () => uiSound('page'),
+  right: () => uiSound('right'),
+  wrong: () => uiSound('wrong'),
+  reveal: () => uiSound('find'),
+  ui: uiSound,
   // secret | lock | cat | key | ending. Without music the old chime says it instead.
   motif: (kind) => { if (scape && playing() && ctx.state === 'running') scape.cue(kind); else if (kind !== 'ending') fx.sfx.chime(); },
   // the story's theme (docs/STORY.md): 'fragment' | 'opening' | 'full'. Never over a lab, a page or a
@@ -139,6 +152,52 @@ export const sfx = {
   horn: () => { if (scape && !muted && ctx.state === 'running') return scape.horn(); return 0; },
   tension: (on) => { where = { ...where, focus: on ? 'duel' : where.focus === 'duel' ? 'page' : where.focus }; applyMix(0.8); },
 };
+
+// ---- the sounds of the hands (ui.js): one entry point, buffers rendered once per name and key
+const uiCache = new Map();
+let uiQuietUntil = 0;
+export function uiSound(name, { v, gain = 1 } = {}) {
+  const s = io(); if (!s) return;
+  const now = s.ctx.currentTime;
+  if (name === 'detent' && now < uiQuietUntil) return; // a dragged slider: at most one detent per 45 ms
+  if (name === 'detent') uiQuietUntil = now + 0.045;
+  const key = scape?.piece ? { root: scape.piece.noteRoot, scale: scape.piece.scale } : DEFAULT_KEY;
+  const q = v == null ? '' : Math.round(Math.max(0, Math.min(1, v)) * 7);
+  const id = `${name}:${q}:${key.root}`;
+  let buf = uiCache.get(id);
+  if (!buf) {
+    const data = renderUi(name, key, s.ctx.sampleRate, v == null ? undefined : q / 7);
+    if (!data.length) return;
+    buf = s.ctx.createBuffer(1, data.length, s.ctx.sampleRate); buf.copyToChannel(data, 0); uiCache.set(id, buf);
+  }
+  const src = s.ctx.createBufferSource(), g = s.ctx.createGain();
+  src.buffer = buf; g.gain.value = gain; src.connect(g); g.connect(s.bus); src.start(now + 0.005);
+}
+export const ui = { sound: uiSound };
+
+// ---- the lab's own bus (lab.js): above the sfx, under a hard limiter, ducking the music while it plays
+let lab = null, labActive = 0, labTimer = null;
+export function labIO() {
+  if (!ctx || !scape) initAudio();
+  if (!ctx || !scape) return null;
+  if (!lab) {
+    const g = ctx.createGain(), lim = ctx.createDynamicsCompressor(), an = ctx.createAnalyser();
+    g.gain.value = 0.5; // a source of gain 1 comes out at about -12 dBFS before the limiter
+    lim.threshold.value = -9; lim.knee.value = 3; lim.ratio.value = 20; lim.attack.value = 0.002; lim.release.value = 0.15;
+    an.fftSize = 2048; an.smoothingTimeConstant = 0.6;
+    g.connect(lim); lim.connect(scape.taps.all); g.connect(an);
+    lab = { ctx, bus: g, analyser: an };
+  }
+  return { ...lab, on: !muted && ctx.state === 'running' };
+}
+// a lab sound starts (and ends `secs` later): the ambient music ducks to a breath meanwhile
+export function labSounding(secs = 1) {
+  if (!scape) return;
+  labActive += 1;
+  scape.taps.music.gain.setTargetAtTime(0.15, ctx.currentTime, 0.08);
+  setTimeout(() => { labActive = Math.max(0, labActive - 1); if (!labActive) { clearTimeout(labTimer); labTimer = setTimeout(() => { if (!labActive && scape) scape.taps.music.gain.setTargetAtTime(playing() ? 1 : 0, ctx.currentTime, 0.6); }, 300); } }, Math.max(50, secs * 1000));
+}
+export const soundMuted = () => muted || !ctx;
 
 // for the console: __sound() shows what plays
 if (typeof window !== 'undefined') window.__sound = () => ({ ctx: ctx?.state, muted, musicOn, noMusic: NO_MUSIC, mood, key: scape?.piece.key, where, mix: scape?.mix });
