@@ -366,6 +366,7 @@ const tapItem = async (c) => {
 const labBtn = (label) => clickEl('.lx .lab-ctl button', label);
 // a slider brought to a value with the station's fine buttons (steps: [big, small]), as a finger would
 async function fine(target, [big, small]) {
+  await until(() => !!document.querySelector('.lx input[type=range]'), 'the slider of the station');
   for (let n = 0; n < 80; n++) {
     const v = await ev(() => +document.querySelector('.lx input[type=range]').value), d = target - v;
     if (Math.abs(d) < small / 2) return;
@@ -378,7 +379,7 @@ Object.assign(RECIPES, {
   'string:harmonics': async () => { for (const m of [12, 7, 5]) { await tapItem(`touch${m}`); await tapItem('pluck'); } },
   'beats:wobble': async () => { await fine(110, [1, 0.1]); await fine(165, [1, 0.1]); },
   'beats:third': async () => { await segBtn('Guitar'); await labBtn('Play A and'); await segBtn('Pure'); await labBtn('Play A and'); },
-  'beats:tuneup': async () => { await fine(110, [0.5, 0.05]); await sleep(1500); },
+  'beats:tuneup': async () => { await fine(2.7, [0.5, 0.05]); await sleep(1500); },
   'twelve:circle': async () => { for (let k = 0; k < 12; k++) await labBtn('One fret up'); await tapItem('fret3'); },
   'twelve:fifthfret': async () => { await tapItem('e5'); await tapItem('g4'); },
   'scale:stencil': async () => { await tapItem('dial7'); await labBtn('Play the scale'); await tapItem('cell11'); },
@@ -545,6 +546,9 @@ async function useLock(r) {
 async function doStationUpper(id, sid) {
   const def = PLACE[id].lab.stations.find((s) => s.id === sid);
   log(`   station ${id}:${sid} "${def.tab}" (upstairs)`);
+  // the bench may open on another station (one already done): go to this one by its step in the header
+  const step = await ev((tab) => { const b = [...document.querySelectorAll('.lx-steps button')].find((e) => (e.getAttribute('aria-label') || e.textContent || '').includes(tab)); if (!b || b.getAttribute('aria-current') === 'step') return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, def.tab);
+  if (step) { await tap(...step); await until(() => document.querySelector('.lx')?.dataset.ready === '1', 'the station'); await sleep(400); }
   if (def.predict) { await clickEl('.lx .lx-choice', null, def.predict.answer); await sleep(500); }
   const recipe = RECIPES[`${id}:${sid}`];
   if (!recipe) { fail(`no recipe for ${id}:${sid}`); return false; }

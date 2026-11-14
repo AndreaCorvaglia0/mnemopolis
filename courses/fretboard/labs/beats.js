@@ -138,31 +138,33 @@ async function third(ctx) {
 
 async function tuneup(ctx) {
   const t = tasks(ctx, [{ select: 'tuned' }]), s = sound(ctx), FE = 82.407 * 2 ** (5 / 12); // low E at fret 5: 110.00 Hz
+  // the peg shows how far it was turned, never the frequency: the ear has to find the spot
   let t0 = 0, held = 0, done = false;
+  const OFF = -2.7, fa = () => FE + OFF + ctl.v.peg;
   const onA = () => { player.update(); view.redraw(); };
-  const ctl = sliders(ctx, [{ id: 'fa', label: 'Peg of the A string', min: 104, max: 116, step: 0.05, value: 107.3 }], onA);
-  fineRow(ctx, ctl, 'fa', [-0.5, -0.05, 0.05, 0.5], onA);
-  const player = pairPlayer(ctx, s, () => [FE, ctl.v.fa]);
+  const ctl = sliders(ctx, [{ id: 'peg', label: 'Peg of the A string (turns)', min: -6, max: 6, step: 0.05, value: 0 }], onA);
+  fineRow(ctx, ctl, 'peg', [-0.5, -0.05, 0.05, 0.5], onA);
+  const player = pairPlayer(ctx, s, () => [FE, fa()]);
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
-    const up = pane.upright, W = pane.W, diff = Math.abs(ctl.v.fa - FE);
+    const up = pane.upright, W = pane.W, diff = Math.abs(fa() - FE);
     d.clear();
     d.text('low E at fret 5', 24, 34, { size: 18, color: C.gold, weight: 600 }); d.text('open A string', up ? 24 : 300, up ? 60 : 34, { size: 18, color: C.acc, weight: 600 });
     // a lamp that pulses with the beats: the only read-out
     const lamp = 0.5 + 0.5 * Math.cos(2 * Math.PI * diff * t0), lx = W - 70, ly = up ? 46 : 40;
     d.circle(lx, ly, 26, { fill: alpha(diff < 0.6 ? C.ok : C.gold, 0.25 + 0.75 * (diff < 0.6 ? 1 : lamp)), glow: diff < 0.6 ? C.ok : null });
-    d.text(done ? `in tune: A ${fmtHz(ctl.v.fa)} Hz` : diff < 0.6 ? 'almost still…' : 'wah, wah, wah', 24, up ? 100 : 74, { size: 20, weight: 700, color: diff < 0.6 ? C.ok : C.text });
-    band(d, 24, up ? 120 : 96, W - 48, up ? 200 : 180, FE, ctl.v.fa, 3, t0);
+    d.text(done ? `in tune: A ${fmtHz(fa())} Hz` : diff < 0.6 ? 'almost still…' : 'wah, wah, wah', 24, up ? 100 : 74, { size: 20, weight: 700, color: diff < 0.6 ? C.ok : C.text });
+    band(d, 24, up ? 120 : 96, W - 48, up ? 200 : 180, FE, fa(), 3, t0);
     d.wrap('The wave of the two notes over three seconds. Each bulge is one beat: fewer bulges, closer notes.', 24, up ? 340 : 296, W - 48, { size: 17, color: C.muted });
   });
   const anim = animate(ctx, (dt) => {
     if (dt === Infinity) return false; t0 += dt;
-    if (Math.abs(ctl.v.fa - FE) < 0.6) { held += dt; if (held > 0.8 && !done) { done = true; t.pick('tuned').check(); } } else held = 0;
+    if (Math.abs(fa() - FE) < 0.6) { held += dt; if (held > 0.8 && !done) { done = true; t.pick('tuned').check(); } } else held = 0;
     view.redraw(); return true;
   });
   anim.kick();
-  ctx.hint(() => ctl.el.fa);
+  ctx.hint(() => ctl.el.peg);
   soundNote(ctx);
-  ctx.stage.__ready = { t, el: ctl.el, pane: view.pane, custom: () => { ctl.set('fa', 110); onA(); } };
+  ctx.stage.__ready = { t, el: ctl.el, pane: view.pane, custom: () => { ctl.set('peg', 2.7); onA(); } };
 }
 
 export default { wobble, third, tuneup };

@@ -138,10 +138,10 @@ async function harmonics(ctx) {
     drawString(d, Lay, { k: 0, wave, touch });
     const [rx, ry] = Lay.read;
     const fret = touch == null ? null : (() => { let b = 0, e = 9; for (let j = 1; j <= MAXF; j++) { const dd = Math.abs(fretAt(j) - touch); if (dd < e) { e = dd; b = j; } } return b; })();
-    if (last && last.n) { d.text(`${F0 * last.n} Hz`, rx, ry, { size: Lay.up ? 34 : 40, weight: 700, color: C.gold }); d.text(`harmonic ${last.n}: ${last.n} × the open ${F0} Hz`, rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 420 }); }
+    if (last && last.n) { d.text(`${F0 * last.n} Hz`, rx, ry, { size: Lay.up ? 34 : 40, weight: 700, color: C.gold }); d.text(Lay.up ? `${last.n} × ${F0} Hz` : `harmonic ${last.n}: ${last.n} × the open ${F0} Hz`, rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 420 }); }
     else if (last) { d.text('almost silent', rx, ry, { size: Lay.up ? 30 : 36, weight: 700, color: C.bad }); d.text('no harmonic has a still point here', rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 420 }); }
     else { d.text(`open string ${F0} Hz`, rx, ry, { size: Lay.up ? 28 : 34, weight: 700 }); }
-    if (touch != null) d.text(`touching at ${(touch * 100).toFixed(1)}% of the string, above fret ${fret}`, ...(Lay.up ? [230, 230] : [70, 330]), { size: 17, color: C.text, max: Lay.up ? 240 : 660 });
+    if (touch != null) { if (Lay.up) { d.text(`touching at ${(touch * 100).toFixed(1)}%`, 230, 214, { size: 17, color: C.text }); d.text(`above fret ${fret}`, 230, 240, { size: 17, color: C.text }); } else d.text(`touching at ${(touch * 100).toFixed(1)}% of the string, above fret ${fret}`, 70, 330, { size: 17, color: C.text, max: 660 }); }
     // the first four ways the string can vibrate; those with a still point at the touch are lit
     const bx = Lay.up ? 230 : 70, by = Lay.up ? 300 : 370, bw = Lay.up ? 230 : 160, gap = Lay.up ? 72 : 0;
     for (let m = 1; m <= 4; m++) {

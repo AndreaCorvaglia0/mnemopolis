@@ -98,8 +98,8 @@ async function relative(ctx) {
     const lit = [...n, 12], cw = rw / 12; for (let j = 0; j < 7; j++) tapSteps.push({ j, x: rx + ((lit[j] + lit[j + 1]) / 2) * cw - 22, y: ry + 56, w: 44, h: 34 });
     const minor = start === 5, major = start === 0;
     d.text(`${C_NAMES[start]} … ${C_NAMES[start]}:  ${st.join(' ')}`, 24, ry + 140, { size: 22, weight: 700, color: minor ? C.purple : major ? C.acc : C.text });
-    d.text(major ? 'the major pattern' : minor ? 'the natural minor pattern: A minor, the relative minor of C' : 'another pattern from the same seven notes', 24, ry + 170, { size: 17, color: C.muted, max: W - 48 });
-    if (flash) d.text(flash, 24, ry + 200, { size: 18, color: C.ok, max: W - 48 });
+    const hh = d.wrap(major ? 'the major pattern' : minor ? 'the natural minor pattern: A minor, the relative minor of C' : 'another pattern from the same seven notes', 24, ry + 156, W - 48, { size: 17, color: C.muted, lines: 2 });
+    if (flash) d.wrap(flash, 24, ry + 166 + hh, W - 48, { size: 18, color: C.ok, lines: 2 });
   });
   let tapStarts = [];
   view.pane.drag((x, y, ph) => {
