@@ -1,5 +1,6 @@
 // The plain town's main path (?story=0: the guide, the League, the champion, the gate); the story's own
 // path is pictured by storyshots.mjs.
+// (&noxp: experience off here, so that no remark on a tier interrupts the scripted steps; npm run shots:world covers it)
 // Pictures of the main path (src/mechanics/quest/): the guide's first speech, the town with the
 // tracker at the start, the mark over the next house, the three tabs of the menu in mid-game (two
 // houses done), a room's tracker, the League refused, the champion stepping aside, the ending card,
@@ -54,7 +55,7 @@ const steps = [
   'key:Escape', 'wait:1200', `eval:${enc(`'after the ending: '+${UI}.trackFull+' ended='+__hb.state.ended`)}`, 'shot:11-free-roaming',
   `eval:${enc(`(${UI}.showAtlas('journey'),1)`)}`, 'wait:900', 'shot:12-journey-after', 'key:Escape', 'wait:500',
 ];
-const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch&story=0' : '?lite&test&story=0' } });
+const r = spawnSync('node', [path.join(here, 'shoot.mjs'), path.join(here, '..', 'dist', 'index.html'), out, steps.join(',')], { stdio: 'inherit', env: { ...process.env, VP: process.env.VP || (PHONE ? '390x844x2' : '1440x800x1'), Q: PHONE ? '?lite&test&touch&story=0&noxp' : '?lite&test&story=0&noxp' } });
 if (process.env.OUT2) for (const f of readdirSync(out)) if (f.endsWith('.png')) copyFileSync(path.join(out, f), path.join(process.env.OUT2, `spine-${PHONE ? 'phone-' : ''}${f}`));
 console.log(`Pictures are in ${out}${process.env.OUT2 ? ` and ${process.env.OUT2}/spine-${PHONE ? 'phone-' : ''}*.png` : ''}.`);
 process.exit(r.status || 0);

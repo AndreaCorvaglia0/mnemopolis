@@ -164,7 +164,7 @@ export function openGame(game, opts) {
         const msg = right ? `${pickOne(t(W.rightMore), rng)}` : timeUp ? (truth ? T('timeUp', { it: truth }) : T('timeUpPlain')) : truth ? T('wrong', { it: T('itWas', { x: truth }) }) : T('wrongPlain');
         feed.className = `gm-feed ${right ? 'yes' : 'no'} gm-pop`;
         feed.innerHTML = '';
-        feed.append(h('span', {}, msg + (why ? ` ${why}` : '')));
+        feed.append(h('span', {}, (said != null && !right ? `${T('said', { x: said })} ` : '') + msg + (why ? ` ${why}` : '')));
         if (pts) feed.append(h('span', { class: 'pts' }, T('points', { n: pts })));
         if (!right) stage.classList.add('gm-shake');
         drawHud();

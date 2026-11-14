@@ -17,6 +17,7 @@ export const G_WORDS = {
   wrongPlain: { en: 'Not this time.', it: 'Non stavolta.' },
   timeUp: { en: 'Time. {it}.', it: 'Tempo. {it}.' },
   timeUpPlain: { en: 'Time.', it: 'Tempo.' },
+  said: { en: 'You said {x}.', it: 'Hai detto {x}.' },
   itWas: { en: 'it was {x}', it: 'era {x}' },
   streak: { en: '{n} in a row', it: '{n} di fila' },
   close: { en: 'Close: {x}', it: 'Vicino: {x}' },
