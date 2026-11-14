@@ -3,38 +3,93 @@
   "version": 1,
   "id": "fretboard",
   "language": "en",
-  "title": "Port Octave",
-  "subject": "Music theory for guitarists, from the vibrating string to the open chord",
-  "pitch": "Pluck a string, hear two notes beat, and find out why the twelfth fret, the major scale and an open E chord work.",
+  "languages": [
+    "en",
+    "it"
+  ],
+  "title": {
+    "en": "Port Octave",
+    "it": "Porto Ottava"
+  },
+  "subject": {
+    "en": "Music theory for guitarists, from the vibrating string to the open chord",
+    "it": "Teoria musicale per chitarristi, dalla corda che vibra all'accordo a vuoto"
+  },
+  "pitch": {
+    "en": "Pluck a string, hear two notes beat, and find out why the twelfth fret, the major scale and an open E chord work.",
+    "it": "Pizzica una corda, ascolta due note che battono e scopri perché il dodicesimo tasto, la scala maggiore e un accordo di Mi a vuoto funzionano."
+  },
   "tags": [
-    "music",
-    "guitar",
-    "sound",
-    "physics"
+    {
+      "en": "music",
+      "it": "musica"
+    },
+    {
+      "en": "guitar",
+      "it": "chitarra"
+    },
+    {
+      "en": "sound",
+      "it": "suono"
+    },
+    {
+      "en": "physics",
+      "it": "fisica"
+    }
   ],
   "level": "introductory",
-  "bigIdea": "Notes are frequencies: halving a string doubles its frequency, twelve equal steps fill that octave, and scales and chords are patterns of those steps on the fretboard.",
-  "learner": "A guitarist who strums a few open chords and songs but does not know why the chords work. No notation, no physics and no theory are assumed.",
+  "bigIdea": {
+    "en": "Notes are frequencies: halving a string doubles its frequency, twelve equal steps fill that octave, and scales and chords are patterns of those steps on the fretboard.",
+    "it": "Le note sono frequenze: dimezzare una corda ne raddoppia la frequenza, dodici passi uguali riempiono quell'ottava, e le scale e gli accordi sono schemi di quei passi sul manico."
+  },
+  "learner": {
+    "en": "A guitarist who strums a few open chords and songs but does not know why the chords work. No notation, no physics and no theory are assumed.",
+    "it": "Un chitarrista che strimpella qualche accordo a vuoto e qualche canzone ma non sa perché gli accordi funzionano. Non si presuppone nessuna notazione, nessuna fisica e nessuna teoria."
+  },
   "goals": [
-    "Predict how the pitch of a string changes when it is fretted, and find the octave at half its length.",
-    "Explain why two close notes beat, and why notes in a simple frequency ratio sound smooth together.",
-    "Name the notes along a string and count the distance between them in half steps.",
-    "Build a major scale from any note with the pattern of whole and half steps.",
-    "Build major and minor triads and find their notes inside an open chord shape.",
     {
-      "text": "Place the minor pentatonic box for any key.",
+      "en": "Predict how the pitch of a string changes when it is fretted, and find the octave at half its length.",
+      "it": "Prevedere come cambia l'altezza di una corda quando viene premuta su un tasto, e trovare l'ottava a metà della sua lunghezza."
+    },
+    {
+      "en": "Explain why two close notes beat, and why notes in a simple frequency ratio sound smooth together.",
+      "it": "Spiegare perché due note vicine battono, e perché le note in un rapporto semplice tra le frequenze suonano lisce insieme."
+    },
+    {
+      "en": "Name the notes along a string and count the distance between them in half steps.",
+      "it": "Nominare le note lungo una corda e contare la distanza tra loro in semitoni."
+    },
+    {
+      "en": "Build a major scale from any note with the pattern of whole and half steps.",
+      "it": "Costruire una scala maggiore da una nota qualsiasi con lo schema di toni e semitoni."
+    },
+    {
+      "en": "Build major and minor triads and find their notes inside an open chord shape.",
+      "it": "Costruire triadi maggiori e minori e trovarne le note dentro la forma di un accordo a vuoto."
+    },
+    {
+      "text": {
+        "en": "Place the minor pentatonic box for any key.",
+        "it": "Collocare il box della pentatonica minore per una tonalità qualsiasi."
+      },
       "concepts": [
         "pentatonic"
       ]
     },
     {
-      "text": "Use the circle of fifths to tell which keys share the most notes.",
+      "text": {
+        "en": "Use the circle of fifths to tell which keys share the most notes.",
+        "it": "Usare il circolo delle quinte per capire quali tonalità condividono più note."
+      },
       "concepts": [
         "fifths"
       ]
     },
     {
-      "text": "Name the major and minor chords that belong to a key.",
+      "text": {
+        "en": "Name the major and minor chords that belong to a key.",
+        "it": "Nominare gli accordi maggiori e minori che appartengono a una tonalità."
+      },
       "concepts": [
         "keys"
       ]
@@ -164,28 +219,52 @@
   "themes": [
     {
       "id": "sound",
-      "name": "String Quay",
-      "idea": "A note is a frequency: a string sets it by its length, and simple ratios make notes agree.",
+      "name": {
+        "en": "String Quay",
+        "it": "Molo delle Corde"
+      },
+      "idea": {
+        "en": "A note is a frequency: a string sets it by its length, and simple ratios make notes agree.",
+        "it": "Una nota è una frequenza: una corda la fissa con la sua lunghezza, e i rapporti semplici fanno andare d'accordo le note."
+      },
       "cue": {
         "landscape": "shore",
         "landmark": "bell",
-        "why": "A bell on the quay: a note is something that vibrates."
+        "why": {
+          "en": "A bell on the quay: a note is something that vibrates.",
+          "it": "Una campana sul molo: una nota è qualcosa che vibra."
+        }
       }
     },
     {
       "id": "notes",
-      "name": "Twelve Steps",
-      "idea": "Twelve equal half steps fill the octave, and a scale is a fixed pattern of those steps.",
+      "name": {
+        "en": "Twelve Steps",
+        "it": "Dodici Passi"
+      },
+      "idea": {
+        "en": "Twelve equal half steps fill the octave, and a scale is a fixed pattern of those steps.",
+        "it": "Dodici semitoni uguali riempiono l'ottava, e una scala è uno schema fisso di quei passi."
+      },
       "cue": {
         "landscape": "meadow",
         "landmark": "obelisk",
-        "why": "An obelisk is a sundial's hand: the twelve notes come round like the hours."
+        "why": {
+          "en": "An obelisk is a sundial's hand: the twelve notes come round like the hours.",
+          "it": "Un obelisco è la lancetta di una meridiana: le dodici note tornano come le ore."
+        }
       }
     },
     {
       "id": "chords",
-      "name": "Chord Hill",
-      "idea": "A chord stacks thirds taken from a scale, and a key is a family of such chords.",
+      "name": {
+        "en": "Chord Hill",
+        "it": "Collina degli Accordi"
+      },
+      "idea": {
+        "en": "A chord stacks thirds taken from a scale, and a key is a family of such chords.",
+        "it": "Un accordo impila terze prese da una scala, e una tonalità è una famiglia di tali accordi."
+      },
       "cue": {
         "landscape": "hill",
         "landmark": "arch"
@@ -4180,84 +4259,126 @@
       "from": "beats",
       "to": "string",
       "type": "requires",
-      "note": "Beats and ratios compare frequencies, which the string sets."
+      "note": {
+        "en": "Beats and ratios compare frequencies, which the string sets.",
+        "it": "I battimenti e i rapporti confrontano frequenze, che sono fissate dalla corda."
+      }
     },
     {
       "from": "twelve",
       "to": "string",
       "type": "requires",
-      "note": "The twelve half steps divide the octave found at half the string."
+      "note": {
+        "en": "The twelve half steps divide the octave found at half the string.",
+        "it": "I dodici semitoni dividono l'ottava che si trova a metà corda."
+      }
     },
     {
       "from": "scale",
       "to": "twelve",
       "type": "requires",
-      "note": "The scale is a pattern of the half steps."
+      "note": {
+        "en": "The scale is a pattern of the half steps.",
+        "it": "La scala è uno schema di semitoni."
+      }
     },
     {
       "from": "pentatonic",
       "to": "scale",
       "type": "requires",
-      "note": "The pentatonic is named by scale degrees and is a pattern of distances like the scale."
+      "note": {
+        "en": "The pentatonic is named by scale degrees and is a pattern of distances like the scale.",
+        "it": "La pentatonica si definisce con i gradi della scala ed è uno schema di distanze come la scala."
+      }
     },
     {
       "from": "fifths",
       "to": "scale",
       "type": "requires",
-      "note": "Keys are major scales; the circle orders them."
+      "note": {
+        "en": "Keys are major scales; the circle orders them.",
+        "it": "Le tonalità sono scale maggiori; il circolo le ordina."
+      }
     },
     {
       "from": "fifths",
       "to": "twelve",
       "type": "same-structure",
-      "note": "Two circles of the same twelve notes, by steps of one or seven half steps."
+      "note": {
+        "en": "Two circles of the same twelve notes, by steps of one or seven half steps.",
+        "it": "Due circoli delle stesse dodici note, con passi di uno o di sette semitoni."
+      }
     },
     {
       "from": "triads",
       "to": "scale",
       "type": "requires",
-      "note": "The third and fifth are notes 3 and 5 of the major scale."
+      "note": {
+        "en": "The third and fifth are notes 3 and 5 of the major scale.",
+        "it": "La terza e la quinta sono la terza e la quinta nota della scala maggiore."
+      }
     },
     {
       "from": "beats",
       "to": "triads",
       "type": "used-in",
-      "note": "The fifth of every triad is the smooth 3:2."
+      "note": {
+        "en": "The fifth of every triad is the smooth 3:2.",
+        "it": "La quinta di ogni triade è il 3:2 liscio."
+      }
     },
     {
       "from": "keys",
       "to": "triads",
       "type": "requires",
-      "note": "The chords of a key are triads."
+      "note": {
+        "en": "The chords of a key are triads.",
+        "it": "Gli accordi di una tonalità sono triadi."
+      }
     },
     {
       "from": "keys",
       "to": "scale",
       "type": "requires",
-      "note": "Their notes come from the scale."
+      "note": {
+        "en": "Their notes come from the scale.",
+        "it": "Le loro note vengono dalla scala."
+      }
     },
     {
       "from": "fifths",
       "to": "keys",
       "type": "used-in",
-      "note": "IV and V are the neighbours of I on the circle of fifths."
+      "note": {
+        "en": "IV and V are the neighbours of I on the circle of fifths.",
+        "it": "IV e V sono le vicine di I sul circolo delle quinte."
+      }
     },
     {
       "from": "twelve",
       "to": "beats",
       "type": "contrasts",
-      "note": "Equal half steps give a nearly pure fifth but an impure third."
+      "note": {
+        "en": "Equal half steps give a nearly pure fifth but an impure third.",
+        "it": "Semitoni uguali danno una quinta quasi pura ma una terza impura."
+      }
     }
   ],
   "finalCheck": {
-    "name": "Keeper's Test",
+    "name": {
+      "en": "Keeper's Test",
+      "it": "La Prova del Custode"
+    },
     "size": 8,
     "pass": 0.7
   },
   "games": [
     {
       "id": "higher",
-      "title": "Higher or lower?",
+      "title": {
+        "en": "Higher or lower?",
+        "it": "Più acuta o più grave?"
+      },
       "concepts": [
         "string"
       ],
@@ -4265,9 +4386,15 @@
       "where": "town",
       "object": "hat",
       "rounds": 10,
-      "learn": "A higher frequency is a higher note; the gap shrinks as you get better.",
+      "learn": {
+        "en": "A higher frequency is a higher note; the gap shrinks as you get better.",
+        "it": "Una frequenza più alta è una nota più acuta; la differenza tra le due note si riduce man mano che migliori."
+      },
       "data": {
-        "ask": "Which string is higher?",
+        "ask": {
+          "en": "Which string is higher?",
+          "it": "Quale corda è più acuta?"
+        },
         "pick": "max",
         "make": {
           "kind": "tone",
@@ -4284,20 +4411,38 @@
     },
     {
       "id": "intervals",
-      "title": "Name the interval",
+      "title": {
+        "en": "Name the interval",
+        "it": "Dai un nome all'intervallo"
+      },
       "concepts": [
         "beats"
       ],
       "kind": "sort-fast",
       "where": "person",
       "rounds": 10,
-      "learn": "Octave 2:1, fifth 3:2, fourth 4:3: the smooth pairs by ear.",
+      "learn": {
+        "en": "Octave 2:1, fifth 3:2, fourth 4:3: the smooth pairs by ear.",
+        "it": "Ottava 2:1, quinta 3:2, quarta 4:3: le coppie lisce a orecchio."
+      },
       "data": {
-        "ask": "Two notes, one after the other. Which interval?",
+        "ask": {
+          "en": "Two notes, one after the other. Which interval?",
+          "it": "Due note, una dopo l'altra. Quale intervallo?"
+        },
         "bins": [
-          "octave, 2:1",
-          "fifth, 3:2",
-          "fourth, 4:3"
+          {
+            "en": "octave, 2:1",
+            "it": "ottava, 2:1"
+          },
+          {
+            "en": "fifth, 3:2",
+            "it": "quinta, 3:2"
+          },
+          {
+            "en": "fourth, 4:3",
+            "it": "quarta, 4:3"
+          }
         ],
         "time": [
           9,
@@ -4478,19 +4623,34 @@
     },
     {
       "id": "majmin",
-      "title": "Major or minor?",
+      "title": {
+        "en": "Major or minor?",
+        "it": "Maggiore o minore?"
+      },
       "concepts": [
         "triads"
       ],
       "kind": "sort-fast",
       "where": "host",
       "rounds": 10,
-      "learn": "The third decides: four half steps major, three minor.",
+      "learn": {
+        "en": "The third decides: four half steps major, three minor.",
+        "it": "La terza decide: quattro semitoni maggiore, tre minore."
+      },
       "data": {
-        "ask": "Is this chord major or minor?",
+        "ask": {
+          "en": "Is this chord major or minor?",
+          "it": "Questo accordo è maggiore o minore?"
+        },
         "bins": [
-          "major",
-          "minor"
+          {
+            "en": "major",
+            "it": "maggiore"
+          },
+          {
+            "en": "minor",
+            "it": "minore"
+          }
         ],
         "time": [
           7,
@@ -4662,29 +4822,53 @@
       "id": "written-octave",
       "by": "string",
       "tier": "passing",
-      "teaser": "The notes you read for guitar are not quite the notes it—",
-      "told": "Guitar music is written an octave higher than it sounds, so the open A string, 110 Hz, is written as the A an octave above it."
+      "teaser": {
+        "en": "The notes you read for guitar are not quite the notes it—",
+        "it": "Le note che leggi per la chitarra non sono proprio quelle che suona—"
+      },
+      "told": {
+        "en": "Guitar music is written an octave higher than it sounds, so the open A string, 110 Hz, is written as the A an octave above it.",
+        "it": "La musica per chitarra si scrive un'ottava più in alto di come suona, quindi la corda di La (A) a vuoto, 110 Hz, si scrive come il La un'ottava sopra."
+      }
     },
     {
       "id": "harmonic-tuning",
       "by": "beats",
       "tier": "settling",
-      "teaser": "Some people tune with the harmonics at frets 5 and 7. It works, except—",
-      "told": "The harmonic above fret 7 is a pure fifth of the string, slightly wider than the guitar's equal-tempered fifth, so tuning every string by harmonics leaves small errors that add up across the strings."
+      "teaser": {
+        "en": "Some people tune with the harmonics at frets 5 and 7. It works, except—",
+        "it": "Alcuni accordano con gli armonici ai tasti 5 e 7. Funziona, tranne che—"
+      },
+      "told": {
+        "en": "The harmonic above fret 7 is a pure fifth of the string, slightly wider than the guitar's equal-tempered fifth, so tuning every string by harmonics leaves small errors that add up across the strings.",
+        "it": "L'armonico sopra il tasto 7 è una quinta pura della corda, un po' più larga della quinta temperata della chitarra, quindi accordare ogni corda con gli armonici lascia piccoli errori che si sommano da una corda all'altra."
+      }
     },
     {
       "id": "do-re-mi",
       "by": "town",
       "tier": "passing",
-      "teaser": "Down south they give the notes other names. Something like—",
-      "told": "In Italy and many other countries the notes C, D, E, F, G, A and B are called Do, Re, Mi, Fa, Sol, La and Si."
+      "teaser": {
+        "en": "Down south they give the notes other names. Something like—",
+        "it": "Oltre confine alle note danno altri nomi. Qualcosa come—"
+      },
+      "told": {
+        "en": "In Italy and many other countries the notes C, D, E, F, G, A and B are called Do, Re, Mi, Fa, Sol, La and Si.",
+        "it": "Nei paesi anglosassoni le note Do, Re, Mi, Fa, Sol, La e Si si chiamano C, D, E, F, G, A e B."
+      }
     },
     {
       "id": "caged",
       "by": "triads",
       "tier": "known",
-      "teaser": "Five shapes, and they spell a word if you—",
-      "told": "The open shapes C, A, G, E and D can each be moved up the neck with a barre, and together they cover the whole fretboard: guitarists call this the CAGED system."
+      "teaser": {
+        "en": "Five shapes, and they spell a word if you—",
+        "it": "Cinque forme, e compongono una parola se tu—"
+      },
+      "told": {
+        "en": "The open shapes C, A, G, E and D can each be moved up the neck with a barre, and together they cover the whole fretboard: guitarists call this the CAGED system.",
+        "it": "Le forme a vuoto C, A, G, E e D si possono spostare lungo il manico con un barré, e insieme coprono tutto il manico: i chitarristi lo chiamano sistema CAGED."
+      }
     }
   ]
 }
