@@ -1,6 +1,6 @@
 # The world branch: a study aid that builds its own towns (plan)
 
-Status: **planned, nothing built**. This page fixes the idea and the order of work. The catalogue
+Status: **planned, nothing built, not started** (the owner keeps it in the plan for now; the technical trial waits for his go). This page fixes the idea and the order of work. The catalogue
 (`docs/SITE.md`) and the full method (`skills/`) stay as they are; this is a second way to use the
 same engine.
 
@@ -99,12 +99,10 @@ game (story off, new strings, new duel skin) or a separate set of mechanics. Fir
 ## Decided with the owner (14 Nov 2026)
 
 - **Age: 8 to 10.**
-- **Who builds: child and parent together.** The owner would also like the child alone, with the
-  model answerable for the material. Constraint: a Claude account is for adults only (18+, by
-  Anthropic's terms), so building always happens on an adult's account and the adult is the one
-  who answers for it. What remains open is *playing* without an account: a town already built
-  calls no model, so it could be exported as a stand-alone file for the public player (`/play/`).
-  To check in the trial.
+- **Who uses it: the adult.** A Claude account is for adults only (18+, by Anthropic's terms),
+  so the artifact is opened and the towns are built on an adult's account, with the child beside
+  them. Whether a finished town can also be played without an account (exported as a stand-alone
+  file for the public player, `/play/`: a built town calls no model) is a question for the trial.
 - **Because the adult may not read everything**, the builder must lean on the material given
   (photos, documents) rather than on what the model remembers, show where each statement comes
   from, keep the adult's one-page summary, and give the child a "this seems wrong" button on
