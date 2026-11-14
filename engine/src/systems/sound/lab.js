@@ -9,13 +9,14 @@
 //   s.stopAll()                                               silence (done when the station closes)
 //   s.scope()                                                 { wave(n), spectrum(n), sounding() } to draw what sounds
 //   s.on                                                      false when sound is off or not started: draw anyway
-//   sound.note('A4') 440, sound.midi('A4') 69, sound.name(69, 'it') 'La4', sound.interval(7) 'perfect fifth', sound.ratio('fifth') 1.5
+//   sound.note('A4') 440, sound.midi('A4') 69, sound.name(69, 'it') 'La4' (the language defaults to the active one), sound.interval(7) 'perfect fifth', sound.ratio('fifth') 1.5
 //
 // Notes are rendered as samples by synth.js (exactly tuned, measured in Node) and played on the lab's
 // own bus: a hard limiter, a level well under clipping, the ambient music ducked while they sound.
 // Sustained and beating tones are oscillators, so a slider can glide them.
 import { labIO, labSounding } from './index.js';
 import { VOICE } from './synth.js';
+import { LANG } from '../../course/_data.js';
 import { toHz, noteToMidi, midiToName, intervalName, justRatio, chordHz, waveOf, spectrumOf } from './notes.js';
 import { soundHz } from '../../mechanics/games/gen.js';
 
@@ -117,7 +118,7 @@ export function sound(owner = null) {
 sound.note = toHz;
 sound.midi = noteToMidi;
 // `name` is a function's own read-only property: defined, not assigned
-Object.defineProperty(sound, 'name', { value: (m, lang = 'en', o = {}) => midiToName(typeof m === 'string' ? noteToMidi(m) : m, { lang, ...o }), configurable: true });
-sound.interval = (semis, lang = 'en') => intervalName(semis, lang);
+Object.defineProperty(sound, 'name', { value: (m, lang = LANG, o = {}) => midiToName(typeof m === 'string' ? noteToMidi(m) : m, { lang, ...o }), configurable: true });
+sound.interval = (semis, lang = LANG) => intervalName(semis, lang);
 sound.ratio = justRatio;
 sound.chordHz = chordHz;

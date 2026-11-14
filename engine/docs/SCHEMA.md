@@ -29,6 +29,35 @@ The engine has no content of its own. `npm run course <slug>` (run automatically
 
 Character looks: `mentor`, `kid`, `nurse`, `fisher`, `archivist`, `surveyor`, `tech`, `keeper`, `tess`.
 
+## Languages
+
+A course may be written in English and Italian at once; the player's browser chooses, and a switch in
+the settings changes it. Nothing else about the course changes.
+
+- `"languages": ["en", "it"]` (optional; default: just `"language"`). `"language"` stays and is the
+  default and the fallback.
+- Any learner-facing text, anywhere in `course.json` (and `world.json`), is either a plain string or
+  `{ "en": "...", "it": "..." }`: titles, names, page text, the options of a question, tasks, goals,
+  clues, traps, lines, and the data of ready-made lab patterns and mini-games. Arrays hold either:
+  `"options": [{ "en": "Red", "it": "Rosso" }, "Green"]`.
+- Accepted answers of a riddle (`answer`) are one flat list valid in every language: add the Italian
+  variants to it. The `clue` is text like any other.
+- In lab and game code, `import { L, lang } from '.../engine/src/lab/kit.js'`: `lang()` is `'en'` or
+  `'it'`, `L(en, it)` the string of the active language (English when the Italian is missing).
+- Only objects whose keys are all language codes (`en`, `it`) count as texts; every other object is
+  data. The resolution happens once, where the course enters the engine; the rest of the engine reads
+  plain strings.
+- The validator checks the course once per language, that every text has every language, and warns
+  about plain strings in a two-language course. The save file is shared: switching language keeps the
+  progress.
+
+```json
+{ "language": "en", "languages": ["en", "it"],
+  "title": { "en": "Colour", "it": "Il colore" },
+  "concepts": [{ "id": "wheel", "questions": [{ "level": 1, "q": { "en": "Which is warm?", "it": "Quale è caldo?" },
+    "options": [{ "en": "Red", "it": "Rosso" }, { "en": "Blue", "it": "Blu" }, { "en": "Teal", "it": "Verde acqua" }], "answer": 0 }] }] }
+```
+
 ## Goals on the ending card
 
 `goals` in `course.json` are strings, or `{ "text": "...", "concepts": ["print"] }` for a goal that

@@ -9,12 +9,33 @@
 // page (engine/player/) calls the same function in the browser.
 import { checkProgression } from './riddles.mjs';
 import { checkCourseProse } from './prose.mjs';
+import { languagesOf, localise } from './localise.mjs';
+import { checkLanguages } from './languages.mjs';
 
 // env: { EMBLEMS, TRADES, TEMPERS, match, tools: names from the engine (null = not checked),
 //        brief: the text of knowledge/brief.md, has(file): whether the course folder holds it,
 //        checkReady(station, where): the checks of ready-made labs (engine/src/lab/patterns/specs.js) }
-// Returns { errors, warns, summary }.
+// Returns { errors, warns, summary, stats }.
+//
+// A course may be bilingual: any text may be { "en": "...", "it": "..." } (engine/docs/SCHEMA.md,
+// "Languages"). Then the whole course is checked once per declared language, on the tree localised to
+// that language, and the messages are merged: one that holds in every language is printed once; one
+// that holds in some is prefixed "[it]". languages.mjs adds the checks of the languages themselves
+// (parity of the texts, texts left as plain strings). A one-language course is checked as before.
 export function validateCourse(c, env = {}) {
+  const langs = languagesOf(c), pre = checkLanguages(c, langs);
+  if (langs.length < 2) { const r = validateOne(localise(c, langs[0], langs[0]), env); return pre.errors.length ? { ...r, errors: [...pre.errors, ...r.errors] } : r; }
+  const runs = langs.map((l) => ({ l, r: validateOne(localise(c, l, langs.includes(c.language) ? c.language : langs[0]), { ...env, lang: l }) }));
+  const merge = (key) => {
+    const by = new Map();
+    runs.forEach(({ l, r }) => r[key].forEach((m) => by.set(m, [...(by.get(m) || []), l])));
+    return [...by].map(([m, ls]) => (ls.length === runs.length ? m : `[${ls.join(', ')}] ${m}`));
+  };
+  const first = runs.find((x) => x.l === (langs.includes(c.language) ? c.language : langs[0])) || runs[0];
+  return { errors: [...pre.errors, ...merge('errors')], warns: [...pre.warns, ...merge('warns')], summary: [...first.r.summary, `languages: ${langs.join(', ')}`], stats: first.r.stats };
+}
+
+function validateOne(c, env = {}) {
 // (the body keeps the indentation of the script it was, so that its history stays readable)
 const { EMBLEMS = null, TRADES = null, TEMPERS = null, match = null, tools = null, brief = '', has = () => true, checkReady = null, checkGames = null } = env;
 const errors = [], warns = [];
@@ -231,7 +252,7 @@ if (checkGames) { const r = checkGames(c, { hasCode: (id) => has(`games/${id}.js
 else if (c.games || c.withheld) warn('games and withheld lines were not checked (the engine is not beside the skill)');
 
 // ---- the register of expository text (references/9-prose.md): warnings, never errors ----
-checkCourseProse(c).forEach((w) => warn(`prose: ${w}`));
+checkCourseProse(c, env.lang).forEach((w) => warn(`prose: ${w}`));
 
 // ---- working documents ----
 ['knowledge/brief.md', 'knowledge/sources.md', 'knowledge/map.md'].forEach((k) => { if (!has(k)) warn(`${k} is missing`); });
