@@ -1043,8 +1043,7 @@
               "Play the scale"
             ],
             "tries": [
-              "Play the scale from C and listen to it.",
-              "Turn the stencil to start on G and play it.",
+              "Turn the stencil to start on G and play the scale.",
               "Tap the note of G major that is not in C major."
             ],
             "takeaway": "A major scale is the pattern <b>W W H W W W H</b>, started on any note. From C it lands only on letter names; from G the seventh step must be a half step below G, so F becomes <b>F♯</b>. The pattern, not a list of notes, is what to remember, and on one string it is 2, 2, 1, 2, 2, 2, 1 frets.",
