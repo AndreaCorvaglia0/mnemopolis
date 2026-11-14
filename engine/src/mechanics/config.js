@@ -8,6 +8,7 @@
 //                                       curated: secrets on, plus a note or two themed on the course
 // ?nolife in the address switches everything off (for tests and comparisons).
 import { WORLD, LANG as ACTIVE } from '../course/_data.js';
+import { FREE } from '../systems/mode.js';
 
 const q = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new URLSearchParams();
 
@@ -18,7 +19,8 @@ export function lifeConfig(world = WORLD, nolife = q.has('nolife')) {
   const o = w && typeof w === 'object' ? w : {};
   const part = (k) => o[k] !== false;
   const notes = Array.isArray(o.secrets) ? o.secrets.filter((s) => s && s.text) : [];
-  const c = { on: true, musings: part('musings'), animals: part('animals'), secrets: part('secrets'), obstacles: part('obstacles'), notes };
+  // free study (systems/mode.js): nothing bars the way, so no locked doors and no boulders
+  const c = { on: true, musings: part('musings'), animals: part('animals'), secrets: part('secrets'), obstacles: part('obstacles') && !(world === WORLD && FREE), notes };
   c.on = c.musings || c.animals || c.secrets || c.obstacles;
   return c.on ? c : off;
 }

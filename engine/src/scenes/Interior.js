@@ -14,6 +14,7 @@ import { attachRoomLife } from '../mechanics/room.js';
 import { attachFloor } from '../mechanics/floors/room.js';
 import { attachLocks } from '../mechanics/riddles/room.js';
 import { houseDuel, challengeLabel } from '../mechanics/duel/index.js';
+import { FREE } from '../systems/mode.js';
 import { w } from '../data/words.js';
 import { STORY } from '../mechanics/story/config.js';
 import { attachStoryRoom } from '../mechanics/story/room.js';
@@ -286,7 +287,7 @@ export class Interior extends Phaser.Scene {
     await ui.converse(m.name, { root: { say: o.say, options: [
       { label: w('room.openLab'), do: async () => { await ui.lab(id); return 'end'; } },
       { label: w('room.showWall'), do: async () => { await ui.reading(id); return 'end'; } },
-      { label: challengeLabel(id), if: () => pool.length >= 2, do: async () => { await this.quizSeries(pool); return 'end'; } },
+      { label: challengeLabel(id), if: () => !FREE && pool.length >= 2, do: async () => { await this.quizSeries(pool); return 'end'; } },
       ...o.options,
       { label: w('town.bye') },
     ] } });

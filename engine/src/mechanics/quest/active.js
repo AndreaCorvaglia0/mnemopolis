@@ -2,9 +2,11 @@
 import { PLACES, COURSE, LEAGUE } from '../../data/content.js';
 import { questOf } from './model.js';
 import { STORY } from '../story/config.js';
+import { FREE } from '../../systems/mode.js';
 
 // in the story every core house keeps a memento upstairs (docs/STORY.md): finding it is part of the path
 const core = PLACES.some((p) => p.core !== false) ? PLACES.filter((p) => p.core !== false) : PLACES;
 export const Q = questOf({ places: PLACES, guide: COURSE.hub.guide.name, champion: LEAGUE.host?.name || 'Judge', mementos: STORY.on ? new Set(core.map((p) => p.id)) : null });
+if (FREE) Q.leagueOpen = () => true;   // free study: the final test can be taken at any time
 export const CORE = new Set(Q.core.map((p) => p.id));
 export const isCorePlace = (id) => CORE.has(id);

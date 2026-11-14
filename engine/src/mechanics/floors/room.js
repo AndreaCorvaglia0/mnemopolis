@@ -12,6 +12,7 @@ import { tr, fill } from '../config.js';
 import { LOCK_WORDS as W } from '../riddles/kinds.js';
 import { floorsOf } from './plan.js';
 import { grantQueryKeys } from './keys.js';
+import { FREE } from '../../systems/mode.js';
 import { lockTextures } from '../riddles/art.js';
 import { upstairsLamp } from '../../gen/interior/paint.js';
 import Phaser from 'phaser';
@@ -63,7 +64,7 @@ class Floor {
     sc.events.on('update', () => { const p = sc.player?.sprite; if (p) me.setPosition(p.x, p.y - 10); });
   }
 
-  hasKey() { return !!state.keys?.[this.id]; }
+  hasKey() { return FREE || !!state.keys?.[this.id]; }   // free study: every floor is open
   onStairs(fx, fy) { const s = this.room.stairs; return !this.up && s && fy === s.y && fx >= s.x && fx < s.x + s.fw; }
   onShelf(fx, fy) { return this.up && this.room.exhibit?.some(([x, y]) => x === fx && y === fy); }
   onBench(fx, fy) { const l = this.room.lab; return this.up && l && fx === l[0] && fy === l[1]; }

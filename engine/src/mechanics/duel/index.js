@@ -12,6 +12,7 @@ import { awardHouse, awardLeague, isFriendly } from './prize.js';
 import { openDuel } from './screen.js';
 import { CHALLENGE } from './lines.js';
 import { STORY } from '../story/config.js';
+import { FREE } from '../../systems/mode.js';
 import { R_TEMPERS, KEEPER, REMEMBER, REMEMBER_STOCK, REMEMBER_CHALLENGE, S_WORDS } from '../story/words.js';
 import { fill, tr } from '../config.js';
 import { findMemento, hasAttic } from '../story/remember.js';
@@ -37,7 +38,8 @@ const place = (id) => { const p = PLACE[id]; return p && { order: p.order, name:
 const sprite = (ui) => (look) => { const t = ui.textures.get(`ch-${look}`); return t && t.key !== '__MISSING' ? t.getSourceImage() : null; };
 function shuffle(a) { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
 
-export const houseQuestions = (id) => QUESTIONS.filter((q) => q.topic === id);
+// (free study has no fights in the houses: with no questions on offer, no room offers the challenge)
+export const houseQuestions = (id) => (FREE ? [] : QUESTIONS.filter((q) => q.topic === id));
 
 // The label of the host's dialogue option.
 export const challengeLabel = (id) => fill((STORY.on ? REMEMBER_CHALLENGE : CHALLENGE)[LANG][isFriendly(state, id) ? 'friendly' : 'first'], { name: MASTERS[id]?.name || '' });

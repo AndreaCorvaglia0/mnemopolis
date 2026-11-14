@@ -9,6 +9,7 @@
 // ?arrived skips the arrival (for the older picture scripts). In Node, STORY=0 in the environment.
 import { DATA, WORLD } from '../../course/_data.js';
 import { tr, fill, LANG } from '../config.js';
+import { FREE } from '../../systems/mode.js';
 
 export { tr, fill, LANG };
 
@@ -17,7 +18,7 @@ const q = typeof location !== 'undefined' ? new URLSearchParams(location.search)
 export function storyConfig(world = WORLD, query = q) {
   const s = world?.story;
   const env = typeof process !== 'undefined' && process.env?.STORY === '0';
-  if (s === false || query.get('story') === '0' || env) return { on: false };
+  if (s === false || query.get('story') === '0' || env || (world === WORLD && FREE)) return { on: false };   // free study has no story (systems/mode.js)
   const o = s && typeof s === 'object' ? s : {};
   return { on: true, ship: o.ship !== false, word: typeof o.word === 'string' && o.word.trim() ? o.word.trim() : null };
 }

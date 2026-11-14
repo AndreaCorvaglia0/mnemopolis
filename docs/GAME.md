@@ -34,6 +34,19 @@ afterwards: the town stays open; what you do there changes how it treats you, an
 Three independent settings of a course: **size** (how many concepts), **care** (effort per unit),
 **level** (how deep). The **pocket** way spends tokens only on the first two rows.
 
+## Two ways to play
+
+Chosen on the title screen the first time, changed later from the settings; the save is the same
+in both, so nothing done in one is lost in the other.
+
+- **Story**: the game as described on this page and in `docs/STORY.md`.
+- **Free study**: the course without the game around it, for a class or an institution. No
+  story, no film, no fights; every floor, lock and game is open from the first minute; the theory,
+  the labs and the mini-games are all there, and the only thing left to pass is the final test.
+
+A course can fix the way for everyone with `"mode": "free"` in `world.json` (no choice is shown);
+`?mode=free` or `?mode=story` in the address does it for one visit. Code: `engine/src/systems/mode.js`.
+
 ## Three axes of play
 
 | Axis | Need | In the game | Earns |

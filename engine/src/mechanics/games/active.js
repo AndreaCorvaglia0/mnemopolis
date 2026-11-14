@@ -14,6 +14,7 @@ import { lifePlan, dressingPlan } from '../active.js';
 import { COURSE_GAMES, GAMES_ON, xpNow, syncNow } from '../experience/active.js';
 import { planGames, gamePeople, unlocked } from './place.js';
 import { openGame } from './frame.js';
+import { FREE } from '../../systems/mode.js';
 import { KIND_MOUNTS } from './kinds/index.js';
 
 export const GAMES = COURSE_GAMES;
@@ -23,7 +24,7 @@ const info = (id) => {
   if (!r) return null;
   return { remembered: r.won || (!r.duel && r.visited && r.n >= r.m), labDone: r.visited && r.n >= r.m };
 };
-export const isOpen = (g) => unlocked(g, state, info);
+export const isOpen = (g) => FREE || unlocked(g, state, info);   // free study: every game from the start
 
 let PLAN = null, PEOPLE = null;
 export function townGames() {

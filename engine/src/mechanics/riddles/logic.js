@@ -8,13 +8,15 @@
 // Wrong answers cost nothing: they are counted in st.tries[id] only to make the thought more precise.
 import { matches } from './match.js';
 import { backTo } from './hints.js';
+import { FREE } from '../../systems/mode.js';
 
 export function ensureLocks(st) {
   st.locks ||= {}; st.tries ||= {}; st.keys ||= {}; st.tools ||= {};
   if (typeof st.insight !== 'number') st.insight = 0;
   return st;
 }
-export const isOpenLock = (st, r) => !!st.locks?.[r.id];
+// (in free study every lock stands open: what it holds can be read, nothing has to be typed)
+export const isOpenLock = (st, r) => FREE || !!st.locks?.[r.id];
 
 // the things a riddle holds: note, station, link, coins, tool, key (see the schema)
 export function contentsOf(r) {

@@ -355,6 +355,8 @@ ending at the League hall as before.
 
 ## The story
 
+**Two ways to play** (`src/systems/mode.js`, docs/GAME.md): the story, or free study (`FREE`): the story off, no house duels, locks and upper floors open, no obstacles, every mini-game open, the final test open at any time. Chosen on the title the first time and saved (`mnemopolis-mode`); `"mode": "free"` in `world.json` fixes it; `?mode=free|story` for one visit; `MODE=free` in Node. Each gate reads `FREE` where it is judged, so the save file is never altered by the way played.
+
 The fiction of `docs/STORY.md`, on by default: `"story": false` in `world.json` gives the plain
 town (the guide, the League hall, the champion at the gate), `?story=0` in the address does the same
 for a test, `STORY=0` in the environment for scripts in Node. Everything is in

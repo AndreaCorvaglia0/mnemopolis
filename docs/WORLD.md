@@ -51,6 +51,16 @@ text inside the artifact: the repo is not needed at run time.
 (concepts, the statements the questions treat as true) and approves or corrects it. The validator
 checks shape, not facts.
 
+## The first rule: short, visual, obvious (owner, 14 Nov 2026)
+
+- **Twenty minutes** for an island, start to villain. Children get bored: anything that does not
+  fit is cut, not shortened.
+- **Very visual**: pictures and things to move before words; little text on screen at a time.
+- **Never confusing**: at every moment the screen says what gives points, what is next, and how
+  much is left before the island is free.
+- **Then, more for who wants it**: after the island is free, coming back to remember earns the
+  points that buy things in the game. Optional, never required to finish.
+
 ## The children's register
 
 A different climate from the catalogue's story (the rain, the forgetting, the bitter loop), which
@@ -134,6 +144,16 @@ phone). Results are written to the page's store, where they can be read back and
 | T6 | Who can use one published artifact? | A second account opens the same page: is its world private, whose usage pays for building | How a new family starts: one shared page, or a copy each |
 | T7 | Can a finished town be played with no account? | Export a town and open it in the public player | The child's own device |
 | T8 | Is the content good enough? | Three school topics built and read against the golden town | Needs phase 1 first; the only trial that is about quality, not plumbing |
+
+Already known from the platform's own documentation (to confirm in T4 and T6): one document of
+the artifact's store holds at most 256 KiB, and a store 25,000 documents; **a visitor from outside
+the owner's organisation can never write to the store**, not even in a private corner. So one
+published page cannot keep every family's world on the server: a family's world lives in the
+browser's own storage on their device (with export and import to move it), or each adult publishes
+their own copy of the page from this repository.
+
+The test page is `spikes/world-trials/index.html`, published as the artifact "Mnemopolis: prove
+tecniche del mondo".
 
 T1 to T7 fit in one page and one evening of the owner's phone; T8 comes after the golden town.
 
