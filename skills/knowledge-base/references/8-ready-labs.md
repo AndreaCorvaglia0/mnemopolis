@@ -107,11 +107,28 @@ Import from `'../../../engine/src/lab/kit.js'`:
 | `shuffle(list, seed)`, `hit(list, x, y)` | A deterministic shuffle (never the identity); the item under a point (`{x, y, w, h}` or `{x, y, r}`). |
 | `compile(expr, names)`, `template(text, names)`, `fmt(x, d)` | The expression language below, from code. |
 | `sfx.tick()`, `sfx.plop()`, `sfx.chime()`, `sfx.thud()`, `sfx.reveal()` | Short sounds, for a snap or an arrival. |
+| `lang()`, `L(en, it)` | The active language of a bilingual course (below). |
 | `canvasPane`, `draggable`, `slider`, `seg`, `readout`, `h`, `rgbCss`, `hslToRgb` | The older pieces (`engine/docs/SCHEMA.md`), still there. |
 | `sliderReveal`, `compare`, `sort`, `order` | The ready-made patterns as functions (below). |
 
 `ctx` (from the frame): `ctx.stage`, `ctx.controls`, `ctx.station` (the station from course.json),
 `ctx.did(i)`, `ctx.hint(fn)`, `ctx.nudge(text)`, `ctx.alive()`, `ctx.onCleanup(fn)`, `ctx.phase()`.
+
+### Languages in lab code
+
+A course may be bilingual (`"languages": ["en", "it"]`, `engine/docs/SCHEMA.md`, "Languages"). Text
+from `course.json` reaches the lab already in the player's language: `ctx.station.takeaway` is a plain
+string. Text that the code writes itself (a label on a canvas, a button, a readout) takes the
+language from the kit: `lang()` returns `'en'` or `'it'`, and `L(en, it)` returns the string for it,
+falling back to `en` when `it` is missing or empty (`L({ en, it })` works too). Single-language
+courses need none of this.
+
+```js
+import { canvasPane, button, L } from '../../../engine/src/lab/kit.js';
+// ...
+button(ctx, L('Show the real curve', 'Mostra la curva vera'), show);
+d.text(L(`${n} samples`, `${n} campioni`), 40, 30, { size: 18 });
+```
 
 ### The import surface
 
@@ -121,7 +138,7 @@ or the `/play/` page). In a packed game a lab file may import only from:
 
 | Module | What it gives |
 |---|---|
-| `engine/src/lab/kit.js` | everything in the table above (use this one) |
+| `engine/src/lab/kit.js` | everything in the table above, `lang` and `L` included (use this one) |
 | `engine/src/lab/shell.js` | `h`, `seg`, `slider`, `readout`, `predict`, `TEXT`, `LANG` |
 | `engine/src/lab/patterns/index.js` | the patterns and helpers (also in kit.js) |
 | `engine/src/systems/audio.js` | `sfx` |

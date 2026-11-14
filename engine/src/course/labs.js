@@ -4,7 +4,7 @@
 //                    station k is saved as state.done['id:k']; the map's "lab n/m" counts these.
 //   UPPER_LABS[id]   the advanced stations of that house, shown upstairs (mechanics/floors/);
 //                    saved as state.done['id+up:<stationId>']. Only houses that have some.
-import { DATA } from './_data.js';
+import { DATA, LANG } from './_data.js';
 import { MOUNTS, LOADED } from './_active.js';
 import { readyMount } from '../lab/patterns/mount.js';
 import { isGround } from '../mechanics/floors/plan.js';
@@ -29,7 +29,7 @@ const labOf = (p, list) => ({
 // may run while modules are still loading.
 let cache = null, upper = null;
 const build = () => (cache ||= Object.fromEntries(DATA.concepts.filter((p) => p.lab).map((p) => [p.id, labOf(p, p.lab.stations.filter(isGround))])));
-const UP = String(DATA.language || 'en').startsWith('it') ? 'di sopra' : 'upstairs';
+const UP = LANG === 'it' ? 'di sopra' : 'upstairs';
 const buildUp = () => (upper ||= Object.fromEntries(DATA.concepts.filter((p) => p.lab?.stations.some((s) => !isGround(s))).map((p) => [p.id, { ...labOf(p, p.lab.stations.filter((s) => !isGround(s))), title: `${p.lab.title} · ${UP}`, upper: true }])));
 const view = (get) => new Proxy({}, {
   get: (_, k) => get()[k], has: (_, k) => k in get(), ownKeys: () => Reflect.ownKeys(get()),

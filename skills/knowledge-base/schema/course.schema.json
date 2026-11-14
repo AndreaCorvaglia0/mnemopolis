@@ -33,46 +33,106 @@
       "description": "Language of the course, e.g. en, it."
     },
     "title": {
-      "type": "string",
-      "description": "Name of the course as the learner sees it."
+      "description": "Name of the course as the learner sees it.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/langText"
+        }
+      ]
     },
     "subject": {
-      "type": "string",
-      "description": "One line: what the course is about."
+      "description": "One line: what the course is about.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/langText"
+        }
+      ]
     },
     "bigIdea": {
-      "type": "string",
-      "description": "One claim, 28 words at most, from which the course follows."
+      "description": "One claim, 28 words at most, from which the course follows.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/langText"
+        }
+      ]
     },
     "learner": {
-      "type": "string",
-      "description": "Who it is for and what they already know."
+      "description": "Who it is for and what they already know.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/langText"
+        }
+      ]
     },
     "pitch": {
-      "type": "string",
-      "description": "Optional. One line for the site's catalogue: what the learner gets, in their terms (about 20 words)."
+      "description": "Optional. One line for the site's catalogue: what the learner gets, in their terms (about 20 words).",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/langText"
+        }
+      ]
     },
     "tags": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Optional. Up to four short words for the site's catalogue (for example science, colour)."
     },
     "level": {
-      "enum": ["introductory", "intermediate", "advanced"],
+      "enum": [
+        "introductory",
+        "intermediate",
+        "advanced"
+      ],
       "description": "Optional. Shown in the site's catalogue; introductory when absent."
     },
     "goals": {
       "type": "array",
       "items": {
         "oneOf": [
-          { "type": "string" },
+          {
+            "type": "string"
+          },
           {
             "type": "object",
-            "required": ["text"],
+            "required": [
+              "text"
+            ],
             "additionalProperties": false,
             "properties": {
-              "text": { "type": "string" },
-              "concepts": { "type": "array", "items": { "type": "string" }, "description": "Concept ids that teach this goal. The ending card lists the goal only when each is core or was finished by the player. Leave out for a goal of the core path." }
+              "text": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
+              },
+              "concepts": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Concept ids that teach this goal. The ending card lists the goal only when each is core or was finished by the player. Leave out for a goal of the core path."
+              }
             }
           }
         ]
@@ -80,7 +140,14 @@
       "description": "What the learner can do at the end. Each starts with a verb. A goal taught only by extra concepts names them: { \"text\": \"...\", \"concepts\": [\"print\"] }."
     },
     "credit": {
-      "type": "string"
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/langText"
+        }
+      ]
     },
     "sources": {
       "type": "array",
@@ -97,7 +164,14 @@
             "type": "string"
           },
           "title": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           },
           "url": {
             "type": "string"
@@ -110,7 +184,14 @@
             ]
           },
           "note": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           }
         }
       }
@@ -133,11 +214,25 @@
             "pattern": "^[a-z][a-z0-9]*$"
           },
           "name": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           },
           "idea": {
-            "type": "string",
-            "description": "The theme as one sentence, 18 words at most."
+            "description": "The theme as one sentence, 18 words at most.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           },
           "cue": {
             "type": "object",
@@ -164,8 +259,15 @@
                 ]
               },
               "why": {
-                "type": "string",
-                "description": "The link with the content, only if an honest one exists."
+                "description": "The link with the content, only if an honest one exists.",
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               }
             }
           }
@@ -210,7 +312,14 @@
             "description": "Read as: from <type> to. 'requires' means from cannot be understood without to."
           },
           "note": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           }
         }
       }
@@ -233,8 +342,15 @@
             "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
           },
           "title": {
-            "type": "string",
-            "description": "At most 5 words."
+            "description": "At most 5 words.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           },
           "concepts": {
             "type": "array",
@@ -283,8 +399,15 @@
             "maximum": 20
           },
           "learn": {
-            "type": "string",
-            "description": "One line on the result screen, at most 16 words."
+            "description": "One line on the result screen, at most 16 words.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           },
           "data": {
             "type": "object",
@@ -322,10 +445,24 @@
             ]
           },
           "teaser": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           },
           "told": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           }
         }
       }
@@ -340,7 +477,14 @@
       "additionalProperties": false,
       "properties": {
         "name": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "size": {
           "type": "integer",
@@ -353,6 +497,18 @@
           "maximum": 1
         }
       }
+    },
+    "languages": {
+      "type": "array",
+      "description": "Languages the course is written in, e.g. [\"en\",\"it\"]. Optional: default is just \"language\". Every text then carries all of them, as { \"en\": ..., \"it\": ... }. \"language\" is the default and the fallback.",
+      "items": {
+        "enum": [
+          "en",
+          "it"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1
     }
   },
   "$defs": {
@@ -397,28 +553,70 @@
           ]
         },
         "name": {
-          "type": "string",
-          "description": "The concept, 2 to 5 words."
+          "description": "The concept, 2 to 5 words.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "place": {
-          "type": "string",
-          "description": "A short, picturable name for where this concept lives."
+          "description": "A short, picturable name for where this concept lives.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "sign": {
-          "type": "string",
-          "maxLength": 9
+          "oneOf": [
+            {
+              "type": "string",
+              "maxLength": 9
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "objective": {
-          "type": "string",
-          "description": "What the learner will be able to do. Starts with an observable verb."
+          "description": "What the learner will be able to do. Starts with an observable verb.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "idea": {
-          "type": "string",
-          "description": "The concept as one sentence, 28 words at most."
+          "description": "The concept as one sentence, 28 words at most.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "wrongBelief": {
-          "type": "string",
-          "description": "What people believe before. Drives the prediction, the surprise and the wrong options."
+          "description": "What people believe before. Drives the prediction, the surprise and the wrong options.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "anchor": {
           "type": "object",
@@ -437,24 +635,52 @@
               ]
             },
             "text": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             },
             "limits": {
-              "type": "string",
-              "description": "Where the anchor stops being true."
+              "description": "Where the anchor stops being true.",
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             }
           }
         },
         "application": {
-          "type": "string",
-          "description": "Where the learner will meet this in real life. Specific."
+          "description": "Where the learner will meet this in real life. Specific.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "remember": {
           "type": "array",
           "minItems": 1,
           "maxItems": 3,
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           }
         },
         "explain": {
@@ -466,10 +692,24 @@
           "additionalProperties": false,
           "properties": {
             "q": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             },
             "a": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             }
           }
         },
@@ -487,7 +727,14 @@
                 "type": "string"
               },
               "how": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               }
             }
           }
@@ -501,7 +748,14 @@
           "additionalProperties": false,
           "properties": {
             "title": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             },
             "stations": {
               "type": "array",
@@ -525,11 +779,25 @@
             "additionalProperties": false,
             "properties": {
               "title": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               },
               "text": {
-                "type": "string",
-                "description": "Under about 120 words."
+                "description": "Under about 120 words.",
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               },
               "figure": {
                 "type": "object",
@@ -550,7 +818,14 @@
                     "type": "string"
                   },
                   "caption": {
-                    "type": "string"
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "$ref": "#/$defs/langText"
+                      }
+                    ]
                   }
                 }
               }
@@ -560,7 +835,14 @@
         "threads": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           },
           "description": "story only: named threads that group the events."
         },
@@ -584,16 +866,44 @@
                 "type": "string"
               },
               "title": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               },
               "who": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               },
               "text": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               },
               "why": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               },
               "src": {
                 "type": "string"
@@ -628,14 +938,28 @@
             "additionalProperties": false,
             "properties": {
               "title": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               },
               "url": {
                 "type": "string"
               },
               "why": {
-                "type": "string",
-                "description": "One line: what this resource gives the learner."
+                "description": "One line: what this resource gives the learner.",
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               }
             }
           }
@@ -653,16 +977,30 @@
           "additionalProperties": false,
           "properties": {
             "name": {
-              "type": "string",
-              "description": "Their first name, 8 characters at most (it goes on the name plate). Optional: the engine picks one."
+              "description": "Their first name, 8 characters at most (it goes on the name plate). Optional: the engine picks one.",
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             },
             "trade": {
               "type": "string",
               "description": "One of the trades in engine/src/gen/interior/trades.js (cartographer, dyer, cook, musician, gardener, clockmaker, doctor, painter, scholar, potter, weaver, printer). Any other word gives a generic home."
             },
             "line": {
-              "type": "string",
-              "description": "Optional. One sentence in their voice that carries the concept's idea; it is what they say first. 30 words at most."
+              "description": "Optional. One sentence in their voice that carries the concept's idea; it is what they say first. 30 words at most.",
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             },
             "temper": {
               "type": "string",
@@ -701,11 +1039,25 @@
           "pattern": "^[a-z][a-z0-9]*$"
         },
         "tab": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "goal": {
-          "type": "string",
-          "description": "The idea as a sentence, 26 words at most."
+          "description": "The idea as a sentence, 26 words at most.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "beat": {
           "enum": [
@@ -733,13 +1085,34 @@
           ]
         },
         "object": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "action": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "surprise": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "predict": {
           "type": "object",
@@ -750,14 +1123,28 @@
           "additionalProperties": false,
           "properties": {
             "q": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             },
             "options": {
               "type": "array",
               "minItems": 3,
               "maxItems": 4,
               "items": {
-                "type": "string"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "$ref": "#/$defs/langText"
+                  }
+                ]
               }
             },
             "answer": {
@@ -766,8 +1153,15 @@
               "description": "Index of the option that the exploration shows to be right. The lab states the verdict after the tasks."
             },
             "why": {
-              "type": "string",
-              "description": "Optional. One short sentence saying why the answer is right, shown with the verdict after the tasks (\"Red and green light add up to yellow.\"). May use <b>."
+              "description": "Optional. One short sentence saying why the answer is right, shown with the verdict after the tasks (\"Red and green light add up to yellow.\"). May use <b>.",
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             }
           }
         },
@@ -775,7 +1169,14 @@
           "type": "array",
           "maxItems": 2,
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           }
         },
         "tries": {
@@ -785,14 +1186,33 @@
           "description": "1 to 3 tasks. A task is a string, or { \"text\", \"when\" }: the condition that ticks it (references/8-ready-labs.md, \"The tries vocabulary\"); a \"ready\" station needs the object form.",
           "items": {
             "oneOf": [
-              { "type": "string" },
+              {
+                "type": "string"
+              },
               {
                 "type": "object",
-                "required": ["text", "when"],
+                "required": [
+                  "text",
+                  "when"
+                ],
                 "additionalProperties": false,
                 "properties": {
-                  "text": { "type": "string" },
-                  "when": { "type": "object", "minProperties": 1, "maxProperties": 1, "description": "One verb: reach, cross, both, try, select, place, run, all, any (references/8-ready-labs.md)." }
+                  "text": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "$ref": "#/$defs/langText"
+                      }
+                    ]
+                  },
+                  "when": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "maxProperties": 1,
+                    "description": "One verb: reach, cross, both, try, select, place, run, all, any (references/8-ready-labs.md)."
+                  }
                 }
               }
             ]
@@ -800,23 +1220,101 @@
         },
         "ready": {
           "type": "object",
-          "required": ["kind"],
+          "required": [
+            "kind"
+          ],
           "description": "Optional. A ready-made lab drawn by the engine from this data, when the concept's lab file has no code for this station (custom code wins). The data of each kind is in references/8-ready-labs.md; the validator checks it (engine/src/lab/patterns/specs.js).",
           "properties": {
-            "kind": { "enum": ["slider-reveal", "compare", "sort", "order"] },
-            "caption": { "type": "string" },
-            "wide": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
-            "tall": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+            "kind": {
+              "enum": [
+                "slider-reveal",
+                "compare",
+                "sort",
+                "order"
+              ]
+            },
+            "caption": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
+            },
+            "wide": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "tall": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
           },
           "oneOf": [
-            { "properties": { "kind": { "const": "slider-reveal" } }, "required": ["controls", "layers"] },
-            { "properties": { "kind": { "const": "compare" } }, "required": ["cases", "layers"] },
-            { "properties": { "kind": { "const": "sort" } }, "required": ["bins", "cards"] },
-            { "properties": { "kind": { "const": "order" } }, "required": ["steps"] }
+            {
+              "properties": {
+                "kind": {
+                  "const": "slider-reveal"
+                }
+              },
+              "required": [
+                "controls",
+                "layers"
+              ]
+            },
+            {
+              "properties": {
+                "kind": {
+                  "const": "compare"
+                }
+              },
+              "required": [
+                "cases",
+                "layers"
+              ]
+            },
+            {
+              "properties": {
+                "kind": {
+                  "const": "sort"
+                }
+              },
+              "required": [
+                "bins",
+                "cards"
+              ]
+            },
+            {
+              "properties": {
+                "kind": {
+                  "const": "order"
+                }
+              },
+              "required": [
+                "steps"
+              ]
+            }
           ]
         },
         "takeaway": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "source": {
           "type": "string"
@@ -849,14 +1347,28 @@
           ]
         },
         "q": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "options": {
           "type": "array",
           "minItems": 3,
           "maxItems": 4,
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              }
+            ]
           }
         },
         "answer": {
@@ -864,14 +1376,28 @@
           "minimum": 0
         },
         "why": {
-          "type": "string"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "traps": {
           "type": "array",
           "items": {
-            "type": [
-              "string",
-              "null"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/langText"
+              },
+              {
+                "type": "null"
+              }
             ]
           },
           "description": "For each option, the mistake it catches; null for the right one."
@@ -900,8 +1426,15 @@
           "description": "safe, computer or door (engine/src/mechanics/riddles/kinds.js). Another word gives a safe."
         },
         "clue": {
-          "type": "string",
-          "description": "What is written on the sticky note, or what the voice behind the door asks. Short: a mnemonic someone would really leave, never a textbook question."
+          "description": "What is written on the sticky note, or what the voice behind the door asks. Short: a mnemonic someone would really leave, never a textbook question.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/langText"
+            }
+          ]
         },
         "answer": {
           "description": "One accepted answer or a list of them: a short term (three words at most) or one number.",
@@ -964,8 +1497,15 @@
           "description": "What the lock guards: something worth the effort.",
           "properties": {
             "note": {
-              "type": "string",
-              "description": "A short secret text, 1 to 4 sentences: an advanced insight."
+              "description": "A short secret text, 1 to 4 sentences: an advanced insight.",
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/langText"
+                }
+              ]
             },
             "station": {
               "type": "string",
@@ -995,6 +1535,20 @@
         "where": {
           "type": "string",
           "description": "upstairs (default) or room (on the ground floor of the house). Any other text is a placement hint and counts as upstairs."
+        }
+      }
+    },
+    "langText": {
+      "type": "object",
+      "description": "The same text in each language of the course: { \"en\": \"...\", \"it\": \"...\" }. Any text value may be a plain string or this object; the course's \"languages\" lists the languages it offers.",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "it": {
+          "type": "string"
         }
       }
     }

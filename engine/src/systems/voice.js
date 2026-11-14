@@ -4,13 +4,13 @@
 // Nothing reads by itself unless "auto" is true: the learner presses Listen.
 // Everything about speech lives here. No function in this file may throw: the API can be missing,
 // blocked or silent (some embedded viewers), and the game must not notice.
-import { DATA, WORLD } from '../course/_data.js';
+import { WORLD, LANG as ACTIVE } from '../course/_data.js';
 import { state, save } from './state.js';
 
 const q = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new URLSearchParams();
 const raw = WORLD?.voice ?? (q.has('voice') ? true : false);
 const CFG = raw && typeof raw === 'object' ? { auto: false, rate: 1, say: {}, ...raw } : { auto: false, rate: 1, say: {} };
-const LANG = String(DATA.language || 'en').replace('_', '-');
+const LANG = ACTIVE; // speech follows the active language
 const synth = (() => {
   try {
     if (typeof window === 'undefined' || !window.speechSynthesis || typeof window.SpeechSynthesisUtterance !== 'function') return null;
