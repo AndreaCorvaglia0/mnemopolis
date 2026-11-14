@@ -38,7 +38,10 @@
     }
   ],
   "level": "introductory",
-  "learner": "A curious adult with no background in colour science who uses screens and printers every day.",
+  "learner": {
+    "en": "A curious adult with no background in colour science who uses screens and printers every day.",
+    "it": "Un adulto curioso, senza conoscenze di scienza del colore, che usa ogni giorno schermi e stampanti."
+  },
   "goals": [
     {
       "en": "Predict the result of mixing coloured lights.",
@@ -581,7 +584,7 @@
             null,
             {
               "en": "Equal amounts do give a grey, but at full strength the grey is as light as it can be: white.",
-              "it": "Quantità uguali danno davvero un grigio, ma alla massima intensità il grigio è il più chiaro possibile: il bianco."
+              "it": "Quantità uguali danno un grigio, ma alla massima intensità il grigio è il più chiaro possibile: il bianco."
             },
             {
               "en": "Brown is what paints do when mixed; three lights at full strength add up to the brightest colour, white.",
@@ -666,7 +669,7 @@
             },
             {
               "en": "Three equal lights do give a neutral colour, but 120 is about half of 255: the result is a mid grey, not white.",
-              "it": "Tre luci uguali danno davvero un colore neutro, ma 120 è circa la metà di 255: il risultato è un grigio medio, non il bianco."
+              "it": "Tre luci uguali danno un colore neutro, ma 120 è circa la metà di 255: il risultato è un grigio medio, non il bianco."
             },
             null
           ]
@@ -1345,10 +1348,7 @@
       "emblem": "prism",
       "expert": {
         "name": "Marta",
-        "trade": {
-          "en": "painter",
-          "it": "pittrice"
-        },
+        "trade": "painter",
         "line": {
           "en": "I never mix by numbers. I ask three things: which colour, how far from grey, how close to white or black.",
           "it": "Non mescolo mai a numeri. Mi faccio tre domande: quale colore, quanto lontano dal grigio, quanto vicino al bianco o al nero."
@@ -1799,10 +1799,7 @@
       "emblem": "eye",
       "expert": {
         "name": "Bruno",
-        "trade": {
-          "en": "dyer",
-          "it": "tintore"
-        },
+        "trade": "dyer",
         "line": {
           "en": "A skein that matched in the vat can look wrong on the shelf. I judge every colour against what will sit next to it.",
           "it": "Una matassa che andava bene nella tinozza può sembrare sbagliata sullo scaffale. Giudico ogni colore in base a ciò che gli starà accanto."
@@ -2284,7 +2281,7 @@
           "traps": [
             {
               "en": "Adding red would fix a card that really is blue-green, but the tint is in the eye, caused by the red cloth.",
-              "it": "Aggiungere rosso correggerebbe un cartoncino davvero blu-verde, ma la tinta è nell'occhio, causata dalla tovaglia rossa."
+              "it": "Aggiungere rosso correggerebbe un cartoncino che è blu-verde, ma la tinta è nell'occhio, causata dalla tovaglia rossa."
             },
             {
               "en": "The eye is not a measuring instrument: it shifts the grey away from the red around it.",
@@ -3024,7 +3021,7 @@
           "traps": [
             {
               "en": "Complementary colours are real, but they are pairs that sit opposite each other, not lights that look the same.",
-              "it": "I colori complementari esistono davvero, ma sono coppie poste una di fronte all'altra, non luci che appaiono uguali."
+              "it": "I colori complementari sono reali, ma sono coppie poste una di fronte all'altra, non luci che appaiono uguali."
             },
             null,
             {
