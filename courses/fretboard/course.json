@@ -5,6 +5,14 @@
   "language": "en",
   "title": "Port Octave",
   "subject": "Music theory for guitarists, from the vibrating string to the open chord",
+  "pitch": "Pluck a string, hear two notes beat, and find out why the twelfth fret, the major scale and an open E chord work.",
+  "tags": [
+    "music",
+    "guitar",
+    "sound",
+    "physics"
+  ],
+  "level": "introductory",
   "bigIdea": "Notes are frequencies: halving a string doubles its frequency, twelve equal steps fill that octave, and scales and chords are patterns of those steps on the fretboard.",
   "learner": "A guitarist who strums a few open chords and songs but does not know why the chords work. No notation, no physics and no theory are assumed.",
   "goals": [
@@ -2071,5 +2079,453 @@
     "name": "Keeper's Test",
     "size": 8,
     "pass": 0.7
-  }
+  },
+  "games": [
+    {
+      "id": "higher",
+      "title": "Higher or lower?",
+      "concepts": [
+        "string"
+      ],
+      "kind": "which",
+      "where": "town",
+      "object": "hat",
+      "rounds": 10,
+      "learn": "A higher frequency is a higher note; the gap shrinks as you get better.",
+      "data": {
+        "ask": "Which string is higher?",
+        "pick": "max",
+        "make": {
+          "kind": "tone",
+          "from": 110,
+          "to": 440,
+          "gap": [
+            4,
+            0.25
+          ],
+          "unit": "semitones",
+          "voice": "pluck"
+        }
+      }
+    },
+    {
+      "id": "intervals",
+      "title": "Name the interval",
+      "concepts": [
+        "beats"
+      ],
+      "kind": "sort-fast",
+      "where": "person",
+      "rounds": 10,
+      "learn": "Octave 2:1, fifth 3:2, fourth 4:3: the smooth pairs by ear.",
+      "data": {
+        "ask": "Two notes, one after the other. Which interval?",
+        "bins": [
+          "octave, 2:1",
+          "fifth, 3:2",
+          "fourth, 4:3"
+        ],
+        "time": [
+          9,
+          5
+        ],
+        "cards": [
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "A3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "E2",
+                "E3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "D4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "G4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "E3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "E2",
+                "B2"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "A3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "D4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "C3",
+                "G3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "E2",
+                "A2"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "D3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "G3"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          },
+          {
+            "sound": {
+              "notes": [
+                "B3",
+                "E4"
+              ],
+              "voice": "pluck",
+              "arp": 0.45,
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "findnote",
+      "title": "Find the note",
+      "concepts": [
+        "twelve"
+      ],
+      "kind": "custom",
+      "where": "town",
+      "object": "box",
+      "rounds": 10,
+      "learn": "One fret is one half step: count from the open string.",
+      "data": {
+        "ask": "Tap the note on the neck."
+      }
+    },
+    {
+      "id": "majmin",
+      "title": "Major or minor?",
+      "concepts": [
+        "triads"
+      ],
+      "kind": "sort-fast",
+      "where": "host",
+      "rounds": 10,
+      "learn": "The third decides: four half steps major, three minor.",
+      "data": {
+        "ask": "Is this chord major or minor?",
+        "bins": [
+          "major",
+          "minor"
+        ],
+        "time": [
+          7,
+          3.5
+        ],
+        "cards": [
+          {
+            "sound": {
+              "notes": [
+                "C3",
+                "E3",
+                "G3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "C3",
+                "D#3",
+                "G3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "F#3",
+                "A3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "D3",
+                "F3",
+                "A3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "E3",
+                "G#3",
+                "B3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "E3",
+                "G3",
+                "B3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "F3",
+                "A3",
+                "C4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "F3",
+                "G#3",
+                "C4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "B3",
+                "D4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "G3",
+                "A#3",
+                "D4"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "C#3",
+                "E3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 0
+          },
+          {
+            "sound": {
+              "notes": [
+                "A2",
+                "C3",
+                "E3"
+              ],
+              "voice": "piano",
+              "dur": 1.6
+            },
+            "label": "♪",
+            "bin": 1
+          }
+        ]
+      }
+    }
+  ],
+  "withheld": [
+    {
+      "id": "written-octave",
+      "by": "string",
+      "tier": "passing",
+      "teaser": "The notes you read for guitar are not quite the notes it—",
+      "told": "Guitar music is written an octave higher than it sounds, so the open A string, 110 Hz, is written as the A an octave above it."
+    },
+    {
+      "id": "harmonic-tuning",
+      "by": "beats",
+      "tier": "settling",
+      "teaser": "Some people tune with the harmonics at frets 5 and 7. It works, except—",
+      "told": "The harmonic above fret 7 is a pure fifth of the string, slightly wider than the guitar's equal-tempered fifth, so tuning every string by harmonics leaves small errors that add up across the strings."
+    },
+    {
+      "id": "do-re-mi",
+      "by": "town",
+      "tier": "passing",
+      "teaser": "Down south they give the notes other names. Something like—",
+      "told": "In Italy and many other countries the notes C, D, E, F, G, A and B are called Do, Re, Mi, Fa, Sol, La and Si."
+    },
+    {
+      "id": "caged",
+      "by": "triads",
+      "tier": "known",
+      "teaser": "Five shapes, and they spell a word if you—",
+      "told": "The open shapes C, A, G, E and D can each be moved up the neck with a barre, and together they cover the whole fretboard: guitarists call this the CAGED system."
+    }
+  ]
 }

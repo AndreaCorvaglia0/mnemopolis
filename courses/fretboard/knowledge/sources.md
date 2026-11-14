@@ -66,6 +66,9 @@ that states the same number.
 | Open shapes C x32010, A x02220, G 320003, E 022100, D xx0232 hold three names each; lowest string played is the root | triads (upstairs) | computed from S6; shapes as taught in S16 | verified |
 | Chords of a major key: I IV V major, ii iii vi minor, vii diminished; G: G Am Bm C D Em F♯dim | keys | S12, S8 | verified |
 | I–V–vi–IV is a common progression in popular songs | keys | S16 (JustinGuitar teaches "common progressions") | simplified: worded as "a common progression", no count claimed |
+| Games and withheld lines (practice only, no new facts): octave 2:1, fifth 3:2, fourth 4:3 by ear; major 4 + 3, minor 3 + 4; notes along the A string | games | S4, S9, S8, S5 | verified (same facts as the houses) |
+| Withheld: the 7th-fret harmonic is a pure fifth, a little wider than the guitar's, so tuning by harmonics leaves small errors | beats (withheld) | S1 ("complications with harmonic tuning"), S4 | verified |
+| Withheld: the open shapes C A G E D moved up the neck with a barre cover the fretboard (CAGED) | triads (withheld) | S16 (JustinGuitar CAGED modules), syllabi G2, G6 | verified as a description of the method, no claim about its merit |
 
 ## Claims I was unsure of, and what I did
 

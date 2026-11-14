@@ -845,7 +845,8 @@ Packing (`src/course/packing.js`, pure, shared by `scripts/pack.mjs` and the `/p
    command line);
 2. each lab file (and `anims.js`) is kept as an ES module, its engine imports rewritten to read
    `globalThis.__mnemoKit` (`src/lab/api.js`: `lab/shell.js`, `lab/kit.js`, `lab/patterns/index.js`,
-   `systems/audio.js`); any other import, a dynamic `import()` or an `export ... from` is refused
+   `systems/audio.js`), and imports of the course's own `labs/lib/*.js` to read `globalThis.__mnemoLib`
+   (payload `libs`, loaded first in dependency order); any other import, a dynamic `import()` or an `export ... from` is refused
    with the file and line;
 3. stations with neither code (the keys of `export default { ... }`, read without running the
    file) nor `"ready"` are named and refused;

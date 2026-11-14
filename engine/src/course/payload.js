@@ -26,10 +26,13 @@ export const EMPTY_COURSE = { id: 'empty', language: 'en', title: 'No course', s
 export async function loadCode(P, kit, MOUNTS, ANIMS, GAMES = {}) {
   if (!P) return;
   globalThis.__mnemoKit = kit;
+  globalThis.__mnemoLib = {};
   const load = async (name, src) => {
     const url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
     try { return await import(/* @vite-ignore */ url); } catch (e) { console.error(`${name}: ${e.message}`); fail(`${name} could not be loaded: ${e.message}`); return null; } finally { URL.revokeObjectURL(url); }
   };
+  // the course's shared modules first, in order (each after those it imports)
+  for (const [id, src] of P.libs || []) { const m = await load(`labs/lib/${id}.js`, src); if (m) globalThis.__mnemoLib[id] = m; }
   await Promise.all(Object.entries(P.labs || {}).map(async ([id, src]) => { const m = await load(`labs/${id}.js`, src); if (m) MOUNTS[id] = m.default || {}; }));
   await Promise.all(Object.entries(P.games || {}).map(async ([id, src]) => { const m = await load(`games/${id}.js`, src); if (m) GAMES[id] = m.default || m; }));
   if (P.anims) { const m = await load('anims.js', P.anims); if (m?.ANIMS) Object.assign(ANIMS, m.ANIMS); }

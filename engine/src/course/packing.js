@@ -27,9 +27,15 @@ export function kitKey(spec) {
   return m ? m[1] : null;
 }
 
-// The import clause "a, { b as c, d }" or "* as K" -> a destructuring of the kit module.
-function binding(clause, key) {
-  const mod = `globalThis.__mnemoKit[${JSON.stringify(key)}]`, out = [];
+// A course's own shared modules: labs/lib/<name>.js, imported as './lib/<name>.js' from a lab file,
+// '../labs/lib/<name>.js' from a game and './<name>.js' from another lib file. Packed, they become
+// globalThis.__mnemoLib[name], loaded before the files that use them (libOrder).
+const LIB_SPEC = { labs: /^\.\/lib\/([\w-]+)\.js$/, games: /^\.\.\/labs\/lib\/([\w-]+)\.js$/, lib: /^\.\/([\w-]+)\.js$/ };
+export const libOf = (spec, from) => (LIB_SPEC[from] ? LIB_SPEC[from].exec(spec)?.[1] ?? null : null);
+
+// The import clause "a, { b as c, d }" or "* as K" -> a destructuring of the kit module (or of a lib).
+function binding(clause, key, lib = null) {
+  const mod = lib != null ? `globalThis.__mnemoLib[${JSON.stringify(lib)}]` : `globalThis.__mnemoKit[${JSON.stringify(key)}]`, out = [];
   let rest = clause.trim();
   const star = /^\*\s+as\s+([A-Za-z_$][\w$]*)$/.exec(rest);
   if (star) return `const ${star[1]} = ${mod};`;
@@ -50,12 +56,20 @@ function binding(clause, key) {
   return out.join(' ');
 }
 
-// Rewrites the static imports of one lab file. Returns { code, errors, uses }.
-export function rewriteImports(src, file = 'lab') {
-  const errors = [], uses = new Set();
+// Rewrites the static imports of one lab file. Returns { code, errors, uses, libs }.
+//   from: 'labs' | 'games' | 'lib' (where the file sits, for its imports of labs/lib/); libNames: the libs that exist
+export function rewriteImports(src, file = 'lab', { from = null, libNames = [] } = {}) {
+  const errors = [], uses = new Set(), libs = new Set();
   const IMPORT = /(^|\n)[ \t]*import(?=[\s{*])\s*([^'";]*?)\s*from\s*(['"])([^'"\n]+)\3[ \t]*;?|(^|\n)[ \t]*import\s*(['"])([^'"\n]+)\6[ \t]*;?/g;
   let code = src.replace(IMPORT, (all, nl, clause, _q, spec, nl2, _q2, bare, at) => {
-    const s = spec ?? bare, line = lineOf(src, at + (nl || nl2 || '').length), key = kitKey(s);
+    const s = spec ?? bare, line = lineOf(src, at + (nl || nl2 || '').length), key = kitKey(s), lib = libOf(s, from);
+    if (lib != null) {
+      if (!libNames.includes(lib)) { errors.push(`${file}, line ${line}: "${s}" is not a file of the course (labs/lib/${lib}.js)`); return all; }
+      if (bare != null) { errors.push(`${file}, line ${line}: an import without names does nothing in a packed game; remove it`); return all; }
+      const b = binding(clause, null, lib);
+      if (!b) { errors.push(`${file}, line ${line}: cannot read the import "${clause.replace(/\s+/g, ' ')}". Write import { a, b as c } from '...'`); return all; }
+      libs.add(lib); return `${nl || ''}${b}`;
+    }
     const allowed = `Lab code may import only from the engine's ${Object.keys(KIT_MODULES).map((k) => `engine/src/${k}`).join(', ')}`;
     if (!key) { errors.push(`${file}, line ${line}: import from "${s}" is not available in a packed game. ${allowed}.`); return all; }
     if (!KIT_MODULES[key]) { errors.push(`${file}, line ${line}: "engine/src/${key}" is not part of the lab kit. ${allowed}.`); return all; }
@@ -72,7 +86,15 @@ export function rewriteImports(src, file = 'lab') {
   if (reexp) errors.push(`${file}, line ${lineOf(code, reexp.index + reexp[1].length)}: "export ... from" is not available in a packed game; import the names, then export them`);
   if (/(^|\n)\s*import\s+[\s\S]*?from/.test(code) && !errors.length) errors.push(`${file}: an import statement could not be read`);
   code = `// packed from ${file}\n${code}\n//# sourceURL=${file}`;
-  return { code, errors, uses: [...uses] };
+  return { code, errors, uses: [...uses], libs: [...libs] };
+}
+
+// The libs in an order where each comes after the libs it imports; a cycle is an error.
+export function libOrder(deps) {
+  const order = [], state = {}, errors = [];
+  const visit = (n, path = []) => { if (state[n] === 2) return; if (state[n] === 1) { errors.push(`labs/lib: the modules import each other in a circle (${[...path, n].join(' -> ')})`); return; } state[n] = 1; (deps[n] || []).forEach((m) => visit(m, [...path, n])); state[n] = 2; order.push(n); };
+  Object.keys(deps).sort().forEach((n) => visit(n));
+  return { order, errors };
 }
 
 // The station ids a lab file provides: the keys of its `export default { ... }` (best effort, without
@@ -108,12 +130,14 @@ export function uncovered(course, labs = {}) {
 
 // Everything the player needs, from the files of a course folder. Returns { payload, errors, warnings }.
 //   files: { course: object, world?: object, labs?: { conceptId: source }, anims?: source, slug? }
-export function makePayload({ course, world = {}, labs = {}, anims = null, slug = null, games = {} }) {
-  const errors = [], warnings = [], out = {}, gout = {};
-  for (const [id, src] of Object.entries(games)) { const r = rewriteImports(src, `games/${id}.js`); errors.push(...r.errors); gout[id] = r.code; }
+export function makePayload({ course, world = {}, labs = {}, anims = null, slug = null, games = {}, libs = {} }) {
+  const errors = [], warnings = [], out = {}, gout = {}, libNames = Object.keys(libs), lout = {}, deps = {};
+  for (const [id, src] of Object.entries(libs)) { const r = rewriteImports(src, `labs/lib/${id}.js`, { from: 'lib', libNames }); errors.push(...r.errors); lout[id] = r.code; deps[id] = r.libs; }
+  const lo = libOrder(deps); errors.push(...lo.errors);
+  for (const [id, src] of Object.entries(games)) { const r = rewriteImports(src, `games/${id}.js`, { from: 'games', libNames }); errors.push(...r.errors); gout[id] = r.code; }
   for (const g of course.games || []) if (g?.kind === 'custom' && !games[g.id]) errors.push(`game "${g.id}" is custom but games/${g.id}.js is missing`);
   for (const [id, src] of Object.entries(labs)) {
-    const r = rewriteImports(src, `labs/${id}.js`);
+    const r = rewriteImports(src, `labs/${id}.js`, { from: 'labs', libNames });
     errors.push(...r.errors); out[id] = r.code;
   }
   let a = null;
@@ -122,7 +146,7 @@ export function makePayload({ course, world = {}, labs = {}, anims = null, slug 
   if (cov.missing.length) errors.push(`${cov.missing.length === 1 ? 'This station has' : 'These stations have'} no code and no "ready" pattern: ${cov.missing.join(', ')}. Write them in labs/<conceptId>.js (export default { <stationId>: mount }) or give the station "ready": { "kind": ... }.`);
   cov.unknownFiles.forEach((f) => warnings.push(`labs/${f}.js: no concept "${f}" with a lab in course.json; the file is ignored`));
   cov.unread.forEach((f) => warnings.push(`labs/${f}.js: its default export is not an object literal, so its stations could not be checked before playing`));
-  return { payload: { v: 1, slug: slug || course.id || 'course', course, world: world || {}, labs: out, anims: a, games: gout }, errors, warnings };
+  return { payload: { v: 1, slug: slug || course.id || 'course', course, world: world || {}, labs: out, anims: a, games: gout, libs: lo.order.map((n) => [n, lout[n]]) }, errors, warnings };
 }
 
 // JSON that is safe inside <script>: no "</script", no "<!--"

@@ -61,14 +61,36 @@ course (music theory for guitarists, with real sound).
   real positions). *Proposal:* document it on the author's card as the way to make a station
   testable.
 
-## Sound
+## Sound (the kit's sound API, first used by a lab here)
 
-- A synthesised plucked string by additive synthesis (harmonics of a string plucked at a fifth of
-  its length, each decaying a little faster) is exact in pitch by construction: measured in Node
-  by autocorrelation within 0.03 Hz of what was asked, for all six open strings.
-- **Beats need harmonics.** Two pure sines a fifth apart never beat; the lesson "the fifth is
-  smooth because harmonics meet" needs complex tones. The station builds each string from six
-  sustained sines (1/k amplitudes). A sound API should offer a sustained tone with harmonics
-  (`hold(f, { harmonics: 6 })`), not only sine and triangle.
+- **The switch was one file**, as planned: `labs/lib/sound.js` first rendered its own additive
+  pluck on its own AudioContext, then became a thin wrapper over the kit's `sound(ctx)`. The
+  stations did not change. Owning that seam is worth recommending to every course with sound.
+- **Pitch is exact.** The kit's Karplus-Strong pluck, measured offline in Node by autocorrelation
+  for every frequency the labs ask for (the six open strings, the octave at fret 12, harmonics 2 to
+  4, the notes of the scale and chord stations): worst error 0.10 cent.
+- **`fundamental()` in `systems/sound/synth.js` returns the strongest partial, not the
+  fundamental.** For a bright pluck at 110 Hz it reports 330 Hz, and at E2 1154 Hz. Anyone checking
+  pitch with it will think the pluck is wrong. *Proposal:* rename it `strongest()`, and add a
+  period-based `fundamental` (autocorrelation, as in this course's check).
+- **Missing: a sustained tone with harmonics.** `hold` is a sine or a triangle. Two pure sines a
+  fifth apart never beat, so "the fifth is smooth because harmonics meet" needs complex tones; the
+  course builds each sustained string from six `hold`s at 1/k. *Proposal:* `hold(f, { harmonics: 6 })`.
+- **`on` is false until the context runs**, and nothing queues: a sound asked for before the first
+  gesture is lost. In labs the learner has always tapped, so it never mattered here.
+- **Not measured:** the live chain (the lab bus, the limiter, the ducking, the analyser), and how
+  it sounds. Levels were kept modest (single notes at gain 0.5, strums at 0.34 per string, sustained
+  harmonics at 0.16/k). Nobody has listened to this course.
 - Everything drawn is computed from the same numbers as the sound, so every station works on mute;
   one gentle line says once that sound helps.
+
+## Mini-games
+
+- The ready kinds covered three of the four games with data only (`which` with generated plucked
+  pairs, `sort-fast` with sounding cards for intervals and for major or minor). The fourth, "Find
+  the note", is custom and reuses the course's neck from `labs/lib/`, which needed the lib support.
+- **A custom game that draws on a canvas gets a stage with no height** (`.gm-stage` is a centred
+  column), and the lab's CSS is not on that screen; the game sets its own box and styles. *Proposal:*
+  a `g.canvas(w, h)` that returns a pane sized like a lab's.
+- **`g.bot` must be written by hand** for `worldshots` to play a custom game; without it the script
+  waits for the timer and then times out on the next game. Worth a line in `10-games.md`.
