@@ -10,6 +10,7 @@
 import { LABS, UPPER_LABS } from '../course/labs.js';
 import { state, save } from '../systems/state.js';
 import { sfx } from '../systems/audio.js';
+import { hand, setQuiet } from './hands.js';
 import { touch } from '../systems/view.js';
 import { available, isOn, isSpeaking, onChange, listen, stop as stopVoice, speak, script, VOICE } from '../systems/voice.js';
 import { codePanel } from './code.js';
@@ -93,7 +94,7 @@ export function h(tag, attrs = {}, ...kids) {
 // ---- small controls ----
 export function seg(options, value, onChange) {
   const el = h('div', { class: 'lab-seg', role: 'group' });
-  const set = (v, fire = true) => { if (fire) sfx.tick(); [...el.children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === String(v))); if (fire) onChange(v); };
+  const set = (v, fire = true) => { if (fire) hand('toggleOn'); [...el.children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === String(v))); if (fire) onChange(v); };
   options.forEach(([v, label]) => el.append(h('button', { type: 'button', 'data-v': v, 'aria-pressed': String(v) === String(value), onclick: () => set(v) }, label)));
   el.set = set;
   return el;
@@ -101,7 +102,7 @@ export function seg(options, value, onChange) {
 
 export function slider(label, min, max, value, onInput, { step = 1, fmt = (v) => v } = {}) {
   const out = h('output', {}, String(fmt(value)));
-  const input = h('input', { type: 'range', min, max, step, value, 'aria-label': label, oninput: () => { out.textContent = fmt(+input.value); onInput(+input.value); } });
+  const input = h('input', { type: 'range', min, max, step, value, 'aria-label': label, oninput: () => { out.textContent = fmt(+input.value); hand('detent', { v: (+input.value - min) / ((max - min) || 1) }); onInput(+input.value); } });
   const el = h('div', { class: 'lab-row' }, h('label', {}, label, out), input);
   el.set = (v) => { input.value = v; out.textContent = fmt(+v); };
   return el;
@@ -114,7 +115,7 @@ export const readout = (html = '') => h('div', { class: 'lab-read', role: 'statu
 export function predict(controls, question, options) {
   return new Promise((resolve) => {
     const box = h('div', { class: 'lx-choices', role: 'group', 'aria-label': question });
-    options.forEach((o, i) => box.append(h('button', { type: 'button', class: 'lx-choice', onclick: () => { sfx.tick(); [...box.children].forEach((b, j) => { b.disabled = true; b.style.opacity = j === i ? 1 : 0.45; if (j === i) b.style.borderColor = 'var(--gold)'; }); resolve(i); } }, h('span', { class: 'k' }, String.fromCharCode(65 + i)), o)));
+    options.forEach((o, i) => box.append(h('button', { type: 'button', class: 'lx-choice', onclick: () => { hand('button'); [...box.children].forEach((b, j) => { b.disabled = true; b.style.opacity = j === i ? 1 : 0.45; if (j === i) b.style.borderColor = 'var(--gold)'; }); resolve(i); } }, h('span', { class: 'k' }, String.fromCharCode(65 + i)), o)));
     controls.append(h('div', { class: 'lx-q' }, question), box);
   });
 }
@@ -540,7 +541,7 @@ export function openLab(id, start = 0, { upper = null } = {}) {
     };
     const choose = (j) => {
       if (my !== token || phase !== 'ask') return;
-      said = j; sfx.tick(); phase = 'explore';
+      said = j; hand('button'); phase = 'explore';
       // on a phone the sheet folds to one line so that the picture and its controls have the room
       if (isStack() && !full) setCollapsed(true);
       render();
@@ -549,8 +550,10 @@ export function openLab(id, start = 0, { upper = null } = {}) {
       if (pendingReveal || (tries.length && ticked.size === tries.length)) finish();
       else setTimeout(() => { if (my === token) pointAt(nowK(), true); }, 350);
     };
+    setQuiet(false); // the kit's controls make their small sounds unless the station asks for quiet
     const ctx = {
       stage, controls, code,
+      quiet: (q = true) => setQuiet(q),
       // the station as course.json gives it (texts, "ready" data, the "when" of each task)
       station: st,
       // show the takeaway now (used by stations whose tasks are not "tries")
@@ -560,7 +563,7 @@ export function openLab(id, start = 0, { upper = null } = {}) {
         if (my !== token || !tries[k] || ticked.has(k)) return;
         ticked.add(k);
         if (phase !== 'explore') return;
-        sfx.tick(); justDone = k;
+        hand('tick'); justDone = k;
         render();
         if (ticked.size === tries.length) setTimeout(finish, 650);
         else setTimeout(() => { if (my === token) pointAt(nowK(), true); }, 300);

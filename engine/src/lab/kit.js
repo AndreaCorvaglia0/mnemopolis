@@ -1,6 +1,8 @@
 // Small building blocks for lab stations. Keep stations short: one canvas, one or two controls.
 import { h } from './shell.js';
 import { sfx } from '../systems/audio.js';
+import { hand } from './hands.js';
+import { sound } from '../systems/sound/lab.js';
 
 // A canvas that fills the stage. The station draws in its own units (w x hgt); the pane scales
 // that box to the largest size that fits the stage, keeps its proportions, centres it, and lets
@@ -148,9 +150,9 @@ export function draggable(pane, items, redraw, { radius = (it) => it.r, bounds =
   pane.drag((x, y, phase) => {
     // a finger is wide: grab a disc if the touch is within 12 screen pixels of it
     const slack = pane.px ? pane.px(12) : 0;
-    if (phase === 'down') { cur = [...items].reverse().find((it) => Math.hypot(x - it.x, y - it.y) <= radius(it) + slack) || null; if (cur) { ox = x - cur.x; oy = y - cur.y; items.splice(items.indexOf(cur), 1); items.push(cur); pane.cv.style.cursor = 'grabbing'; } }
+    if (phase === 'down') { cur = [...items].reverse().find((it) => Math.hypot(x - it.x, y - it.y) <= radius(it) + slack) || null; if (cur) { ox = x - cur.x; oy = y - cur.y; items.splice(items.indexOf(cur), 1); items.push(cur); pane.cv.style.cursor = 'grabbing'; hand('dragStart'); } }
     else if (cur && phase === 'move') { cur.x = x - ox; cur.y = y - oy; const b = bx(); if (b) { cur.x = Math.max(b[0], Math.min(b[2], cur.x)); cur.y = Math.max(b[1], Math.min(b[3], cur.y)); } redraw(); }
-    else if (phase === 'up') { cur = null; pane.cv.style.cursor = 'grab'; }
+    else if (phase === 'up') { if (cur) hand('drop'); cur = null; pane.cv.style.cursor = 'grab'; }
   });
   pane.cv.style.cursor = 'grab';
 }
@@ -169,4 +171,4 @@ export function hslToRgb(hh, s, l) { // h in degrees, s and l in 0..1
 // functions: sliderReveal, compare, sort, order.
 export * from './patterns/index.js';
 export { h, seg, slider, readout } from './shell.js';
-export { sfx };
+export { sfx, sound, hand };

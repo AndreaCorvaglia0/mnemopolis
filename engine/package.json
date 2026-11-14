@@ -24,7 +24,8 @@
     "build:player": "node scripts/build-player.mjs",
     "shots:ready": "node scripts/readyshots.mjs",
     "build:play": "vite build --config vite.play.config.js",
-    "sound": "node scripts/use-course.mjs && node scripts/soundcheck.mjs"
+    "sound": "node scripts/use-course.mjs && node scripts/soundcheck.mjs",
+    "sound:ui": "node scripts/soundui.mjs"
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.3.1",
