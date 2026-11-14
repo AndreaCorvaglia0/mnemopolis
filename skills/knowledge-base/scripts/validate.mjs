@@ -30,6 +30,9 @@ const VERBS_WEAK = /^(understand|know|learn|be aware|appreciate|familiar)/i;
 
 // ---- course ----
 need(c, ['id', 'language', 'title', 'subject', 'bigIdea', 'themes', 'concepts', 'relations', 'finalCheck'], 'course');
+if (c.pitch !== undefined) max(c.pitch, 30, 'pitch');
+if (c.tags !== undefined && (!Array.isArray(c.tags) || c.tags.length > 4)) err('tags: an array of at most 4 short words');
+if (c.level !== undefined && !['introductory', 'intermediate', 'advanced'].includes(c.level)) err('level: introductory, intermediate or advanced');
 if (c.version !== 1) err('course: "version" must be 1');
 if (c.id && !/^[a-z][a-z0-9-]*$/.test(c.id)) err('course: "id" must be a lowercase slug');
 max(c.bigIdea, 28, 'bigIdea');
@@ -244,7 +247,7 @@ if (core.length && coreMin > 60) warn(`the core path is about ${Math.round(coreM
 const stations = concepts.reduce((s, p) => s + (p.lab?.stations?.length || 0), 0);
 const summary = [`${c.title || 'course'}: ${themes.length} themes, ${concepts.length} concepts${extra.length ? ` (${core.length} core, ${extra.length} extra)` : ''}, ${stations} lab stations, ${rememberTotal} lines to remember`,
   `core path about ${playMinutes(core, true)} min; everything about ${playMinutes(concepts, true)} min`];
-return { errors, warns, summary };
+return { errors, warns, summary, stats: { coreMinutes: playMinutes(core, true), allMinutes: playMinutes(concepts, true), houses: concepts.length, coreHouses: core.length, stations } }; // stats: for the site's catalogue
 }
 
 // ---- the command line ----

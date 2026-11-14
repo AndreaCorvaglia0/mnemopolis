@@ -48,6 +48,19 @@
       "type": "string",
       "description": "Who it is for and what they already know."
     },
+    "pitch": {
+      "type": "string",
+      "description": "Optional. One line for the site's catalogue: what the learner gets, in their terms (about 20 words)."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Up to four short words for the site's catalogue (for example science, colour)."
+    },
+    "level": {
+      "enum": ["introductory", "intermediate", "advanced"],
+      "description": "Optional. Shown in the site's catalogue; introductory when absent."
+    },
     "goals": {
       "type": "array",
       "items": {

@@ -35,20 +35,18 @@ jobs:
         run: npm test
       - name: Build every complete course
         run: |
-          mkdir -p site
-          echo '<!doctype html><meta charset="utf-8"><title>Mnemopolis</title><body style="font:18px system-ui;max-width:640px;margin:60px auto;padding:0 20px"><h1>Mnemopolis</h1><ul>' > site/index.html
+          mkdir -p site/_site/media
           for d in courses/*/; do
             slug=$(basename "$d")
             [ -f "$d/course.json" ] || continue
             if COURSE="$slug" npm run build; then
               mkdir -p "site/$slug" && cp engine/dist/index.html "site/$slug/index.html"
-              title=$(node -p "require('./courses/$slug/course.json').title")
-              echo "<li><a href=\"$slug/\">$title</a></li>" >> site/index.html
+              # two pictures of the game for the front page (town at night, one lab); never fails the build
+              node engine/scripts/cataloguemedia.mjs "site/$slug/index.html" site/_site/media "$slug" || echo "::warning::no front-page pictures for $slug"
             else
               echo "::warning::course $slug is not complete yet (see the log): not published"
             fi
           done
-          echo '</ul>' >> site/index.html
       - name: Prebuilt player, the /play/ page, and games packed without a build
         # pack.mjs needs no packages and no bundler: the demo at /pocket-demo/ is made that way, and the
         # packed games are compared with their bundled builds (places, questions, every station)
@@ -63,7 +61,10 @@ jobs:
           node engine/scripts/packcheck.mjs /tmp/chroma-bundled.html /tmp/chroma-packed.html courses/chroma
           node engine/scripts/packcheck.mjs /tmp/pocket-demo-bundled.html site/pocket-demo/index.html courses/pocket-demo
           node engine/scripts/playcheck.mjs courses/pocket-demo
-          echo '<p><a href="play/">Make a game from a course</a>: no install, nothing uploaded.</p>' >> site/index.html
+      - name: Front page (English and Italian), from the courses and their pictures
+        run: |
+          node scripts/build-site.mjs --out site --featured chroma
+          ls -l site site/it site/_site site/_site/media
       - uses: actions/upload-artifact@v4
         with:
           name: games
