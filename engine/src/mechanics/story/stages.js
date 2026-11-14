@@ -11,7 +11,7 @@ import { tr } from './config.js';
 export const rememberedRow = (r) => r.won || (!r.duel && r.visited && r.n >= r.m);
 export function townProgress(s) { return progressOf(Q.coreProgress(s).map((r) => ({ done: rememberedRow(r) }))); }
 export const stageNow = (s) => stageOf(townProgress(s), !!(s.ended || s.passedLeague));
-export const rainNow = (s) => rainOf(townProgress(s), !!(s.ended || s.passedLeague)); // the lamp lit: the rain stops
+export const rainNow = (s) => rainOf(s.played || 0, Object.keys(s.visited || {}).length > 0, !!(s.ended || s.passedLeague)); // it lets up soon after the arrival
 
 const deck = new Deck();
 export const greeting = (s) => deck.draw(`greet:${stageNow(s)}`, tr(S_WORDS.greet[stageNow(s)]));

@@ -18,10 +18,14 @@ export function stageOf(p, ended = false) {
   return 'warm';
 }
 
-// the rain: heavy at the start, thinner with each house, gone at the ending
-export function rainOf(p, ended = false) {
-  if (ended) return 0;
-  return Math.max(0, Math.min(1, 1 - 0.75 * p));
+// the rain: heavy on arrival, then it lets up soon: it thins from RAIN_HOLD seconds of play and is
+// gone by RAIN_GONE, or at once when the first building has been entered. (The owner found rain
+// through the whole game too much; the town's warming is carried by windows, people and music.)
+export const RAIN_HOLD = 18, RAIN_GONE = 32;
+export function rainOf(played = 0, entered = false, ended = false) {
+  if (ended || entered) return 0;
+  if (played <= RAIN_HOLD) return 1;
+  return Math.max(0, 1 - (played - RAIN_HOLD) / (RAIN_GONE - RAIN_HOLD));
 }
 
 // ---- mementos: one per core house, in an order that escalates. With fewer houses: always the

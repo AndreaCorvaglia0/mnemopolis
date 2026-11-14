@@ -191,7 +191,7 @@ learning the endings will tell. A new ending is a new entry in `ENDINGS` (`final
 | Part | Change |
 |---|---|
 | Opening | Arrival scene; name asked once (kept on the device only); the ship moored at a quay |
-| Town | Rain that thins with progress; dark windows that light up; the League hall becomes an unmarked lighthouse |
+| Town | Rain on arrival that lets up within about half a minute, or when the first lab is opened; dark windows that light up; the League hall becomes an unmarked lighthouse |
 | People | Lines by stage: cold, thawing, warm; the guide becomes the harbour master |
 | Duel | Reskinned as remembering: strings, bars, tempers; rules unchanged |
 | Upstairs | Every core house has one (for the memento), even with no advanced material |

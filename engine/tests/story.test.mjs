@@ -23,9 +23,9 @@ test('the town warms with progress: cold, thawing, warm; the rain thins and stop
   assert.equal(stageOf(0.5), 'thawing'); assert.equal(stageOf(0.74), 'thawing');
   assert.equal(stageOf(0.75), 'warm'); assert.equal(stageOf(1), 'warm');
   assert.equal(stageOf(0, true), 'warm', 'after the ending everyone is warm');
-  assert.equal(rainOf(0), 1);
-  for (let p = 0; p < 1; p += 0.1) assert.ok(rainOf(p + 0.1) < rainOf(p), 'thinner with every house');
-  assert.ok(rainOf(1) > 0 && rainOf(1) < 0.3, 'still a drizzle before the lighthouse');
+  assert.equal(rainOf(0), 1); assert.equal(rainOf(10), 1);
+  assert.ok(rainOf(25) > 0 && rainOf(25) < 1, 'letting up');
+  assert.equal(rainOf(40), 0); assert.equal(rainOf(5, true), 0, 'gone once a building is entered');
   assert.equal(rainOf(0.5, true), 0, 'none after the ending');
   assert.equal(progressOf([{ done: true }, { done: false }, { done: true }, { done: false }]), 0.5);
   assert.equal(progressOf([]), 1);
