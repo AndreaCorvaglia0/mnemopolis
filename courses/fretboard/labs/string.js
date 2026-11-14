@@ -81,7 +81,7 @@ async function pluck(ctx) {
     const [rx, ry] = Lay.read, lenmm = LEN * (1 - u0);
     const big = Lay.up ? 34 : 40;
     d.text(`${fmtHz(f())} Hz`, rx, ry, { size: big, weight: 700, color: plucked ? C.gold : C.text });
-    d.text(`vibrating length ${Math.round(lenmm)} mm${k ? `, fret ${k}` : ', open'}`, rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 400 });
+    d.text(Lay.up ? `${Math.round(lenmm)} mm${k ? `, fret ${k}` : ', open'}` : `vibrating length ${Math.round(lenmm)} mm${k ? `, fret ${k}` : ', open'}`, rx, ry + 30, { size: 17, color: C.muted, max: Lay.up ? 170 : 400 });
     if (!Lay.up) d.text(`open string: ${fmtHz(freq(ctl.v.T))} Hz   ·   tension ${ctl.v.T.toFixed(1)} N`, 450, ry, { size: 17, color: C.muted, max: 350 });
     else d.text(`open: ${fmtHz(freq(ctl.v.T))} Hz`, rx, ry + 58, { size: 17, color: C.muted });
     // the last plucks, so the two can be compared

@@ -92,3 +92,12 @@ export function soundNote(ctx) {
   const t = setTimeout(() => { if (!ctx.alive || ctx.alive()) ctx.nudge?.('Sound helps here: turn the volume up a little. With it off, the picture shows the same thing.', 6000); }, 1200);
   ctx.onCleanup?.(() => clearTimeout(t));
 }
+
+// Calls fn when the frame's phase changes ('ask' -> 'explore' -> 'done'): the stations hide, while the
+// prediction is open, what would answer it, and draw it as soon as the learner has committed.
+export function onPhase(ctx, fn) {
+  let last = ctx.phase?.();
+  const id = setInterval(() => { const p = ctx.phase?.(); if (p !== last) { last = p; fn(p); } }, 150);
+  ctx.onCleanup?.(() => clearInterval(id));
+  return () => ctx.phase?.() === 'ask';
+}

@@ -18,7 +18,7 @@ async function compass(ctx) {
     if (root === 0 && Math.abs(steps) >= 12) t.pick('round');
     t.check(); view.redraw();
   };
-  const geo = (pane) => (pane.upright ? { A: dialGeom(pane.W / 2, 200, 104), B: dialGeom(pane.W / 2, 470, 104, { order: 7 }) } : { A: dialGeom(205, 255, 120), B: dialGeom(615, 255, 120, { order: 7 }) });
+  const geo = (pane) => (pane.upright ? { A: dialGeom(pane.W / 2, 250, 92), B: dialGeom(pane.W / 2, 520, 92, { order: 7 }) } : { A: dialGeom(205, 255, 120), B: dialGeom(615, 255, 120, { order: 7 }) });
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
     const { A, B } = geo(pane), ks = keySet(root), names = keyNames(root); d.clear();
     const label = Array.from({ length: 12 }, (_, p) => { const k = MAJOR.findIndex((x) => pc(root + x) === p); return k >= 0 ? names[k] : nameOf(p); });
@@ -32,8 +32,10 @@ async function compass(ctx) {
     }
     const sh = names.filter((n) => n.includes('♯')), fl = names.filter((n) => n.includes('♭'));
     d.text(`${names[0]} major: ${names.join(' ')}`, 24, 40, { size: pane.upright ? 21 : 24, weight: 700, color: C.gold, max: pane.W - 48 });
-    const line2 = `${sh.length ? `${sh.length} sharp${sh.length > 1 ? 's' : ''}` : fl.length ? `${fl.length} flat${fl.length > 1 ? 's' : ''}` : 'no sharps or flats'}${changed ? `   ·   changed: ${nameOf(changed.from)} → ${names[MAJOR.findIndex((x) => pc(root + x) === changed.to)] || nameOf(changed.to)}` : ''}   ·   steps: ${steps}`;
-    d.text(line2, 24, 68, { size: 17, color: C.muted, max: pane.W - 48 });
+    const acc = sh.length ? `${sh.length} sharp${sh.length > 1 ? 's' : ''}` : fl.length ? `${fl.length} flat${fl.length > 1 ? 's' : ''}` : 'no sharps or flats';
+    const ch = changed ? `changed: ${nameOf(changed.from, fl.length > 0)} → ${names[MAJOR.findIndex((x) => pc(root + x) === changed.to)] || nameOf(changed.to)}` : '';
+    if (pane.upright) { d.text(`${acc}   ·   steps: ${steps}`, 24, 68, { size: 17, color: C.muted }); if (ch) d.text(ch, 24, 94, { size: 17, color: C.gold }); }
+    else d.text(`${acc}${ch ? `   ·   ${ch}` : ''}   ·   steps: ${steps}`, 24, 68, { size: 17, color: C.muted, max: pane.W - 48 });
   });
   const anim = animate(ctx, (dt) => { const more = glow.step(dt); view.redraw(); return more; });
   view.pane.drag((x, y, ph) => {

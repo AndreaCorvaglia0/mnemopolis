@@ -6,7 +6,7 @@
 //   tuneup   (upstairs) tune the A string to the 5th fret of the low E by removing the beats
 import { stage, sliders, button, tasks, animate, h, C, alpha } from '../../../engine/src/lab/kit.js';
 import { fmtHz } from './lib/music.js';
-import { sound, soundNote } from './lib/sound.js';
+import { sound, soundNote, onPhase } from './lib/sound.js';
 
 const N = 6; // harmonics per string, in the sound and in the drawing
 
@@ -39,7 +39,7 @@ function samples(tones, t0, span) {
 function band(d, x, y, w, hgt, fa, fb, span, t0, { colour = C.acc } = {}) {
   d.box(x, y, w, hgt, { fill: '#0f141d', stroke: C.line, r: 8 });
   const win = 4 / Math.min(fa, fb), ys = samples([[fa, 1], [fb, 1]], t0, span + win), mid = y + hgt / 2, cols = Math.floor(w / 2), half = Math.round((win * RATE) / 2);
-  const norm = 2 * (1 + 1 / 2 + 1 / 3 + 1 / 4 + 1 / 5 + 1 / 6) * 0.62, top = [], bot = [];
+  const norm = 2 * 1.9, top = [], bot = [];
   for (let c = 0; c <= cols; c++) {
     const i0 = Math.round((c / cols) * span * RATE); let mx = -9, mn = 9;
     for (let i = i0; i < i0 + 2 * half && i < ys.length; i++) { if (ys[i] > mx) mx = ys[i]; if (ys[i] < mn) mn = ys[i]; }
@@ -52,17 +52,18 @@ function band(d, x, y, w, hgt, fa, fb, span, t0, { colour = C.acc } = {}) {
 }
 
 // two rulers of harmonics, A above (gold), B below (teal); close pairs joined
-function rulers(d, x, y, w, fa, fb, maxHz, { la = 'string A', lb = 'string B' } = {}) {
+function rulers(d, x, y, w, fa, fb, maxHz, { la = 'string A', lb = 'string B', hide = false } = {}) {
   const X = (f) => x + (f / maxHz) * w, ya = y, yb = y + 74;
   d.line([[x, ya], [x + w, ya]], { color: C.line2, width: 2 }); d.line([[x, yb], [x + w, yb]], { color: C.line2, width: 2 });
   for (let f = 0; f <= maxHz; f += maxHz > 1000 ? 200 : 100) { d.line([[X(f), yb], [X(f), yb + 8]], { color: C.line2, width: 1 }); if (f % (maxHz > 1000 ? 400 : 200) === 0 && f < maxHz) d.text(String(f), X(f), yb + 28, { size: 16, color: C.dim, align: 'center' }); }
   d.text('Hz', x + w, yb + 28, { size: 16, color: C.dim, align: 'right' });
   d.text(la, x, ya - 26, { size: 16, color: C.gold }); d.text(lb, x, yb + 50, { size: 16, color: C.acc });
   for (let i = 1; i <= N; i++) { if (fa * i <= maxHz) { d.line([[X(fa * i), ya - 14], [X(fa * i), ya + 2]], { color: C.gold, width: 3 }); } if (fb * i <= maxHz) d.line([[X(fb * i), yb - 2], [X(fb * i), yb + 14]], { color: C.acc, width: 3 }); }
-  for (const p of pairs(fa, fb, maxHz)) {
-    const same = p.diff < 0.25, xm = (X(p.fa) + X(p.fb)) / 2;
+  let lastLabel = -1e9;
+  if (!hide) for (const p of pairs(fa, fb, maxHz)) {
+    const same = p.diff < 0.25, xm = (X(p.fa) + X(p.fb)) / 2, room = xm - lastLabel > (same ? 64 : 76);
     d.line([[X(p.fa), ya + 4], [X(p.fb), yb - 4]], { color: same ? C.ok : C.bad, width: same ? 4 : 2.5, glow: same ? C.ok : null, dash: same ? null : [5, 4] });
-    d.text(same ? 'meet' : `${p.diff.toFixed(1)}/s`, xm + 6, (ya + yb) / 2 + 6, { size: 16, weight: 700, color: same ? C.ok : C.bad });
+    if (room) { d.text(same ? 'meet' : `${p.diff.toFixed(1)}/s`, xm + 6, (ya + yb) / 2 + 6, { size: 16, weight: 700, color: same ? C.ok : C.bad }); lastLabel = xm; }
   }
 }
 function fineRow(ctx, ctl, id, steps, after) {
@@ -87,18 +88,20 @@ async function wobble(ctx) {
   const ctl = sliders(ctx, [{ id: 'fb', label: 'String B', min: 100, max: 240, step: 0.1, value: 113, unit: 'Hz' }], onB);
   fineRow(ctx, ctl, 'fb', [-1, -0.1, 0.1, 1], onB);
   const player = pairPlayer(ctx, s, () => [FA, ctl.v.fb]);
+  const asking = onPhase(ctx, () => view.redraw());
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
-    const up = pane.upright, W = pane.W, fb = ctl.v.fb, v = verdict(FA, fb);
+    const up = pane.upright, W = pane.W, fb = ctl.v.fb, v = verdict(FA, fb), ask = asking();
     d.clear();
     d.text(`string A ${fmtHz(FA)} Hz`, 24, 34, { size: 18, color: C.gold, weight: 600 });
     d.text(`string B ${fmtHz(fb)} Hz`, up ? 24 : 250, up ? 60 : 34, { size: 18, color: C.acc, weight: 600 });
     d.text(`B / A = ${(fb / FA).toFixed(3)}`, up ? 260 : 480, up ? 60 : 34, { size: 18, color: C.muted });
     const msg = v.kind === 'steady' ? 'steady: harmonics meet, no beating' : v.kind === 'far' ? 'no harmonics close enough to beat' : `beats: ${v.rate.toFixed(1)} per second${v.rate > 6 ? ', heard as roughness' : ''}`;
     const by = up ? 84 : 56;
-    d.text(msg, 24, by + 26, { size: up ? 20 : 22, weight: 700, color: v.kind === 'steady' ? C.ok : v.kind === 'beat' ? C.text : C.muted, max: W - 48 });
+    if (!ask) d.text(msg, 24, by + 26, { size: up ? 20 : 22, weight: 700, color: v.kind === 'steady' ? C.ok : v.kind === 'beat' ? C.text : C.muted, max: W - 48 });
     d.text('the two strings together, over two seconds', 24, by + 58, { size: 16, color: C.dim });
-    band(d, 24, by + 68, W - 48, up ? 150 : 130, FA, fb, 2, t0);
-    rulers(d, 40, up ? 410 : 334, W - 80, FA, fb, up ? 700 : 1000);
+    if (ask) { d.box(24, by + 68, W - 48, up ? 150 : 130, { fill: '#0f141d', stroke: C.line, r: 8 }); d.text('?', W / 2, by + 68 + (up ? 88 : 78), { size: 34, color: C.dim, align: 'center' }); }
+    else band(d, 24, by + 68, W - 48, up ? 150 : 130, FA, fb, 2, t0);
+    rulers(d, 40, up ? 410 : 334, W - 80, FA, fb, up ? 700 : 1000, { hide: ask });
   });
   const anim = animate(ctx, (dt) => { if (dt === Infinity) return false; t0 += dt; view.redraw(); return true; });
   anim.kick();
@@ -113,9 +116,11 @@ async function third(ctx) {
   const fb = () => (mode === 'et' ? ET : FA * 1.25);
   const ctl = sliders(ctx, [{ id: 'm', label: 'Tuning of the third', options: [['et', 'Guitar: equal steps'], ['just', 'Pure 5:4']], value: 'et' }], (id, v) => { mode = v; view.redraw(); });
   button(ctx, 'Play A and C♯', () => { s.stopAll(); const a = s.rich(FA, { n: N }), b = s.rich(fb(), { n: N }); setTimeout(() => { a.stop(); b.stop(); }, 3500); t.pick(`play-${mode}`).check(); }, { primary: true });
+  const asking = onPhase(ctx, () => view.redraw());
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
     const up = pane.upright, W = pane.W, f2 = fb(), v = verdict(FA, f2);
     d.clear();
+    if (asking()) { d.text('A, 220 Hz, and C♯, four half steps above it', 24, 34, { size: 19, weight: 600, max: W - 48 }); d.wrap('Answer the question; then play the two notes and compare the two tunings of C♯.', 24, 60, W - 48, { size: 18, color: C.muted }); return; }
     d.text(`A ${fmtHz(FA)} Hz and C♯ ${fmtHz(f2)} Hz`, 24, 34, { size: 19, weight: 600, max: W - 48 });
     d.text(`ratio ${(f2 / FA).toFixed(4)}${mode === 'just' ? ' = 5:4' : ', four equal half steps'}`, 24, 62, { size: 17, color: C.muted, max: W - 48 });
     const msg = v.kind === 'steady' ? 'steady: the 5th harmonic of A meets the 4th of C♯' : `the 5th harmonic of A (${(5 * FA).toFixed(0)} Hz) and the 4th of C♯ (${(4 * f2).toFixed(1)} Hz) beat ${v.rate.toFixed(1)} times a second`;

@@ -3,7 +3,7 @@
 //   fifthfret  (upstairs) the six strings: fret 5 gives the next open string, fret 4 on the G string
 import { stage, button, tasks, animate, spring, C, alpha } from '../../../engine/src/lab/kit.js';
 import { TUNING, hz, nameOf, fmtHz, pc, isLetter, neckGeom, drawNeck, dot, dialGeom, drawDial } from './lib/music.js';
-import { sound, soundNote } from './lib/sound.js';
+import { sound, soundNote, onPhase } from './lib/sound.js';
 
 const A2 = 45;
 
@@ -19,13 +19,15 @@ async function circle(ctx) {
   };
   const geo = (pane) => {
     const up = pane.upright, W = pane.W;
-    const D = up ? dialGeom(W / 2, 175, 120, { order: 1 }) : dialGeom(170, 200, 130, { order: 1 });
-    const G = up ? neckGeom({ x: 24, y: 500, w: W - 40, h: 0 }, { strings: [1], frets: 12, open: 38 }) : neckGeom({ x: 350, y: 300, w: 450, h: 0 }, { strings: [1], frets: 12, open: 40 });
+    const D = up ? dialGeom(W / 2, 165, 112, { order: 1 }) : dialGeom(170, 200, 130, { order: 1 });
+    const G = up ? neckGeom({ x: 24, y: 560, w: W - 40, h: 0 }, { strings: [1], frets: 12, open: 38 }) : neckGeom({ x: 350, y: 300, w: 450, h: 0 }, { strings: [1], frets: 12, open: 40 });
     return { up, D, G };
   };
+  const asking = onPhase(ctx, () => view.redraw());
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
     const { up, D, G } = geo(pane); d.clear();
     const m = A2 + fret, lit = new Set([pc(m)]);
+    if (asking()) { d.circle(D.cx, D.cy, D.r * 1.18, { fill: C.card, stroke: C.line2, width: 2 }); d.text('?', D.cx, D.cy + 14, { size: 40, color: C.dim, align: 'center' }); drawNeck(d, G, { numbers: false, markers: false }); dot(d, G, 1, 0, { fill: C.gold, r: 12 }); d.text('A', ...G.pos(1, 0).map((v, i) => v - (i ? 30 : 0)), { size: 18, weight: 700, color: C.gold, align: 'center' }); return; }
     drawDial(d, D, { lit });
     // the hand: from the centre to the note, turned by the number of half steps above A
     const a = D.ang((9 + hand.v) % 12), turns = Math.floor(hand.v / 12 + 1e-6);
@@ -37,7 +39,7 @@ async function circle(ctx) {
     const { y1 } = drawNeck(d, G, { labels: true });
     for (let k = 0; k <= 12; k++) if (seen.has(k)) { const [x, y] = G.pos(1, k); if (k !== fret) d.circle(x, y, 7, { fill: alpha(C.acc, 0.7) }); d.text(nameOf(A2 + k), x, y - 30 - (isLetter(A2 + k) ? 0 : 20), { size: isLetter(A2 + k) ? 18 : 16, weight: k === fret ? 700 : 500, color: k === fret ? C.gold : isLetter(A2 + k) ? C.text : C.muted, align: 'center' }); }
     dot(d, G, 1, fret, { fill: C.gold, r: 12 });
-    const rx = up ? 24 : 350, ry = up ? 360 : 90;
+    const rx = up ? 24 : 350, ry = up ? 400 : 90;
     d.text(`${nameOf(m)}  ·  fret ${fret}  ·  ${fmtHz(hz(m))} Hz`, rx, ry, { size: up ? 24 : 28, weight: 700, color: C.gold, max: pane.W - rx - 20 });
     d.text(`× ${(hz(m) / hz(A2)).toFixed(3)} the open A string (110 Hz)`, rx, ry + 30, { size: 17, color: C.muted, max: pane.W - rx - 20 });
     d.text(isLetter(m) ? 'a letter name' : `a sharp: between ${nameOf(m - 1)} and ${nameOf(m + 1)}`, rx, ry + 56, { size: 17, color: C.muted, max: pane.W - rx - 20 });

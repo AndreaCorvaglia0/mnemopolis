@@ -26,7 +26,7 @@ async function stencil(ctx) {
   const t = tasks(ctx, [{ select: 'playG' }, { select: 'fs' }]), s = sound(ctx);
   let root = 0, playing = -1, flash = null; const rot = spring(0, 8);
   const notes = () => MAJOR.map((x) => pc(root + x));
-  const geo = (pane) => (pane.upright ? { D: dialGeom(pane.W / 2, 170, 118), R: [40, 400, pane.W - 80] } : { D: dialGeom(200, 240, 122), R: [420, 250, 370] });
+  const geo = (pane) => (pane.upright ? { D: dialGeom(pane.W / 2, 168, 104), R: [40, 440, pane.W - 80] } : { D: dialGeom(200, 240, 122), R: [420, 250, 370] });
   const play = () => {
     s.stopAll(); const base = C3 + root;
     MAJOR.concat(12).forEach((x, i) => { s.pluck(hz(base + x), { dur: 1.2, gain: 0.5, at: i * 0.32 }); setTimeout(() => { if (ctx.alive()) { playing = i; view.redraw(); } }, i * 320 + 10); });

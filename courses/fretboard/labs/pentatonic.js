@@ -31,7 +31,8 @@ async function box(ctx) {
     ns.forEach((n) => { const deg = DEGREE[(((n.m - root) % 12) + 12) % 12], isRoot = deg === '1', on = lit >= 0 && order[lit] === n; dot(d, G, n.st, n.k, { fill: on ? C.gold : isRoot ? C.bad : C.acc, text: deg, color: '#04201d', r: 15, ring: on ? C.gold : null }); });
     const names = [0, 3, 5, 7, 10].map((x) => nameOf(root + x, [5, 10, 3, 8, 1].includes((root + 3) % 12)));
     d.text(`${nameOf(root)} minor pentatonic`, 24, 44, { size: pane.upright ? 24 : 28, weight: 700, color: C.gold });
-    d.text(`root on the low E string at fret ${r}${r === 0 ? ' (open)' : ''}:  ${names.join('  ')}`, 24, 76, { size: 18, color: C.muted, max: pane.W - 48 });
+    if (pane.upright) { d.text(`root on the low E string at fret ${r}${r === 0 ? ' (open)' : ''}`, 24, 76, { size: 18, color: C.muted }); d.text(names.join('  '), 24, 104, { size: 20, weight: 700, color: C.text }); }
+    else d.text(`root on the low E string at fret ${r}${r === 0 ? ' (open)' : ''}:  ${names.join('  ')}`, 24, 76, { size: 18, color: C.muted, max: pane.W - 48 });
     d.text('drag the box along the neck', 24, y1 + 54, { size: 16, color: C.dim });
   });
   const anim = animate(ctx, (dt) => { const more = pos.step(dt); view.redraw(); return more; });
