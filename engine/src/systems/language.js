@@ -12,9 +12,10 @@ const nextOf = (lang = LANG) => LANGUAGES[(LANGUAGES.indexOf(lang) + 1) % LANGUA
 
 // choose `lang`: save it, then reload. A ?lang= in the address would win over the saved choice, so it
 // is rewritten; an address that cannot carry a query (a blob: page of the /play/ viewer) just reloads.
-export function setLanguage(lang, { reload = () => location.reload() } = {}) {
-  if (!LANGUAGES.includes(lang) || lang === LANG) return false;
-  const saved = saveLang(lang);
+// (opts: for tests: the languages, the current one, what saves and reloads)
+export function setLanguage(lang, { reload = () => location.reload(), languages = LANGUAGES, current = LANG, save = saveLang } = {}) {
+  if (!languages.includes(lang) || lang === current) return false;
+  const saved = save(lang);
   try {
     const q = new URLSearchParams(location.search);
     if ((q.has('lang') || !saved) && !/^blob:/.test(location.href)) {

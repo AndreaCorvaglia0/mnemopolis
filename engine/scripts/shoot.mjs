@@ -21,7 +21,9 @@ await page.setViewport({ width: vw, height: vh, deviceScaleFactor: vd || 1 });
 const logs = [];
 page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) logs.push(`[${m.type()}] ${m.text()}`); });
 page.on("pageerror", (e) => logs.push(`[pageerror] ${(e.stack || e.message).slice(0, 600)}`));
-await page.goto('file://' + html + (process.env.Q || ''));
+// LANG=it shows the Italian side of a bilingual course (a shell's LANG=en_US.UTF-8 is ignored)
+const WANT = /^(en|it)$/.test(process.env.LANG || '') ? process.env.LANG : '';
+await page.goto('file://' + html + (process.env.Q || '') + (WANT ? `${(process.env.Q || '').includes('?') ? '&' : '?'}lang=${WANT}` : ''));
 const steps = stepsArg.split(',').map((s) => s.trim()).filter(Boolean);
 for (const s of steps) {
   const [cmd, a, b] = s.split(':');

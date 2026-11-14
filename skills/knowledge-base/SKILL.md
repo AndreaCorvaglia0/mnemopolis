@@ -24,6 +24,12 @@ Everything goes in `courses/<slug>/`:
 | `knowledge/map.md` | Concepts kept and left out, links between them, the mind map, the path | The user (this is the checkpoint) |
 | `course.json` | The course as data: themes, concepts, labs, questions | The engine, the validator |
 
+A course may be bilingual (`"languages": ["en", "it"]`, any text as `{ "en": ..., "it": ... }`: see
+`engine/docs/SCHEMA.md`, "Languages"). Write each language natively, not word for word: the same
+idea, the examples and the rhythm of that language; the prose register (`references/9-prose.md`) applies
+in both, and the validator checks each language on its own. Riddle answers stay one flat list
+with the variants of every language.
+
 Templates are in `templates/`. The format of `course.json` is in `schema/course.schema.json`,
 with a complete example in `courses/chroma/`.
 

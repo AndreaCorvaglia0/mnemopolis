@@ -24,7 +24,7 @@ import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const PHONE = !!process.env.PHONE, FAST = !!process.env.FAST, OUT = process.env.OUT || '/tmp';
-const TAG = `${process.env.NAME || 'play'}${PHONE ? '-phone' : ''}${FAST ? '-ci' : ''}`;
+const TAG = `${process.env.NAME || 'play'}${PHONE ? '-phone' : ''}${FAST ? '-ci' : ''}${/^(en|it)$/.test(process.env.LANG || '') ? `-${process.env.LANG}` : ''}`;
 const html = process.env.HTML || path.join(here, '..', 'dist', 'index.html');
 const CHROME = process.env.CHROME || ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'].find(existsSync);
 if (!CHROME) { console.log('No Chrome or Chromium found (set CHROME=/path): the play-through was skipped.'); process.exit(0); }
@@ -35,12 +35,17 @@ mkdirSync(OUT, { recursive: true });
 // (npm run shots:story); STORY=1 in the environment would leave the story on, which the bot does
 // not know how to play yet.
 if (process.env.STORY !== '1') process.env.STORY = '0';
+// LANG=it plays the Italian side of a bilingual course (LANG=en the English one). Only a bare language
+// code counts: a shell's LANG=en_US.UTF-8 is not a choice. The page gets ?lang=, this script's own copy of
+// the course gets MNEMO_LANG, so that what the bot expects is what the page shows.
+const WANT = /^(en|it)$/.test(process.env.LANG || '') ? process.env.LANG : '';
+if (WANT) process.env.MNEMO_LANG = WANT;
 const { Q } = await import('../src/mechanics/quest/active.js');
 const { trackerLine } = await import('../src/mechanics/quest/strings.js');
 const { PLACE, QUESTIONS } = await import('../src/data/content.js');
 const { LABS } = await import('../src/course/labs.js');
 const { RIDDLES } = await import('../src/mechanics/riddles/data.js');
-const { DATA } = await import('../src/course/_data.js');
+const { DATA, LANG: ACTIVE } = await import('../src/course/_data.js');
 const { GATE } = await import('../src/world/townMap.js');
 
 // ---------------------------------------------------------------- log, checks, actions
@@ -59,9 +64,9 @@ const page = await browser.newPage();
 await page.setViewport(PHONE ? { width: 390, height: 844, deviceScaleFactor: 2, hasTouch: true, isMobile: true } : { width: 1280, height: 760, deviceScaleFactor: 1 });
 page.on('pageerror', (e) => fail(`page error: ${(e.stack || e.message).slice(0, 400)}`));
 page.on('console', (m) => { if (m.type() === 'error') fail(`console error: ${m.text().slice(0, 300)}`); else if (m.text().startsWith('walker:')) log(`!! NOTE ${m.text()}`); });
-const q = `?lite&test${PHONE ? '&touch' : ''}${process.env.STORY === '0' ? '&story=0' : ''}${process.env.Q || ''}`;
+const q = `?lite&test${PHONE ? '&touch' : ''}${process.env.STORY === '0' ? '&story=0' : ''}${process.env.Q || ''}${WANT ? `&lang=${WANT}` : ''}`;
 await page.goto(`file://${html}${q}`);
-log(`${TAG}: ${DATA.title} (${DATA.language}), ${PHONE ? 'phone 390x844, taps' : 'desktop 1280x760, mouse and keys'}${FAST ? ', FAST: carried to doors' : ''}, address ${q}`);
+log(`${TAG}: ${DATA.title} (${ACTIVE}), ${PHONE ? 'phone 390x844, taps' : 'desktop 1280x760, mouse and keys'}${FAST ? ', FAST: carried to doors' : ''}, address ${q}`);
 
 const ev = (fn, ...args) => page.evaluate(fn, ...args);
 async function until(fn, what, ms = 40000, ...args) {
@@ -487,7 +492,7 @@ async function challengeHost(id, { win = true, shotName = null } = {}) {
   await walkTo(at[0], at[1], `the host of ${id}`);
   await until(() => __game.scene.getScene('UI').choice, `the host's options in ${id}`);
   const { CHALLENGE } = await import('../src/mechanics/duel/lines.js');
-  const lang = DATA.language?.startsWith('it') ? 'it' : 'en';
+  const lang = ACTIVE;
   const ok = await choose((o) => o === CHALLENGE[lang].first || o === CHALLENGE[lang].friendly);
   if (!ok) return null;
   const r = await duel({ win, label: id });
