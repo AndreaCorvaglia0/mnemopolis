@@ -489,7 +489,7 @@ async function challengeHost(id, { win = true, shotName = null } = {}) {
   await walkTo(at[0], at[1], `the host of ${id}`);
   await until(() => __game.scene.getScene('UI').choice, `the host's options in ${id}`);
   const { CHALLENGE } = await import('../src/mechanics/duel/lines.js');
-  const lang = DATA.language?.startsWith('it') ? 'it' : 'en';
+  const lang = DATA.language?.startsWith('it') || /lang=it/.test(process.env.Q || '') ? 'it' : 'en';
   const ok = await choose((o) => o === CHALLENGE[lang].first || o === CHALLENGE[lang].friendly);
   if (!ok) return null;
   const r = await duel({ win, label: id });
@@ -558,7 +558,7 @@ async function doStationUpper(id, sid) {
   const def = PLACE[id].lab.stations.find((s) => s.id === sid);
   log(`   station ${id}:${sid} "${def.tab}" (upstairs)`);
   // the bench may open on another station (one already done): go to this one by its step in the header
-  const step = await ev((tab) => { const b = [...document.querySelectorAll('.lx-steps button')].find((e) => (e.getAttribute('aria-label') || e.textContent || '').includes(tab)); if (!b || b.getAttribute('aria-current') === 'step') return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, def.tab);
+  const step = await ev((tab, idx) => { const bs = [...document.querySelectorAll('.lx-steps button')]; const b = bs.find((e) => (e.getAttribute('aria-label') || e.textContent || '').includes(tab)) || (/lang=it/.test(location.search) ? bs[idx] : null); if (!b || b.getAttribute('aria-current') === 'step') return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, def.tab, PLACE[id].lab.stations.filter((s) => s.advanced).findIndex((s) => s.id === sid));
   if (step) { await tap(...step); await until(() => document.querySelector('.lx')?.dataset.ready === '1', 'the station'); await sleep(400); }
   if (def.predict) { await clickEl('.lx .lx-choice', null, def.predict.answer); await sleep(500); }
   const recipe = RECIPES[`${id}:${sid}`];
