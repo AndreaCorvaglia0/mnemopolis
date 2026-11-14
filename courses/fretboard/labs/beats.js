@@ -116,19 +116,19 @@ async function third(ctx) {
   let t0 = 0, mode = 'et';
   const fb = () => (mode === 'et' ? ET : FA * 1.25);
   const ctl = sliders(ctx, [{ id: 'm', label: L('Tuning of the third', 'Intonazione della terza'), options: [['et', L('Guitar: equal steps', 'Chitarra: passi uguali')], ['just', L('Pure 5:4', 'Pura 5:4')]], value: 'et' }], (id, v) => { mode = v; view.redraw(); });
-  button(ctx, L('Play A and C♯', 'Suona La e Do♯'), () => { s.stopAll(); const a = s.rich(FA, { n: N }), b = s.rich(fb(), { n: N }); setTimeout(() => { a.stop(); b.stop(); }, 3500); t.pick(`play-${mode}`).check(); }, { primary: true });
+  button(ctx, L('Play A and C♯', 'Suona La (A) e Do♯ (C♯)'), () => { s.stopAll(); const a = s.rich(FA, { n: N }), b = s.rich(fb(), { n: N }); setTimeout(() => { a.stop(); b.stop(); }, 3500); t.pick(`play-${mode}`).check(); }, { primary: true });
   const asking = onPhase(ctx, () => view.redraw());
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
     const up = pane.upright, W = pane.W, f2 = fb(), v = verdict(FA, f2);
     d.clear();
-    if (asking()) { d.text(L('A, 220 Hz, and C♯, four half steps above it', 'La (A), 220 Hz, e Do♯ (C♯), quattro semitoni sopra'), 24, 34, { size: 19, weight: 600, max: W - 48 }); d.wrap(L('Answer the question; then play the two notes and compare the two tunings of C♯.', 'Rispondi alla domanda; poi suona le due note e confronta le due intonazioni del Do♯.'), 24, 60, W - 48, { size: 18, color: C.muted }); return; }
-    d.text(L(`A ${fmtHz(FA)} Hz and C♯ ${fmtHz(f2)} Hz`, `La ${fmtHz(FA)} Hz e Do♯ ${fmtHz(f2)} Hz`), 24, 34, { size: 19, weight: 600, max: W - 48 });
+    if (asking()) { d.text(L('A, 220 Hz, and C♯, four half steps above it', 'La (A), 220 Hz, e Do♯ (C♯), quattro semitoni sopra'), 24, 34, { size: 19, weight: 600, max: W - 48 }); d.wrap(L('Answer the question; then play the two notes and compare the two tunings of C♯.', 'Rispondi alla domanda; poi suona le due note e confronta le due intonazioni del Do♯ (C♯).'), 24, 60, W - 48, { size: 18, color: C.muted }); return; }
+    d.text(L(`A ${fmtHz(FA)} Hz and C♯ ${fmtHz(f2)} Hz`, `La (A) ${fmtHz(FA)} Hz e Do♯ (C♯) ${fmtHz(f2)} Hz`), 24, 34, { size: 19, weight: 600, max: W - 48 });
     d.text(`${L('ratio', 'rapporto')} ${nf(f2 / FA, 4)}${mode === 'just' ? ' = 5:4' : L(', four equal half steps', ', quattro semitoni uguali')}`, 24, 62, { size: 17, color: C.muted, max: W - 48 });
-    const msg = v.kind === 'steady' ? L('steady: the 5th harmonic of A meets the 4th of C♯', 'costante: la 5ª armonica del La coincide con la 4ª del Do♯') : L(`the 5th harmonic of A (${(5 * FA).toFixed(0)} Hz) and the 4th of C♯ (${(4 * f2).toFixed(1)} Hz) beat ${v.rate.toFixed(1)} times a second`, `la 5ª armonica del La (${(5 * FA).toFixed(0)} Hz) e la 4ª del Do♯ (${nf(4 * f2, 1)} Hz) battono ${nf(v.rate, 1)} volte al secondo`);
+    const msg = v.kind === 'steady' ? L('steady: the 5th harmonic of A meets the 4th of C♯', 'costante: la 5ª armonica del La (A) coincide con la 4ª del Do♯ (C♯)') : L(`the 5th harmonic of A (${(5 * FA).toFixed(0)} Hz) and the 4th of C♯ (${(4 * f2).toFixed(1)} Hz) beat ${v.rate.toFixed(1)} times a second`, `la 5ª armonica del La (A, ${(5 * FA).toFixed(0)} Hz) e la 4ª del Do♯ (C♯, ${nf(4 * f2, 1)} Hz) battono ${nf(v.rate, 1)} volte al secondo`);
     const hh = d.wrap(msg, 24, 78, W - 48, { size: 19, weight: 700, color: v.kind === 'steady' ? C.ok : C.bad, lines: 3 });
     d.text(L('the two notes together, over one second', 'le due note insieme, in un secondo'), 24, 98 + hh, { size: 16, color: C.dim });
     band(d, 24, 108 + hh, W - 48, up ? 140 : 120, FA, f2, 1, t0);
-    rulers(d, 40, up ? 430 : 326, W - 80, FA, f2, 1400, { la: L('A, 220 Hz', 'La, 220 Hz'), lb: L('C♯', 'Do♯') });
+    rulers(d, 40, up ? 430 : 326, W - 80, FA, f2, 1400, { la: L('A, 220 Hz', 'La (A), 220 Hz'), lb: L('C♯', 'Do♯ (C♯)') });
   });
   const anim = animate(ctx, (dt) => { if (dt === Infinity) return false; t0 += dt; view.redraw(); return true; });
   anim.kick();
@@ -143,7 +143,7 @@ async function tuneup(ctx) {
   let t0 = 0, held = 0, done = false;
   const OFF = -2.7, fa = () => FE + OFF + ctl.v.peg;
   const onA = () => { player.update(); view.redraw(); };
-  const ctl = sliders(ctx, [{ id: 'peg', label: L('Peg of the A string (turns)', 'Meccanica della corda di La (giri)'), min: -6, max: 6, step: 0.05, value: 0 }], onA);
+  const ctl = sliders(ctx, [{ id: 'peg', label: L('Peg of the A string (turns)', 'Meccanica della corda di La (A), in giri'), min: -6, max: 6, step: 0.05, value: 0 }], onA);
   fineRow(ctx, ctl, 'peg', [-0.5, -0.05, 0.05, 0.5], onA);
   const player = pairPlayer(ctx, s, () => [FE, fa()]);
   const view = stage(ctx, { wide: [820, 480], tall: [480, 640] }, (d, pane) => {
@@ -153,7 +153,7 @@ async function tuneup(ctx) {
     // a lamp that pulses with the beats: the only read-out
     const lamp = 0.5 + 0.5 * Math.cos(2 * Math.PI * diff * t0), lx = W - 70, ly = up ? 46 : 40;
     d.circle(lx, ly, 26, { fill: alpha(diff < 0.6 ? C.ok : C.gold, 0.25 + 0.75 * (diff < 0.6 ? 1 : lamp)), glow: diff < 0.6 ? C.ok : null });
-    d.text(done ? L(`in tune: A ${fmtHz(fa())} Hz`, `accordata: La ${fmtHz(fa())} Hz`) : diff < 0.6 ? L('almost still…', 'quasi ferma…') : L('wah, wah, wah', 'uà, uà, uà'), 24, up ? 100 : 74, { size: 20, weight: 700, color: diff < 0.6 ? C.ok : C.text });
+    d.text(done ? L(`in tune: A ${fmtHz(fa())} Hz`, `accordata: La (A) ${fmtHz(fa())} Hz`) : diff < 0.6 ? L('almost still…', 'quasi ferma…') : L('wah, wah, wah', 'uà, uà, uà'), 24, up ? 100 : 74, { size: 20, weight: 700, color: diff < 0.6 ? C.ok : C.text });
     band(d, 24, up ? 120 : 96, W - 48, up ? 200 : 180, FE, fa(), 3, t0);
     d.wrap(L('The wave of the two notes over three seconds. Each bulge is one beat: fewer bulges, closer notes.', "L'onda delle due note in tre secondi. Ogni rigonfiamento è un battimento: meno rigonfiamenti, note più vicine."), 24, up ? 340 : 296, W - 48, { size: 17, color: C.muted });
   });

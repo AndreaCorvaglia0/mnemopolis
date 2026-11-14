@@ -3,7 +3,7 @@
 //             one string (a ruler of half steps); turn it to a new root, play it, find what changed
 //   relative  (upstairs) C major's notes started from A: the minor pattern, with no note changed
 import { stage, button, tasks, animate, spring, C, alpha, L } from '../../../engine/src/lab/kit.js';
-import { hz, pc, nameOf, letterOf, toLetter, bothLabel, isIt, MAJOR, STEPS, stepName, keyNames, dialGeom, drawDial } from './lib/music.js';
+import { hz, pc, nameOf, letterOf, toLetter, bothLabel, pairList, isIt, MAJOR, STEPS, stepName, keyNames, dialGeom, drawDial } from './lib/music.js';
 import { sound, soundNote } from './lib/sound.js';
 
 const C3 = 48;
@@ -44,14 +44,15 @@ async function stencil(ctx) {
     const label = new Array(12).fill(null); ns.forEach((p, i) => (label[p] = names[i]));
     drawDial(d, D, { lit: new Set(ns), gold: new Set([pc(root)]), names: label.map((n, p) => n || nameOf(p)) });
     for (let j = 0; j < 7; j++) { const a = D.ang(r0 + (MAJOR[j] + (MAJOR[j + 1] ?? 12)) / 2); d.text(stepName(STEPS[j]), D.cx + Math.cos(a) * D.r * (isIt() ? 1.35 : 1.28), D.cy + Math.sin(a) * D.r * (isIt() ? 1.35 : 1.28) + 6, { size: 17, weight: 700, color: STEPS[j] === 'H' ? C.gold : '#d8c49a', align: 'center' }); }
-    d.text(L(`${names[0]} major`, `${names[0]} maggiore`), D.cx, D.cy + 8, { size: 24, weight: 700, color: C.gold, align: 'center' });
+    if (isIt()) { d.text(`${names[0]} maggiore`, D.cx, D.cy, { size: 22, weight: 700, color: C.gold, align: 'center' }); d.text(`(${toLetter(names[0])})`, D.cx, D.cy + 26, { size: 20, weight: 700, color: C.gold, align: 'center' }); }
+    else d.text(`${names[0]} major`, D.cx, D.cy + 8, { size: 24, weight: 700, color: C.gold, align: 'center' });
     // the same scale on one string: one cell per fret
     const cells = Array.from({ length: 13 }, (_, i) => { const p = pc(root + i), k = ns.indexOf(p); return k >= 0 ? toLetter(names[k]) : letterOf(p, false); });  // the cells are a fretboard: letters
     const [rx, ry, rw] = R; tapCells = [];
     ruler(d, rx, ry, rw, root, MAJOR, { names: cells, playing, tap: tapCells, lab: L('on one string: one cell per fret', 'su una corda: una casella per tasto') });
     const sharps = names.filter((n) => n.includes('♯')), flats = names.filter((n) => n.includes('♭'));
     const txt = sharps.length ? L(`${sharps.length} sharp${sharps.length > 1 ? 's' : ''}: ${sharps.join(' ')}`, `${sharps.length} diesis: ${sharps.map(bothLabel).join(' ')}`) : flats.length ? L(`${flats.length} flat${flats.length > 1 ? 's' : ''}: ${flats.join(' ')}`, `${flats.length} bemolle: ${flats.map(bothLabel).join(' ')}`) : L('no sharps or flats', 'nessun diesis né bemolle');
-    d.text(names.join('  '), rx, ry - 70, { size: 22, weight: 700, color: C.text, max: rw + 30 });
+    d.text(pairList(names), rx, ry - 70, { size: 22, weight: 700, color: C.text, max: rw + 30 });
     d.text(txt, rx, ry - 42, { size: 18, color: sharps.length || flats.length ? C.gold : C.muted });
     if (flash) d.text(flash, rx, ry + 120, { size: 18, color: C.ok, max: rw + 30 });
   });
@@ -76,7 +77,7 @@ async function relative(ctx) {
   let start = 0, playing = -1, flash = null, tapSteps = [];
   const C_NAMES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];   // letters: the cells of the ruler are a fretboard
   const SHOWN = C_NAMES.map((c, j) => L(c, nameOf([0, 2, 4, 5, 7, 9, 11][j])));
-  const FIRST = L('The first half step: from B to C, the 2nd step', 'Il primo semitono: da Si a Do, il 2º passo');
+  const FIRST = L('The first half step: from B to C, the 2nd step', 'Il primo semitono: da Si (B) a Do (C), il 2º passo');
   // the seven notes of C major from the chosen start, as half steps from it, and the steps between
   const from = () => { const base = MAJOR[start]; return MAJOR.map((_, j) => (MAJOR[(start + j) % 7] - base + 12) % 12); };
   const stepsFrom = () => { const n = [...from(), 12]; return n.slice(0, 7).map((x, j) => (n[j + 1] - x === 1 ? 'H' : 'W')); };
@@ -101,7 +102,7 @@ async function relative(ctx) {
     const lit = [...n, 12], cw = rw / 12; for (let j = 0; j < 7; j++) tapSteps.push({ j, x: rx + ((lit[j] + lit[j + 1]) / 2) * cw - 22, y: ry + 56, w: 44, h: 34 });
     const minor = start === 5, major = start === 0;
     d.text(`${SHOWN[start]} … ${SHOWN[start]}:  ${st.map(stepName).join(' ')}`, 24, ry + 140, { size: 22, weight: 700, color: minor ? C.purple : major ? C.acc : C.text });
-    const hh = d.wrap(major ? L('the major pattern', 'lo schema maggiore') : minor ? L('the natural minor pattern: A minor, the relative minor of C', 'lo schema minore naturale: La minore (Am), la relativa minore di Do') : L('another pattern from the same seven notes', 'un altro schema con le stesse sette note'), 24, ry + 156, W - 48, { size: 17, color: C.muted, lines: 2 });
+    const hh = d.wrap(major ? L('the major pattern', 'lo schema maggiore') : minor ? L('the natural minor pattern: A minor, the relative minor of C', 'lo schema minore naturale: La minore (Am), la relativa minore di Do (C)') : L('another pattern from the same seven notes', 'un altro schema con le stesse sette note'), 24, ry + 156, W - 48, { size: 17, color: C.muted, lines: 2 });
     if (flash) d.wrap(flash, 24, ry + 166 + hh, W - 48, { size: 18, color: C.ok, lines: 2 });
   });
   let tapStarts = [];
