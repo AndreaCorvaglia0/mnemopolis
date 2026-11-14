@@ -96,8 +96,44 @@ game (story off, new strings, new duel skin) or a separate set of mechanics. Fir
 5. Labs to measure, if the trial allows; more patterns in any case.
 6. Sharing towns; the catalogue open to contributed courses (rules for a pull request, review).
 
+## Decided with the owner (14 Nov 2026)
+
+- **Age: 8 to 10.**
+- **Who builds: child and parent together.** The owner would also like the child alone, with the
+  model answerable for the material. Constraint: a Claude account is for adults only (18+, by
+  Anthropic's terms), so building always happens on an adult's account and the adult is the one
+  who answers for it. What remains open is *playing* without an account: a town already built
+  calls no model, so it could be exported as a stand-alone file for the public player (`/play/`).
+  To check in the trial.
+- **Because the adult may not read everything**, the builder must lean on the material given
+  (photos, documents) rather than on what the model remembers, show where each statement comes
+  from, keep the adult's one-page summary, and give the child a "this seems wrong" button on
+  every question.
+- **The children's world needs its own fiction**, coherent across many islands; the catalogue's
+  story (rain, forgetting, the bitter loop) is not reused.
+
+## The common dynamic across islands (proposal, not approved)
+
+One thing that grows with the child and travels on the ship from island to island:
+
+- **A companion** that the child raises. It gains levels from what the child understands (labs)
+  and remembers (questions); each island gives it one new ability tied to that island's topic.
+- **Challenges as friendly fights.** Each house is kept by a small creature of the fog (what is
+  not yet understood); the companion's moves are the child's answers. Nobody is hurt: a beaten
+  creature clears up and stays in the house as a friend. The island's last check is its keeper.
+- **Coming back matters.** On islands already cleared, the fog creeps back after some days and
+  the creatures return a little stronger: this is spaced repetition, dressed as the game's own
+  rule, and it is where most of the memory work happens.
+- **Coins** from repetition, spent on things that show (the companion's looks, the ship, the
+  island's lights) and on tools that open small secret places. Levels come only from learning,
+  never from spending.
+- **A very clear progression**: stars per house, a seal per island, the companion's level, the
+  chart filling in.
+
+The link with the catalogue is light: the fog of forgetting is the same idea, told for children.
+All of this is the engine's (creatures drawn by the generators, fixed rules): no tokens.
+
 ## Open questions for the owner
 
-- The age to design for first (8 to 10? 11 to 13?).
-- Who builds: a parent or teacher for the child, or the child alone with the adult's check after?
+- Fights or not: the proposal above says yes, mild. To confirm after seeing one on screen.
 - Italian first, with English as the second language, or both from the start?
