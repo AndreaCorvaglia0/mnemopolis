@@ -25,6 +25,7 @@
 person's remark on experience when one comes. Pictures `/tmp/play-*.png`, log `/tmp/play-log.txt` (`OUT=` to change). It only reads the state (`__hb`, the scenes), except that every run starts from a fresh save. Exit code 1 on any problem. About 8 minutes of headless Chrome for the example course. |
 | `npm run play:phone` | The same on a phone held upright (390 x 844, taps): `/tmp/play-phone-*`. About 10 minutes. |
 | `npm run play:ci` | The same story, with the player carried in front of each door instead of walking the town (the one place where the bot writes state). `Q='&nolife'` adds to the address (also try `world.json` `"gen": false` or `"voice": false`). |
+| `npm run play:duo` | The bilingual fixture (`engine/tests/fixtures/duo`, never published; its English is Italian with an `EN:` mark, only to tell the languages apart) built once and played through in English and in Italian (`LANG=en|it`, which also works with `play`/`play:ci` on any bilingual course). |
 | `npm run shots:it` | The Italian test course (`engine/tests/fixtures/prova`: three simple machines, a lab, a workshop, an expert's home with a temper and a safe; never published) played through on a desktop window and a phone: `/tmp/it-*.png`, `/tmp/it-phone-*.png`. Then the engine points back at the course it used. `COURSE=prova npm run build` builds that course alone. |
 | `npm run sound` | Renders the music offline in headless Chrome and measures it (levels, brightness, density, silences, ducking); writes `/tmp/music-*.wav` and `.png`. A few minutes. See "Sound". |
 | `npm run shots:world` | Experience and the mini-games in pictures (`scripts/worldshots.mjs`), for chroma and the pocket demo, desktop then phone: remarks at three tiers, a withheld line refused then told, the notebook with the tier and what was told, the door that knows you, a tier announced, a game spot with its mark, every game of the course (start, a round, a miss, the result), the keeper on a return after the ending. `/tmp/world-<course>-*.png`, `/tmp/world-phone-<course>-*.png`. |
@@ -184,8 +185,8 @@ The lab is the core learning screen. Its rules, each answering something learner
 
 ## Words
 
-Every word a player reads is in English and Italian, chosen by `language` in `course.json`
-(English for anything else, `mechanics/config.js`). The older interface (title screen, HUD and
+Every word a player reads is in English and Italian, chosen by the active language (below;
+English for anything else, `mechanics/config.js`). The older interface (title screen, HUD and
 toasts, prompts, dialogue options, the tall-grass quiz, the badge card, the reading wall, the mind
 map, the museum's plaques, the code panel, the guide's default lines, signs) reads
 `src/data/words.js` through `w('ui.musicOff')`, `w('town.talkTo', { name })`; the newer modules keep
@@ -203,6 +204,42 @@ cut, and dense stations put their controls below the fold.
 
 Station code keeps its old contract (`ctx.stage`, `ctx.controls`, `did`, `reveal`); what was
 added is optional and listed in `SCHEMA.md`, with a note on upgrading an old station.
+
+## Languages
+
+The engine's own words are English and Italian (above). A course may offer both as well: any
+learner-facing text in `course.json` or `world.json` is a plain string or `{ "en": "...", "it": "..." }`,
+and `"languages": ["en", "it"]` declares them (format and rules: `SCHEMA.md`, "Languages").
+
+- **One resolution.** `src/course/localise.js` (the code lives in `skills/knowledge-base/scripts/localise.mjs`,
+  so that the validator works without the engine) holds `localise(value, lang, fallback)`, a pure deep
+  map that replaces every object whose keys are all language codes (`en`, `it`, at least one, values
+  text) by the string of the language, falling back to the default language, then to English, then to
+  any present; every other object is data and is left alone. It runs once, where the course enters the
+  engine: the generated `_data.js` (build) and the same file for the prebuilt player (the payload).
+  `DATA` and `WORLD` are then plain strings; `DATA.language` is the active language, `DATA.languages`
+  the offered ones, and `_data.js` also exports `LANG`, `LANGUAGES` and `RAW` (the course as written).
+- **The active language** is chosen once at boot, in this order: `?lang=it|en`, the saved choice
+  (`localStorage`, key `mnemopolis-lang`, outside the save), the browser's languages if the course offers
+  one, the course's `language`. A course with one language ignores all of it. `LANG` from
+  `mechanics/config.js` is the active language; never read `DATA.language` for the player's language
+  (it used to be the source of `LANG`: a bilingual course would then have shown the default
+  language's interface). In Node (tests, scripts) `MNEMO_LANG=it` plays the part of `?lang=`.
+- **The switch** (`systems/language.js`): the settings of the menu and of the story's notebook gain
+  "Language · Lingua: English / Italiano" (only when the course has more than one language), and the
+  title screen a small EN / IT pair. Choosing saves the language and reloads the page: the town, the
+  labs and the voice then start again in it. The save is shared: it holds ids, numbers and flags, never
+  text, so progress survives the switch (`tests/i18n.test.mjs`). An address with `?lang=` is rewritten
+  to the new choice; a page that cannot take a query (the viewer's `blob:` address) just reloads.
+- **Lab code** gets `lang()` and `L(en, it)` from `lab/kit.js` (also in the packed player's `KIT`);
+  `sound.name()` and `sound.interval()` default to the active language (`La4` or `A4`).
+- **Voice** speaks the active language (`systems/voice.js`). The page's `<html lang>` and, in a
+  bilingual course, `<title>` follow the active language.
+- **Tools.** The validator checks the course once per language on the localised tree, plus parity
+  (`skills/knowledge-base/scripts/languages.mjs`); the site generator shows the Italian page the Italian
+  title, pitch and goals and adds `?lang=it` to its play links; `LANG=it npm run play:ci` plays the
+  Italian side of a bilingual course; `npm run play:duo` builds the fixture `tests/fixtures/duo` and
+  plays it in both languages.
 
 ## Voice
 

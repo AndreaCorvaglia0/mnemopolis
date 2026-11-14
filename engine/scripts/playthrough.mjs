@@ -18,13 +18,14 @@
 // the tracker must name that step, never something done or impossible. It also checks a few known
 // suspects: a stray Space after a duel, the exit tile of a house, every core house reachable, etc.
 import puppeteer from 'puppeteer-core';
+import { helpers as readyHelpers } from './readyhelpers.mjs';
 import { existsSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const PHONE = !!process.env.PHONE, FAST = !!process.env.FAST, OUT = process.env.OUT || '/tmp';
-const TAG = `${process.env.NAME || 'play'}${PHONE ? '-phone' : ''}${FAST ? '-ci' : ''}`;
+const TAG = `${process.env.NAME || 'play'}${PHONE ? '-phone' : ''}${FAST ? '-ci' : ''}${/^(en|it)$/.test(process.env.LANG || '') ? `-${process.env.LANG}` : ''}`;
 const html = process.env.HTML || path.join(here, '..', 'dist', 'index.html');
 const CHROME = process.env.CHROME || ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'].find(existsSync);
 if (!CHROME) { console.log('No Chrome or Chromium found (set CHROME=/path): the play-through was skipped.'); process.exit(0); }
@@ -35,12 +36,17 @@ mkdirSync(OUT, { recursive: true });
 // (npm run shots:story); STORY=1 in the environment would leave the story on, which the bot does
 // not know how to play yet.
 if (process.env.STORY !== '1') process.env.STORY = '0';
+// LANG=it plays the Italian side of a bilingual course (LANG=en the English one). Only a bare language
+// code counts: a shell's LANG=en_US.UTF-8 is not a choice. The page gets ?lang=, this script's own copy of
+// the course gets MNEMO_LANG, so that what the bot expects is what the page shows.
+const WANT = /^(en|it)$/.test(process.env.LANG || '') ? process.env.LANG : '';
+if (WANT) process.env.MNEMO_LANG = WANT;
 const { Q } = await import('../src/mechanics/quest/active.js');
 const { trackerLine } = await import('../src/mechanics/quest/strings.js');
 const { PLACE, QUESTIONS } = await import('../src/data/content.js');
 const { LABS } = await import('../src/course/labs.js');
 const { RIDDLES } = await import('../src/mechanics/riddles/data.js');
-const { DATA } = await import('../src/course/_data.js');
+const { DATA, LANG: ACTIVE } = await import('../src/course/_data.js');
 const { GATE } = await import('../src/world/townMap.js');
 
 // ---------------------------------------------------------------- log, checks, actions
@@ -59,9 +65,9 @@ const page = await browser.newPage();
 await page.setViewport(PHONE ? { width: 390, height: 844, deviceScaleFactor: 2, hasTouch: true, isMobile: true } : { width: 1280, height: 760, deviceScaleFactor: 1 });
 page.on('pageerror', (e) => fail(`page error: ${(e.stack || e.message).slice(0, 400)}`));
 page.on('console', (m) => { if (m.type() === 'error') fail(`console error: ${m.text().slice(0, 300)}`); else if (m.text().startsWith('walker:')) log(`!! NOTE ${m.text()}`); });
-const q = `?lite&test${PHONE ? '&touch' : ''}${process.env.STORY === '0' ? '&story=0' : ''}${process.env.Q || ''}`;
+const q = `?lite&test${PHONE ? '&touch' : ''}${process.env.STORY === '0' ? '&story=0' : ''}${process.env.Q || ''}${WANT ? `&lang=${WANT}` : ''}`;
 await page.goto(`file://${html}${q}`);
-log(`${TAG}: ${DATA.title} (${DATA.language}), ${PHONE ? 'phone 390x844, taps' : 'desktop 1280x760, mouse and keys'}${FAST ? ', FAST: carried to doors' : ''}, address ${q}`);
+log(`${TAG}: ${DATA.title} (${ACTIVE}), ${PHONE ? 'phone 390x844, taps' : 'desktop 1280x760, mouse and keys'}${FAST ? ', FAST: carried to doors' : ''}, address ${q}`);
 
 const ev = (fn, ...args) => page.evaluate(fn, ...args);
 async function until(fn, what, ms = 40000, ...args) {
@@ -337,6 +343,21 @@ function coneMatch(nm) {
   return [Math.round(((b[0] * a[1][1] - a[0][1] * b[1]) / det) * 100), Math.round(((a[0][0] * b[1] - a[1][0] * b[0]) / det) * 100)];
 }
 
+// A station without a hand-written recipe is played from its own data: the tasks' `when` conditions,
+// done in the page with the helpers of readyshots.mjs (ready-made patterns, and code stations that
+// expose ctx.stage.__ready). So a new course's stations need no text or id known to this script.
+const readyRecipe = (def) => async () => {
+  await ev(readyHelpers); // defines window.__act
+  for (let k = 0; k < def.tries.length; k++) {
+    const r = await ev((k) => window.__act(k), k);
+    if (!/^did/.test(String(r))) throw new Error(`task ${k + 1}: ${r}`);
+    await sleep(1800);
+  }
+  await sleep(2500);
+};
+// a station whose every task carries its `when` can be played from data, in any language
+const hasWhens = (def) => (def?.when?.length ? def.when.every(Boolean) : !!def?.tries?.length && def.tries.every((t) => t && typeof t === 'object' && t.when));
+const recipeFor = (key, def) => (ACTIVE !== 'en' && hasWhens(def) ? readyRecipe(def) : RECIPES[key] || (def?.tries?.length ? readyRecipe(def) : null));
 const RECIPES = {
   'lamps:mix': async () => {
     await dragItem((o) => o.c === '#ff0000', (P) => { const g = P.items.find((o) => o.c === '#00ff00'); return [g.x - 40, g.y]; });
@@ -420,9 +441,9 @@ async function doStation(id, k, { upper = false, wrongPredict = false } = {}) {
     await clickEl('.lx .lx-choice', null, pick);
     await sleep(500);
   }
-  const recipe = RECIPES[`${id}:${name}`];
+  const recipe = recipeFor(`${id}:${name}`, def);
   if (!recipe) { fail(`no recipe for station ${id}:${name}`); return false; }
-  await recipe();
+  try { await recipe(); } catch (e) { fail(`station ${id}:${name}: the recipe failed (${e.message})`); return false; }
   try { await until(() => !!document.querySelector('.lx .lx-primary'), `the takeaway of ${id}:${name}`, 25000); }
   catch (e) {
     fail(`station ${id}:${name}: the takeaway did not come after the tries (${e.message})`);
@@ -486,9 +507,13 @@ async function challengeHost(id, { win = true, shotName = null } = {}) {
   const scn = (await probe()).scene, at = await ev((scn) => { const s = __game.scene.getScene(scn); const m = s.master || s.guide; return [m.tx, m.ty]; }, scn);
   await walkTo(at[0], at[1], `the host of ${id}`);
   await until(() => __game.scene.getScene('UI').choice, `the host's options in ${id}`);
+  // the host's challenge option, matched by the engine's own tables in every language (the label may
+  // carry the host's name): never by a text written here
   const { CHALLENGE } = await import('../src/mechanics/duel/lines.js');
-  const lang = DATA.language?.startsWith('it') ? 'it' : 'en';
-  const ok = await choose((o) => o === CHALLENGE[lang].first || o === CHALLENGE[lang].friendly);
+  const { REMEMBER_CHALLENGE } = await import('../src/mechanics/story/words.js');
+  const rx = (s) => new RegExp(`^${s.split(/\{\w+\}/).map((x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('.+')}$`);
+  const labels = [CHALLENGE, REMEMBER_CHALLENGE].flatMap((T) => Object.values(T).flatMap((l) => [l.first, l.friendly])).filter(Boolean).map(rx);
+  const ok = await choose((o) => labels.some((r) => r.test(o)));
   if (!ok) return null;
   const r = await duel({ win, label: id });
   log(`   duel at ${id}: ${r.won ? 'WON' : 'lost'} in ${r.turns} turns`);
@@ -559,9 +584,9 @@ async function doStationUpper(id, sid) {
   const step = await ev((tab) => { const b = [...document.querySelectorAll('.lx-steps button')].find((e) => (e.getAttribute('aria-label') || e.textContent || '').includes(tab)); if (!b || b.getAttribute('aria-current') === 'step') return null; const r = b.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, def.tab);
   if (step) { await tap(...step); await until(() => document.querySelector('.lx')?.dataset.ready === '1', 'the station'); await sleep(400); }
   if (def.predict) { await clickEl('.lx .lx-choice', null, def.predict.answer); await sleep(500); }
-  const recipe = RECIPES[`${id}:${sid}`];
+  const recipe = recipeFor(`${id}:${sid}`, def);
   if (!recipe) { fail(`no recipe for ${id}:${sid}`); return false; }
-  await recipe();
+  try { await recipe(); } catch (e) { fail(`station ${id}:${sid}: the recipe failed (${e.message})`); return false; }
   try { await until(() => !!document.querySelector('.lx .lx-primary'), `the takeaway of ${id}:${sid}`, 25000); return true; }
   catch (e) { fail(`advanced station ${id}:${sid}: no takeaway`); return false; }
 }

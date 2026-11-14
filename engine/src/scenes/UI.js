@@ -13,6 +13,7 @@ import { openLab } from '../lab/shell.js';
 import { openReading } from '../lab/reading.js';
 import { LIFE, tr, fill, WORDS } from '../mechanics/config.js';
 import { w, promptOf } from '../data/words.js';
+import { languageSettings, mountTitleSwitch } from '../systems/language.js';
 import { floorsOf } from '../mechanics/floors/plan.js';
 import { leagueDuel } from '../mechanics/duel/index.js';
 import { available as voiceAvailable, isOn as voiceOn, isSpeaking, onChange as onVoice, listen, speak, stop as stopVoice, toggle as toggleVoice, VOICE } from '../systems/voice.js';
@@ -342,10 +343,12 @@ export class UI extends Phaser.Scene {
       const ctr = this.text(F.cx, cy + 156, w(this.touch ? 'title.helpTouch' : 'title.helpKeys') + (LIFE.musings ? (this.touch ? `\n${tr(WORDS.titleTouch)}` : `\n${tr(WORDS.titleKeys)}`) : ''), 16, '#f1ecd9', { stroke: '#1b1a2b', strokeThickness: 5, ...wrap }).setOrigin(0.5);
       const cred = this.text(F.cx, F.b - 28, COURSE.credit || '', 13, '#cfd3e8', { stroke: '#1b1a2b', strokeThickness: 4, ...wrap }).setOrigin(0.5);
       c.add([shade, title, sub, press, ctr, cred]);
+      const unmount = mountTitleSwitch();
       this.tweens.add({ targets: press, alpha: 0.25, duration: 700, yoyo: true, repeat: -1 });
       this.tweens.add({ targets: title, y: title.y - 6, duration: 2200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       this.waitKey().then(() => {
         sfx.confirm();
+        unmount();
         this.tweens.add({ targets: c, alpha: 0, duration: 450, onComplete: () => { c.destroy(); this.setHudVisible(true); this.close(); resolve(); } });
       });
     });
@@ -722,6 +725,7 @@ export class UI extends Phaser.Scene {
       ...moodSetting(), // mist, lantern, deep (systems/sound/)
       ...(voiceAvailable() ? [{ label: tr(S.voice), on: () => voiceOn(), value: () => onoff(voiceOn()), toggle: () => { toggleVoice(); if (this.where) this.setLocation(...this.where); } }] : []),
       { label: tr(S.grass), on: () => !state.grassOff, value: () => onoff(!state.grassOff), toggle: () => { state.grassOff = !state.grassOff; save(); } },
+      ...languageSettings(),
       ...(town ? [{ label: tr(S.time), on: () => true, value: () => tr(S.tod)[town.tod] || town.tod, toggle: () => town.cycleTime(true) }] : []),
     ];
     const r = await this.page(() => openMenu({ tab, settings, touch: this.touch }));

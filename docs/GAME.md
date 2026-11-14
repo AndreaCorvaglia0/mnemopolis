@@ -104,6 +104,8 @@ ambient music, voice, the prebuilt player, two example courses.
 Built since: experience and the commenting world (tiers, remarks, withheld lines, the door that
 knows you), mini-games (six ready kinds and custom ones), interaction sounds and a sound API for labs.
 
+Languages: a game can be bilingual (English and Italian), chosen by the player's browser, with a switch in the settings; progress is kept when switching.
+
 Being built: a course on music theory for guitarists, a new front page for the site.
 
 Planned: endings by experience (their triggers are fixed: `STORY.md`), the shop and tools, a pocket skill with the budget question, a

@@ -10,6 +10,7 @@ import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync, copyFi
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateCourse } from '../skills/knowledge-base/scripts/validate.mjs';
+import { languagesOf, localise } from '../skills/knowledge-base/scripts/localise.mjs';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
@@ -35,14 +36,22 @@ function readCourses() {
     try { c = JSON.parse(readFileSync(file, 'utf8')); } catch (e) { console.log(`site: ${d.name} not listed (${e.message})`); continue; }
     if (!c.title || !c.bigIdea || !c.concepts?.length) { console.log(`site: ${d.name} not listed (incomplete)`); continue; }
     const { stats } = validateCourse(c, {}); // the validator's own estimate of the main path
-    const core = new Set(c.concepts.filter((p) => p.core !== false).map((p) => p.id));
-    const goals = (c.goals || []).filter((g) => typeof g === 'string' || (g.concepts || []).every((id) => core.has(id))).map((g) => (typeof g === 'string' ? g : g.text)).slice(0, 3);
     const media = (k) => (existsSync(path.join(OUT, ASSETS, 'media', `${d.name}-${k}.webp`)) ? `${ASSETS}/media/${d.name}-${k}.webp` : null);
-    list.push({ slug: d.name, title: c.title, subject: c.subject, bigIdea: c.bigIdea, pitch: c.pitch, tags: (c.tags || []).slice(0, 4), level: c.level || 'introductory',
-      lang: c.language || 'en', goals, minutes: stats.coreMinutes, houses: stats.houses, labs: stats.stations, town: media('town'), lab: media('lab') });
+    list.push({ slug: d.name, raw: c, langs: languagesOf(c), lang: String(c.language || 'en').slice(0, 2), minutes: stats.coreMinutes, houses: stats.houses, labs: stats.stations, town: media('town'), lab: media('lab') });
   }
   list.sort((a, b) => (b.slug === FEATURED) - (a.slug === FEATURED) || a.slug.localeCompare(b.slug));
   return list;
+}
+
+// A course as the page of one language shows it: the title, subject, pitch and goals of that language
+// when the course has it (a bilingual course), else those of its own language. The play link of the
+// Italian page carries ?lang=it for a course that offers Italian.
+function viewOf(entry, lang) {
+  const c = localise(entry.raw, entry.langs.includes(lang) ? lang : entry.lang, entry.lang);
+  const core = new Set(c.concepts.filter((p) => p.core !== false).map((p) => p.id));
+  const goals = (c.goals || []).filter((g) => typeof g === 'string' || (g.concepts || []).every((id) => core.has(id))).map((g) => (typeof g === 'string' ? g : g.text)).slice(0, 3);
+  return { ...entry, title: c.title, subject: c.subject, bigIdea: c.bigIdea, pitch: c.pitch, tags: (c.tags || []).slice(0, 4), level: c.level || 'introductory', goals,
+    playQuery: lang === 'it' && entry.langs.includes('it') && entry.langs.length > 1 ? '?lang=it' : '' };
 }
 
 // ---- the words, English and Italian (written for each language, not translated word by word) ----
@@ -149,7 +158,7 @@ const ICONS = [
 ];
 
 function card(c, t, featured) {
-  const play = `${c.slug}/`;
+  const play = `${c.slug}/${c.playQuery}`;
   const shot = (src, alt, cls, w, h) => (src ? `<img class="${cls}" src="${src}" alt="${esc(alt)}" width="${w}" height="${h}" loading="${featured ? 'eager' : 'lazy'}" decoding="async">` : '');
   const placeholder = `<div class="ph" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M8 54V30l24-16 24 16v24z" fill="#1c2540"/><rect x="26" y="32" width="12" height="14" rx="2" fill="#ffcf5a"/></svg><span>${esc(c.title)}</span></div>`;
   const media = c.town
@@ -157,9 +166,10 @@ function card(c, t, featured) {
     : `<div class="shots">${placeholder}</div>`;
   const hook = c.pitch || c.bigIdea;
   const goals = c.goals.length ? `<p class="k">${esc(t.youWill)}</p><ul>${c.goals.map((g) => `<li>${esc(g)}</li>`).join('')}</ul>` : '';
-  const langName = t.langName[c.lang] || (() => { try { return new Intl.DisplayNames([t.htmlLang], { type: 'language' }).of(c.lang); } catch { return c.lang; } })();
+  const nameOf = (l) => t.langName[l] || (() => { try { return new Intl.DisplayNames([t.htmlLang], { type: 'language' }).of(l); } catch { return l; } })();
+  const langName = c.langs.map(nameOf).join(' · '); // a bilingual course shows both
   const chips = [t.time(c.minutes), `${t.houses(c.houses)} · ${t.labs(c.labs)}`, langName, t.levels[c.level] || c.level].map((x) => `<li>${esc(x)}</li>`).join('');
-  return `<li class="card${featured ? ' feat' : ''}" data-lang="${esc(c.lang)}">
+  return `<li class="card${featured ? ' feat' : ''}" data-lang="${esc(c.langs.join(' '))}">
 <a class="shotlink" href="${play}" tabindex="-1" aria-hidden="true">${media}</a>
 <div class="body"><h3><a href="${play}">${esc(c.title)}</a></h3><p class="subj">${esc(c.subject)}</p>
 <p class="hook">${esc(hook)}</p>${goals}<ul class="chips">${chips}</ul>
@@ -242,13 +252,14 @@ footer nav{display:flex;flex-wrap:wrap;gap:6px 22px;margin:12px 0}footer a{color
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}.btn{transition:none}}
 `;
 
-function page(lang, courses) {
+function page(lang, entries) {
+  const courses = entries.map((e) => viewOf(e, lang));
   const t = T[lang], other = T[lang === 'en' ? 'it' : 'en'];
   const rel = lang === 'en' ? '' : '../';             // links to the games are relative to this page
   const fix = (html) => (rel ? html.replace(/(href|src)="(?!https?:|#|\.\.?\/|data:|mailto:)/g, `$1="${rel}`) : html);
   const feat = courses[0];
-  const filter = courses.length > 5 && new Set(courses.map((c) => c.lang)).size > 1;
-  const langs = [...new Set(courses.map((c) => c.lang))];
+  const filter = courses.length > 5 && new Set(courses.flatMap((c) => c.langs)).size > 1;
+  const langs = [...new Set(courses.flatMap((c) => c.langs))];
   const url = SITE_URL + (lang === 'en' ? '' : 'it/'), og = `${SITE_URL}${ASSETS}/og.jpg`;
   const cards = courses.map((c, i) => card(c, t, i === 0)).join('\n');
   const body = `<a class="skip" href="#games">${esc(t.skip)}</a>
@@ -256,7 +267,7 @@ function page(lang, courses) {
 <div class="wrap top"><a class="brand" href="${lang === 'en' ? './' : './'}"><i></i>${esc(t.home)}</a>
 <nav aria-label="${esc(t.nav)}"><a class="sw" href="${lang === 'en' ? 'it/' : '../#en'}" hreflang="${t.swCode}" lang="${t.swCode}" aria-label="${esc(t.swLabel)}">${esc(t.sw)}</a></nav></div>
 <div class="wrap herotext"><h1>${esc(t.heroH)}</h1><p class="lead">${esc(t.heroP)}</p>
-<div class="cta">${feat ? `<a class="btn big" href="${feat.slug}/">${esc(t.play(feat.title))}</a>` : ''}<a class="textlink" href="#games">${esc(t.seeAll)} ↓</a></div>
+<div class="cta">${feat ? `<a class="btn big" href="${feat.slug}/${feat.playQuery}">${esc(t.play(feat.title))}</a>` : ''}<a class="textlink" href="#games">${esc(t.seeAll)} ↓</a></div>
 ${feat ? `<p class="note">${esc(feat.subject)} · ${esc(t.time(feat.minutes))}</p>` : ''}</div>
 ${scene()}
 </header>
@@ -279,7 +290,7 @@ ${courses.length ? `<ul class="grid${courses.length === 1 ? ' n1' : ''}" id="gri
   const redirect = lang === 'en' ? `if(/^it\\b/i.test(navigator.language||'')&&location.hash!=='#en')location.replace('it/');` : '';
   const js = `<script>${redirect}
 document.querySelectorAll('.copy').forEach(function(b){var l=b.textContent;b.addEventListener('click',function(){var t=document.getElementById('prompt').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent=b.dataset.copied;setTimeout(function(){b.textContent=l},1800)},function(){var r=document.createRange();r.selectNodeContents(document.getElementById('prompt'));var s=getSelection();s.removeAllRanges();s.addRange(r)})})});
-document.querySelectorAll('.filter button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.filter button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});document.querySelectorAll('#grid .card').forEach(function(c){c.hidden=!!b.dataset.f&&c.dataset.lang!==b.dataset.f})})});
+document.querySelectorAll('.filter button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.filter button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});document.querySelectorAll('#grid .card').forEach(function(c){c.hidden=!!b.dataset.f&&(' '+c.dataset.lang+' ').indexOf(' '+b.dataset.f+' ')<0})})});
 </script>`;
   const html = `<!doctype html>
 <html lang="${t.htmlLang}">

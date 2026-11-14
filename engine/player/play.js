@@ -9,7 +9,7 @@ import { TRADE_NAMES } from '../src/gen/interior/trades.js';
 import { TEMPER_NAMES } from '../src/mechanics/duel/tempers.js';
 import * as match from '../src/mechanics/riddles/match.js';
 import { TOOLS } from '../src/mechanics/obstacles/kinds.js';
-import { makePayload, insertPayload } from '../src/course/packing.js';
+import { makePayload, insertPayload, titleOf } from '../src/course/packing.js';
 
 const IT = /^it\b/i.test(navigator.language || '');
 const T = IT ? {
@@ -83,8 +83,8 @@ async function make(files) {
   if (errors.length) { out.innerHTML = `<div class="msg bad">${esc(T.errs(errors.length))}<ul>${errors.map((e) => `<li>${esc(e)}</li>`).join('')}</ul></div>${warnHtml}`; return; }
   let html;
   try { html = insertPayload(await getPlayer(), p.payload); } catch { out.innerHTML = `<div class="msg bad">${esc(T.noPlayer)}</div>${warnHtml}`; return; }
-  game = { html, name: `${course.id || 'game'}.html`, title: course.title };
-  out.innerHTML = `<div class="msg ok">${T.ok(esc(course.title), warns.length)}<div class="row" style="justify-content:flex-start"><button type="button" class="primary" id="play">${esc(T.play)}</button><button type="button" id="dl">${esc(T.download)}</button></div></div>${warnHtml}`;
+  game = { html, name: `${course.id || 'game'}.html`, title: titleOf(course) };
+  out.innerHTML = `<div class="msg ok">${T.ok(esc(titleOf(course)), warns.length)}<div class="row" style="justify-content:flex-start"><button type="button" class="primary" id="play">${esc(T.play)}</button><button type="button" id="dl">${esc(T.download)}</button></div></div>${warnHtml}`;
   $('play').onclick = play; $('dl').onclick = download;
 }
 
