@@ -19,6 +19,7 @@
     "en": "Sound is a squeeze passed from molecule to molecule: its rate is the pitch, its strength the loudness, and it needs matter to travel.",
     "it": "Il suono è una compressione che passa di molecola in molecola: la sua frequenza determina l'altezza, la sua forza il volume, e per propagarsi ha bisogno di materia."
   },
+  "listed": false,
   "pitch": {
     "en": "Squeeze the air, set a pitch, and find out why sound needs something to travel through.",
     "it": "Comprimi l'aria, scegli un'altezza e scopri perché il suono ha bisogno di un mezzo attraverso cui propagarsi."

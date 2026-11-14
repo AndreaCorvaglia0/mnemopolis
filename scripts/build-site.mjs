@@ -35,6 +35,7 @@ function readCourses() {
     let c;
     try { c = JSON.parse(readFileSync(file, 'utf8')); } catch (e) { console.log(`site: ${d.name} not listed (${e.message})`); continue; }
     if (!c.title || !c.bigIdea || !c.concepts?.length) { console.log(`site: ${d.name} not listed (incomplete)`); continue; }
+    if (c.listed === false) { console.log(`site: ${d.name} not listed ("listed": false: built and playable, kept off the front page)`); continue; }
     const { stats } = validateCourse(c, {}); // the validator's own estimate of the main path
     const media = (k) => (existsSync(path.join(OUT, ASSETS, 'media', `${d.name}-${k}.webp`)) ? `${ASSETS}/media/${d.name}-${k}.webp` : null);
     list.push({ slug: d.name, raw: c, langs: languagesOf(c), lang: String(c.language || 'en').slice(0, 2), minutes: stats.coreMinutes, houses: stats.houses, labs: stats.stations, town: media('town'), lab: media('lab') });

@@ -6,7 +6,7 @@
   A template for building learning games as memory towns: every building is a concept, every lab is a place to get your hands on it.
 </p>
 
-**Play, no install, on a phone or a computer** (about an hour each): [Chroma Town](https://andreacorvaglia0.github.io/mnemopolis/chroma/) (how colour works) · [How Sound Works](https://andreacorvaglia0.github.io/mnemopolis/pocket-demo/) · [all the games](https://andreacorvaglia0.github.io/mnemopolis/)
+**Play, no install, on a phone or a computer** (about an hour each): [Chroma Town](https://andreacorvaglia0.github.io/mnemopolis/chroma/) (how colour works) · [Port Octave](https://andreacorvaglia0.github.io/mnemopolis/fretboard/) (music theory for guitarists) · [all the games](https://andreacorvaglia0.github.io/mnemopolis/)
 
 <p align="center"><a href="https://andreacorvaglia0.github.io/mnemopolis/chroma/"><img src="assets/screenshot-town.webp" alt="Chroma Town at night: lit windows, a river, a lighthouse" width="70%"></a></p>
 

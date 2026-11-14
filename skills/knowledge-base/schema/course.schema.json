@@ -76,6 +76,7 @@
         }
       ]
     },
+    "listed": { "type": "boolean", "description": "false keeps the course off the site's front page (it is still built and playable at its address). Default true." },
     "pitch": {
       "description": "Optional. One line for the site's catalogue: what the learner gets, in their terms (about 20 words).",
       "oneOf": [

@@ -72,3 +72,5 @@ contrast, headings, landmarks, touch targets and the tab order.
 Only dark. The catalogue shows a course's text in its own language, so the Italian page may show
 English cards. The hero's play button names a fixed featured course in the workflow
 (`--featured chroma`). The first picture of a lab is the question screen, not the lab in use.
+
+A course with `"listed": false` in `course.json` is built and playable at its address but has no card on the front page. `pocket-demo` (How Sound Works) is kept that way: it is the worked example and test case of pocket mode, not a showcase course.
