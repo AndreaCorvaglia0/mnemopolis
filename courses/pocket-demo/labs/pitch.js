@@ -4,8 +4,10 @@
 //               crests counted on the trace
 //   wavelength  a custom sketch: the learner guesses how wavelength depends on frequency, then the
 //               real curve (343 m/s divided by the frequency) is drawn over the guess
-import { L, sliderReveal, button, stage, tasks, animate, spring, C, alpha, clamp, fmt } from '../../../engine/src/lab/kit.js';
+import { L, lang, sliderReveal, button, stage, tasks, animate, spring, C, alpha, clamp, fmt } from '../../../engine/src/lab/kit.js';
 
+// decimals follow the language: 1.06 in English, 1,06 in Italian
+const num = (x, d) => { const t = fmt(x, d); return lang() === 'it' ? String(t).replace('.', ',') : t; };
 const SOUND = 343; // m/s, air at 20 °C (OpenStax University Physics 1, 17.2)
 
 async function tone(ctx) {
@@ -65,10 +67,10 @@ async function wavelength(ctx) {
       d.line(curve, { color: C.acc, width: 4, glow: C.acc });
     }
     d.line(pts, { color: C.gold, width: 3, dash: [10, 7] });
-    pts.forEach(([x, y], i) => { d.circle(x, y, 16, { fill: alpha(C.gold, moved.has(i) ? 0.25 : 0.12), stroke: C.gold, width: 3 }); if (shown) d.text(`${fmt(lam(F[i]), 2)} m`, x, py(lam(F[i])) - 18, { size: 16, weight: 700, color: C.acc, align: 'center' }); });
+    pts.forEach(([x, y], i) => { d.circle(x, y, 16, { fill: alpha(C.gold, moved.has(i) ? 0.25 : 0.12), stroke: C.gold, width: 3 }); if (shown) d.text(`${num(lam(F[i]), 2)} m`, x, py(lam(F[i])) - 18, { size: 16, weight: 700, color: C.acc, align: 'center' }); });
     if (shown && real >= 1) {
       const err = F.reduce((s, f, i) => s + Math.abs(guess[i].v - lam(f)), 0) / F.length;
-      d.text(L(`your guess is ${fmt(err, 2)} m off on average`, `la tua stima si discosta in media di ${fmt(err, 2)} m`), 16, y0 + h + lh * 3.6, { size: 17, weight: 700, color: C.gold, max: pane.W - 32 });
+      d.text(L(`your guess is ${num(err, 2)} m off on average`, `la tua stima si discosta in media di ${num(err, 2)} m`), 16, y0 + h + lh * 3.6, { size: 17, weight: 700, color: C.gold, max: pane.W - 32 });
     }
   });
   const anim = animate(ctx, (dt) => { let more = guess.map((g) => g.step(dt)).some(Boolean); if (shown && real < 1) { real = dt === Infinity ? 1 : Math.min(1, real + dt * 0.8); more = true; } view.redraw(); return more; });
