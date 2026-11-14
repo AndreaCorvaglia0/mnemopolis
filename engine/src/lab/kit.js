@@ -3,6 +3,16 @@ import { h } from './shell.js';
 import { sfx } from '../systems/audio.js';
 import { hand } from './hands.js';
 import { sound } from '../systems/sound/lab.js';
+import { LANG } from '../course/_data.js';
+import { makeL } from '../course/localise.js';
+
+// The active language, for lab and game code (chosen once at boot; see ENGINE.md, "Languages").
+//   lang()                    'en' or 'it'
+//   L('Hello', 'Ciao')        the string of the active language; English when the Italian is missing or empty
+//   L({ en: 'Hello', it: 'Ciao' })    the same, from an object
+// Use it for texts that the lab code writes itself; text from course.json arrives already resolved.
+export const lang = () => LANG;
+export const L = makeL(LANG);
 
 // A canvas that fills the stage. The station draws in its own units (w x hgt); the pane scales
 // that box to the largest size that fits the stage, keeps its proportions, centres it, and lets

@@ -83,7 +83,8 @@ export function proseFields(c) {
   return out;
 }
 
-export function checkCourseProse(c) {
-  const lang = String(c.language || 'en').slice(0, 2).toLowerCase();
+// lang: the language the texts are written in (default: the course's `language`); a bilingual
+// course is checked once per language, each with its own word lists
+export function checkCourseProse(c, lang = String(c.language || 'en').slice(0, 2).toLowerCase()) {
   return proseFields(c).flatMap((f) => proseIssues(f.text, { lang, kind: f.kind }).map((x) => `${f.where}: ${x.fix} ("${x.quote}")`));
 }
