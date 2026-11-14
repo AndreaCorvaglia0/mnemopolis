@@ -4,12 +4,12 @@
 //   riddlesIn(placeId, floor)   the locks standing on that floor of that house ('up' | 'ground')
 //   whereFor(floor)         the `where` argument of backTo() and attempt() for this course
 //   openedLocks(st)         the opened locks, for the discoveries page
-import { DATA } from '../../course/_data.js';
+import { DATA, LANG as ACTIVE } from '../../course/_data.js';
 import { whereOf, isGround } from '../floors/plan.js';
 import { LOCK_KINDS } from './kinds.js';
 import { contentsOf } from './logic.js';
 
-export const LANG = String(DATA.language || 'en').slice(0, 2).toLowerCase() === 'it' ? 'it' : 'en';
+export const LANG = ACTIVE;
 const concepts = DATA.concepts || [];
 export const RIDDLES = concepts.flatMap((p) => (p.riddles || []).map((r) => ({ ...r, place: p.id, where: whereOf(r) })));
 export const RIDDLE = Object.fromEntries(RIDDLES.map((r) => [r.id, r]));

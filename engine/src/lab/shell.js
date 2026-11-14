@@ -16,10 +16,10 @@ import { available, isOn, isSpeaking, onChange, listen, stop as stopVoice, speak
 import { codePanel } from './code.js';
 import { CSS } from './style.js';
 import { readingArticle } from './reading.js';
-import { DATA } from '../course/_data.js';
+import { LANG as ACTIVE } from '../course/_data.js';
 
-// Every word the frame shows, in one place: English and Italian. The set follows the course's
-// `language` (course.json), with English for anything missing. Another language is one more
+// Every word the frame shows, in one place: English and Italian. The set follows the active language
+// (course/localise.js), with English for anything missing. Another language is one more
 // entry in STRINGS with the same keys.
 const STRINGS = {
   en: {
@@ -59,7 +59,7 @@ const STRINGS = {
     about: 'Su questa immagine', station: (i, n, t, d) => `Postazione ${i} di ${n}: ${t}${d ? ', fatta' : ''}`,
   },
 };
-export const LANG = String(DATA.language || 'en').slice(0, 2).toLowerCase();
+export const LANG = ACTIVE;
 export const TEXT = { ...STRINGS.en, ...(STRINGS[LANG] || {}) };
 export { STRINGS };
 

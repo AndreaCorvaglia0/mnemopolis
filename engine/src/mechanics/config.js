@@ -7,7 +7,7 @@
 //   "life": { "secrets": [ { "kind": "note", "text": "...", "near": "<conceptId>" } ] }
 //                                       curated: secrets on, plus a note or two themed on the course
 // ?nolife in the address switches everything off (for tests and comparisons).
-import { DATA, WORLD } from '../course/_data.js';
+import { WORLD, LANG as ACTIVE } from '../course/_data.js';
 
 const q = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new URLSearchParams();
 
@@ -24,8 +24,10 @@ export function lifeConfig(world = WORLD, nolife = q.has('nolife')) {
 }
 export const LIFE = lifeConfig();
 
-// English and Italian, by the course language; English for anything else.
-export const LANG = String(DATA.language || 'en').slice(0, 2).toLowerCase() === 'it' ? 'it' : 'en';
+// The ACTIVE language, 'en' or 'it': chosen once at boot (?lang=, the saved choice, the browser, the
+// course's own `language`; course/localise.js) and resolved in course/_data.js. Never read
+// DATA.language for this: in a bilingual course it is the default, not what the player reads.
+export const LANG = ACTIVE;
 // a registry entry { en, it } -> the string (or list) in the course language
 export const tr = (v, lang = LANG) => (v && typeof v === 'object' && !Array.isArray(v) ? v[lang] ?? v.en : v);
 export const fill = (s, vars) => String(s).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
