@@ -12,6 +12,9 @@
 //            chance; the coins as a tally.
 // openNotebook({ tab, settings, touch }) has the contract of quest/menu.js openMenu: it resolves
 // with 'ending' (see the ending again) or undefined. With "story": false the plain menu stays.
+import { XP_ON, tierNow, tierWord, marginLine, toldList, xpNow, TIERS, XLINES, trLine, progressNow } from '../experience/active.js';
+import { gamesFound } from '../games/active.js';
+import { G_WORDS } from '../games/strings.js';
 import { h } from '../../lab/shell.js';
 import { COURSE, PLACE, PLACES, DISTRICTS } from '../../data/content.js';
 import { state } from '../../systems/state.js';
@@ -126,6 +129,12 @@ const CSS = `
 .nbk-pk{padding:0;list-style:none}
 .nbk-pk li{line-height:34px}
 .nbk-pk button{min-height:44px;margin-left:8px;padding:0 10px;border:0;background:none;color:${RED};font:inherit;text-decoration:underline;cursor:pointer}
+.nbk-tier{display:flex;align-items:center;gap:10px;margin:6px 0 2px}
+.nbk-tier svg{width:44px;height:44px;flex:none}
+.nbk-tier .w{font-size:1.15em}
+.nbk-tier .lb{color:${PENCIL};font-size:.85em;display:block}
+.nbk-margin{color:${PENCIL};transform:rotate(-2.5deg);margin:2px 0 6px 18px;font-size:.92em}
+.nbk-xp{color:${PENCIL};font-size:.8em}
 .nbk-tally{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .nbk-tally svg{height:32px}
 .nbk-set{position:absolute;top:58px;left:12px;z-index:5;width:min(440px,calc(100vw - 24px));max-height:calc(100vh - 80px);overflow:auto;padding:12px;border-radius:12px;background:#141922;border:1px solid #3a4558;box-shadow:0 12px 30px #000a;display:flex;flex-wrap:wrap;gap:8px;box-sizing:border-box}
@@ -182,6 +191,12 @@ function journey(onEnding, turn) {
   const st = Q.nextStep(state), rows = Q.coreProgress(state), cur = st.place?.id;
   const L = [h('span', { class: 'sig' }, nameOf()), h('h2', {}, state.ended ? tr(N.anotherRound) : tr(N.sections.journey))];
   if (!state.ended) for (const l of tr(S_WORDS.goal)) L.push(h('p', { class: 'small' }, l));
+  // experience: how the town sees me, as a word in my hand and a small drawn mark (never a number)
+  if (XP_ON) {
+    const t = tierNow();
+    L.push(h('div', { class: 'nbk-tier', 'data-tier': t }, svg(tierMark(TIERS.indexOf(t), progressNow())), h('span', {}, h('span', { class: 'lb' }, trLine(XLINES.clues.tier)), h('span', { class: 'w' }, tierWord(t)))));
+    const m = marginLine(); if (m) L.push(h('p', { class: 'nbk-margin' }, m));
+  }
   L.push(h('div', { class: 'sp' }));
   const li = rows.map((r) => {
     const fog = state.ended && isFoggy(r.id), now = r.id === cur && !state.ended;
@@ -312,6 +327,19 @@ function thumb(kind) {
   return THUMBS.get(key);
 }
 
+// the tier as a small ink drawing: a lamp whose rays grow with the tier (0 to 4), the current one
+// pencilled in part (how far into it); hand-drawn wobble, no numbers
+function tierMark(i, part = 0) {
+  const rays = [];
+  for (let k = 0; k < 8; k++) {
+    const a = (Math.PI * 2 * k) / 8 - Math.PI / 2, on = k < i * 2, half = !on && k < i * 2 + Math.round(part * 2);
+    if (!on && !half) continue;
+    const r0 = 9.5, r1 = on ? 18 : 14, w = (k % 3) * 0.4;
+    rays.push(`<path d="M${(22 + r0 * Math.cos(a)).toFixed(1)} ${(22 + r0 * Math.sin(a)).toFixed(1)} L${(22 + r1 * Math.cos(a + 0.05)).toFixed(1)} ${(22 + r1 * Math.sin(a + 0.05) + w).toFixed(1)}" stroke="${on ? INK : PENCIL}" stroke-width="${on ? 2 : 1.4}" stroke-linecap="round" fill="none"/>`);
+  }
+  return `<svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 14.2 C26.6 14 30 17.6 29.8 22.2 C29.6 26.6 26 30.1 21.6 29.8 C17.3 29.5 14.1 26 14.3 21.7 C14.5 17.6 17.8 14.4 22 14.2 Z" fill="${i ? 'rgba(255,207,90,0.45)' : 'none'}" stroke="${INK}" stroke-width="1.8"/>${rays.join('')}</svg>`;
+}
+
 function tally(n) {
   const marks = Math.min(25, Math.ceil(n / 10)), parts = [];
   for (let i = 0; i < marks; i++) {
@@ -354,7 +382,15 @@ function clues(busy, turn) {
     if (list.length) R.push(h('div', { class: 'sp' }), h('h2', {}, tr(N.found)), h('ul', { class: 'nbk-pk' }, list.map((s) => h('li', {}, s.kind === 'painting' && PAINTINGS[s.painting] ? tr(PAINTINGS[s.painting].title) : s.kind === 'note' ? `"${s.text}"` : tr(SECRETS[s.kind].title),
       s.kind === 'painting' || s.kind === 'prints' ? h('button', { type: 'button', onclick: () => look(s.kind === 'prints' ? 'lanterncat' : s.painting) }, tr(N.look)) : null))));
   }
+  // experience: what people finally told me (withheld lines), the games found, the number, small
+  if (XP_ON) {
+    const told = toldList();
+    if (told.length) R.push(h('div', { class: 'sp' }), h('h2', {}, trLine(XLINES.clues.heading)), h('ul', { class: 'nbk-pk' }, told.map((x) => h('li', { 'data-told': x.id }, x.text))));
+  }
+  const gf = gamesFound();
+  if (gf.length) R.push(h('div', { class: 'sp' }), h('h2', {}, tr(G_WORDS.found)), h('ul', { class: 'nbk-pk' }, gf.map((g) => h('li', {}, g.plays ? fill(tr(G_WORDS.foundRow), { title: tr(g.title), n: g.best }) : fill(tr(G_WORDS.foundNone), { title: tr(g.title) })))));
   const n = state.insight || 0;
+  if (XP_ON) R.push(h('p', { class: 'nbk-xp' }, fill(trLine(XLINES.clues.xp), { n: xpNow() })));
   R.push(h('div', { class: 'sp' }), h('div', { class: 'nbk-tally' }, n ? tally(n) : null, h('span', {}, fill(tr(N.coins), { n }))));
   R.push(turn(0));
   return [L, R];

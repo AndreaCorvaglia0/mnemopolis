@@ -33,7 +33,7 @@ if (existsSync(path.join(dir, 'world.json'))) try { world = JSON.parse(read('wor
 const v = validateCourse(course, {
   EMBLEMS: await eng('gen/emblems.js', (m) => m.EMBLEMS), TRADES: await eng('gen/interior/trades.js', (m) => m.TRADE_NAMES),
   TEMPERS: await eng('mechanics/duel/tempers.js', (m) => m.TEMPER_NAMES), match: await eng('mechanics/riddles/match.js', (m) => m),
-  tools: await eng('mechanics/obstacles/kinds.js', (m) => Object.keys(m.TOOLS)), checkReady: await eng('lab/patterns/specs.js', (m) => m.checkReady),
+  tools: await eng('mechanics/obstacles/kinds.js', (m) => Object.keys(m.TOOLS)), checkReady: await eng('lab/patterns/specs.js', (m) => m.checkReady), checkGames: await eng('mechanics/games/spec.js', (m) => m.checkGames),
   brief: existsSync(path.join(dir, 'knowledge', 'brief.md')) ? read('knowledge/brief.md') : '', has: (k) => existsSync(path.join(dir, k)),
 });
 v.warns.forEach((w) => console.log(`warning  ${w}`));
@@ -44,8 +44,10 @@ if (v.errors.length) { console.log(`\n${v.errors.length} errors in course.json: 
 const labsDir = path.join(dir, 'labs'), labs = {};
 if (existsSync(labsDir)) for (const f of readdirSync(labsDir)) if (f.endsWith('.js') && statSync(path.join(labsDir, f)).isFile()) labs[f.slice(0, -3)] = readFileSync(path.join(labsDir, f), 'utf8');
 const anims = existsSync(path.join(dir, 'anims.js')) ? read('anims.js') : null;
+const gamesDir = path.join(dir, 'games'), games = {};
+if (existsSync(gamesDir)) for (const f of readdirSync(gamesDir)) if (f.endsWith('.js')) games[f.slice(0, -3)] = readFileSync(path.join(gamesDir, f), 'utf8');
 const slug = path.basename(path.resolve(dir));
-const { payload, errors, warnings } = makePayload({ course, world, labs, anims, slug });
+const { payload, errors, warnings } = makePayload({ course, world, labs, anims, slug, games });
 warnings.forEach((w) => console.log(`warning  ${w}`));
 errors.forEach((e) => console.log(`ERROR    ${e}`));
 if (errors.length) { console.log(`\n${errors.length} errors in the lab code: not packed.`); process.exit(1); }

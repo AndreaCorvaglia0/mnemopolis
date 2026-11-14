@@ -9,6 +9,7 @@ import { drawText, textWidth } from '../art/buildings.js';
 import { FireLight, bracket } from '../art/fire.js';
 import { PLACE, MASTERS } from '../data/content.js';
 import { houseDuel, challengeLabel, houseQuestions } from '../mechanics/duel/index.js';
+import { ownerTalk } from '../mechanics/experience/owner.js';
 import { state, save } from '../systems/state.js';
 
 // The main corridor of the castle: walk east and you walk forward in time.
@@ -138,8 +139,9 @@ export class Museum extends Phaser.Scene {
     this.guide.faceToward(this.player.tx, this.player.ty);
     sfx.select();
     const bye = { label: w('town.thanks') };
+    const o = await ownerTalk(ui, this.id, m.name, m.hi);
     await ui.converse(m.name, {
-      root: { say: m.hi, options: [kinds.length ? { label: w('room.colours'), to: 'col' } : null, { label: w('room.firstPlaque'), do: async () => { await ui.plaque(this.list, 0, this.place.kinds); return 'end'; } }, houseQuestions(this.id).length >= 2 ? { label: challengeLabel(this.id), do: async () => { await houseDuel(ui, this.id); return 'end'; } } : null, bye].filter(Boolean) },
+      root: { say: o.say, options: [...o.options, kinds.length ? { label: w('room.colours'), to: 'col' } : null, { label: w('room.firstPlaque'), do: async () => { await ui.plaque(this.list, 0, this.place.kinds); return 'end'; } }, houseQuestions(this.id).length >= 2 ? { label: challengeLabel(this.id), do: async () => { await houseDuel(ui, this.id); return 'end'; } } : null, bye].filter(Boolean) },
       col: { say: w('room.coloursAre', { list: kinds.map((k) => k[0]).join(', ') }), options: [bye] },
     });
     this.guide.face('down');

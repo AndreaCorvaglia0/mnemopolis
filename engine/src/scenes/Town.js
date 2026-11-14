@@ -20,6 +20,9 @@ import { Deck } from '../mechanics/musings/think.js';
 import { w } from '../data/words.js';
 import { STORY } from '../mechanics/story/config.js';
 import { attachStoryTown, storyNpc, storyStart } from '../mechanics/story/town.js';
+import { attachTownGames, offerOption } from '../mechanics/games/town.js';
+import { XP_ON, GAMES_ON, greetLine } from '../mechanics/experience/active.js';
+import { withheldMoment, knownDoor } from '../mechanics/experience/world.js';
 
 const talkDeck = new Deck(); // people's hints and congratulations cycle before repeating
 const TOD = {
@@ -73,6 +76,7 @@ export class Town extends Phaser.Scene {
     this.nav = new TapNav(this, { w: MAP_W, h: MAP_H, redirect: (x, y) => { const b = BUILDINGS.find((o) => !o.home && x >= o.x && x < o.x + o.w && y >= o.y && y < o.y + o.h); return b ? b.doors[0] : null; } });
     this.layout();
     this.life = attachTownLife(this); // optional ambient life: thoughts, animals, secrets, obstacles (src/mechanics/)
+    this.games = GAMES_ON ? attachTownGames(this) : null; // mini-games on their spots (mechanics/games/)
     this.scale.on('resize', this.layout, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.layout, this));
     if (!this.registry.get('lite')) {
@@ -360,13 +364,14 @@ export class Town extends Phaser.Scene {
     this.updateLighting(time);
     this.story?.update(time, delta);
     this.life?.update(time);
+    this.games?.update(time);
     const k = this.keys;
     if (this.ui.busy || this.locked || this.player.moving) {
       Phaser.Input.Keyboard.JustDown(k.SPACE); Phaser.Input.Keyboard.JustDown(k.ENTER); Phaser.Input.Keyboard.JustDown(k.E);
       return;
     }
     const [px, py] = this.player.facing(), near = this.npcAt(px, py);
-    this.ui.setPrompt(near ? `Space  ${w('town.talkTo', { name: near.def.name })}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? `Space  ${w('town.readSign')}` : this.objects.get(`${px},${py}`)?.kind === 'monument' ? `Space  ${w('town.landmark')}` : this.isGate(px, py) ? `Space  ${tr(state.passedLeague ? Q_WORDS.townGate.through : Q_WORDS.townGate.prompt)}` : this.story?.prompt(px, py) || this.life?.prompt(px, py) || null);
+    this.ui.setPrompt(near ? `Space  ${w('town.talkTo', { name: near.def.name })}` : this.objects.get(`${px},${py}`)?.kind === 'sign' ? `Space  ${w('town.readSign')}` : this.objects.get(`${px},${py}`)?.kind === 'monument' ? `Space  ${w('town.landmark')}` : this.isGate(px, py) ? `Space  ${tr(state.passedLeague ? Q_WORDS.townGate.through : Q_WORDS.townGate.prompt)}` : this.story?.prompt(px, py) || this.games?.prompt(px, py) || this.life?.prompt(px, py) || null);
     const key = k.LEFT.isDown || k.A.isDown ? 'left' : k.RIGHT.isDown || k.D.isDown ? 'right' : k.UP.isDown || k.W.isDown ? 'up' : k.DOWN.isDown || k.S.isDown ? 'down' : null;
     if (key) this.nav.cancel();
     const tapped = !key && this.nav.walking, dir = key || this.nav.next();
@@ -426,6 +431,7 @@ export class Town extends Phaser.Scene {
     if (door) return this.tryDoor(door);
     if (this.isGate(fx, fy)) return this.useGate();
     if (this.story?.use(fx, fy)) return;
+    if (this.games?.use(fx, fy)) return;
     this.life?.use(fx, fy);
   }
 
@@ -443,8 +449,10 @@ export class Town extends Phaser.Scene {
     // One line, then the player picks what to ask. Every answer is one line too. "What should I do
     // now?" answers from the main path (the same step as the tracker), and sometimes hints at more.
     const t = TALK[npc.def.id] || { hi: '...', options: [] }, bye = { label: w('town.bye') };
+    await withheldMoment(this.ui, npc.def.id, npc.def.name); // experience: they start to tell you something (mechanics/experience/)
     const opts = [[tr(Q_WORDS.ask), () => this.whatNow()], ...t.options.map((o) => [o[0], () => o[1]])];
-    const nodes = { root: { say: t.hi, options: [...opts.map((o, i) => ({ label: o[0], to: `a${i}` })), bye] } };
+    const game = offerOption(this.ui, npc.def.id); // "Fancy a game?" (mechanics/games/)
+    const nodes = { root: { say: greetLine(null, t.hi) || t.hi, options: [...opts.map((o, i) => ({ label: o[0], to: `a${i}` })), ...(game ? [game] : []), bye] } };
     opts.forEach((o, i) => { nodes[`a${i}`] = { get say() { return o[1](); }, options: [...opts.filter((_, j) => j !== i).map((x) => ({ label: x[0], to: `a${opts.indexOf(x)}` })), { label: w('town.thanksBye') }] }; });
     await this.ui.converse(npc.def.name, nodes);
     npc.face(npc.home);
@@ -601,6 +609,7 @@ export class Town extends Phaser.Scene {
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(b.scene || 'Interior', { id: b.id }));
       return;
     }
+    if (b.home && XP_ON) return knownDoor(this.ui, b); // the door that knows you (mechanics/experience/world.js)
     if (b.league && this.story) return this.story.door(b); // the lighthouse (story/lighthouse.js)
     if (b.league) return GATE ? this.ui.say([fill(tr(Q_WORDS.townGate.hall), { person: LEAGUE.host?.name || w('town.judge') })], { name: b.name }) : this.league();
     return this.ui.say(DIALOG.closedHome, { name: b.name });

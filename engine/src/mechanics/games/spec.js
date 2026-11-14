@@ -144,7 +144,7 @@ export function checkGames(course = {}, { hasCode = null } = {}) {
   }
   const per = {};
   for (const g of list) for (const c of g?.concepts || []) per[c] = (per[c] || 0) + 1;
-  for (const [c, n] of Object.entries(per)) if (n > 2) warns.push(`concept "${c}" is practised by ${n} games: one, at most two, per concept`);
+  for (const [c, n] of Object.entries(per)) if (n > 3) warns.push(`concept "${c}" is practised by ${n} games: one or two per concept, three at most`);
   if (list.length > 8) warns.push(`${list.length} games: two or three are plenty for a course`);
   // withheld lines
   const wl = course.withheld;

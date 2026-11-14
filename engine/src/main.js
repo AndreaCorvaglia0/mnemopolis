@@ -1,3 +1,4 @@
+import { xpDebug } from './mechanics/experience/debug.js';
 import Phaser from 'phaser';
 import '@fontsource/pixelify-sans/latin-400.css';
 import '@fontsource/pixelify-sans/latin-600.css';
@@ -200,6 +201,8 @@ window.__hb = {
   riddles: () => RIDDLES,
   // the story: jump between its moments (mechanics/story/debug.js; npm run shots:story)
   story: storyDebug(game),
+  // experience and mini-games (mechanics/experience/debug.js; npm run shots:world)
+  xp: xpDebug(game),
   lifeSheet,
   // Used by the automated play-through check.
   probe: () => {

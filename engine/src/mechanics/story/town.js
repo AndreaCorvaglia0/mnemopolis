@@ -22,6 +22,9 @@ import { cinema } from './cinema.js';
 import { playOpening } from './opening.js';
 import { Weather } from './weather.js';
 import { stageNow, greeting, curtLine, rememberedRow } from './stages.js';
+import { greetLine, masterLine } from '../experience/active.js';
+import { withheldMoment } from '../experience/world.js';
+import { offerOption } from '../games/town.js';
 import { isFoggy } from './fog.js';
 import { lighthouseDoor, theWord } from './lighthouse.js';
 import { playEnding, TALLY } from './finale.js';
@@ -207,8 +210,12 @@ class StoryTown {
     const what = () => (stage === 'cold' && !guide ? curtLine() : sc.whatNow());
     // the way back to the ship: everyone says goodbye, as to someone they have seen leave before
     if (state.passedLeague && !state.ended) { await ui.say([guide ? tr(S_WORDS.berth) : talkDeck.draw('bye', tr(S_WORDS.farewell))], { name }); npc.face(npc.home); return true; }
+    await withheldMoment(ui, npc.def.id, name); // experience: they start to tell you something, and stop
     const opts = [[tr(Q_WORDS.ask), what], ...(stage === 'cold' ? [] : t.options.map((o) => [o[0], () => o[1]]))];
-    const nodes = { root: { say: greeting(state), options: [...opts.map((o, i) => ({ label: o[0], to: `a${i}` })), { label: tr({ en: 'Bye', it: 'Ciao' }) }] } };
+    const game = offerOption(ui, npc.def.id);
+    // the stage (how much the town remembers) sets the temperature; the tier (your experience) how they regard you
+    const hi = guide && Math.random() < 0.4 ? masterLine() || greeting(state) : greetLine(stage, greeting(state)) || greeting(state);
+    const nodes = { root: { say: hi, options: [...opts.map((o, i) => ({ label: o[0], to: `a${i}` })), ...(game ? [game] : []), { label: tr({ en: 'Bye', it: 'Ciao' }) }] } };
     opts.forEach((o, i) => { nodes[`a${i}`] = { get say() { return o[1](); }, options: [...opts.filter((_, j) => j !== i).map((x) => ({ label: x[0], to: `a${opts.indexOf(x)}` })), { label: tr({ en: 'Thanks, bye', it: 'Grazie, ciao' }) }] }; });
     await ui.converse(name, nodes);
     npc.face(npc.home);

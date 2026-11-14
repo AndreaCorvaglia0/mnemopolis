@@ -116,7 +116,8 @@ export function sound(owner = null) {
 }
 sound.note = toHz;
 sound.midi = noteToMidi;
-sound.name = (m, lang = 'en', o = {}) => midiToName(typeof m === 'string' ? noteToMidi(m) : m, { lang, ...o });
+// `name` is a function's own read-only property: defined, not assigned
+Object.defineProperty(sound, 'name', { value: (m, lang = 'en', o = {}) => midiToName(typeof m === 'string' ? noteToMidi(m) : m, { lang, ...o }), configurable: true });
 sound.interval = (semis, lang = 'en') => intervalName(semis, lang);
 sound.ratio = justRatio;
 sound.chordHz = chordHz;

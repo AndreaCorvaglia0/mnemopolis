@@ -169,3 +169,11 @@ export function signals(s, now = Date.now()) {
     fresh: !!x.last && now - x.last.at < 4 * 60 * 1000, // "just": within four minutes
   };
 }
+
+// canEnter's rule, pure: may the player go into (or through) `thing` at this tier? Today one door
+// demonstrates it (the shut house on the square); everything else answers yes.
+export const ENTRY_NEEDS = { 'door:home': 'known' };
+export function canEnterAt(thing, tier) {
+  const need = ENTRY_NEEDS[thing];
+  return !need || atLeast(tier, need) ? { ok: true } : { ok: false, need };
+}

@@ -21,6 +21,7 @@ import { startFog } from './fog.js';
 import { S_WORDS } from './words.js';
 import { tr, fill } from './config.js';
 import { endingOf } from './logic.js';
+import { purserLine, keeperLoopLine, tierNow, completionNow } from '../experience/active.js';
 
 export const TALLY = 4;
 
@@ -61,6 +62,8 @@ export async function playLamp(town) {
     const lit = v.fade('lamp', 1, 3800);
     sfx.motif?.('lock');
     for (const l of tr(S_WORDS.keeperLamp)) await c.say(l, { min: 3200 });
+    const kl = keeperLoopLine(); // experience: the keeper reads you too ("You stayed longer this time. Not long enough.")
+    if (kl) await c.say(kl, { min: 3200 });
     await (c.skipped ? null : lit);
     v = await cut(c, v, registerPainter(), { name, place: COURSE.title, arrived: state.story?.arrivedAt, push: 0.1, pushTime: 16 }, 1500);
     await c.say(tr(S_WORDS.registerSeen), { min: 3000 });
@@ -95,6 +98,8 @@ const ENDINGS = {
     // the purser at the gangway
     v = await cut(c, v, gangwayPainter(), { push: 0.05 });
     await c.say(fill(tr(S_WORDS.anotherRound), { name }), { min: 3600 });
+    const pl = purserLine(); // experience: the purser notices how long you stayed; the loop does not change
+    if (pl) await c.say(tr({ en: `"${pl}"`, it: `«${pl}»` }), { min: 3000 });
     await c.say(tr(S_WORDS.aboard), { min: 2200 });
     // the ship at the quay, its lights going out, as at the arrival
     v = await cut(c, v, harbourPainter(), { dock: 1, lights: 1, rain: 0, stars: 1, notebook: 1, push: 0 }, 1500);
@@ -119,7 +124,7 @@ export async function playEnding(town) {
   const ui = town.ui, name = state.story?.name || tr(S_WORDS.defaultName);
   if (state.ended || town.story?.ending) return;
   town.story.ending = true;
-  const ending = ENDINGS[endingOf(state)] || ENDINGS.loop;
+  const ending = ENDINGS[endingOf(state, { tier: tierNow(), completion: completionNow() })] || ENDINGS.loop;
   await cinema(ui, (c) => ending(c, { name }));
   state.ended = true;
   Object.assign((state.story ||= {}), { left: true, rounds: (state.story.rounds || 0) + 1 });

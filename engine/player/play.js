@@ -3,6 +3,7 @@
 // (validateCourse) and the packing of src/course/packing.js (lab imports, stations without code).
 import { validateCourse } from '../../skills/knowledge-base/scripts/validate.mjs';
 import { checkReady } from '../src/lab/patterns/specs.js';
+import { checkGames } from '../src/mechanics/games/spec.js';
 import { EMBLEMS } from '../src/gen/emblems.js';
 import { TRADE_NAMES } from '../src/gen/interior/trades.js';
 import { TEMPER_NAMES } from '../src/mechanics/duel/tempers.js';
@@ -59,10 +60,11 @@ function sortFiles(files) {
   const root = course ? course.path.replace(/course\.json$|[^/]*$/, '') : '';
   const world = by(/(^|\/)world\.json$/), anims = by(/(^|\/)anims\.js$/);
   const labs = {};
-  files.filter((f) => f.path.endsWith('.js') && f !== anims).forEach((f) => { labs[f.path.split('/').pop().slice(0, -3)] = f.text; });
+  const games = {};
+  files.filter((f) => f.path.endsWith('.js') && f !== anims).forEach((f) => { (/(^|\/)games\/[^/]+\.js$/.test(f.path) ? games : labs)[f.path.split('/').pop().slice(0, -3)] = f.text; });
   const knowledge = new Set(files.filter((f) => f.path.startsWith(`${root}knowledge/`)).map((f) => f.path.slice(root.length)));
   const brief = files.find((f) => f.path === `${root}knowledge/brief.md`)?.text || '';
-  return { course, world, anims, labs, knowledge, brief, folder: files.some((f) => f.path.includes('/')) };
+  return { course, world, anims, labs, games, knowledge, brief, folder: files.some((f) => f.path.includes('/')) };
 }
 
 async function make(files) {
@@ -73,9 +75,9 @@ async function make(files) {
   let course, world = {};
   try { course = JSON.parse(F.course.text); } catch (e) { out.innerHTML = `<div class="msg bad">${esc(T.badJson(e.message))}</div>`; return; }
   if (F.world) try { world = JSON.parse(F.world.text); } catch (e) { out.innerHTML = `<div class="msg bad">${esc(T.badWorld(e.message))}</div>`; return; }
-  const v = validateCourse(course, { EMBLEMS, TRADES: TRADE_NAMES, TEMPERS: TEMPER_NAMES, match, tools: Object.keys(TOOLS), checkReady, brief: F.brief, has: (k) => !F.folder || F.knowledge.has(k) });
+  const v = validateCourse(course, { EMBLEMS, TRADES: TRADE_NAMES, TEMPERS: TEMPER_NAMES, match, tools: Object.keys(TOOLS), checkReady, checkGames, brief: F.brief, has: (k) => (k.startsWith('games/') ? !!F.games[k.slice(6, -3)] : !F.folder || F.knowledge.has(k)) });
   errors.push(...v.errors); warns.push(...v.warns);
-  const p = makePayload({ course, world, labs: F.labs, anims: F.anims?.text || null, slug: course.id });
+  const p = makePayload({ course, world, labs: F.labs, anims: F.anims?.text || null, slug: course.id, games: F.games });
   errors.push(...p.errors); warns.push(...p.warnings);
   const warnHtml = warns.length ? `<details><summary>${esc(T.warns(warns.length))}</summary><ul class="warn">${warns.map((w) => `<li>${esc(w)}</li>`).join('')}</ul></details>` : '';
   if (errors.length) { out.innerHTML = `<div class="msg bad">${esc(T.errs(errors.length))}<ul>${errors.map((e) => `<li>${esc(e)}</li>`).join('')}</ul></div>${warnHtml}`; return; }

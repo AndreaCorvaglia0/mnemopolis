@@ -23,7 +23,7 @@ export const EMPTY_COURSE = { id: 'empty', language: 'en', title: 'No course', s
 
 // Lab code: each file is an ES module whose engine imports were rewritten to read
 // globalThis.__mnemoKit. It is loaded from a Blob URL once the engine's modules have all run.
-export async function loadCode(P, kit, MOUNTS, ANIMS) {
+export async function loadCode(P, kit, MOUNTS, ANIMS, GAMES = {}) {
   if (!P) return;
   globalThis.__mnemoKit = kit;
   const load = async (name, src) => {
@@ -31,5 +31,6 @@ export async function loadCode(P, kit, MOUNTS, ANIMS) {
     try { return await import(/* @vite-ignore */ url); } catch (e) { console.error(`${name}: ${e.message}`); fail(`${name} could not be loaded: ${e.message}`); return null; } finally { URL.revokeObjectURL(url); }
   };
   await Promise.all(Object.entries(P.labs || {}).map(async ([id, src]) => { const m = await load(`labs/${id}.js`, src); if (m) MOUNTS[id] = m.default || {}; }));
+  await Promise.all(Object.entries(P.games || {}).map(async ([id, src]) => { const m = await load(`games/${id}.js`, src); if (m) GAMES[id] = m.default || m; }));
   if (P.anims) { const m = await load('anims.js', P.anims); if (m?.ANIMS) Object.assign(ANIMS, m.ANIMS); }
 }

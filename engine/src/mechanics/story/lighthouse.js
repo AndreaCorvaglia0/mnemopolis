@@ -16,6 +16,7 @@ import { STORY, tr, fill } from './config.js';
 import { doorWord } from './logic.js';
 import { cinema } from './cinema.js';
 import { playLamp } from './finale.js';
+import { XP_ON, keeperReturnLines } from '../experience/active.js';
 
 export const theWord = () => doorWord(COURSE.bigIdea, STORY.word);
 export const DOOR_RIDDLE = () => ({ id: 'story-lighthouse', kind: 'door', clue: tr(S_WORDS.doorClue), answer: [theWord()], type: 'text', place: null });
@@ -23,6 +24,8 @@ export const DOOR_RIDDLE = () => ({ id: 'story-lighthouse', kind: 'door', clue: 
 export async function lighthouseDoor(town) {
   const ui = town.ui, keeper = tr(S_WORDS.keeper);
   if (state.ended || state.story?.turned) {
+    // after the ending: the keeper comments on how long you have stayed, and names vaguely what is still missing
+    if (state.ended && XP_ON) await ui.say(keeperReturnLines(), { name: keeper });
     await ui.converse(keeper, { root: { say: tr(S_WORDS.keeperAgain), options: [{ label: tr(S_WORDS.keeperFace), do: async () => { await ui.league(); return 'end'; } }, { label: tr(S_WORDS.notNow) }] } });
     return;
   }
